@@ -1,7 +1,7 @@
 # GitHub bilan ishlash tartibi
 
 GitHub egasi: `JurabekPM`. Repozitoriy nomi: `rizo-dealer-native`.
-Asosiy branch: `main`. Repozitoriy dastlab private qilib yaratiladi.
+Asosiy branch: `main`. Repozitoriy private qilib yaratildi: https://github.com/JurabekPM/rizo-dealer-native . Lokal `origin` shu repozitoriyga ulangan; `main` → `origin/main`ni kuzatadi.
 
 ## Har vazifa
 

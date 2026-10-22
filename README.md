@@ -2,6 +2,8 @@
 
 Native Kotlin / Jetpack Compose UI/UX prototip. Admin va Agent alohida navigatsiyaga ega; ma’lumotlar lokal namuna va SharedPreferences bilan ishlaydi. Dealer backend va haqiqiy login yo‘q.
 
+GitHub: [JurabekPM/rizo-dealer-native](https://github.com/JurabekPM/rizo-dealer-native) — **private**, asosiy branch `main`.
+
 ## Yangi developer yoki Gemini uchun
 
 1. [GEMINI.md](GEMINI.md) — tez kirish va asosiy qoidalar.
