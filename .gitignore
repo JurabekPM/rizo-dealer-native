@@ -1,0 +1,34 @@
+# Generated Android/Gradle/Kotlin output
+.gradle/
+.kotlin/
+build/
+.externalNativeBuild/
+.cxx/
+captures/
+*.apk
+*.aab
+*.apks
+*.hprof
+*.log
+
+# IDE and machine-specific configuration
+.idea/
+*.iml
+local.properties
+.DS_Store
+Thumbs.db
+
+# Credentials and signing material: never commit
+.env
+.env.*
+!.env.example
+*.jks
+*.keystore
+keystore.properties
+signing.properties
+credentials*.json
+service-account*.json
+
+# Local backups
+backups/
+handoff-snapshots/

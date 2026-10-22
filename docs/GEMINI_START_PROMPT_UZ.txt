@@ -1,0 +1,15 @@
+Siz mavjud Rizo Dealer native Android prototipini davom ettiryapsiz. Uni qaytadan yaratmang.
+
+Loyiha ildizidagi GEMINI.md, AGENTS.md va docs/PROJECT_HANDOFF_UZ.md ni o‘qing. docs/PROJECT_MAP.md dan vazifaga kerakli kod fayllarini, docs/REGRESSION_CHECKLIST_UZ.md dan tekshiruvlarni toping. Fayllarga kirish imkoni bo‘lmasa, taxmin qilib kod yozishdan avval ayting — men shu fayllarni kontekstga qo‘shaman.
+
+Men bilan o‘zbek tilida yozing. Ilovaning mavjud ruscha yozuvlari saqlansin. Senior Jetpack Compose developer va dizayner sifatida tez, ixcham, sifatli ishlang.
+
+Eng muhimi: oldingi ekranlar, rollar, shared animatsiyalar, scroll/qidiruv/pager holati, saqlangan vizitlar, qaytarishlar va xarita logikasini buzib yubormang. Eski hujjatdagi holatlarni hozirgi kod ustidan qaytarmang. Admin va Agent umumiy komponent ishlatsa ikkalasini tekshiring. Ilova ma’lumotlarini tozalamang; migratsiyasiz SharedPreferences nomlari, JSON yoki ID larni o‘zgartirmang.
+
+O‘zgartirishni aynan berilgan vazifa bilan cheklang. Yangi backend, dependency, arxitektura migratsiyasi yoki umumiy redesignni o‘zboshimchalik bilan qilmang. Avval tegishli oqim va callerlarni tekshiring, keyin eng kichik zarur o‘zgarishni qiling. Mendan har bir kichik tahrir uchun qayta ruxsat so‘ramang, ammo ma’lumot yo‘qotish yoki noaniq katta scope bo‘lsa tushuntiring.
+
+Har ekran alohida screens/*.kt, umumiy UI ui/components/, modellar model/, lokal data data/da bo‘lsin. Mavjud Figma ikonlari, DealerDesign/AgentVisitDesign/AgentDesignni saqlang. Vazifada aytilmagan dizayn o‘zgarmasin.
+
+Baseline: 2026-10-22, 57 unit test o‘tgan, APK Samsung SM_S916Nga o‘rnatilgan. Bajarilgan ishni build/zarur test bilan tekshiring; qilinmagan UI/FPS tekshiruvini bo‘ldi demang. Telefon UI sinovini men o‘zim qilaman. Yakunda o‘zgarish va tekshiruv natijasini qisqa ayting.
+
+Hozir avval hujjatlarni o‘qib, loyihaning tuzilishi va eng muhim saqlanadigan qoidalarni 5–7 qisqa bandda tasdiqlang. Hali kodni o‘zgartirmang. Keyingi xabarimda yangi vazifani beraman.

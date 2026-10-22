@@ -1,0 +1,977 @@
+{
+  "date": "2026-10-22",
+  "timezone": "Asia/Tashkent",
+  "tests": 57,
+  "failures": 0,
+  "note": "Source/config baseline only. No phone data. Docs are not part of source hashes.",
+  "files": [
+    {
+      "path": "app/build.gradle.kts",
+      "sha256": "710cf276bfcfcac27f81379d62b4070389f7909410c2c409014c731a44a1d66c"
+    },
+    {
+      "path": "app/src/androidTest/java/com/example/dealerappnative/ExampleInstrumentedTest.kt",
+      "sha256": "01ab286190dd150fc7f2b19418ef746291d71d8b9bde31726f1390604bf36476"
+    },
+    {
+      "path": "app/src/main/AndroidManifest.xml",
+      "sha256": "943cd96cb8a781a77afe517a9e6298c2d8d9cd8333abca5da8fc4cb57cad5479"
+    },
+    {
+      "path": "app/src/main/assets/map/LICENSE.txt",
+      "sha256": "53e8dc25862014e4324741ca18fbe3611e11d42ef69f59f86ea8c5389647d4cb"
+    },
+    {
+      "path": "app/src/main/assets/map/MAPLIBRE-LICENSE.txt",
+      "sha256": "ee5fc05a0677eaf69601d2c7db0d9ecd6cc27c3abc1d0733bc9ed34707cf8ef2"
+    },
+    {
+      "path": "app/src/main/assets/map/bright-style.json",
+      "sha256": "078365f1d0357dcba0dd36fb5e2a938f83ec84b2b2034b50bcc2baee55421588"
+    },
+    {
+      "path": "app/src/main/assets/map/images/marker-icon-2x.png",
+      "sha256": "00179c4c1ee830d3a108412ae0d294f55776cfeb085c60129a39aa6fc4ae2528"
+    },
+    {
+      "path": "app/src/main/assets/map/images/marker-icon.png",
+      "sha256": "574c3a5cca85f4114085b6841596d62f00d7c892c7b03f28cbfa301deb1dc437"
+    },
+    {
+      "path": "app/src/main/assets/map/images/marker-shadow.png",
+      "sha256": "264f5c640339f042dd729062cfc04c17f8ea0f29882b538e3848ed8f10edb4da"
+    },
+    {
+      "path": "app/src/main/assets/map/index.html",
+      "sha256": "9beba1a5040980447e1f73033f482b27a584f96d079f27150a899e7ad159cdcd"
+    },
+    {
+      "path": "app/src/main/assets/map/leaflet.css",
+      "sha256": "a7837102824184820dfa198d1ebcd109ff6d0ff9a2672a074b9a1b4d147d04c6"
+    },
+    {
+      "path": "app/src/main/assets/map/leaflet.js",
+      "sha256": "db49d009c841f5ca34a888c96511ae936fd9f5533e90d8b2c4d57596f4e5641a"
+    },
+    {
+      "path": "app/src/main/assets/map/maplibre-gl.css",
+      "sha256": "43c1d886b5fdf0aac4e7135bd6f84b823d9f48283a648012665f9be52c01389f"
+    },
+    {
+      "path": "app/src/main/assets/map/maplibre-gl.js",
+      "sha256": "1525f971223d81f169f049f1ce50083e6f1643aa6b0ea0716653a550d2d57fc2"
+    },
+    {
+      "path": "app/src/main/assets/map/store-marker.svg",
+      "sha256": "33422e251b2e7ef3e9dab98e3e68a822323804112f5e2e270ae2918e04f69dce"
+    },
+    {
+      "path": "app/src/main/assets/visit_samples/store-interior.png",
+      "sha256": "cf3b95fc2e320cb8370e07d92f147682093182f63706905c9854b861074aea76"
+    },
+    {
+      "path": "app/src/main/assets/visit_samples/visit-product.jpg",
+      "sha256": "a6657b940379470f7561f501738cb55ac50f7543e4355f8b78097da43f06b534"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/DealerApp.kt",
+      "sha256": "6ab34451735b3414d1f760f15b9d081012cc13a2d41fc21c408fc63539a7364c"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/DealerEntry.kt",
+      "sha256": "1b36ab0a693a3c6511996651b5f42b0cc4fbafd1fa97f751b79cd21cd473251a"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/MainActivity.kt",
+      "sha256": "eae4cdc5b04187ec7210df1ec6cf29486c045499b9920ef0bb52dc3249a8878a"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/data/AdditionalVisitSampleData.kt",
+      "sha256": "3bed28a135710f4613c128ad5092122c7c68b8c066bd618c246a4ba4c8562f67"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/data/AdminReturnDocuments.kt",
+      "sha256": "c17b4464f7254d9bf74fee46b91e58a20cba8de45e3a10727a89cd7f1af55075"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/data/AgentDebtSampleStores.kt",
+      "sha256": "72118b88f73a48a29330351583007071b3cef8b17a12607812db79cd7e76268e"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/data/AgentHistoryReports.kt",
+      "sha256": "2d5e599d3142e724ccd1831bd9e41b7482685d6e9a9cf850c7f213dc4991c368"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/data/AgentHistorySales.kt",
+      "sha256": "810a6db99bd431c32d4846f648758340e8c8e2c73ceb5b0a070e7f347eb2a8c6"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/data/AgentHomeSampleData.kt",
+      "sha256": "8ddfab6e1346679cd49eb57b5b3cdfa19520c6af3dbf240ca5c7b1017968fb66"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/data/AgentMenuSampleData.kt",
+      "sha256": "c716b0f3a45717efb317d8d876dd823134565edebc66134acce4fec6b3e6b9d4"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/data/AgentStatisticsSampleData.kt",
+      "sha256": "e9181e16221886640109ee16dc79bb9d17709be79b8a6d16cf7a232d868d080e"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/data/AgentStoreDebtData.kt",
+      "sha256": "248024cae03079769477d9fb9e715ca5da3121b48605b71ff1e4e2c05c83c154"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/data/AgentVisitSampleData.kt",
+      "sha256": "59ea583e6f205c118b33f5655c6beac1a250a0df55346b05607a24e9bf7486f7"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/data/AgentVisitSessions.kt",
+      "sha256": "69e73b5677eb0f860fe8c592e3b7668e8bcd906c83de6af805880d117871e8d8"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/data/CompletedAgentVisitSamples.kt",
+      "sha256": "016d86850135ec49528276355c9c3d55718583e3f2ada84ae66937b170f60e4e"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/data/DealerMapDefaults.kt",
+      "sha256": "838c6590a3d745aee79b60b31c4713368d5265428e9b37ee59b171b18205fb0f"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/data/HistoryReturnTotals.kt",
+      "sha256": "27ffeed64af692cb6779a3207980c30722093e51da2b6c17012d71331f9825c0"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/data/MixedAgentVisitSampleData.kt",
+      "sha256": "fc941a4ca1d61fd40ea4ed83d86aac3a08413fd35fcf10b70932c21648148d37"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/data/MonthlyHistoryDocuments.kt",
+      "sha256": "224950d6268804cc993996304f3392c6566b0ae5e2b4f1f9c065e43a2bb8174e"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/data/PendingAgentVisitSampleData.kt",
+      "sha256": "fc3776e8a8d4bfb29a6f60fc394d8964e385c1dea53ffcc1e3e55f74599d1ac9"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/data/ReturnCatalog.kt",
+      "sha256": "7f6a49fda60f9a08393e15b70d8bb87a8a5c9387818b6009ad6295992dccb615"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/data/ReturnReasonStore.kt",
+      "sha256": "4385c074e1e78361f690050e07a8ff8397a02094b21943922b0c0d95520deb71"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/data/RevisionMonthBalances.kt",
+      "sha256": "8112cf6b0ab14d52c2bcf9d55b4775297b579593de85c4f85888bdce87dc8c48"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/data/StoreLocationPreferences.kt",
+      "sha256": "4f21ce172ace5667bcda74f1bff6bc8b80e4da9c466cb5f52b5f584957ee45ca"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/data/StoreSampleData.kt",
+      "sha256": "c8cf4bf838837046b150815896a4556294739b8486e03f3663ea35cb483630e1"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/data/VisitMapStore.kt",
+      "sha256": "a4229997eadbde72207016e33ad82e0240b2ef839620e49d6151d24d16187fba"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/data/VisitReturnStore.kt",
+      "sha256": "4f9a22133927346f134dc8f0bf454b4e5591ef89b9cb079fddd63a3c033775b5"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/data/VisitSampleData.kt",
+      "sha256": "801bf2a466493c968f5426ca99b65007f481fab90a7735ffb05087337e02e7cb"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/location/DeviceLocationServices.kt",
+      "sha256": "83a38286fd3b204130b066efb43f45658df54e90867c46c265e668933e9bd6be"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/location/StoreAddressFormatter.kt",
+      "sha256": "1dee1899711209cda7734e022b2bd592a098bff1cad93cf3f075274057ef0251"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/location/StoreRouteService.kt",
+      "sha256": "2198448b0a4174ec3461297412fc26c76213a93b30d3a37e6c1a6a1d61c0b067"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/model/AgentHistory.kt",
+      "sha256": "1879ff0e51265b9eece5be2edb8c6d4ae75ccf57e8140d23b62f068148621b1d"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/model/AgentHomeMetric.kt",
+      "sha256": "5124bfd2f67eb7098d5da20ac0bfd3aaa415a2a3cb39d0f5832e272d092a56dd"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/model/AgentStoreDebt.kt",
+      "sha256": "a133d14b8a381d905533646a54a2826747d07e60d528cb179ee584657399634b"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/model/AgentVisitSession.kt",
+      "sha256": "f61b34b2740ee08e2dd90a6fef09bf604af69a693f61632d0c02d2e7e39ab3b3"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/model/AppRole.kt",
+      "sha256": "e18cab53f4be2c89a9823b3a6b1dcc34d5b32c98e5d1b861cb7ae7b5044dcc29"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/model/DebtDirection.kt",
+      "sha256": "d640fce92ba49ad2e294e98559ea39e9309195c45a292aabcdfaa0412a26faa1"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/model/OrderUiModel.kt",
+      "sha256": "8759f5bacf286aae3c46c0525cddcb951efb4d6d9209ce109f00a40091b68102"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/model/ReturnReason.kt",
+      "sha256": "b53ae25a7a5d86571234fb5c0e9bcb8a8cf0cec1e4a80238cf95877a0f8f8fca"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/model/StatisticsPeriod.kt",
+      "sha256": "ef376787c6e52561f48451388ca6b09c95bf17b37be5d0c91f4baec1766d5d4c"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/model/StoreLocation.kt",
+      "sha256": "290a1d5da536972f7d3125bd51299252d398a3058c645128ef1a9e1a2a1f7fa0"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/model/StoreRoute.kt",
+      "sha256": "a6e3ea1fb1f9d8a352ae80d70e61f64fc835bf859f640e82813c8057515965b9"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/model/StoreRouteSummary.kt",
+      "sha256": "c0c52c018c5164c42ea27d907ab8edaf3d59f8d57d6633d108a50a5e6ed8d065"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/model/StoreUiModel.kt",
+      "sha256": "5cc81650cff1c3932fa40133e03d0780f8ea9cbcd5c4c7e73841421207680adb"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/model/VisitResult.kt",
+      "sha256": "daee375d2ea4a2a2a9406df8ccf50d92545f9be8c67df2e702efc37a836ed01c"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/model/VisitReturnRecord.kt",
+      "sha256": "288b1426716cc8b914b0ac30cec952a1a3a75dab7e974d4ec0d8e8d4b59085dc"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/model/VisitStore.kt",
+      "sha256": "7e1d17d543e1129f9dd6922887a58327b0cdd391d41830294b96f8b5a871ac50"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/navigation/AgentBottomBar.kt",
+      "sha256": "27437d20fe48efe31e7135296f62b7823b590ca879b98b654d92a502748cd579"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/navigation/AgentDestination.kt",
+      "sha256": "200a39a846941424b8ae45c97c8962d663f144b9ff95a57e9967988f16d847dc"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/navigation/DealerBottomNavigation.kt",
+      "sha256": "aaf0d88e1bc7c1a87bf90695b76d5f34bdd028e7c85f69cc9474e12e1a897de5"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/navigation/DealerDestination.kt",
+      "sha256": "eb2477bf05cd774f63553c2d0ffc039b804ae02598e6410cc1282de7d502c80f"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/screens/AdminReturnCreateScreen.kt",
+      "sha256": "dcab76eb5a80449c4e163211aa770ce791fe6f050801c6df1824435c6eaeecea"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/screens/AdminReturnDetailScreen.kt",
+      "sha256": "7d8ec64d4dc6ca82ff8f49c5b5c57e916ad6ab8ec6a7f1ed78d3eaeb515b331f"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/screens/AdminReturnsScreen.kt",
+      "sha256": "b0baf5f632150068006214c4cb5e5bce17951c55fabc99508fa10b11ec3adf2e"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/screens/AdminRevisionsScreen.kt",
+      "sha256": "7500ae3283f902f4552db60d801783da28813709a34461467ab9cbc4f386c40d"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/screens/AdminVisitsFlowScreen.kt",
+      "sha256": "1874df0f4fe8e57f1eb9d7568b167d9a025aa5a440ee9a81fa2879d8a108a24e"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/screens/AgentHistoryArchiveScreen.kt",
+      "sha256": "6afd490893883b26d88912d40863b386fa29e44b42cdda7476aa79ea6315ca5e"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/screens/AgentHistoryOperationScreen.kt",
+      "sha256": "d4d8ae3fc9e4887de431d92977e0996f45d3b59ed7a18dba5853f0b001fdbf2a"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/screens/AgentHistoryScreen.kt",
+      "sha256": "b44ae2fdc0bd47130fd581ea8978a4e7d144684f10d75a1c13e44737f7df71de"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/screens/AgentHistorySectionScreen.kt",
+      "sha256": "42efbb7d6a4244ec257fd2aae3b12dfc1bf1563a7b4ef13c854d63fca582fc52"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/screens/AgentHistoryVisitDetailScreen.kt",
+      "sha256": "66fec1b1b320825fe0f785e6eeb1ea978d50748ccfb43f067b746d39df4cb6be"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/screens/AgentMenuScreen.kt",
+      "sha256": "b2e72e14a9dbcd07e6f6615542c7e462796584a94a518d2d888dc81157684dd5"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/screens/AgentSalesHistoryScreen.kt",
+      "sha256": "6688bdc9561776474555eaf19baab634bde4936f9d55448b81585162d3ae899c"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/screens/AgentScreen.kt",
+      "sha256": "8267644e590367e7294c36b1834f12840457c29704a5b032857de81b84fcd942"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/screens/AgentStatisticsScreen.kt",
+      "sha256": "81c071395de796d40dd35720bbdc2b7ea53287b3c65443ef0f29a3d81f8d580e"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/screens/AgentStoreDebtsScreen.kt",
+      "sha256": "19dfb0739568720eaa6501a9b3ea1e8569611cf50363998a1d1f6183fa72d3a5"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/screens/AgentStoreDetailScreen.kt",
+      "sha256": "9d58181a5504c1ae20b5984678c34bb8d9569d68ef775ea2f93033a8b8475c22"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/screens/AgentStoresScreen.kt",
+      "sha256": "eefb94d4b23f69e0e8144d63081579052323b87798ed7b1b48df69504a3cdc82"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/screens/AgentVisitDetailScreen.kt",
+      "sha256": "5a6339d6cff63fbdee3f0232b6caf22c6ae5b5d29af859c3fe56a1954bb6405f"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/screens/AgentVisitsScreen.kt",
+      "sha256": "bee7cdffe996f0ca45ce0d253546444a384df04ed540f300eeba4f755445304e"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/screens/CollectionsScreen.kt",
+      "sha256": "c21cad2003889256c05c7ab51f6a6150d09e4180f57b45656684a2f4326cffca"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/screens/DeliveriesScreen.kt",
+      "sha256": "e522d3ad9967495428690ad0490a06a5e5b6b741485423989ed9e84e4db54ab6"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/screens/MenuScreen.kt",
+      "sha256": "04042fb7049a06cfe5898d58d9f6ec032a2c3b8e0bfe2a9c607752b9b47e474b"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/screens/MonthlyOperationsScreen.kt",
+      "sha256": "517a8e6f168e1fd4976ddec95aae1fb59de78bdf9840161f377d95cea8378d22"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/screens/RequestsScreen.kt",
+      "sha256": "40af41414a281e8b75b3c27762ad88ce721d9db63b4ad8e5498c97869381b8a7"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/screens/ReturnProductPickerScreen.kt",
+      "sha256": "a5f0ec1a9558011fc2c7cfcb02d8e4dde83d33ed83da9109ac974847c761e96b"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/screens/ReturnReasonSettingsScreen.kt",
+      "sha256": "4cfffc3fa69b0ab7ceca5e4dbf452d6a2f37997ec176f8197063bda21dfa9b4c"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/screens/RoleSelectionScreen.kt",
+      "sha256": "1a17a5e3d223c626b387d6ad71a22aa109e7a4c70f462e929c790a2729809984"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/screens/RoutesScreen.kt",
+      "sha256": "e3fa78eccebb5e822364eaf063a5929f1e1ee64e6e9f932fbb8d8a305932fd06"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/screens/StoreDetailScreen.kt",
+      "sha256": "577b69fbf536b823179653add781d25a840d799ea97cb6868b8d1dcaa54bbd21"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/screens/StoreMapScreen.kt",
+      "sha256": "0e69e764925f37694ef89a0aa5c3f043320b246e03071e8479f0301dee700329"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/screens/StoresScreen.kt",
+      "sha256": "1f4cf45cfdc255a24a007659abbf7ae7f0d462b10a91ba0ccc6101cdc36c4cc1"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/screens/VisitDetailScreen.kt",
+      "sha256": "c2ebdc64af5c11aafce438e032fe1046284e9eac25ccb4738b040f1200d6ec19"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/screens/VisitReturnScreen.kt",
+      "sha256": "7dd5ac1f1d89ce4770c174bda29465e647df7835945f1f74c1730a2c935633ef"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/screens/VisitsScreen.kt",
+      "sha256": "b0e87452bf1986d89c76a08b6faa9ef615031c9fcaefcccbe56c0b90c048ac3b"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/ActiveHistoryTabs.kt",
+      "sha256": "5d263c7e9abdb0b3c8706177576287bf8f7fd8273abc4240df9a6fddba708895"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/AgentHistoryCard.kt",
+      "sha256": "10983d4728651f2dd9766662ae94bd36c365e4ebd5f1f774389c4264bad45594"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/AgentHistoryDatePicker.kt",
+      "sha256": "d5ce6267538b15eb45544bfded44f68530c9c130a2c15005fe45acff5ff53b0e"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/AgentHistoryDetails.kt",
+      "sha256": "0c14d16e68ff23c3442248b5dd3628f8ad41bb546929ba87263faee7ad35f477"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/AgentHistoryFilterSheet.kt",
+      "sha256": "f5eb7f7fb8d692645efbe5977d7a6a8155f509956d93f4140e760d8c7a23ad28"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/AgentMenuRow.kt",
+      "sha256": "d7801e78d28261bf85f283037da54a10b437fd7b53b3c8daad323f7e62a0f533"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/AgentMetricCard.kt",
+      "sha256": "3a8860fc95431d74bcc4e44a9fe58f9d0858042fcb0d38fc727746521d50be1f"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/AgentProgress.kt",
+      "sha256": "1986189143f6c4cb19858c4968bc2a11902b6178a6eb593de4e587fc99fd10a2"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/AgentStoreDebtCard.kt",
+      "sha256": "8fae008c2bb3583efff479479d0a96f4ca17cb70f4f40d60640bce4438f9a9fe"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/AgentStoreDebtHeader.kt",
+      "sha256": "dca0058c2bfc53f3ba91615c58bb39f2609208456a0100bf01856b3de0b45eaa"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/AgentStoreSharedTransition.kt",
+      "sha256": "18da16abea76732b975cda0ee00164da50caf105b6ad17b9ca5e6ccf0236c683"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/AgentVisitControls.kt",
+      "sha256": "2e9d5affbd94b514bb089eb90be613b2491351562378788e0a03ea17f59da680"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/ChildScreenHeader.kt",
+      "sha256": "2c04d6467e9d3793a75967a218235d83e15699e862c6bf4346c03f624640b3e5"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/DealerIcon.kt",
+      "sha256": "4fb32a0dbc6a5125356923d250524fd6742714cd2e93e5148e7b0e72912d83a7"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/DraggableMapSheet.kt",
+      "sha256": "59046a025fe023b0db240d72a35049f947aa2de8ef650d2d6ca231b58e832e99"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/HistoryMonthCard.kt",
+      "sha256": "d625a71d02ea8d40b4685982dca0060f7e9afcf333555969f3fbe2d80cd60dac"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/MenuRow.kt",
+      "sha256": "d636b13bec75789473664fd6d6b275816e8751dd9dfe53e63eb2e8629d9c6d50"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/OrderCard.kt",
+      "sha256": "168fa99f4b440a1722cbeec7e7266f50980557e5ddfc235509a5b23e3db0cc57"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/OrderListScreen.kt",
+      "sha256": "e7759b3e0eb16e46c7a3c1702ab6c57f3310cb956fa5404f13a400876e45c93d"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/PrototypeCreateButton.kt",
+      "sha256": "1bac44cb4eccb0997f13be1ded48f833c555f8283562bbfebfb8d1c3cc18168c"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/ReturnProductComponents.kt",
+      "sha256": "1c246eaec44ec1952a457d578122b4be1bcbb00295c85847cb5ed88403123175"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/ReturnProductInfoSheet.kt",
+      "sha256": "f7c536788fc01c4ea129a97b1d4bbe11e4d5351c37f88ac6d88b642148672d1b"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/ReturnReasonSheet.kt",
+      "sha256": "1fcefd30c1f7d7af8efb8a8453aac14ced3037670d85634129b52cc28806ed37"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/ScreenHeader.kt",
+      "sha256": "b1dc1919286dec415a800becb41fdd91d653ef58d50fc583587b663c7b509bc7"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/SearchField.kt",
+      "sha256": "3a11a2292b59b0dacb67a38c5513d2536bb982a36eeb32a91c5081726a07f42d"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/ShortcutCard.kt",
+      "sha256": "6c36e4356938468e030c7f2a888c16edd747bc97e483dd25a8b59c6c717d7097"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/SoftActionButtons.kt",
+      "sha256": "99b493fbcbe7d39d27355865ff94c3fc7b13a1f013c9da46e250019f36949f22"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/SoftCardPress.kt",
+      "sha256": "0dc2a873e45052735e6e10a0d18dcafb82fe6fa204056ebe3530b0447ea3e177"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/StatisticsDatePicker.kt",
+      "sha256": "4c13474ef22bdb55d7cd71bb5eddf610e74947e0e1b2b457a4efbd023a7c9c02"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/StatisticsPeriodFilter.kt",
+      "sha256": "be15e26724ec3da7cda9ebd90cdaae5e62b3d2d84a0509fa312bb47114dbf552"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/StoreActionsHost.kt",
+      "sha256": "76b6c7b483103c88b62ced596698bc619516632cc358974d00d3ee6688800757"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/StoreMapInfoSheet.kt",
+      "sha256": "3105842e602882d2d0afd407308a2d8fb060ca469b7c0d2d032f5244702b8c25"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/StoreMapMarker.kt",
+      "sha256": "65fb013f69409b133f9de1b9000b0ea8338843c138cfb79323d79c82f1c9081e"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/StoreMapView.kt",
+      "sha256": "e1eb6423d74c6b15df455ffabdbc2a06825b61b79702133afa05d761ade92252"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/VisitFinishSheet.kt",
+      "sha256": "f3db9476e3ae8c99ad5136c6e5cc7f767592a4208bd83478c1cb31e3c54c5424"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/VisitListViewport.kt",
+      "sha256": "65f45a32830fe109588020f9f6d2fbdaf33eba79a52a9e83bab13fa52e55f7e3"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/VisitResultsRow.kt",
+      "sha256": "e34c7ebae8a054aeb6c16d9dd3bb9464b456637618f1bd5b474403ea1fa468dc"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/VisitResultsTransition.kt",
+      "sha256": "256a3ad97a9b93f4e18d648c6cbe31e73ccb2c7d3a7e2b13f196ae2961a3b2b6"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/components/VisitStoreCard.kt",
+      "sha256": "2ad465d948a2820bbd4120dc386f33bd63a5910604328ce1bf9c7fa46a2a75f7"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/theme/AgentDesign.kt",
+      "sha256": "39fce6cdb751085c7e8c5a0c29630c169ccc3d4f018df39b8b879144b2b1528c"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/theme/AgentVisitDesign.kt",
+      "sha256": "f29e8e6b6e41af60836e7c181d6f52df8f25c2f111e2eede026e26cf319f102c"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/theme/DealerDesign.kt",
+      "sha256": "4d7995846ecd58c38150d24b800be98ea4c55c6f4e6910931a0f21c17b9504fb"
+    },
+    {
+      "path": "app/src/main/java/com/example/dealerappnative/ui/theme/DealerPrototypeTheme.kt",
+      "sha256": "f17491af623d7c07a3132d44ad14a1648a92b23908d662befb19f2ce8096c2b0"
+    },
+    {
+      "path": "app/src/main/keepRules/rules.keep",
+      "sha256": "cd9f36ade2d8604e1b7cf24eff5b171f9c0816c0aa013ba7eb55be4fe2e1dac7"
+    },
+    {
+      "path": "app/src/main/res/drawable-nodpi/img_visit_collection_result.png",
+      "sha256": "85c99b9f5a522b269835834c09bdcda941a90176256cc3fd4e25054894c71617"
+    },
+    {
+      "path": "app/src/main/res/drawable/dealer_avatar.jpg",
+      "sha256": "ebf7cc0802c65facc0b2c020d7076b5dd883e3e6a19231652bddbfd24e179631"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_agent_chevron.xml",
+      "sha256": "1387fc73572d6f18796b39f36fad78de34740adac3a75105328da30430c87d45"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_agent_clear.xml",
+      "sha256": "d329373d31ae677e2784524e73cf42f773de02054b7ace2d5b6f7669bffd9f56"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_agent_debt.xml",
+      "sha256": "65352784f01f70433c60dc3cd8ae236dfec25d7bf1de5d708476f5b7fde3c145"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_agent_delivery.xml",
+      "sha256": "22e2866a0dbc8467aa99289d16f2dad42e8f5eceefbdb091399bc77dd014192b"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_agent_history.xml",
+      "sha256": "b5b2d60ea4231c0f238c2c892fadcab29eacb8b2355927ed283b9b60712b34e4"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_agent_home.xml",
+      "sha256": "959903b5cdcefee745295ac812ea001beda45b1adf5abc6334a0bfc1f1f96b67"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_agent_menu.xml",
+      "sha256": "b2a8d8fdecdc4f04150c6e692fe2ce28d17a5d6661d7d5498c2560a1ecc5cfdc"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_agent_orders.xml",
+      "sha256": "b70c4f68f725189ac1a0e91e28b01596199c8a531994c59bb33a09620143d79f"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_agent_refresh.xml",
+      "sha256": "6cefb9107be8315df249d5a9662bc38ff0d6ab4133a87e4bc39a0bdc1992bb14"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_agent_return.xml",
+      "sha256": "8928313bc8ca50138065b6177a401ea959208bd273c856f9b22cba309431c713"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_agent_revision.xml",
+      "sha256": "b4d0453005a99d9f1fc661b31a58b0094c7e543a1f97b0d72add6ffcf9762c5c"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_agent_schedule.xml",
+      "sha256": "6c74a93306f87112c7dd518745629e6d9ab43c00dbde88bb550761b38252379c"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_agent_statistics.xml",
+      "sha256": "896171b0045699e6d2c9e96433173fad0bfe7243f9e9b1114d0a5d872bac957d"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_agent_store.xml",
+      "sha256": "6cb467a8ef82b83d42ea29bfbd8f097c29975a4c366f58dc77c90bfe74c05016"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_agent_visit.xml",
+      "sha256": "f4befd13613571004d54b3e67e6e056bee4fbbc39d2dcbde62c01054203c6a14"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_agent_wallet.xml",
+      "sha256": "8f55e38a8c87ab430174fa0b30a6b42e53c057623b47c1fd2b10594c633cbaf5"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_arrow_back.xml",
+      "sha256": "5f3eba1bb52e1cc1ec85bedc8a29333853e874d6b6f2b2aaf088688351b173c6"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_bell.xml",
+      "sha256": "f50f6b834bf0b818e539a3990bea86f027db8fecf2b8cec7fddbb3e29b340c59"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_box.xml",
+      "sha256": "4be25d0afb15942f329907e975a07c7bba130be0b1f269d34e5c93dd12ee3e40"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_category.xml",
+      "sha256": "8bec367941bcc153117a6a2712468bfa0ea3a98cc292b5a5e05c05abe01a1283"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_chevron.xml",
+      "sha256": "0bc84fb9a31e33203148ca33076dd4218e21aaa87e8e037e8afe086fab77b9e0"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_collection_filter.xml",
+      "sha256": "f5574febcab5d8c50419ccc14a513965de22f2b4f9d0c622c3d899ddaeead42c"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_dealer_info.xml",
+      "sha256": "2ae21237318c8371caad8d1079f55996a914b08dd17dbd0199c9767500baed95"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_discount.xml",
+      "sha256": "8e93e654cc8183c8390f29b81bd5b239a6b081132e6ba7648e487da8aabac00f"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_edit.xml",
+      "sha256": "f1beaf629946ca6f06ea806a509ba6ecede26cb01299b3f030588c9fe121e39a"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_exit.xml",
+      "sha256": "39eaaf8dd6586ecc4d9f892d9a2dfe0f4dda07a0ae449a62b350d1080b01ee17"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_gift.xml",
+      "sha256": "b2465474df5293ba6a9aba71ba3f96cec607d3d94d5c6350ad8b8e8b53aee96b"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_info.xml",
+      "sha256": "b3bf79b0fa03e5ce765294b5101c61ac7d5622583677fffbb3608a2f7c81939b"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_launcher_background.xml",
+      "sha256": "ed423c73a6f40a4d2909f0901e60527b3a807cd59e1b5593bcaae1808b1c6321"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_launcher_foreground.xml",
+      "sha256": "01d1a6a6c1234eb7fe270d097eb283d72b9c95ae5118886f1b6573aad280f1f7"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_menu.xml",
+      "sha256": "b713f718fca456e3d510cdd421d77e2b08f917d4a3773911b9328f0eb9596d4c"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_money.xml",
+      "sha256": "cb1db529f1ada21fac7bebbb42d0c7026fbe6ac571bc2821950378fd0cee6062"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_pending_actions.xml",
+      "sha256": "3a3861d5443e48207e9cfa7947c6229daa648421ed7987cfa3bf6e4fbb394c7f"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_people.xml",
+      "sha256": "47282d7b1194ba76b0a791852a71a8900ca524615b30451f170c4a17bcaaf24f"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_person_outline.xml",
+      "sha256": "dbe26c0660b94e6bea8a54d064234b97a0e340c512fd987817ff07050d8e7eff"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_phone_call.xml",
+      "sha256": "d4086dfcda41108b7e5edb93d9b9a142fea2b46ec21cca6dff3680032facf99c"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_pin.xml",
+      "sha256": "d3b3dd9d828d4d5b77202576d17e4b185a0a498b7a0de028413d1c2a175208c1"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_return.xml",
+      "sha256": "e0b5485783aef63f5248ee0ff5f67f674e8db25caf5d87763171e1289c10652b"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_route.xml",
+      "sha256": "19f28fa8a4d8916910b581de2af2b42a270ddb3e419201f52b24299da2a4647e"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_search.xml",
+      "sha256": "88ba32ad2adb04fe977e9ef60db8736173ba360c3e381a4bb0633b3594b58cfd"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_settings.xml",
+      "sha256": "6c11f48d3f35f3738524363e6bd166e8f6c45a00c77fb8a2ff75971c735d83d3"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_sort.xml",
+      "sha256": "6eb455498099309678274e60d533c31c38e8859ca1c151698ebf0e020e7fc9c1"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_store.xml",
+      "sha256": "66e635a91d6c91368fc2380e7e9eef42b8abfe4c9dbf25946496a5496520166f"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_store_map_marker.xml",
+      "sha256": "6ce6044d5937715b21e666ab3a33d7dfa7f788031f34c4898190095722a0e87b"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_visit.xml",
+      "sha256": "805638c31b9151807329677f81cfc4063f19adec8e332e3da36dca3e311a07f5"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_visit_camera.xml",
+      "sha256": "f2fdcf643d1b64e9c72f9efd6c854a1bf2ab38f1672c58531f530a95add2814f"
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_visit_route.xml",
+      "sha256": "487e94a0fcf2e9c5438cb74935661cdbf569b47cce01f5614332441ce05218f9"
+    },
+    {
+      "path": "app/src/main/res/drawable/img_agent_collection_plan.png",
+      "sha256": "4471e0a06c1d6dbef308c1c92bc1fd1f5a21d6e970afd5ad479afa9b3aaefdb5"
+    },
+    {
+      "path": "app/src/main/res/drawable/return_dewalt.png",
+      "sha256": "304f73b823ba2f6e9f22a70ecf4fbd800b7089926643265ececaf9078683b4a0"
+    },
+    {
+      "path": "app/src/main/res/drawable/return_makita.png",
+      "sha256": "82e983f7b5a64104cb418382952a8cb8ac2099407885f27ef3dff897285b0564"
+    },
+    {
+      "path": "app/src/main/res/font/agent_onest_bold.ttf",
+      "sha256": "13928eef52efd848aaa5f8b12c0b936e19cb485b4887ec4baeab8b1b7a006e36"
+    },
+    {
+      "path": "app/src/main/res/font/agent_onest_medium.ttf",
+      "sha256": "bff5fecf04af7f2df18819a61698e3a8f1732bcca3e093fecf92f2ae129f9e1e"
+    },
+    {
+      "path": "app/src/main/res/font/agent_onest_regular.ttf",
+      "sha256": "b56fa48e5583ca32b5334a1a1695652daab9bb9d3b102e1635443f16d3389d79"
+    },
+    {
+      "path": "app/src/main/res/font/agent_onest_semibold.ttf",
+      "sha256": "4ccd28de63958899d91a8e87448797434d7531d3f5b4defd2551b4d4fc22bd39"
+    },
+    {
+      "path": "app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml",
+      "sha256": "88f7653499ef524126ea5018a99baf9cc3269e7e584d6205dfdd76db39f39cc0"
+    },
+    {
+      "path": "app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml",
+      "sha256": "88f7653499ef524126ea5018a99baf9cc3269e7e584d6205dfdd76db39f39cc0"
+    },
+    {
+      "path": "app/src/main/res/mipmap-hdpi/ic_launcher.webp",
+      "sha256": "dd00996198640ed28fbc09cdcd7a3807cf8707f3eb255b659634da3ca6a6ff01"
+    },
+    {
+      "path": "app/src/main/res/mipmap-hdpi/ic_launcher_round.webp",
+      "sha256": "1ed73f5341a69d3b41c7e02e126803f50cc8c3284adf4bbb737f0c93577aef07"
+    },
+    {
+      "path": "app/src/main/res/mipmap-mdpi/ic_launcher.webp",
+      "sha256": "846219e6f72fe9a6c104ca8919cbee36a101e7d2ff8da9da67b689a5888f060d"
+    },
+    {
+      "path": "app/src/main/res/mipmap-mdpi/ic_launcher_round.webp",
+      "sha256": "4e2c58b91de01130e6479e00cbbaaf6e77cd961dd2c8e303cf13cd077fa92632"
+    },
+    {
+      "path": "app/src/main/res/mipmap-xhdpi/ic_launcher.webp",
+      "sha256": "398340dad816fc9a6338cb151a8cf1e45b926f9bfb70628b24c4bd2523cc94d4"
+    },
+    {
+      "path": "app/src/main/res/mipmap-xhdpi/ic_launcher_round.webp",
+      "sha256": "91b490aef86574901137f0a252272e1f1add99c1ad709e0696ed68929b88d261"
+    },
+    {
+      "path": "app/src/main/res/mipmap-xxhdpi/ic_launcher.webp",
+      "sha256": "58ae87fa0c5b5d1562d27fd648d2c061553fe20e3ed570bde588162d01ea7a27"
+    },
+    {
+      "path": "app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp",
+      "sha256": "3009fad079f5772f30ecd767f98924367fbe0f81c30048d672d4fda2d5ca7d12"
+    },
+    {
+      "path": "app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp",
+      "sha256": "f98fef5bc3bfe5b65692c40ad1cbae2bec4faf9f1b249c397626740db71b62d8"
+    },
+    {
+      "path": "app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp",
+      "sha256": "5faf033745c8c882c43bb1b372d4e4a5890caec63d9892a2e756c954108b85dc"
+    },
+    {
+      "path": "app/src/main/res/values/colors.xml",
+      "sha256": "b5626527d503417f0d8e5b1e08f338de7b31173bf0e122815f03e64932adbd88"
+    },
+    {
+      "path": "app/src/main/res/values/strings.xml",
+      "sha256": "e571fa619eb31ebcff6d7cd182d19c192e8c38ca77b33c976b7d63bccb838531"
+    },
+    {
+      "path": "app/src/main/res/values/themes.xml",
+      "sha256": "8b6b7e9aa4bc52cdd307660977b97c660e2ff0a7f82b1faa5697845ead0455b5"
+    },
+    {
+      "path": "app/src/main/res/xml/backup_rules.xml",
+      "sha256": "6cf1a27e6807b1d24e41d3fbe7ddc1bfe1f42226027964f6eaf477d71b43b283"
+    },
+    {
+      "path": "app/src/main/res/xml/data_extraction_rules.xml",
+      "sha256": "cb1fc47ab4a984530ed60e0e6ee638929c3038290e7e7e0b4b03a3a30fbe7381"
+    },
+    {
+      "path": "app/src/test/java/com/example/dealerappnative/AdminReturnDocumentsTest.kt",
+      "sha256": "f444c7773bff6e646711736e6c2fffaac5dfb4e4f9274f9548317f4ba80dc24f"
+    },
+    {
+      "path": "app/src/test/java/com/example/dealerappnative/AgentHistoryFilterTest.kt",
+      "sha256": "c443a9f91cf4194300a17a6cd7b049e2266f74e9ee11f07f707b13d0e91fbb42"
+    },
+    {
+      "path": "app/src/test/java/com/example/dealerappnative/AgentHistoryReportsTest.kt",
+      "sha256": "68f2739ec888aedc353416240fa897b2c00c16182a0e0ac0115ad65d2c0444ce"
+    },
+    {
+      "path": "app/src/test/java/com/example/dealerappnative/AgentHistorySalesTest.kt",
+      "sha256": "33169fbda61e582f0e29669dce142195a0fa69252506c40bda3f81f7cde0d744"
+    },
+    {
+      "path": "app/src/test/java/com/example/dealerappnative/AgentVisitSessionTest.kt",
+      "sha256": "add83848bf7349d3dc43d66d9f97b1f2c9500afc61261de9c45dfbb8ef0c795d"
+    },
+    {
+      "path": "app/src/test/java/com/example/dealerappnative/ExampleUnitTest.kt",
+      "sha256": "165b9f7a67638918bd94cedd750e5464ea6ddba62541e7b51f2d82c828e46cd8"
+    },
+    {
+      "path": "app/src/test/java/com/example/dealerappnative/MonthlyHistoryDocumentsTest.kt",
+      "sha256": "d7e29ff1bbb1cfa9086e6b8203a2b69e52efd1e66f8d70df5b5c04f1173ffacf"
+    },
+    {
+      "path": "app/src/test/java/com/example/dealerappnative/ReturnReasonTest.kt",
+      "sha256": "f735c121635d0f5e2c6291a26fb58971fafc139f1ded58853232532da77c310a"
+    },
+    {
+      "path": "app/src/test/java/com/example/dealerappnative/RevisionMonthBalancesTest.kt",
+      "sha256": "39a6e0f0b90c2007fee0dbecd6d685bf8398025d06569434d6f0032acf3112b5"
+    },
+    {
+      "path": "app/src/test/java/com/example/dealerappnative/StatisticsPeriodTest.kt",
+      "sha256": "86991a123d138c6fa1600e40de5419870149fe151a92e51097614e06746e0680"
+    },
+    {
+      "path": "app/src/test/java/com/example/dealerappnative/VisitMapStoreTest.kt",
+      "sha256": "2aa44ea596cc6963da503f3b1e888d833a6bed40a57e5c5dd4e99f4c09496bcc"
+    },
+    {
+      "path": "app/src/test/java/com/example/dealerappnative/VisitReturnsTest.kt",
+      "sha256": "edd0808f2ddcaf055b89bb29b60fc5e7ccb3d561470e45181909a554196ae219"
+    },
+    {
+      "path": "app/src/test/java/com/example/dealerappnative/VisitSampleConsistencyTest.kt",
+      "sha256": "9c824127f80b64c581596cba18e482009c71ab3c7eb7dc20053b7a961f9c206b"
+    },
+    {
+      "path": "app/src/test/java/com/example/dealerappnative/data/ReturnCatalogTest.kt",
+      "sha256": "c1937da7b2a55ff0b51c3c1aeb743b8aae6284b4ad2081028b65f63cf3d869cb"
+    },
+    {
+      "path": "build.gradle.kts",
+      "sha256": "be7dbfa1841b18b020f744e203b995d3dac5709c2a6b8e310fbcfaed0364919a"
+    },
+    {
+      "path": "gradle.properties",
+      "sha256": "cf774135f23cd1e6c054168ce772e24140800347f95b29819744c96f97e4ef26"
+    },
+    {
+      "path": "gradle/gradle-daemon-jvm.properties",
+      "sha256": "6c13aa5ba36690ccfbbb25a8807d01d98c15833e446d7ae82ddc726472cb8ef7"
+    },
+    {
+      "path": "gradle/libs.versions.toml",
+      "sha256": "48cfaf09d44f98cb4528a1fce90b01318eed9ffb82bb53cf093a0bdc2b8b7a42"
+    },
+    {
+      "path": "gradle/wrapper/gradle-wrapper.jar",
+      "sha256": "76805e32c009c0cf0dd5d206bddc9fb22ea42e84db904b764f3047de095493f3"
+    },
+    {
+      "path": "gradle/wrapper/gradle-wrapper.properties",
+      "sha256": "298886d0c11af628d110635a10aeaad4f74741f7a5a16e0f3f64947925a61b73"
+    },
+    {
+      "path": "gradlew",
+      "sha256": "3238afb2aed5cb16eb7d6718077e7138059108f007b54179e9cc157c5a6e0e89"
+    },
+    {
+      "path": "gradlew.bat",
+      "sha256": "1d297e00bd21de3ace22b4d7f2de1f9dfa858883d66bbf7c1ccbecccec8f4f3b"
+    },
+    {
+      "path": "settings.gradle.kts",
+      "sha256": "e22c60cd1f61bdbb9d3b5ac286e586aca475dd9dec9fb6283f275e5a266dc518"
+    }
+  ]
+}

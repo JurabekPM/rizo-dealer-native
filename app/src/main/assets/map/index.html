@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; worker-src blob:; connect-src 'self' https://tiles.openfreemap.org; img-src 'self' https://tiles.openfreemap.org data: blob:;">
+<link rel="stylesheet" href="maplibre-gl.css">
+<style>
+html,body { margin:0; background:#faf9f5; } #map { height:100vh; width:100%; }
+.maplibregl-ctrl-attrib { font:9px/14px sans-serif!important; background:#fffc; max-width:calc(100vw - 8px); }
+.maplibregl-ctrl-icon { opacity:.6; }
+.maplibregl-ctrl-group { border:0; border-radius:12px; overflow:hidden; box-shadow:0 2px 8px #0001; }
+.maplibregl-ctrl-group button { width:36px; height:36px; }
+.store-map-marker { position:relative; width:56px; height:68px; }
+.store-map-marker img { display:block; width:56px; height:56px; filter:drop-shadow(0 3px 3px #0002); }
+.store-map-marker .ground-dot { position:absolute; left:22px; bottom:0; width:12px; height:12px;
+  background:white; border-radius:50%; box-shadow:0 2px 5px #0003; }
+.store-map-marker .ground-dot::after { content:""; position:absolute; inset:3px; border-radius:50%; background:#9103e4; }
+.dealer-marker { width:20px; height:20px; border:3px solid white; border-radius:50%; background:#2781ed; box-shadow:0 2px 6px #0004; }
+.dealer-marker span { position:absolute; top:28px; left:50%; transform:translateX(-50%); color:#1766bb;
+  font:bold 11px sans-serif; background:#fffe; border-radius:5px; padding:3px 6px; white-space:nowrap; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<script src="maplibre-gl.js"></script>
+<script>
+const basemapStyle = __BASEMAP_STYLE__;
+const dealerPosition = __DEALER_POSITION__;
+const map = new maplibregl.Map({container:'map',style:basemapStyle,center:dealerPosition,zoom:15,
+  attributionControl:false,pitchWithRotate:false,dragRotate:false});
+map.touchZoomRotate.disableRotation();
+map.addControl(new maplibregl.AttributionControl({compact:false}),'bottom-right');
+const element = document.createElement('div');
+element.className = 'store-map-marker';
+element.innerHTML = '<img src="store-marker.svg" alt=""><span class="ground-dot"></span>';
+const marker = new maplibregl.Marker({element,anchor:'center',offset:[0,-28]});
+const dealer = document.createElement('div');
+dealer.className = 'dealer-marker'; dealer.innerHTML = '<span>Дилер</span>';
+new maplibregl.Marker({element:dealer}).setLngLat(dealerPosition).addTo(map);
+let editing=false,first=true,lastRecenter=-1,destination=dealerPosition,routeGeometry=null;
+let sheetInset=0;
+window.setStoreSheetInset=function(inset) {
+  sheetInset=Math.max(0,inset);
+  const attribution=document.querySelector(".maplibregl-ctrl-bottom-right");
+  if(attribution) attribution.style.bottom=sheetInset+"px";
+};
+const emptyRoute={type:'FeatureCollection',features:[]};
+function drawRoute() {
+  if(!map.getSource('dealer-route')) return;
+  map.getSource('dealer-route').setData(routeGeometry ? {type:'Feature',properties:{},geometry:routeGeometry} : emptyRoute);
+  ['dealer-route-border','dealer-route-line'].forEach(id=>map.setLayoutProperty(id,'visibility',editing?'none':'visible'));
+}
+function fitRoute() {
+  const points=routeGeometry ? routeGeometry.coordinates : [dealerPosition,destination];
+  const bounds=new maplibregl.LngLatBounds(); points.forEach(point=>bounds.extend(point));
+  map.fitBounds(bounds,{padding:{top:80,bottom:Math.min(88+sheetInset,Math.max(88,map.getContainer().clientHeight-160)),left:52,right:52},maxZoom:15,duration:350});
+}
+function reportCenter() {
+  if(editing) { const point=map.getCenter().wrap(); StoreMap.positionChanged(point.lat,point.lng); }
+}
+window.resizeStoreMap=function(height) {
+  if(height>0) document.getElementById('map').style.height=height+'px';
+  map.resize();
+};
+window.configureStoreMap=function(lat,lng,edit,recenterToken) {
+  const modeChanged=editing!==edit,requested=lastRecenter!==recenterToken;
+  editing=edit; destination=[lng,lat]; marker.setLngLat(destination);
+  if(edit) marker.remove(); else marker.addTo(map);
+  if(first||modeChanged||requested) {
+    if(edit) map.jumpTo({center:modeChanged||first?destination:map.getCenter(),zoom:15});
+    else fitRoute();
+  }
+  first=false;lastRecenter=recenterToken;drawRoute();reportCenter();
+};
+// Routing is owned by Compose so totals still update after leaving the map.
+window.updateStoreRoute=function(lat,lng,geometry) {
+  destination=[lng,lat];routeGeometry=geometry;drawRoute();
+  if(!editing) { marker.setLngLat(destination);fitRoute(); }
+};
+window.focusStorePoint=function(lat,lng) {
+  if(editing)map.easeTo({center:[lng,lat],zoom:16,duration:650});
+};
+map.on('load',()=>{
+  map.addSource('dealer-route',{type:'geojson',data:emptyRoute});
+  const label=(map.getStyle().layers.find(layer=>layer.type==='symbol')||{}).id;
+  map.addLayer({id:'dealer-route-border',type:'line',source:'dealer-route',layout:{'line-join':'round','line-cap':'round'},paint:{'line-color':'#ffffff','line-width':11,'line-opacity':.9}},label);
+  map.addLayer({id:'dealer-route-line',type:'line',source:'dealer-route',layout:{'line-join':'round','line-cap':'round'},paint:{'line-color':'#9103e4','line-width':7}},label);
+  drawRoute();
+});
+map.on('movestart',()=>{if(editing)StoreMap.mapMoving(true);});
+map.on('moveend',()=>{reportCenter();StoreMap.mapMoving(false);});
+map.on('click',e=>{if(editing)map.easeTo({center:e.lngLat,duration:280});});
+map.on('idle',()=>StoreMap.tileStatus(true));
+map.on('error',()=>StoreMap.tileStatus(false));
+StoreMap.ready();
+</script>
+</body>
+</html>

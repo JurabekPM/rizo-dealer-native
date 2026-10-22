@@ -1,0 +1,146 @@
+[
+  {
+    "icon": "refresh",
+    "sourceMask": "mask2_21_115",
+    "sourceOrigin": [
+      389.0,
+      352.0
+    ],
+    "size": [
+      22.0,
+      22.0
+    ]
+  },
+  {
+    "icon": "visit",
+    "sourceMask": "mask3_21_115",
+    "sourceOrigin": [
+      105.0,
+      428.0
+    ],
+    "size": [
+      22.0,
+      22.0
+    ]
+  },
+  {
+    "icon": "chevron",
+    "sourceMask": "mask4_21_115",
+    "sourceOrigin": [
+      372.0,
+      429.0
+    ],
+    "size": [
+      20.0,
+      20.0
+    ]
+  },
+  {
+    "icon": "orders",
+    "sourceMask": "mask5_21_115",
+    "sourceOrigin": [
+      92.0,
+      596.59
+    ],
+    "size": [
+      22.0,
+      22.0
+    ]
+  },
+  {
+    "icon": "delivery",
+    "sourceMask": "mask7_21_115",
+    "sourceOrigin": [
+      260.0,
+      596.59
+    ],
+    "size": [
+      22.0,
+      22.0
+    ]
+  },
+  {
+    "icon": "wallet",
+    "sourceMask": "mask9_21_115",
+    "sourceOrigin": [
+      92.0,
+      724.59
+    ],
+    "size": [
+      22.0,
+      22.0
+    ]
+  },
+  {
+    "icon": "return",
+    "sourceMask": "mask11_21_115",
+    "sourceOrigin": [
+      260.0,
+      724.59
+    ],
+    "size": [
+      22.0,
+      22.0
+    ]
+  },
+  {
+    "icon": "revision",
+    "sourceMask": "mask13_21_115",
+    "sourceOrigin": [
+      92.0,
+      868.59
+    ],
+    "size": [
+      22.0,
+      22.0
+    ]
+  },
+  {
+    "icon": "store",
+    "sourceMask": "mask15_21_115",
+    "sourceOrigin": [
+      260.0,
+      868.59
+    ],
+    "size": [
+      22.0,
+      22.0
+    ]
+  },
+  {
+    "icon": "home",
+    "sourceMask": "mask17_21_115",
+    "sourceOrigin": [
+      89.0,
+      901.5
+    ],
+    "size": [
+      22.0,
+      22.0
+    ]
+  },
+  {
+    "icon": "menu",
+    "sourceMask": "mask21_21_115",
+    "sourceOrigin": [
+      377.0,
+      901.5
+    ],
+    "size": [
+      22.0,
+      22.0
+    ]
+  },
+  {
+    "icon": "debt",
+    "sourceMask": "mask47_21_115",
+    "sourceOrigin": [
+      892.0,
+      731.59
+    ],
+    "size": [
+      22.0,
+      22.0
+    ]
+  }
+]
