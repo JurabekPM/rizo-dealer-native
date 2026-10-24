@@ -179,3 +179,18 @@ Handoff yaratilganda Git yo‘q edi; 2026-10-22 kuni Git ishga tushirildi. Joriy
 - Internet bo‘lmasa route/geocoder/map ishlamasligi mumkin; fallback mavjud UIini olib tashlamang. OSRM production SLA bermaydi.
 - Mavjud ba’zi report/menu/buttonlar dizayn maketi xolos. Masalan store detailsdagi vizual «Начать визит»ni Agent Visitsdagi haqiqiy session boshqaruvi bilan adashtirmang.
 - Hozir alohida bajarilmagan topshiriq yo‘q: keyingi o‘zgarish foydalanuvchining yangi vazifasidan boshlanadi. Ushbu cheklovlarni ruxsatsiz kengaytirish “tozalash” hisoblanmaydi.
+
+## 11. Agent Заявка — 2026-10-24
+
+Agent → Визиты → do‘kon → Заявка endi ishlaydi. Alohida bottom-navigation bandi qo‘shilmadi; Admin Заявки va umumiy Return oqimi o‘zgarmadi.
+
+- Yangi zayavka faqat faol vizitda. Boshlanmagan vizitda «Начать визит» bilan haqiqiy boshlanish vaqti yoziladi; bir faol vizit qoidasi saqlangan. Yakunlangan vizitda yangi zayavka yaratilmaydi.
+- Figma bo‘sh holati/asl illustratsiya → Добавить → mahsulot qidirish (nom/barcode), miqdor sheeti → Продолжить → umumiy summa, tovarlar soni, X va minus/count/plus → Завершить → Внимание / Да.
+- Picker mustaqil draft: Back tashqi formani o‘zgartirmaydi. Sheet miqdori 0..katalog stock oralig‘ida, stock 0 bo‘lsa tanlanmaydi. 0 miqdor cartdan chiqaradi. Bekor qilish/bo‘sh forma result yoki hujjat yozmaydi.
+- `RequestCatalog.kt` — 20 demo pozitsiya, buyurtma uchun alohida stock; returnning do‘kondagi qoldig‘i yoki manba hujjati order UIiga ko‘chirilmagan. Asl mavjud mahsulot rasmlari qayta ishlatiladi, qolganida neutral placeholder.
+- `VisitRequestStore`: yangi `agent_visit_requests` SharedPreferences, visit ID → documentId, createdAt, items(productId,name,price,quantity). Bir vizitga bitta zayavka. Narx/nom/miqdor snapshot, UZS Long. Faol vizitda «Редактировать» bilan shu hujjat yangilanadi; documentId/createdAt saqlanadi. Vizit yakunlangach read-only.
+- `AgentVisitSessions.saveRequest` faqat faol sessionga Request resultini qo‘shadi, vizitni yakunlamaydi va boshqa natija/izoh/rasm/vaqtni saqlaydi. Vizit qatorida haqiqiy items/total tavsifi chiqadi.
+- AgentHistoryEntry.requestRecord optional. Vizit yakunlangach history/sales shu record mahsulot va summalarini oladi; demo mahsulotlar bilan almashtirmaydi. Sales oyiga record.createdAt (Asia/Tashkent) bo‘yicha tushadi. Haqiqiy qayd bo‘lmagan sklad/qabul/dostavka timeline hodisalari qo‘shilmadi.
+- O‘rganilgan Figma va aniq komponentlar: `figma-reference/agent-requests/README.md`.
+
+Tekshiruv: debug yig‘ildi, **62 unit test, 0 failures** (yangi order validatsiyasi, aniq total, history/sales va oy chegarasi). Telefon UIini foydalanuvchi tekshiradi. Oldindan tahrirlangan PendingAgentVisitSampleData va VisitSampleConsistencyTest fayllari aynan saqlandi va bu vazifaning commitiga kiritilmadi.

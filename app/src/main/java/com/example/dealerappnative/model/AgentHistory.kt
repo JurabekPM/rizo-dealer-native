@@ -15,7 +15,7 @@ internal enum class HistoryVisitType(val label: String) {
     }
 }
 
-internal data class AgentHistoryEntry(val visit: VisitStore, val session: AgentVisitSession, val unplanned: Boolean = false, val returnRecord: VisitReturnRecord? = null) {
+internal data class AgentHistoryEntry(val visit: VisitStore, val session: AgentVisitSession, val unplanned: Boolean = false, val returnRecord: VisitReturnRecord? = null, val requestRecord: VisitRequestRecord? = null) {
     val status: HistoryStatus get() = if (session.isAttempt) HistoryStatus.Cancelled else HistoryStatus.Completed
 }
 

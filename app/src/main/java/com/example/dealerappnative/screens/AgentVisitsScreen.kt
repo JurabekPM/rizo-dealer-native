@@ -70,7 +70,7 @@ internal fun AgentVisitsScreen(visitSessions: AgentVisitSessions, onDetailVisibl
             .toMutableList().apply { add(2.coerceAtMost(size), active) }
     }
     val returns = LocalVisitReturns.current
-    val cards = orderedCards.map(returns::enrich).map { card ->
+    val cards = orderedCards.map(returns::enrich).map(visitSessions.requests::enrich).map { card ->
         visitSessions.sessions[card.id]?.let { session ->
             card.copy(status = when {
                 session.isActive -> VisitStatus.Active

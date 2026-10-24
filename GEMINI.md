@@ -59,3 +59,7 @@ Kod manba haqiqatidir; hujjat undan farq qilsa avval tekshiring. Yangi topshiriq
 
 This project now uses Git. See `docs/GITHUB_WORKFLOW_UZ.md`.
 The user authorized committing and pushing completed, task-scoped changes to the project's own GitHub repository after validation. Check `git remote -v`, branch, status and diff first. Do not include unrelated changes, credentials, device settings or build output. Do not force-push or erase history. Report actual push success or the remaining blocker. One writer per checkout; parallel agents use separate worktrees.
+
+## 2026-10-24: Agent Заявка
+
+Agent → Визиты → do‘kon → Заявка yaratish qo‘shilgan; yangi navigation tabi yo‘q. Faqat faol vizitda saqlash/tahrirlash, yakunlanganda read-only. AgentVisitSessions.requests / agent_visit_requests lokal hujjati; save Request resultini qo‘shadi, vizitni yakunlamaydi. Picker tranzaksion, history/sales o‘z record summalari va yaratilgan sanasidan foydalanadi. Tafsilot: handoff §11. Joriy build va 62 test o‘tdi; UI sinovini foydalanuvchi qiladi.

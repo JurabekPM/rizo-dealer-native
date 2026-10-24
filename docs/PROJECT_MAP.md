@@ -197,3 +197,13 @@ Fayl nomi mavjudlikni bildiradi; har bir tugma ishlashiga kafolat emas. Vizual-o
 - `app/src/main/AndroidManifest.xml`: INTERNET va foreground location permissions; ACTION_DIALga CALL_PHONE kerak emas.
 - `gradle/libs.versions.toml`, `app/build.gradle.kts`: haqiqiy build versiyalari.
 - `docs/HANDOFF_BASELINE_SHA256.json`: source holati; `scripts/Compare-HandoffBaseline.ps1` o‘qish uchun solishtiruvchi script.
+
+## Agent Заявка qo‘shimchasi — 2026-10-24
+
+- `screens/AgentVisitRequestScreen.kt`: vizitdan kirish, faol-vizit cheklovi, form, tasdiqlash.
+- `screens/RequestProductPickerScreen.kt`: tranzaksion qidiruv/tanlash.
+- `ui/components/RequestProductComponents.kt`: original uslubdagi thumbnail/card, quantity sheet.
+- `screens/VisitRequestDetailScreen.kt`: saqlangan zayavka va faol vizitda tahrirlash.
+- `data/RequestCatalog.kt`, `data/VisitRequestStore.kt`, `model/VisitRequestRecord.kt`: order katalogi, lokal JSON, snapshot va validatsiya.
+- `data/AgentVisitSessions.kt`: saveRequest; `model/AgentHistory.kt`, `data/AgentHistoryReports.kt`, `data/AgentHistorySales.kt`: haqiqiy request record bilan integratsiya.
+- `VisitRequestsTest.kt`: total/validation/history/month boundary regressiyalari.

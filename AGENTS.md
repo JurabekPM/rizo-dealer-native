@@ -76,3 +76,7 @@ Use `docs/REGRESSION_CHECKLIST_UZ.md` selectively. Report build/test results acc
 
 This project now uses Git. See `docs/GITHUB_WORKFLOW_UZ.md`.
 The user authorized committing and pushing completed, task-scoped changes to the project's own GitHub repository after validation. Check `git remote -v`, branch, status and diff first. Do not include unrelated changes, credentials, device settings or build output. Do not force-push or erase history. Report actual push success or the remaining blocker. One writer per checkout; parallel agents use separate worktrees.
+
+## Agent request flow — 2026-10-24
+
+Agent Visit → Заявка uses AgentVisitRequestScreen / RequestProductPickerScreen / VisitRequestDetailScreen. Local agent_visit_requests storage belongs to AgentVisitSessions.requests. Save is active-visit-only and adds Request without finishing the visit; edits preserve documentId/createdAt. Picker Back must not mutate the cart, empty forms must not create work. Finished visits/orders are read-only. History/Sales use requestRecord snapshots and createdAt for monthly grouping. Admin orders/Return flow are unchanged. See handoff section 11 and figma-reference/agent-requests/README.md.

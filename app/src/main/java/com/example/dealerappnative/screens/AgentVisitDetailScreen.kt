@@ -37,6 +37,11 @@ internal fun AgentVisitDetailScreen(store: StoreUiModel, visit: VisitStore,
     sessions: AgentVisitSessions, onBack: () -> Unit) {
     val session = sessions.sessions[store.id]
     val detailListState = rememberLazyListState()
+    var requestVisible by rememberSaveable(store.id) { mutableStateOf(false) }
+    if (requestVisible) {
+        AgentVisitRequestScreen(visit, sessions, onBack = { requestVisible = false })
+        return
+    }
     var returnVisible by rememberSaveable(store.id) { mutableStateOf(false) }
     if (returnVisible) {
         VisitReturnScreen(visit, session, allowCreate = session?.isActive == true,
@@ -77,7 +82,11 @@ internal fun AgentVisitDetailScreen(store: StoreUiModel, visit: VisitStore,
                     .padding(horizontal = 16.dp)) {
                     VisitResult.entries.forEachIndexed { index, result ->
                         VisitOperationRow(visit, result, result in (session?.results ?: visit.results),
-                            onClick = if (result == VisitResult.Return) ({ returnVisible = true }) else null)
+                            onClick = when (result) {
+                                VisitResult.Return -> ({ returnVisible = true })
+                                VisitResult.Request -> ({ requestVisible = true })
+                                else -> null
+                            })
                         if (index < VisitResult.entries.lastIndex) HorizontalDivider(color = DealerDesign.divider,
                             modifier = Modifier.padding(start = 36.dp))
                     }

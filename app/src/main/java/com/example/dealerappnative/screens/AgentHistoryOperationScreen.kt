@@ -22,6 +22,10 @@ import com.example.dealerappnative.ui.theme.DealerDesign
 /** One recorded document, opened from a visit, revision list or monthly plan ledger. */
 @Composable
 internal fun AgentHistoryOperationScreen(entry: AgentHistoryEntry, operation: HistoryOperation, onBack: () -> Unit) {
+    if (operation.result == VisitResult.Request && entry.requestRecord != null) {
+        VisitRequestDetailScreen(entry.visit, entry.requestRecord, onBack)
+        return
+    }
     Column(Modifier.fillMaxSize().background(DealerDesign.background)) {
         HistoryHeader(entry.visit.name, onBack)
         LazyColumn(Modifier.weight(1f), contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp),

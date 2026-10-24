@@ -42,7 +42,8 @@ internal fun AgentHistoryScreen(sessions: AgentVisitSessions, onDetailVisible: (
         .filterIndexed { index, _ -> index % 4 == 1 }.map { it.id }.toSet() }
     val entries = agentVisitCards.mapNotNull { visit ->
         sessions.sessions[visit.id]?.takeUnless { it.isActive }?.let {
-            AgentHistoryEntry(returns.enrich(visit.copy(results = it.results)), it, visit.id in unplannedIds, returns.records[visit.id])
+            AgentHistoryEntry(sessions.requests.enrich(returns.enrich(visit.copy(results = it.results))), it,
+                visit.id in unplannedIds, returns.records[visit.id], sessions.requests.records[visit.id])
         }
     }.sortedByDescending { it.session.startedAt }
     val visible = entries.filter(filter::matches)

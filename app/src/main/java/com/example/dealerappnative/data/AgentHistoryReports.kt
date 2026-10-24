@@ -34,6 +34,11 @@ internal data class HistoryOperation(val result: VisitResult, val documentId: St
 /** Fictional document lines are stable per visit ID; only recorded session results create documents. */
 internal fun historyOperations(entry: AgentHistoryEntry): List<HistoryOperation> =
     if (entry.session.isActive) emptyList() else entry.session.results.distinct().map { result ->
+    if (result == VisitResult.Request && entry.requestRecord != null) {
+        val record = entry.requestRecord
+        return@map HistoryOperation(result, record.documentId,
+            record.items.map { HistoryProduct(it.name, it.price, it.quantity) }, record.total)
+    }
     if (result == VisitResult.Return && entry.returnRecord != null) {
         val record = entry.returnRecord
         return@map HistoryOperation(result, record.documentId,

@@ -104,3 +104,14 @@
 ```
 
 Bu 2026-10-22 hujjat topshirish paytidagi source SHA-256 holati bilan solishtiradi. Keyinchalik asosli yangi o‘zgarishlar chiqishi normal. Har bir farq xato degani emas, lekin vazifaga aloqasiz farqlar tekshiriladi. Baseline manifestni testni “yashil” qilish uchun avtomatik yangilamang.
+
+## Agent Заявка — yangi oqim (2026-10-24)
+
+- Boshlanmagan vizitda Заявка → Начать визит; boshqa vizit faol bo‘lsa boshlamasin. Yakunlangan vizit qayta ochilmasin.
+- Faol vizit → Заявка → Добавить → nom/barcode qidirish → qty sheet → Продолжить. Picker Back cartni o‘zgartirmasin; X qidiruv matnini tozalasin.
+- 0/stockdan ko‘p/noto‘g‘ri miqdor tekshirilsin, stock 0 mahsulot tanlanmasin. Minus0 yoki X mahsulotni olib tashlasin. Total = price×qty jami.
+- Завершить → Нет/dismiss hujjat/result yozmasin. Да request yozsin va vizit davom etsin. Qayta kirishda o‘z nom/narx/qty/total chiqsin; faol vizitda Редактировать ishlasin.
+- App qayta ochilganda request saqlansin. Vizit yakunlangach request read-only, История/История продаж ayni mahsulot/summani ko‘rsatsin; oy record.createdAt bo‘yicha.
+- Returnlar/sabab sheetlari, Admin Заказы, shared transition va listga Back scrolli saqlansin.
+
+Avtomatik holat: assembleDebug va 62 unit test muvaffaqiyatli. Yuqoridagi UI bandlari foydalanuvchining qurilmadagi tekshiruvi uchun; avtomatik bajarilgan deb belgilanmagan.

@@ -31,7 +31,9 @@ internal fun AgentSalesHistoryScreen(entries: List<AgentHistoryEntry>, onBack: (
     var visitId by rememberSaveable { mutableStateOf<String?>(null) }
     var result by rememberSaveable { mutableStateOf<VisitResult?>(null) }
     val states = rememberSaveableStateHolder()
-    val months = (historyPlanMonths(entries) + entries.mapNotNull { it.returnRecord?.let { record -> HistoryMonth.at(record.createdAt) } })
+    val months = (historyPlanMonths(entries) + entries.flatMap { entry ->
+        listOfNotNull(entry.returnRecord?.createdAt, entry.requestRecord?.createdAt).map(HistoryMonth::at)
+    })
         .distinct().sortedByDescending { it.key }
     val month = months.find { it.key == monthKey }
     val stores = month?.let { historySalesStores(it, entries) }.orEmpty()
@@ -63,7 +65,11 @@ internal fun AgentSalesHistoryScreen(entries: List<AgentHistoryEntry>, onBack: (
                                     (if (report.result == VisitResult.Return) "−" else "") + historyMoney(report.amount),
                                     if (report.result == VisitResult.Return) DebtDirection.StoreOwesDealer.color else DealerDesign.text)
                                 HistoryValue(if (report.result == VisitResult.Return) "Дата возврата" else "Дата подтверждения",
-                                    historyDate(requireNotNull(entry.session.finishedAt)))
+                                    historyDate(when (report.result) {
+                                        VisitResult.Request -> entry.requestRecord?.createdAt
+                                        VisitResult.Return -> entry.returnRecord?.createdAt
+                                        else -> null
+                                    } ?: requireNotNull(entry.session.finishedAt)))
                                 HistoryValue("Товары", "Посмотреть (${report.products.size})", DealerDesign.accent)
                             }
                         }

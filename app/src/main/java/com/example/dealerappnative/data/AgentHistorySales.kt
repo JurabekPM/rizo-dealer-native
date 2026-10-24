@@ -16,7 +16,11 @@ internal fun historySalesStores(month: HistoryMonth, entries: List<AgentHistoryE
     val documents = entries.filter { !it.session.isActive }
         .flatMap { entry -> historyOperations(entry).filter {
             (it.result == VisitResult.Request || it.result == VisitResult.Return) &&
-                HistoryMonth.at(if (it.result == VisitResult.Return) entry.returnRecord?.createdAt ?: entry.session.startedAt else entry.session.startedAt) == month
+                HistoryMonth.at(when (it.result) {
+                    VisitResult.Return -> entry.returnRecord?.createdAt ?: entry.session.startedAt
+                    VisitResult.Request -> entry.requestRecord?.createdAt ?: entry.session.startedAt
+                    else -> entry.session.startedAt
+                }) == month
         }.map { entry to it } }.groupBy { it.first.visit.id }
     return historyStorePlans(HistorySection.RequestPlan, month, entries).map { plan ->
         HistorySalesStore(plan.visit, plan.target, documents[plan.visit.id].orEmpty()

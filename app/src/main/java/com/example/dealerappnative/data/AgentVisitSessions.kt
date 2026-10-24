@@ -5,6 +5,9 @@ import androidx.compose.runtime.mutableStateMapOf
 import com.example.dealerappnative.model.AgentVisitSession
 import com.example.dealerappnative.model.VisitFinishReason
 import com.example.dealerappnative.model.VisitResult
+import com.example.dealerappnative.model.VisitRequestItem
+import com.example.dealerappnative.model.VisitRequestRecord
+import com.example.dealerappnative.model.canSaveVisitRequest
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -12,6 +15,7 @@ import org.json.JSONObject
 internal class AgentVisitSessions(context: Context) {
     private val preferences = context.applicationContext.getSharedPreferences("agent_visit_sessions", Context.MODE_PRIVATE)
     val sessions = mutableStateMapOf<String, AgentVisitSession>()
+    val requests = VisitRequestStore(context)
 
     init {
         preferences.all.forEach { (id, value) ->
@@ -51,6 +55,18 @@ internal class AgentVisitSessions(context: Context) {
     fun start(storeId: String, results: List<VisitResult>): Boolean {
         if (results.isNotEmpty() || sessions.containsKey(storeId) || activeStoreId != null) return false
         save(storeId, AgentVisitSession(startedAt = System.currentTimeMillis(), results = results.toList()))
+        return true
+    }
+
+    /** Save exactly this visit's order; preserve its start, notes, photos and other work. */
+    fun saveRequest(storeId: String, items: List<VisitRequestItem>): Boolean {
+        val session = sessions[storeId] ?: return false
+        if (!canSaveVisitRequest(session, items)) return false
+        val existing = requests.records[storeId]
+        val now = System.currentTimeMillis()
+        val record = VisitRequestRecord(existing?.documentId ?: "RQ-$now", existing?.createdAt ?: now, items.toList())
+        requests.save(storeId, record)
+        save(storeId, session.copy(results = (session.results + VisitResult.Request).distinct()))
         return true
     }
 
