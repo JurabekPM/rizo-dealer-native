@@ -206,3 +206,11 @@ RequestProductThumbnail original rasmlarni IOda sampled decode qiladi. Beshta as
 ### Picker: foydalanuvchi so‘ragan narx/nom ajratilishi
 
 Figma asosidan keyingi ruxsat etilgan o‘zgarish: bor mahsulotlarda В наличии va ajratuvchi nuqta olib tashlandi. Faqat stock=0 bo‘lsa narx ostida Нет в наличии; shu qatorda + va bosish ishlamaydi. Mahsulot nomi15/20 Medium (2 qator/ellipsis), narx16/22 Semibold, valyuta/birlik13/18 Medium kulrang; matn oralig‘i4. Oddiy bir qator nomli mavjud mahsulot qatori48px kontent ichida qoladi. Discount, quantity badge, picker draft/stock cap, katalog va saqlangan hujjatlar o‘zgarmagan. Manbadagi eski В наличии qatorini avtomatik qaytarmang.
+
+### Picker: tanlanganlarni tekshirish va ixcham jami
+
+- Mavjud mahsulotlar yuqorida, stock=0 pastda; har guruh ichida avvalgi displayOrder. Katalog/draft indekslari va saqlangan mahsulot IDlari o‘zgarmaydi.
+- «Выбрано: N товаров» bosilsa faqat tanlanganlar; «Все товары» orqali qaytiladi. Qidiruv ikkala rejimda ham ishlaydi, matn va tanlov o‘chmaydi. Alohida LazyListState har rejimning scroll joyini saqlaydi. 0 miqdor tanlanganlar ro‘yxatidan chiqaradi, bo‘sh holatda barcha tovarlarga qaytish bor.
+- Продолжить ustida noyob pozitsiyalar soni va barcha tanlanganlarning Long UZS jami turadi. Qidiruv/filtr summani kamaytirmaydi. Tanlov bo‘lmasa jami satri yashirin, Продолжить o‘chiq.
+- Tanlangan thumbnailga1dp/60% accent chegara; o‘lcham48 va sampled IO decode saqlangan. selected parametri defaultfalse: forma va saqlangan hujjat rasmlari o‘zgarmaydi.
+- Bu foydalanuvchi tasdiqlagan Figma asosidan keyingi yaxshilanishlar. Picker Back hanuz tashqi formani o‘zgartirmaydi; faqat Продолжить draftni qo‘llaydi. Build va66 unit test o‘tdi, qurilma UIini foydalanuvchi tekshiradi.

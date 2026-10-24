@@ -57,7 +57,7 @@ internal fun RequestPickerSearch(query: String, onQuery: (String) -> Unit, focus
 internal fun RequestPickerProduct(product: RequestCatalogProduct, quantity: Int, onSelect: () -> Unit) {
     Row(Modifier.fillMaxWidth().softCardPress(enabled = product.stock > 0, onClick = onSelect)
         .padding(horizontal = 16.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically) {
-        RequestProductThumbnail(product)
+        RequestProductThumbnail(product, selected = quantity > 0)
         Spacer(Modifier.width(12.dp))
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(product.name, style = Design.productTitle, color = DealerDesign.text,

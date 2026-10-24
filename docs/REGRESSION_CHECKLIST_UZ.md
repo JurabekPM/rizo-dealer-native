@@ -117,3 +117,6 @@ Bu 2026-10-22 hujjat topshirish paytidagi source SHA-256 holati bilan solishtira
 Avtomatik holat: assembleDebug va 62 unit test muvaffaqiyatli. Yuqoridagi UI bandlari foydalanuvchining qurilmadagi tekshiruvi uchun; avtomatik bajarilgan deb belgilanmagan.
 
 Figma picker tuzatishi: klaviatura bilan header72/search40, X maydon ichida; selected done_all va count;48/32 rasm, plus40 va17 baland badge; narx soni aniqroq Semibold, valyuta/birlik kulrang; mavjud tovarlarda В наличии yo‘q, tugaganda Нет в наличии va + yo‘q;10% belgi va eski narx strike saqlangan. Miqdor sheetida oddiy holatda nom/qoldiq satrlari yo‘q, suffix ajratilgan; confirm yumshoq yopilsin. Stock cap va Back draft qoidasi saqlansin. 63 unit test o‘tdi; bular qurilmadagi vizual tekshiruv o‘rnini bosmaydi.
+
+- Pickerda mavjud tovarlar avval, tugaganlar oxirida. «Выбрано» ↔ «Все товары» qidiruv/draftni yo‘qotmasin, har rejim scrolli saqlansin; qty0 tanlanganlardan chiqsin.
+- Tanlangan rasmida nozik chegara; Продолжить ustida pozitsiyalar soni va to‘liq jami. Qidiruvda tovar yashirilsa ham jami o‘zgarmasin; Back tashqi cartga qo‘llamasin.

@@ -31,3 +31,7 @@ Validation: assembleDebug and63 unit tests pass. Matching was checked against ex
 ## Subsequent explicit user adjustment — price and title hierarchy
 
 Available products omit the availability label and dot. Only out-of-stock products show Нет в наличии below the price, without an add action. Product title15/20 Medium (max2 lines), numeric price16/22 Semibold with tabular digits, currency/unit13/18 Medium in secondary gray; vertical gap4. Search/header/sheet styles and all quantity/discount behavior stay as before. These are intentional user changes after matching the source; do not revert them to the original SVG.
+
+## Approved picker review improvements
+
+Available items precede out-of-stock items, retaining displayOrder inside each group and original catalog indexes in drafts. The selected-count row toggles selected-only/all, preserves query and separate list positions, and lets quantities be edited in either view. The compact footer shows all selected product positions and the full price×quantity total above Continue, independently of query/filter. Only selected picker thumbnails gain a subtle1dp accent border (60% opacity); other thumbnail callers keep the original look. No selection means no summary row and disabled Continue. These changes were explicitly approved after the source match; do not revert them from the original SVG. Build and66 unit tests passed; user performs device UI checks.

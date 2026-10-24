@@ -29,3 +29,18 @@ internal val requestCatalog = returnCatalog.mapIndexed { index, product ->
 internal fun normalizeRequestQuantities(values: List<Int>): List<Int> = requestCatalog.mapIndexed { index, product ->
     values.getOrElse(index) { 0 }.coerceIn(0, product.stock)
 }
+
+/** Return catalog indexes, never reorder the draft's persisted product positions. */
+internal fun requestPickerIndexes(quantities: List<Int>, query: String = "", selectedOnly: Boolean = false): List<Int> {
+    val current = normalizeRequestQuantities(quantities)
+    val search = query.trim()
+    return requestCatalog.indices.filter { index ->
+        val product = requestCatalog[index]
+        (!selectedOnly || current[index] > 0) &&
+            (product.name.contains(search, ignoreCase = true) || product.id.contains(search, ignoreCase = true))
+    }.sortedWith(compareBy<Int> { requestCatalog[it].stock <= 0 }.thenBy { requestCatalog[it].displayOrder })
+}
+
+/** The entire draft contributes to the total, including items hidden by search/filter. */
+internal fun requestPickerTotal(quantities: List<Int>): Long = normalizeRequestQuantities(quantities)
+    .mapIndexed { index, quantity -> requestCatalog[index].price * quantity.toLong() }.sum()
