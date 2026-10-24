@@ -115,3 +115,5 @@ Bu 2026-10-22 hujjat topshirish paytidagi source SHA-256 holati bilan solishtira
 - Returnlar/sabab sheetlari, Admin Заказы, shared transition va listga Back scrolli saqlansin.
 
 Avtomatik holat: assembleDebug va 62 unit test muvaffaqiyatli. Yuqoridagi UI bandlari foydalanuvchining qurilmadagi tekshiruvi uchun; avtomatik bajarilgan deb belgilanmagan.
+
+Figma picker tuzatishi: klaviatura bilan header72/search40, X maydon ichida; selected done_all va count;48/32 rasm, plus40 va17 baland badge; narx+mavjudlik yonma-yon,10% belgi va eski narx strike. Miqdor sheetida oddiy holatda nom/qoldiq satrlari yo‘q, suffix ajratilgan; confirm yumshoq yopilsin. Stock cap va Back draft qoidasi saqlansin. 63 unit test o‘tdi; bular qurilmadagi vizual tekshiruv o‘rnini bosmaydi.

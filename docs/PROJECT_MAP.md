@@ -207,3 +207,5 @@ Fayl nomi mavjudlikni bildiradi; har bir tugma ishlashiga kafolat emas. Vizual-o
 - `data/RequestCatalog.kt`, `data/VisitRequestStore.kt`, `model/VisitRequestRecord.kt`: order katalogi, lokal JSON, snapshot va validatsiya.
 - `data/AgentVisitSessions.kt`: saveRequest; `model/AgentHistory.kt`, `data/AgentHistoryReports.kt`, `data/AgentHistorySales.kt`: haqiqiy request record bilan integratsiya.
 - `VisitRequestsTest.kt`: total/validation/history/month boundary regressiyalari.
+
+Mahsulot tanlashning Figma qismi: `ui/components/RequestPickerComponents.kt`, `RequestQuantitySheet.kt`, `RequestProductThumbnail.kt`, `ui/theme/RequestPickerDesign.kt`. `RequestCatalogCompatibilityTest.kt` UI saralashidan keyin eski draft ID/miqdorlari joyi o‘zgarmasligini tekshiradi.

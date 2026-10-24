@@ -194,3 +194,11 @@ Agent → Визиты → do‘kon → Заявка endi ishlaydi. Alohida bott
 - O‘rganilgan Figma va aniq komponentlar: `figma-reference/agent-requests/README.md`.
 
 Tekshiruv: debug yig‘ildi, **62 unit test, 0 failures** (yangi order validatsiyasi, aniq total, history/sales va oy chegarasi). Telefon UIini foydalanuvchi tekshiradi. Oldindan tahrirlangan PendingAgentVisitSampleData va VisitSampleConsistencyTest fayllari aynan saqlandi va bu vazifaning commitiga kiritilmadi.
+
+### 2026-10-24: mahsulot tanlash Figma bilan qayta moslandi
+
+RequestProductPickerScreen endi SearchSelection eksportining o‘lcham/rang/ikon/raster manbalarini ishlatadi. RequestPickerComponents va RequestPickerDesign faqat shu oynaga tegishli: Regular15/20 va13/18 manbaga mos; boshqa ekranlarda kuchaytirilgan typography saqlangan. Header72/search40, ichki X, selected done_all, rasm48/32, narx+mavjudlik bir qator, badge va chegirma; compact RequestQuantitySheet alohida faylda.
+
+RequestProductThumbnail original rasmlarni IOda sampled decode qiladi. Beshta asl mahsulot rasmi bor; ikkita bir xil asset avvalgi Return resursidan qayta ishlatiladi. RequestCatalog dastlabki20 ID/indeksni saqlaydi, XGT/Ryobi yangi22tagacha kengaytiradi; displayOrder saqlanadigan draft indekslarini o‘zgartirmaydi. Yangi Makita demo450000/old500000; mavjud request snapshotlari o‘zgarmaydi. Return katalogi o‘zgarmagan.
+
+63 unit test va build o‘tdi; UI/FPSni telefonda avtomatik tekshirildi deb hisoblamang. `figma-reference/agent-requests/README.md` va picker-measurements.json — aniq manbalar.

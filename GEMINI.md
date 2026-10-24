@@ -63,3 +63,5 @@ The user authorized committing and pushing completed, task-scoped changes to the
 ## 2026-10-24: Agent Заявка
 
 Agent → Визиты → do‘kon → Заявка yaratish qo‘shilgan; yangi navigation tabi yo‘q. Faqat faol vizitda saqlash/tahrirlash, yakunlanganda read-only. AgentVisitSessions.requests / agent_visit_requests lokal hujjati; save Request resultini qo‘shadi, vizitni yakunlamaydi. Picker tranzaksion, history/sales o‘z record summalari va yaratilgan sanasidan foydalanadi. Tafsilot: handoff §11. Joriy build va 62 test o‘tdi; UI sinovini foydalanuvchi qiladi.
+
+Mahsulot tanlash oynasi keyin Figma eksportidagi aniq qiymatlarga qayta moslandi: ichki X, done_all, narx+mavjudlik, badge, chegirma va asl5 rasm. RequestPickerDesign shu oyna uchun manbadagi Regular vaznlarini ishlatadi; boshqa ekranlarni o‘zgartirmang. Request katalog22 pozitsiya, eski20 indeks saqlangan. Yangi unit test bilan jami63 ta o‘tdi.

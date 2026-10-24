@@ -1,0 +1,1238 @@
+{
+  "figmaNode": "13744-262806",
+  "exportSha256": "fe0b36506091fe3b5bde70635ac8e279e8559363264610818fcadf878bfc376e",
+  "assets": [
+    {
+      "name": "request_makita",
+      "sourceId": "image0_13744_262806",
+      "sha256": "82e983f7b5a64104cb418382952a8cb8ac2099407885f27ef3dff897285b0564",
+      "androidResource": "drawable/return_makita.png"
+    },
+    {
+      "name": "request_bosch",
+      "sourceId": "image1_13744_262806",
+      "sha256": "34ce458596d5654302a6a3af9229b6d582bb4006dc4145860030f71e26d7e34d",
+      "androidResource": "drawable-nodpi/request_bosch.png"
+    },
+    {
+      "name": "request_dewalt",
+      "sourceId": "image2_13744_262806",
+      "sha256": "304f73b823ba2f6e9f22a70ecf4fbd800b7089926643265ececaf9078683b4a0",
+      "androidResource": "drawable/return_dewalt.png"
+    },
+    {
+      "name": "request_xgt",
+      "sourceId": "image3_13744_262806",
+      "sha256": "b4d7072b748fdd7c1aa0a66ce964f0ca13b0a1d2a2b831f4cce5b7df0642156c",
+      "androidResource": "drawable-nodpi/request_xgt.png"
+    },
+    {
+      "name": "request_ryobi",
+      "sourceId": "image4_13744_262806",
+      "sha256": "f9490df4b6250d6949bd1b73225bb9b41d421cbde59327a363f5a6f885d6d572",
+      "androidResource": "drawable-nodpi/request_ryobi.png"
+    }
+  ],
+  "geometry": [
+    {
+      "tag": "rect",
+      "width": "375",
+      "height": "812",
+      "fill": "white",
+      "text": ""
+    },
+    {
+      "tag": "rect",
+      "id": "Bounding box",
+      "x": "16",
+      "y": "132",
+      "width": "24",
+      "height": "24",
+      "fill": "#D9D9D9",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "â³ Label",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Text",
+      "font-size": "15",
+      "letter-spacing": "-0.24px",
+      "text": "Выбрано: 0 товар"
+    },
+    {
+      "tag": "tspan",
+      "x": "52",
+      "y": "149.332",
+      "text": ""
+    },
+    {
+      "tag": "rect",
+      "id": "Rectangle 11776",
+      "x": "16",
+      "y": "168",
+      "width": "343",
+      "height": "1",
+      "fill": "#EBEBEB",
+      "text": ""
+    },
+    {
+      "tag": "rect",
+      "width": "343",
+      "height": "64",
+      "transform": "translate(16 181)",
+      "fill": "white",
+      "text": ""
+    },
+    {
+      "tag": "rect",
+      "x": "16",
+      "y": "189",
+      "width": "48",
+      "height": "48",
+      "rx": "12",
+      "fill": "#F1F1F1",
+      "text": ""
+    },
+    {
+      "tag": "rect",
+      "id": "image 562",
+      "x": "24",
+      "y": "197",
+      "width": "32",
+      "height": "32",
+      "fill": "url(#pattern0_13744_262806)",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "â³ Label_2",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Text",
+      "font-size": "15",
+      "letter-spacing": "-0.24px",
+      "text": "Аккумуляторная дрель Makita"
+    },
+    {
+      "tag": "tspan",
+      "x": "76",
+      "y": "196.332",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "â³ Label_3",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Text",
+      "font-size": "15",
+      "letter-spacing": "-0.24px",
+      "text": "450 000 UZS/шт"
+    },
+    {
+      "tag": "tspan",
+      "x": "76",
+      "y": "218.332",
+      "text": ""
+    },
+    {
+      "tag": "circle",
+      "id": "Ellipse 1",
+      "cx": "201",
+      "cy": "213",
+      "r": "2",
+      "fill": "#D5DADD",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "Ð Ð¼Ð°Ð³Ð°Ð·Ð¸Ð½Ðµ: 35",
+      "fill": "#22C348",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Text",
+      "font-size": "13",
+      "letter-spacing": "-0.078px",
+      "text": "В наличии"
+    },
+    {
+      "tag": "tspan",
+      "x": "209",
+      "y": "217.621",
+      "text": ""
+    },
+    {
+      "tag": "rect",
+      "x": "76",
+      "y": "225",
+      "width": "36",
+      "height": "20",
+      "rx": "6",
+      "fill": "#FF0000",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "10%",
+      "transform": "translate(80 226)",
+      "fill": "white",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Text",
+      "font-size": "13",
+      "letter-spacing": "-0.078px",
+      "text": "10%"
+    },
+    {
+      "tag": "tspan",
+      "x": "0.0687227",
+      "y": "13.6211",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "500 000 UZS/ÑÑ",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Text",
+      "font-size": "13",
+      "letter-spacing": "-0.078px",
+      "text": "500 000 UZS/шт"
+    },
+    {
+      "tag": "tspan",
+      "x": "116",
+      "y": "239.621",
+      "text": ""
+    },
+    {
+      "tag": "rect",
+      "id": "Rectangle 11823",
+      "x": "116",
+      "y": "235",
+      "width": "103",
+      "height": "1",
+      "fill": "#F76659",
+      "text": ""
+    },
+    {
+      "tag": "rect",
+      "id": "Bounding box_2",
+      "x": "327",
+      "y": "201",
+      "width": "24",
+      "height": "24",
+      "fill": "#D9D9D9",
+      "text": ""
+    },
+    {
+      "tag": "rect",
+      "id": "Rectangle 11780",
+      "x": "16",
+      "y": "257",
+      "width": "343",
+      "height": "1",
+      "fill": "#EBEBEB",
+      "text": ""
+    },
+    {
+      "tag": "rect",
+      "width": "343",
+      "height": "48",
+      "transform": "translate(16 270)",
+      "fill": "white",
+      "text": ""
+    },
+    {
+      "tag": "rect",
+      "x": "16",
+      "y": "270",
+      "width": "48",
+      "height": "48",
+      "rx": "12",
+      "fill": "#F1F1F1",
+      "text": ""
+    },
+    {
+      "tag": "rect",
+      "id": "image 562_2",
+      "x": "24",
+      "y": "278",
+      "width": "32",
+      "height": "32",
+      "fill": "url(#pattern1_13744_262806)",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "â³ Label_4",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Text",
+      "font-size": "15",
+      "letter-spacing": "-0.24px",
+      "text": "Дрель-шуруповерт Bosch GSR 120-LI"
+    },
+    {
+      "tag": "tspan",
+      "x": "76",
+      "y": "288.332",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "â³ Label_5",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Text",
+      "font-size": "15",
+      "letter-spacing": "-0.24px",
+      "text": "500 000 UZS/шт"
+    },
+    {
+      "tag": "tspan",
+      "x": "76",
+      "y": "310.332",
+      "text": ""
+    },
+    {
+      "tag": "circle",
+      "id": "Ellipse 1_2",
+      "cx": "201",
+      "cy": "305",
+      "r": "2",
+      "fill": "#D5DADD",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "Ð Ð¼Ð°Ð³Ð°Ð·Ð¸Ð½Ðµ: 35_2",
+      "fill": "#84919A",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Text",
+      "font-size": "13",
+      "letter-spacing": "-0.078px",
+      "text": "Нет в наличии"
+    },
+    {
+      "tag": "tspan",
+      "x": "209",
+      "y": "309.621",
+      "text": ""
+    },
+    {
+      "tag": "rect",
+      "id": "Rectangle 11777",
+      "x": "16",
+      "y": "330",
+      "width": "343",
+      "height": "1",
+      "fill": "#EBEBEB",
+      "text": ""
+    },
+    {
+      "tag": "rect",
+      "width": "343",
+      "height": "48",
+      "transform": "translate(16 343)",
+      "fill": "white",
+      "text": ""
+    },
+    {
+      "tag": "rect",
+      "x": "16",
+      "y": "343",
+      "width": "48",
+      "height": "48",
+      "rx": "12",
+      "fill": "#F1F1F1",
+      "text": ""
+    },
+    {
+      "tag": "rect",
+      "id": "image 562_3",
+      "x": "24",
+      "y": "351",
+      "width": "32",
+      "height": "32",
+      "fill": "url(#pattern2_13744_262806)",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "â³ Label_6",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Text",
+      "font-size": "15",
+      "letter-spacing": "-0.24px",
+      "text": "Перфоратор DeWalt D25134K"
+    },
+    {
+      "tag": "tspan",
+      "x": "76",
+      "y": "361.332",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "â³ Label_7",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Text",
+      "font-size": "15",
+      "letter-spacing": "-0.24px",
+      "text": "500 000 UZS/шт"
+    },
+    {
+      "tag": "tspan",
+      "x": "76",
+      "y": "383.332",
+      "text": ""
+    },
+    {
+      "tag": "circle",
+      "id": "Ellipse 1_3",
+      "cx": "201",
+      "cy": "378",
+      "r": "2",
+      "fill": "#D5DADD",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "Ð Ð¼Ð°Ð³Ð°Ð·Ð¸Ð½Ðµ: 35_3",
+      "fill": "#22C348",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Text",
+      "font-size": "13",
+      "letter-spacing": "-0.078px",
+      "text": "В наличии"
+    },
+    {
+      "tag": "tspan",
+      "x": "209",
+      "y": "382.621",
+      "text": ""
+    },
+    {
+      "tag": "rect",
+      "id": "Bounding box_3",
+      "x": "327",
+      "y": "355",
+      "width": "24",
+      "height": "24",
+      "fill": "#D9D9D9",
+      "text": ""
+    },
+    {
+      "tag": "rect",
+      "id": "Rectangle 11778",
+      "x": "16",
+      "y": "403",
+      "width": "343",
+      "height": "1",
+      "fill": "#EBEBEB",
+      "text": ""
+    },
+    {
+      "tag": "rect",
+      "width": "343",
+      "height": "62",
+      "transform": "translate(16 416)",
+      "fill": "white",
+      "text": ""
+    },
+    {
+      "tag": "rect",
+      "x": "16",
+      "y": "423",
+      "width": "48",
+      "height": "48",
+      "rx": "12",
+      "fill": "#F1F1F1",
+      "text": ""
+    },
+    {
+      "tag": "rect",
+      "id": "image 562_4",
+      "x": "24",
+      "y": "431",
+      "width": "32",
+      "height": "32",
+      "fill": "url(#pattern3_13744_262806)",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "â³ Label_8",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Text",
+      "font-size": "15",
+      "letter-spacing": "-0.24px",
+      "text": "Аккумуляторная дисковая пила XGT® 40 В макс"
+    },
+    {
+      "tag": "tspan",
+      "x": "76",
+      "y": "431.332",
+      "text": ""
+    },
+    {
+      "tag": "tspan",
+      "x": "76",
+      "y": "451.332",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "â³ Label_9",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Text",
+      "font-size": "15",
+      "letter-spacing": "-0.24px",
+      "text": "500 000 UZS/шт"
+    },
+    {
+      "tag": "tspan",
+      "x": "76",
+      "y": "473.332",
+      "text": ""
+    },
+    {
+      "tag": "circle",
+      "id": "Ellipse 1_4",
+      "cx": "201",
+      "cy": "468",
+      "r": "2",
+      "fill": "#D5DADD",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "Ð Ð¼Ð°Ð³Ð°Ð·Ð¸Ð½Ðµ: 35_4",
+      "fill": "#84919A",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Text",
+      "font-size": "13",
+      "letter-spacing": "-0.078px",
+      "text": "В магазине: 35"
+    },
+    {
+      "tag": "tspan",
+      "x": "209",
+      "y": "472.621",
+      "text": ""
+    },
+    {
+      "tag": "rect",
+      "id": "Bounding box_4",
+      "x": "327",
+      "y": "435",
+      "width": "24",
+      "height": "24",
+      "fill": "#D9D9D9",
+      "text": ""
+    },
+    {
+      "tag": "rect",
+      "id": "Rectangle 11779",
+      "x": "16",
+      "y": "490",
+      "width": "343",
+      "height": "1",
+      "fill": "#EBEBEB",
+      "text": ""
+    },
+    {
+      "tag": "rect",
+      "width": "343",
+      "height": "60",
+      "transform": "translate(16 503)",
+      "fill": "white",
+      "text": ""
+    },
+    {
+      "tag": "rect",
+      "x": "16",
+      "y": "509",
+      "width": "48",
+      "height": "48",
+      "rx": "12",
+      "fill": "#F1F1F1",
+      "text": ""
+    },
+    {
+      "tag": "rect",
+      "id": "image 562_5",
+      "x": "24",
+      "y": "517",
+      "width": "32",
+      "height": "32",
+      "fill": "url(#pattern4_13744_262806)",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "â³ Label_10",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Text",
+      "font-size": "15",
+      "letter-spacing": "-0.24px",
+      "text": "Аккумуляторная дрель-шуруповерт Ryobi R18DD3-0"
+    },
+    {
+      "tag": "tspan",
+      "x": "76",
+      "y": "518.332",
+      "text": ""
+    },
+    {
+      "tag": "tspan",
+      "x": "76",
+      "y": "538.332",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "Ð Ð½Ð°Ð»Ð¸ÑÐ¸Ð¸",
+      "fill": "#22C348",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Text",
+      "font-size": "13",
+      "letter-spacing": "-0.078px",
+      "text": "В наличии"
+    },
+    {
+      "tag": "tspan",
+      "x": "76",
+      "y": "558.621",
+      "text": ""
+    },
+    {
+      "tag": "rect",
+      "x": "335.5",
+      "y": "503.5",
+      "width": "23",
+      "height": "23",
+      "rx": "5.5",
+      "fill": "#F4F4F4",
+      "text": ""
+    },
+    {
+      "tag": "rect",
+      "x": "335.5",
+      "y": "503.5",
+      "width": "23",
+      "height": "23",
+      "rx": "5.5",
+      "stroke": "#D5DADD",
+      "text": ""
+    },
+    {
+      "tag": "rect",
+      "width": "375",
+      "height": "80",
+      "transform": "translate(0 441)",
+      "fill": "white",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "Label",
+      "fill": "white",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Text",
+      "font-size": "15",
+      "letter-spacing": "-0.5px",
+      "text": "Продолжить"
+    },
+    {
+      "tag": "tspan",
+      "x": "141",
+      "y": "486.332",
+      "text": ""
+    },
+    {
+      "tag": "rect",
+      "width": "375",
+      "height": "116",
+      "fill": "white",
+      "text": ""
+    },
+    {
+      "tag": "rect",
+      "id": "Bounding box_5",
+      "x": "64",
+      "y": "68",
+      "width": "24",
+      "height": "24",
+      "fill": "#D9D9D9",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "Value",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Text",
+      "font-size": "15",
+      "letter-spacing": "-0.24px",
+      "text": "Дрель|"
+    },
+    {
+      "tag": "tspan",
+      "x": "96",
+      "y": "85.332",
+      "text": ""
+    },
+    {
+      "tag": "rect",
+      "id": "Bounding box_6",
+      "x": "323",
+      "y": "68",
+      "width": "24",
+      "height": "24",
+      "fill": "#D9D9D9",
+      "text": ""
+    },
+    {
+      "tag": "rect",
+      "width": "375",
+      "height": "291",
+      "transform": "translate(0 521)",
+      "fill": "#D1D5DB",
+      "fill-opacity": "0.9",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "Letter",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Display",
+      "font-size": "26",
+      "letter-spacing": "0.364px",
+      "text": "q"
+    },
+    {
+      "tag": "tspan",
+      "x": "13.8652",
+      "y": "556.242",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "Letter_2",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Display",
+      "font-size": "26",
+      "letter-spacing": "0.364px",
+      "text": "w"
+    },
+    {
+      "tag": "tspan",
+      "x": "48.6943",
+      "y": "556.242",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "Letter_3",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Display",
+      "font-size": "26",
+      "letter-spacing": "0.364px",
+      "text": "e"
+    },
+    {
+      "tag": "tspan",
+      "x": "88.335",
+      "y": "556.242",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "Letter_4",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Display",
+      "font-size": "26",
+      "letter-spacing": "0.364px",
+      "text": "r"
+    },
+    {
+      "tag": "tspan",
+      "x": "127.988",
+      "y": "556.242",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "Letter_5",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Display",
+      "font-size": "26",
+      "letter-spacing": "0.364px",
+      "text": "t"
+    },
+    {
+      "tag": "tspan",
+      "x": "165.077",
+      "y": "556.242",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "Letter_6",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Display",
+      "font-size": "26",
+      "letter-spacing": "0.364px",
+      "text": "y"
+    },
+    {
+      "tag": "tspan",
+      "x": "199.678",
+      "y": "556.242",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "Letter_7",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Display",
+      "font-size": "26",
+      "letter-spacing": "0.364px",
+      "text": "u"
+    },
+    {
+      "tag": "tspan",
+      "x": "236.145",
+      "y": "556.242",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "Letter_8",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Display",
+      "font-size": "26",
+      "letter-spacing": "0.364px",
+      "text": "i"
+    },
+    {
+      "tag": "tspan",
+      "x": "277.321",
+      "y": "556.242",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "Letter_9",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Display",
+      "font-size": "26",
+      "letter-spacing": "0.364px",
+      "text": "o"
+    },
+    {
+      "tag": "tspan",
+      "x": "310.094",
+      "y": "556.242",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "Letter_10",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Display",
+      "font-size": "26",
+      "letter-spacing": "0.364px",
+      "text": "p"
+    },
+    {
+      "tag": "tspan",
+      "x": "346.853",
+      "y": "556.242",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "Letter_11",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Display",
+      "font-size": "26",
+      "letter-spacing": "0.364px",
+      "text": "a"
+    },
+    {
+      "tag": "tspan",
+      "x": "33.4746",
+      "y": "610.242",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "Letter_12",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Display",
+      "font-size": "26",
+      "letter-spacing": "0.364px",
+      "text": "s"
+    },
+    {
+      "tag": "tspan",
+      "x": "70.9443",
+      "y": "610.242",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "Letter_13",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Display",
+      "font-size": "26",
+      "letter-spacing": "0.364px",
+      "text": "d"
+    },
+    {
+      "tag": "tspan",
+      "x": "106.802",
+      "y": "610.242",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "Letter_14",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Display",
+      "font-size": "26",
+      "letter-spacing": "0.364px",
+      "text": "f"
+    },
+    {
+      "tag": "tspan",
+      "x": "147.052",
+      "y": "610.242",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "Letter_15",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Display",
+      "font-size": "26",
+      "letter-spacing": "0.364px",
+      "text": "g"
+    },
+    {
+      "tag": "tspan",
+      "x": "180.865",
+      "y": "610.242",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "Letter_16",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Display",
+      "font-size": "26",
+      "letter-spacing": "0.364px",
+      "text": "h"
+    },
+    {
+      "tag": "tspan",
+      "x": "217.992",
+      "y": "610.242",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "Letter_17",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Display",
+      "font-size": "26",
+      "letter-spacing": "0.364px",
+      "text": "j"
+    },
+    {
+      "tag": "tspan",
+      "x": "259.334",
+      "y": "610.242",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "Letter_18",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Display",
+      "font-size": "26",
+      "letter-spacing": "0.364px",
+      "text": "k"
+    },
+    {
+      "tag": "tspan",
+      "x": "292.69",
+      "y": "610.242",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "Letter_19",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Display",
+      "font-size": "26",
+      "letter-spacing": "0.364px",
+      "text": "l"
+    },
+    {
+      "tag": "tspan",
+      "x": "333.347",
+      "y": "610.242",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "Letter_20",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Display",
+      "font-size": "26",
+      "letter-spacing": "0.364px",
+      "text": "z"
+    },
+    {
+      "tag": "tspan",
+      "x": "70.9189",
+      "y": "666.242",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "Letter_21",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Display",
+      "font-size": "26",
+      "letter-spacing": "0.364px",
+      "text": "x"
+    },
+    {
+      "tag": "tspan",
+      "x": "107.906",
+      "y": "666.242",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "Letter_22",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Display",
+      "font-size": "26",
+      "letter-spacing": "0.364px",
+      "text": "c"
+    },
+    {
+      "tag": "tspan",
+      "x": "144.487",
+      "y": "666.242",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "Letter_23",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Display",
+      "font-size": "26",
+      "letter-spacing": "0.364px",
+      "text": "v"
+    },
+    {
+      "tag": "tspan",
+      "x": "181.716",
+      "y": "666.242",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "Letter_24",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Display",
+      "font-size": "26",
+      "letter-spacing": "0.364px",
+      "text": "b"
+    },
+    {
+      "tag": "tspan",
+      "x": "217.802",
+      "y": "666.242",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "Letter_25",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Display",
+      "font-size": "26",
+      "letter-spacing": "0.364px",
+      "text": "n"
+    },
+    {
+      "tag": "tspan",
+      "x": "255.145",
+      "y": "666.242",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "Letter_26",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Display",
+      "font-size": "26",
+      "letter-spacing": "0.364px",
+      "text": "m"
+    },
+    {
+      "tag": "tspan",
+      "x": "288.552",
+      "y": "666.242",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "Letter_27",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Text",
+      "font-size": "16",
+      "letter-spacing": "-0.32px",
+      "text": "123"
+    },
+    {
+      "tag": "tspan",
+      "x": "34.7653",
+      "y": "722.188",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "Letter_28",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Text",
+      "font-size": "16",
+      "letter-spacing": "-0.32px",
+      "text": "space"
+    },
+    {
+      "tag": "tspan",
+      "x": "165.609",
+      "y": "722.188",
+      "text": ""
+    },
+    {
+      "tag": "text",
+      "id": "Letter_29",
+      "fill": "black",
+      "style": "white-space: pre",
+      "{http://www.w3.org/XML/1998/namespace}space": "preserve",
+      "font-family": "SF Pro Text",
+      "font-size": "16",
+      "letter-spacing": "-0.32px",
+      "text": "return"
+    },
+    {
+      "tag": "tspan",
+      "x": "305.425",
+      "y": "722.188",
+      "text": ""
+    },
+    {
+      "tag": "rect",
+      "width": "375",
+      "height": "812",
+      "fill": "white",
+      "text": ""
+    },
+    {
+      "tag": "rect",
+      "width": "375",
+      "height": "44",
+      "fill": "white",
+      "text": ""
+    }
+  ]
+}
