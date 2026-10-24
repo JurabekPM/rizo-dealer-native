@@ -1,0 +1,8 @@
+<!-- Horizontal arm of the original ic_request_add, with the same rounded end caps. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp" android:viewportWidth="24" android:viewportHeight="24">
+    <group android:translateX="-327" android:translateY="-201">
+        <path android:fillColor="#9103E4" android:fillType="evenOdd"
+            android:pathData="M333 212H345C345.283 212 345.521 212.096 345.713 212.287C345.904 212.479 346 212.717 346 213C346 213.283 345.904 213.521 345.713 213.713C345.521 213.904 345.283 214 345 214H333C332.717 214 332.479 213.904 332.287 213.713C332.096 213.521 332 213.283 332 213C332 212.717 332.096 212.479 332.287 212.287C332.479 212.096 332.717 212 333 212Z" />
+    </group>
+</vector>
