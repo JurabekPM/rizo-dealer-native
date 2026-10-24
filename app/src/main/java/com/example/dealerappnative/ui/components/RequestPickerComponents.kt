@@ -1,7 +1,6 @@
 package com.example.dealerappnative.ui.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -53,55 +52,79 @@ internal fun RequestPickerSearch(query: String, onQuery: (String) -> Unit, focus
         })
 }
 
+/** Quick add is inline; only the numeric counter opens the bulk quantity sheet. */
 @Composable
-internal fun RequestPickerProduct(product: RequestCatalogProduct, quantity: Int, onSelect: () -> Unit) {
-    Row(Modifier.fillMaxWidth().softCardPress(enabled = product.stock > 0, onClick = onSelect)
-        .padding(horizontal = 16.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically) {
-        RequestProductThumbnail(product, selected = quantity > 0)
-        Spacer(Modifier.width(12.dp))
-        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text(product.name, style = Design.productTitle, color = DealerDesign.text,
-                maxLines = 2, overflow = TextOverflow.Ellipsis)
-            Text(buildAnnotatedString {
-                append(historyMoney(product.price).removeSuffix(" UZS"))
-                withStyle(Design.unit.toSpanStyle().copy(color = DealerDesign.secondary)) {
-                    append(" UZS/шт")
-                }
-            }, style = Design.price, color = DealerDesign.text, maxLines = 1, overflow = TextOverflow.Ellipsis)
-            if (product.stock <= 0) Text("Нет в наличии", style = Design.detail,
-                color = DealerDesign.secondary, maxLines = 1, overflow = TextOverflow.Ellipsis)
-            product.previousPrice?.takeIf { it > product.price }?.let { previous ->
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                    val percent = kotlin.math.round((previous - product.price).toDouble() * 100 / previous).toInt()
-                    Box(Modifier.clip(RoundedCornerShape(6.dp)).background(Color.Red)
-                        .padding(horizontal = 4.dp, vertical = 1.dp)) {
-                        Text("$percent%", style = Design.detail, color = Color.White)
+internal fun RequestPickerProduct(product: RequestCatalogProduct, quantity: Int,
+    onStep: (Int) -> Unit, onEditQuantity: () -> Unit) {
+    Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            RequestProductThumbnail(product, selected = quantity > 0)
+            Spacer(Modifier.width(12.dp))
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(product.name, style = Design.productTitle, color = DealerDesign.text,
+                    maxLines = 2, overflow = TextOverflow.Ellipsis)
+                Text(buildAnnotatedString {
+                    append(historyMoney(product.price).removeSuffix(" UZS"))
+                    withStyle(Design.unit.toSpanStyle().copy(color = DealerDesign.secondary)) {
+                        append(" UZS/шт")
                     }
-                    Box {
-                        Text(historyMoney(previous) + "/шт", style = Design.detail, color = DealerDesign.text)
-                        Box(Modifier.matchParentSize(), contentAlignment = Alignment.Center) {
-                            Box(Modifier.fillMaxWidth().height(1.dp).background(Color(0xFFF76659)))
+                }, style = Design.price, color = DealerDesign.text, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                if (product.stock <= 0) Text("Нет в наличии", style = Design.detail,
+                    color = DealerDesign.secondary, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                product.previousPrice?.takeIf { it > product.price }?.let { previous ->
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                        val percent = kotlin.math.round((previous - product.price).toDouble() * 100 / previous).toInt()
+                        Box(Modifier.clip(RoundedCornerShape(6.dp)).background(Color.Red)
+                            .padding(horizontal = 4.dp, vertical = 1.dp)) {
+                            Text("$percent%", style = Design.detail, color = Color.White)
+                        }
+                        Box {
+                            Text(historyMoney(previous) + "/шт", style = Design.detail, color = DealerDesign.text)
+                            Box(Modifier.matchParentSize(), contentAlignment = Alignment.Center) {
+                                Box(Modifier.fillMaxWidth().height(1.dp).background(Color(0xFFF76659)))
+                            }
                         }
                     }
                 }
             }
-        }
-        if (product.stock > 0) {
-            Spacer(Modifier.width(12.dp))
-            Box(Modifier.size(40.dp)) {
-                Box(Modifier.fillMaxSize().clip(RoundedCornerShape(12.dp)).background(Design.addBackground)
-                    .softCardPress(onClick = onSelect)
-                    .semantics { contentDescription = "Количество: ${product.name}, $quantity" }, contentAlignment = Alignment.Center) {
-                    DealerIcon(R.drawable.ic_request_add, DealerDesign.accent)
-                }
-                if (quantity > 0) Box(Modifier.align(Alignment.TopEnd).offset(x = 8.dp, y = (-8).dp)
-                    .widthIn(min = (10 + 7 * quantity.toString().length).dp)
-                    .clip(RoundedCornerShape(12.dp)).background(DealerDesign.accent)
-                    .border(1.dp, Color.White, RoundedCornerShape(12.dp)).padding(horizontal = 5.dp, vertical = 2.dp),
-                    contentAlignment = Alignment.Center) {
-                    Text("$quantity", style = Design.badge, color = Color.White)
+            if (product.stock > 0) {
+                Spacer(Modifier.width(12.dp))
+                // Reserve the same slot so names/prices do not rewrap after the first add.
+                Box(Modifier.size(40.dp)) {
+                    if (quantity == 0) Box(Modifier.fillMaxSize().clip(RoundedCornerShape(12.dp))
+                        .background(Design.addBackground).softCardPress { onStep(1) }
+                        .semantics { contentDescription = "Добавить: ${product.name}" }, contentAlignment = Alignment.Center) {
+                        DealerIcon(R.drawable.ic_request_add, DealerDesign.accent)
+                    }
                 }
             }
+        }
+        if (quantity > 0 && product.stock > 0) Box(Modifier.padding(start = 60.dp, top = 8.dp)) {
+            RequestPickerCounter(product, quantity, onStep, onEditQuantity)
+        }
+    }
+}
+
+@Composable
+private fun RequestPickerCounter(product: RequestCatalogProduct, quantity: Int,
+    onStep: (Int) -> Unit, onEditQuantity: () -> Unit) {
+    Row(Modifier.height(40.dp).clip(RoundedCornerShape(12.dp)).background(Design.addBackground),
+        verticalAlignment = Alignment.CenterVertically) {
+        SoftTextButton(onClick = { onStep(-1) }, modifier = Modifier.size(40.dp)
+            .semantics { contentDescription = "Уменьшить количество: ${product.name}" }) {
+            Text("−", style = Design.sheetTitle, color = DealerDesign.accent)
+        }
+        Box(Modifier.widthIn(min = 48.dp).height(40.dp).softCardPress(onClick = onEditQuantity)
+            .padding(horizontal = 4.dp)
+            .semantics { contentDescription = "Ввести количество: ${product.name}, $quantity" },
+            contentAlignment = Alignment.Center) {
+            Text("$quantity", style = Design.price, color = DealerDesign.accent)
+        }
+        SoftTextButton(onClick = { onStep(1) }, enabled = quantity < product.stock,
+            modifier = Modifier.size(40.dp)
+                .semantics { contentDescription = "Увеличить количество: ${product.name}" }) {
+            Text("+", style = Design.sheetTitle,
+                color = if (quantity < product.stock) DealerDesign.accent else DealerDesign.tertiary)
         }
     }
 }

@@ -30,6 +30,12 @@ internal fun normalizeRequestQuantities(values: List<Int>): List<Int> = requestC
     values.getOrElse(index) { 0 }.coerceIn(0, product.stock)
 }
 
+/** Read the latest draft for each tap; quick repeated steps cannot reuse a stale row quantity. */
+internal fun stepRequestPickerQuantity(values: List<Int>, index: Int, step: Int): List<Int> =
+    normalizeRequestQuantities(values).toMutableList().apply {
+        this[index] = (this[index].toLong() + step).coerceIn(0L, requestCatalog[index].stock.toLong()).toInt()
+    }
+
 /** Return catalog indexes, never reorder the draft's persisted product positions. */
 internal fun requestPickerIndexes(quantities: List<Int>, query: String = "", selectedOnly: Boolean = false): List<Int> {
     val current = normalizeRequestQuantities(quantities)

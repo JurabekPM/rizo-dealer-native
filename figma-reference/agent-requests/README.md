@@ -35,3 +35,7 @@ Available products omit the availability label and dot. Only out-of-stock produc
 ## Approved picker review improvements
 
 Available items precede out-of-stock items, retaining displayOrder inside each group and original catalog indexes in drafts. The selected-count row toggles selected-only/all, preserves query and separate list positions, and lets quantities be edited in either view. The compact footer shows all selected product positions and the full price×quantity total above Continue, independently of query/filter. Only selected picker thumbnails gain a subtle1dp accent border (60% opacity); other thumbnail callers keep the original look. No selection means no summary row and disabled Continue. These changes were explicitly approved after the source match; do not revert them from the original SVG. Build and66 unit tests passed; user performs device UI checks.
+
+## Approved inline quantity interaction
+
+The picker + now adds one immediately. Selected rows show a compact40dp minus/count/plus below the price (indented to the text column); tapping the count alone opens the existing bulk quantity sheet. The original40dp action slot stays reserved so names/prices do not rewrap. Row-wide click and the old plus badge are removed. Steps use the latest draft, clamp to stock/zero, update the existing selected filter/footer, and do not mutate the caller until Continue. Adding hides search IME; closing bulk entry no longer forces search IME open. The post-selection order review remains unchanged by explicit user request.

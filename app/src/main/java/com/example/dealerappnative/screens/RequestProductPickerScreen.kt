@@ -83,7 +83,11 @@ internal fun RequestProductPickerScreen(initial: List<Int>, onBack: () -> Unit, 
         HorizontalDivider(color = DealerDesign.divider, modifier = Modifier.padding(horizontal = 16.dp))
         LazyColumn(Modifier.weight(1f), state = if (selectedOnly) selectedListState else allListState) {
             items(indexes, key = { requestCatalog[it].id }, contentType = { "request-product" }) { index ->
-                RequestPickerProduct(requestCatalog[index], quantities[index], onSelect = { quantityIndex = index })
+                RequestPickerProduct(requestCatalog[index], quantities[index], onStep = { step ->
+                    draft = stepRequestPickerQuantity(draft, index, step)
+                    focusManager.clearFocus()
+                    keyboard?.hide()
+                }, onEditQuantity = { quantityIndex = index })
                 HorizontalDivider(color = DealerDesign.divider, modifier = Modifier.padding(horizontal = 16.dp))
             }
             if (indexes.isEmpty()) item(key = "empty") {
@@ -109,12 +113,12 @@ internal fun RequestProductPickerScreen(initial: List<Int>, onBack: () -> Unit, 
             RequestPickerButton("Продолжить", selectedCount > 0) { keyboard?.hide(); onConfirm(quantities) }
         }
     }
-    LaunchedEffect(quantityIndex) {
-        if (quantityIndex == null) { focus.requestFocus(); keyboard?.show() }
-    }
+    LaunchedEffect(Unit) { focus.requestFocus(); keyboard?.show() }
     quantityIndex?.let { index -> RequestQuantitySheet(requestCatalog[index], quantities[index],
-        onDismiss = { quantityIndex = null }, keepKeyboardOpen = true, onConfirm = {
-            draft = quantities.toMutableList().apply { this[index] = it }; quantityIndex = null
+        onDismiss = { quantityIndex = null; focusManager.clearFocus(); keyboard?.hide() }, onConfirm = {
+            draft = normalizeRequestQuantities(draft).toMutableList().apply { this[index] = it }
+            quantityIndex = null
+            focusManager.clearFocus()
         }) }
 }
 

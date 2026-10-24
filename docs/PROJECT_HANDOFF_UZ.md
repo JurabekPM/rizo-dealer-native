@@ -214,3 +214,11 @@ Figma asosidan keyingi ruxsat etilgan o‘zgarish: bor mahsulotlarda В нали
 - Продолжить ustida noyob pozitsiyalar soni va barcha tanlanganlarning Long UZS jami turadi. Qidiruv/filtr summani kamaytirmaydi. Tanlov bo‘lmasa jami satri yashirin, Продолжить o‘chiq.
 - Tanlangan thumbnailga1dp/60% accent chegara; o‘lcham48 va sampled IO decode saqlangan. selected parametri defaultfalse: forma va saqlangan hujjat rasmlari o‘zgarmaydi.
 - Bu foydalanuvchi tasdiqlagan Figma asosidan keyingi yaxshilanishlar. Picker Back hanuz tashqi formani o‘zgartirmaydi; faqat Продолжить draftni qo‘llaydi. Build va66 unit test o‘tdi, qurilma UIini foydalanuvchi tekshiradi.
+
+### Picker: sheet o‘rniga tezkor miqdor
+
+Foydalanuvchi faqat mahsulot ro‘yxatida yangi interactionni tasdiqladi; tanlashdan keyingi zayavka formasi keyingi vazifa, o‘zgartirilmadi. + bosish1 dona qo‘shadi, yangi tanlov narxi ostida40dp −/son/+ counter chiqadi. Narx/nom ustuni kengligi oldingi40dp action slot bilan saqlanadi. Sonning o‘zi bulk RequestQuantitySheetni ochadi; butun qatorga click yo‘q. Eski plus ustidagi badge o‘rniga counter ishlaydi; nozik thumbnail border, tanlanganlar filtri, jami va query saqlangan.
+
+stepRequestPickerQuantity har bosishda oxirgi draftdan yangi list qaytaradi, stock va0 chegaralarini saqlaydi; tez takroriy tap eskirgan row miqdorini qayta ishlatmaydi. Minus0 tanlanganlar ro‘yxatidan chiqaradi va jami yangilanadi. Sheet faqat tasdiqlanganda draftni o‘zgartiradi; tashqi forma hanuz faqat Продолжить bilan yangilanadi. Inline bosishda qidiruv focus/IME yopiladi; bulk sheet yopilgach IME avtomatik qidiruvga qaytmaydi. Search ochilgandagi dastlabki fokus qolgan. RequestProductCard/review, Return va Admin buyurtmalari o‘zgarmagan.
+
+Inline miqdor tekshiruvi: debug build va 68 unit test muvaffaqiyatli, 0 xato. Qurilma UIini foydalanuvchi tekshiradi.

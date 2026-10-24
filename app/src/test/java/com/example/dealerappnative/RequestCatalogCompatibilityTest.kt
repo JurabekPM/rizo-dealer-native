@@ -5,6 +5,31 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class RequestCatalogCompatibilityTest {
+    @Test fun quickStepsAddOneThenAccumulateAndStopAtStockWithoutChangingOtherSelections() {
+        var draft = List(requestCatalog.size) { if (it == 4) 3 else 0 }
+        draft = stepRequestPickerQuantity(draft, 0, 1)
+        assertEquals(1, draft[0])
+        repeat(9) { draft = stepRequestPickerQuantity(draft, 0, 1) }
+        assertEquals(10, draft[0])
+        assertEquals(3, draft[4])
+        assertEquals(requestCatalog[0].price * 10L + requestCatalog[4].price * 3L, requestPickerTotal(draft))
+        repeat(requestCatalog[0].stock) { draft = stepRequestPickerQuantity(draft, 0, 1) }
+        assertEquals(requestCatalog[0].stock, draft[0])
+        assertEquals(3, draft[4])
+        draft = stepRequestPickerQuantity(draft, 3, 1)
+        assertEquals(0, draft[3]) // An unavailable item cannot enter the draft.
+    }
+
+    @Test fun lastMinusRemovesSelectionAndTotalButDoesNotMutateTheIncomingOrder() {
+        val incoming = MutableList(requestCatalog.size) { 0 }.apply { this[0] = 1 }
+        val draft = stepRequestPickerQuantity(incoming, 0, -1)
+        assertEquals(1, incoming[0])
+        assertEquals(0, draft[0])
+        assertTrue(requestPickerIndexes(draft, selectedOnly = true).isEmpty())
+        assertEquals(0L, requestPickerTotal(draft))
+        assertEquals(draft, stepRequestPickerQuantity(draft, 0, -1))
+    }
+
     @Test fun unavailableProductsFollowAllAvailableProductsWithoutChangingCatalogOrder() {
         val ids = requestCatalog.map { it.id }
         val shown = requestPickerIndexes(emptyList())

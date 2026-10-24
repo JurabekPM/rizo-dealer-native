@@ -120,3 +120,6 @@ Figma picker tuzatishi: klaviatura bilan header72/search40, X maydon ichida; sel
 
 - Pickerda mavjud tovarlar avval, tugaganlar oxirida. «Выбрано» ↔ «Все товары» qidiruv/draftni yo‘qotmasin, har rejim scrolli saqlansin; qty0 tanlanganlardan chiqsin.
 - Tanlangan rasmida nozik chegara; Продолжить ustida pozitsiyalar soni va to‘liq jami. Qidiruvda tovar yashirilsa ham jami o‘zgarmasin; Back tashqi cartga qo‘llamasin.
+
+- Picker + darhol1 dona qo‘shsin, sheet ochilmasin; keyingi −/son/+ narx ostida. Faqat sonni bosish sheet ochsin. Tez taplar hisobdan tushmasin, stockdan oshmasin, minus0 chiqarib tashlasin.
+- Qidiruv/selected filter/jami/Back qoidalari saqlansin; bulk sheet cancel miqdorni o‘zgartirmasin, tasdiq yangilasin. Tanlashdan keyingi review oynasi o‘zgarmasin.
