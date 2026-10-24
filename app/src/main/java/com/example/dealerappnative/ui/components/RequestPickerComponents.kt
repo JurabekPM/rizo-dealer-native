@@ -17,6 +17,8 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.dealerappnative.R
@@ -57,19 +59,17 @@ internal fun RequestPickerProduct(product: RequestCatalogProduct, quantity: Int,
         .padding(horizontal = 16.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically) {
         RequestProductThumbnail(product)
         Spacer(Modifier.width(12.dp))
-        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-            Text(product.name, style = Design.body, color = DealerDesign.text,
+        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Text(product.name, style = Design.productTitle, color = DealerDesign.text,
                 maxLines = 2, overflow = TextOverflow.Ellipsis)
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(historyMoney(product.price) + "/шт", style = Design.body, color = DealerDesign.text,
-                    maxLines = 1)
-                Spacer(Modifier.width(6.dp))
-                Box(Modifier.size(4.dp).background(Design.dot, RoundedCornerShape(2.dp)))
-                Spacer(Modifier.width(6.dp))
-                Text(if (product.stock > 0) "В наличии" else "Нет в наличии", style = Design.detail,
-                    color = if (product.stock > 0) Design.available else DealerDesign.secondary,
-                    maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
-            }
+            Text(buildAnnotatedString {
+                append(historyMoney(product.price).removeSuffix(" UZS"))
+                withStyle(Design.unit.toSpanStyle().copy(color = DealerDesign.secondary)) {
+                    append(" UZS/шт")
+                }
+            }, style = Design.price, color = DealerDesign.text, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            if (product.stock <= 0) Text("Нет в наличии", style = Design.detail,
+                color = DealerDesign.secondary, maxLines = 1, overflow = TextOverflow.Ellipsis)
             product.previousPrice?.takeIf { it > product.price }?.let { previous ->
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                     val percent = kotlin.math.round((previous - product.price).toDouble() * 100 / previous).toInt()

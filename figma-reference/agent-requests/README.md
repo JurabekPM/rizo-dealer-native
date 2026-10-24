@@ -27,3 +27,7 @@ Inspected/exported SearchSelection **13744:262806**, quantity sheet **12512:2844
 - Catalog's first20 ID/index positions stay stable for restored drafts. XGT and Ryobi append at the end; visual sorting is independent. The fresh Makita demo price is450000 (previous500000); saved order snapshots stay unchanged. There are22 request fixtures; Return's20 items are unchanged.
 
 Validation: assembleDebug and63 unit tests pass. Matching was checked against exported geometry/assets; the phone UI/FPS was not automatically verified because the user prefers personal device checks.
+
+## Subsequent explicit user adjustment — price and title hierarchy
+
+Available products omit the availability label and dot. Only out-of-stock products show Нет в наличии below the price, without an add action. Product title15/20 Medium (max2 lines), numeric price16/22 Semibold with tabular digits, currency/unit13/18 Medium in secondary gray; vertical gap4. Search/header/sheet styles and all quantity/discount behavior stay as before. These are intentional user changes after matching the source; do not revert them to the original SVG.

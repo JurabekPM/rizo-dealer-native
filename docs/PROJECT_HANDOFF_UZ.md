@@ -202,3 +202,7 @@ RequestProductPickerScreen endi SearchSelection eksportining o‘lcham/rang/ikon
 RequestProductThumbnail original rasmlarni IOda sampled decode qiladi. Beshta asl mahsulot rasmi bor; ikkita bir xil asset avvalgi Return resursidan qayta ishlatiladi. RequestCatalog dastlabki20 ID/indeksni saqlaydi, XGT/Ryobi yangi22tagacha kengaytiradi; displayOrder saqlanadigan draft indekslarini o‘zgartirmaydi. Yangi Makita demo450000/old500000; mavjud request snapshotlari o‘zgarmaydi. Return katalogi o‘zgarmagan.
 
 63 unit test va build o‘tdi; UI/FPSni telefonda avtomatik tekshirildi deb hisoblamang. `figma-reference/agent-requests/README.md` va picker-measurements.json — aniq manbalar.
+
+### Picker: foydalanuvchi so‘ragan narx/nom ajratilishi
+
+Figma asosidan keyingi ruxsat etilgan o‘zgarish: bor mahsulotlarda В наличии va ajratuvchi nuqta olib tashlandi. Faqat stock=0 bo‘lsa narx ostida Нет в наличии; shu qatorda + va bosish ishlamaydi. Mahsulot nomi15/20 Medium (2 qator/ellipsis), narx16/22 Semibold, valyuta/birlik13/18 Medium kulrang; matn oralig‘i4. Oddiy bir qator nomli mavjud mahsulot qatori48px kontent ichida qoladi. Discount, quantity badge, picker draft/stock cap, katalog va saqlangan hujjatlar o‘zgarmagan. Manbadagi eski В наличии qatorini avtomatik qaytarmang.
