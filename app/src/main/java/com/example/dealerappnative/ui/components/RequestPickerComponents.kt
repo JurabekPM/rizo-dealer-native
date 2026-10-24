@@ -87,19 +87,9 @@ internal fun RequestPickerProduct(product: RequestCatalogProduct, quantity: Int,
                     }
                 }
             }
-            if (product.stock > 0) {
-                Spacer(Modifier.width(12.dp))
-                // Reserve the same slot so names/prices do not rewrap after the first add.
-                Box(Modifier.size(40.dp)) {
-                    if (quantity == 0) Box(Modifier.fillMaxSize().clip(RoundedCornerShape(12.dp))
-                        .background(Design.addBackground).softCardPress { onStep(1) }
-                        .semantics { contentDescription = "Добавить: ${product.name}" }, contentAlignment = Alignment.Center) {
-                        DealerIcon(R.drawable.ic_request_add, DealerDesign.accent)
-                    }
-                }
-            }
         }
-        if (quantity > 0 && product.stock > 0) Box(Modifier.padding(start = 60.dp, top = 8.dp)) {
+        if (product.stock > 0) Box(Modifier.fillMaxWidth().padding(top = 8.dp),
+            contentAlignment = Alignment.CenterEnd) {
             RequestPickerCounter(product, quantity, onStep, onEditQuantity)
         }
     }
@@ -108,23 +98,28 @@ internal fun RequestPickerProduct(product: RequestCatalogProduct, quantity: Int,
 @Composable
 private fun RequestPickerCounter(product: RequestCatalogProduct, quantity: Int,
     onStep: (Int) -> Unit, onEditQuantity: () -> Unit) {
-    Row(Modifier.height(40.dp).clip(RoundedCornerShape(12.dp)).background(Design.addBackground),
+    // Fixed size in both states: reveal controls to the left of the same plus button.
+    Row(Modifier.size(128.dp, 40.dp).clip(RoundedCornerShape(12.dp))
+        .background(if (quantity > 0) Design.addBackground else Color.Transparent),
         verticalAlignment = Alignment.CenterVertically) {
-        SoftTextButton(onClick = { onStep(-1) }, modifier = Modifier.size(40.dp)
-            .semantics { contentDescription = "Уменьшить количество: ${product.name}" }) {
-            Text("−", style = Design.sheetTitle, color = DealerDesign.accent)
-        }
-        Box(Modifier.widthIn(min = 48.dp).height(40.dp).softCardPress(onClick = onEditQuantity)
-            .padding(horizontal = 4.dp)
-            .semantics { contentDescription = "Ввести количество: ${product.name}, $quantity" },
-            contentAlignment = Alignment.Center) {
-            Text("$quantity", style = Design.price, color = DealerDesign.accent)
-        }
-        SoftTextButton(onClick = { onStep(1) }, enabled = quantity < product.stock,
-            modifier = Modifier.size(40.dp)
-                .semantics { contentDescription = "Увеличить количество: ${product.name}" }) {
-            Text("+", style = Design.sheetTitle,
-                color = if (quantity < product.stock) DealerDesign.accent else DealerDesign.tertiary)
+        if (quantity > 0) {
+            SoftTextButton(onClick = { onStep(-1) }, modifier = Modifier.size(40.dp)
+                .semantics { contentDescription = "Уменьшить количество: ${product.name}" }) {
+                Text("−", style = Design.sheetTitle, color = DealerDesign.accent)
+            }
+            Box(Modifier.size(48.dp, 40.dp).softCardPress(onClick = onEditQuantity)
+                .padding(horizontal = 4.dp)
+                .semantics { contentDescription = "Ввести количество: ${product.name}, $quantity" },
+                contentAlignment = Alignment.Center) {
+                Text("$quantity", style = Design.price, color = DealerDesign.accent, maxLines = 1)
+            }
+        } else Spacer(Modifier.width(88.dp))
+        Box(Modifier.size(40.dp).clip(RoundedCornerShape(12.dp)).background(Design.addBackground)
+            .softCardPress(enabled = quantity < product.stock) { onStep(1) }
+            .semantics { contentDescription = if (quantity == 0) "Добавить: ${product.name}"
+                else "Увеличить количество: ${product.name}" }, contentAlignment = Alignment.Center) {
+            DealerIcon(R.drawable.ic_request_add,
+                if (quantity < product.stock) DealerDesign.accent else DealerDesign.tertiary)
         }
     }
 }

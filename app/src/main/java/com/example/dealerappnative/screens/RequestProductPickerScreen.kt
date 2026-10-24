@@ -85,8 +85,6 @@ internal fun RequestProductPickerScreen(initial: List<Int>, onBack: () -> Unit, 
             items(indexes, key = { requestCatalog[it].id }, contentType = { "request-product" }) { index ->
                 RequestPickerProduct(requestCatalog[index], quantities[index], onStep = { step ->
                     draft = stepRequestPickerQuantity(draft, index, step)
-                    focusManager.clearFocus()
-                    keyboard?.hide()
                 }, onEditQuantity = { quantityIndex = index })
                 HorizontalDivider(color = DealerDesign.divider, modifier = Modifier.padding(horizontal = 16.dp))
             }
