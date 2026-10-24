@@ -52,46 +52,48 @@ internal fun RequestPickerSearch(query: String, onQuery: (String) -> Unit, focus
         })
 }
 
-/** Title gets the full text column; price and fixed-size controls share one compact row. */
+/** A full-width price/action row leaves long titles and quantity controls independent. */
 @Composable
 internal fun RequestPickerProduct(product: RequestCatalogProduct, quantity: Int,
     onStep: (Int) -> Unit, onEditQuantity: () -> Unit) {
-    Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.Top) {
-        RequestProductThumbnail(product, selected = quantity > 0)
-        Spacer(Modifier.width(12.dp))
-        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text(product.name, style = Design.productTitle, color = DealerDesign.text,
-                maxLines = 2, overflow = TextOverflow.Ellipsis)
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                Text(buildAnnotatedString {
-                    append(historyMoney(product.price).removeSuffix(" UZS"))
-                    withStyle(Design.unit.toSpanStyle().copy(color = DealerDesign.secondary)) {
-                        append(" UZS/шт")
-                    }
-                }, style = Design.price, color = DealerDesign.text, modifier = Modifier.weight(1f),
+    Column(Modifier.fillMaxWidth()
+        .softCardPress(enabled = product.stock > 0 && quantity == 0) { onStep(1) }
+        .padding(horizontal = 16.dp, vertical = 12.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            RequestProductThumbnail(product, selected = quantity > 0)
+            Spacer(Modifier.width(12.dp))
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(product.name, style = Design.productTitle, color = DealerDesign.text,
                     maxLines = 2, overflow = TextOverflow.Ellipsis)
-                if (product.stock > 0) {
-                    Spacer(Modifier.width(8.dp))
-                    RequestPickerCounter(product, quantity, onStep, onEditQuantity)
-                }
-            }
-            if (product.stock <= 0) Text("Нет в наличии", style = Design.detail,
-                color = DealerDesign.secondary, maxLines = 1, overflow = TextOverflow.Ellipsis)
-            product.previousPrice?.takeIf { it > product.price }?.let { previous ->
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                    val percent = kotlin.math.round((previous - product.price).toDouble() * 100 / previous).toInt()
-                    Box(Modifier.clip(RoundedCornerShape(6.dp)).background(Color.Red)
-                        .padding(horizontal = 4.dp, vertical = 1.dp)) {
-                        Text("$percent%", style = Design.detail, color = Color.White)
-                    }
-                    Box {
-                        Text(historyMoney(previous) + "/шт", style = Design.detail, color = DealerDesign.text)
-                        Box(Modifier.matchParentSize(), contentAlignment = Alignment.Center) {
-                            Box(Modifier.fillMaxWidth().height(1.dp).background(Color(0xFFF76659)))
+                if (product.stock <= 0) Text("Нет в наличии", style = Design.detail,
+                    color = DealerDesign.secondary, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                product.previousPrice?.takeIf { it > product.price }?.let { previous ->
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                        val percent = kotlin.math.round((previous - product.price).toDouble() * 100 / previous).toInt()
+                        Box(Modifier.clip(RoundedCornerShape(6.dp)).background(Color.Red)
+                            .padding(horizontal = 4.dp, vertical = 1.dp)) {
+                            Text("$percent%", style = Design.detail, color = Color.White)
+                        }
+                        Box {
+                            Text(historyMoney(previous) + "/шт", style = Design.detail, color = DealerDesign.text)
+                            Box(Modifier.matchParentSize(), contentAlignment = Alignment.Center) {
+                                Box(Modifier.fillMaxWidth().height(1.dp).background(Color(0xFFF76659)))
+                            }
                         }
                     }
                 }
+            }
+        }
+        Spacer(Modifier.height(4.dp))
+        Row(Modifier.fillMaxWidth().heightIn(min = 40.dp), verticalAlignment = Alignment.CenterVertically) {
+            Text(buildAnnotatedString {
+                append(historyMoney(product.price).removeSuffix(" UZS"))
+                withStyle(Design.unit.toSpanStyle().copy(color = DealerDesign.text)) { append(" UZS/шт") }
+            }, style = Design.price, color = DealerDesign.text, modifier = Modifier.weight(1f),
+                maxLines = 1, overflow = TextOverflow.Ellipsis)
+            if (product.stock > 0) {
+                Spacer(Modifier.width(12.dp))
+                RequestPickerCounter(product, quantity, onStep, onEditQuantity)
             }
         }
     }

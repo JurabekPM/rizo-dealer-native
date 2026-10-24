@@ -118,8 +118,8 @@ Avtomatik holat: assembleDebug va 62 unit test muvaffaqiyatli. Yuqoridagi UI ban
 
 Figma picker tuzatishi: klaviatura bilan header72/search40, X maydon ichida; selected done_all va count;48/32 rasm, plus40 va17 baland badge; narx soni aniqroq Semibold, valyuta/birlik kulrang; mavjud tovarlarda В наличии yo‘q, tugaganda Нет в наличии va + yo‘q;10% belgi va eski narx strike saqlangan. Miqdor sheetida oddiy holatda nom/qoldiq satrlari yo‘q, suffix ajratilgan; confirm yumshoq yopilsin. Stock cap va Back draft qoidasi saqlansin. 63 unit test o‘tdi; bular qurilmadagi vizual tekshiruv o‘rnini bosmaydi.
 
-- Pickerda mavjud tovarlar avval, tugaganlar oxirida. «Выбрано» ↔ «Все товары» qidiruv/draftni yo‘qotmasin, har rejim scrolli saqlansin; qty0 tanlanganlardan chiqsin.
+- Pickerda mavjud tovarlar avval, tugaganlar oxirida. Yuqori done_all/Выбрано/Показать bo‘lmasin; hisob pastda0 bo‘lsa ham bir xil balandlikda qolsin. Продолжить → review → Добавить tanlovni saqlasin.
 - Tanlangan rasmida nozik chegara; Продолжить ustida pozitsiyalar soni va to‘liq jami. Qidiruvda tovar yashirilsa ham jami o‘zgarmasin; Back tashqi cartga qo‘llamasin.
 
-- Picker + darhol1 dona qo‘shsin, sheet ochilmasin; narx yonidagi108×32dp −/son/+ ixcham tursin, + joyidan ko‘chmasin. Son ko‘payishda yuqoriga, kamayishda pastga almashsin, tez taplar va4 xonali miqdor klip ichida to‘g‘ri ko‘rinsin. Faqat sonni bosish sheet ochsin. Tez taplar hisobdan tushmasin, stockdan oshmasin, minus0 chiqarib tashlasin.
-- Qidiruv/selected filter/jami/Back qoidalari saqlansin; bulk sheet cancel miqdorni o‘zgartirmasin, tasdiq yangilasin. Tanlashdan keyingi review oynasi o‘zgarmasin.
+- Pickerda bo‘sh mavjud cardning istalgan joyi yoki40dp + darhol1 dona qo‘shsin, double increment bo‘lmasin. Nom to‘liq joyda, narx/birlik bir xil qora; pastki full-width qatorda120×40 counter. Son markazda320ms up/down, fon/prefix300ms ochilib-yopilsin. + joyi va list/card balandligi tanlovda o‘zgarmasin; tez taps/stock cap/zero va bulk sheet tekshirilsin.
+- Qidiruv/jami/Back qoidalari saqlansin; bulk sheet cancel miqdorni o‘zgartirmasin, tasdiq yangilasin. Tanlashdan keyingi review oynasi o‘zgarmasin.
