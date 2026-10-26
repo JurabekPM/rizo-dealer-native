@@ -222,3 +222,13 @@ Pickerning joriy dizayni: yuqorida48dp rasm + max2 qator nom va chegirma; pastda
 stepRequestPickerQuantity har bosishda oxirgi draftdan yangi list qaytaradi, stock va0 chegaralarini saqlaydi; tez takroriy tap eskirgan row miqdorini qayta ishlatmaydi. Minus0 tanlovdan chiqaradi va jami yangilanadi. Sheet faqat tasdiqlanganda draftni o‘zgartiradi; tashqi forma hanuz faqat Продолжить bilan yangilanadi. Inline +/− bosishda qidiruv focus/IME o‘z holatida qoladi; bulk sheet yopilgach IME avtomatik qidiruvga qaytmaydi. Search ochilgandagi dastlabki fokus qolgan. RequestProductCard/review, Return va Admin buyurtmalari o‘zgarmagan.
 
 Inline miqdor tekshiruvi: debug build va 68 unit test muvaffaqiyatli, 0 xato. Qurilma UIini foydalanuvchi tekshiradi.
+
+### 2026-10-26: umumiy picker uslubi qaytarishlarda
+
+Uchta kirish yo‘li (Agent Visit→Return, Admin Visit→Return, Admin Menu→Returns→Create→store) bitta ReturnProductPickerScreen ishlatadi. Uning header/footeri, rasm48/title max2/price+animated counter, qidiruv X, selection border va bulk sheeti yangilangan Request uslubida. Return cardida Можно вернуть va oldingi Заявка sanasi/originalQuantity ham bor.
+
+PickerProduct — faqat readonly UI contract. RequestCatalogProductning konstruktor/ID/indeks/narxlari o‘zgarmagan; ReturnCatalogProduct.stock getter availablega, id getter barcodega teng. Hech qaysi catalog fixtures yoki saqlangan JSON almashtirilmagan. RequestQuantitySheet default4 digit; Return picker maxDigits2/stockLabel=Можно вернуть bilan0..available tekshiradi. Formadagi eski ReturnQuantitySheet va source-info sheet o‘z holida.
+
+stepReturnPickerQuantity har tapda oxirgi lokal draftdan, faqat Return qoldig‘igacha hisoblaydi; returnPickerTotal Long jami to‘liq draftdan. Back/dismiss tranzaksion, faqat Подтвердить tashqi tanlovga qo‘llaydi. Returnda empty draft confirm avvalgidek mumkin (barcha oldingi mahsulotni olib tashlash uchun); Request Continue0da o‘chiq. Bu save emas: VisitReturnScreenning Возвратить→reason sheet→validation→store.save oqimi, active-visit/read-only cheklovlari va tarix o‘zgarmadi. Unit tests qoldiq ajratilishi, total va draft izolyatsiyasini qamraydi; qurilma UIini foydalanuvchi tekshiradi.
+
+2026-10-26 validation: assembleDebug and 70 unit tests passed, 0 failures. User performs device UI checks.

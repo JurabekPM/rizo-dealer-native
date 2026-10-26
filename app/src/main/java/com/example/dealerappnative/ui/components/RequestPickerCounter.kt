@@ -31,13 +31,13 @@ import androidx.compose.ui.semantics.disabled
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.example.dealerappnative.R
-import com.example.dealerappnative.data.RequestCatalogProduct
+import com.example.dealerappnative.model.PickerProduct
 import com.example.dealerappnative.ui.theme.DealerDesign
 import com.example.dealerappnative.ui.theme.RequestPickerDesign as Design
 
 /** Fixed hit slots; reveal is draw-only, so the plus and product layout never move. */
 @Composable
-internal fun RequestPickerCounter(product: RequestCatalogProduct, quantity: Int,
+internal fun RequestPickerCounter(product: PickerProduct, quantity: Int,
     onStep: (Int) -> Unit, onEditQuantity: () -> Unit) {
     val expanded = quantity > 0
     val reveal = animateFloatAsState(if (expanded) 1f else 0f,

@@ -123,3 +123,9 @@ Figma picker tuzatishi: klaviatura bilan header72/search40, X maydon ichida; sel
 
 - Pickerda bo‘sh mavjud cardning istalgan joyi yoki40dp + darhol1 dona qo‘shsin, double increment bo‘lmasin. Nom to‘liq joyda, narx/birlik bir xil qora; pastki full-width qatorda120×40 counter. Son markazda320ms up/down, fon/prefix300ms ochilib-yopilsin. + joyi va list/card balandligi tanlovda o‘zgarmasin; tez taps/stock cap/zero va bulk sheet tekshirilsin.
 - Qidiruv/jami/Back qoidalari saqlansin; bulk sheet cancel miqdorni o‘zgartirmasin, tasdiq yangilasin. Tanlashdan keyingi review oynasi o‘zgarmasin.
+
+## 2026-10-26: umumiy qaytarish picker
+
+- Agent faol Visit→Return, Admin Visit→Return va Admin Menu→Returns→Create→store orqali yangi umumiy tanlash ochilsin.
+- Card/+1, markazdagi son/bulk sheet, animatsiya, qidiruv X, footer count/total ishlasin. Returndagi qoldiq/date/original qty saqlansin; Requestning kattaroq stocki Returnga o‘tmasin, bulk2 digit/0..available.
+- Back va sheet cancel tashqi draftni o‘zgartirmasin; Подтвердить0 ham oldingi tanlovni tozalasin. Tanlash save qilmasin; Возвратитьdan keyingina reason sheet va final save. Completed return read-only, Agent active-visit talabi va Admin sabab boshqaruvi saqlansin.

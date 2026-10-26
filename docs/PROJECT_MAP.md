@@ -209,3 +209,5 @@ Fayl nomi mavjudlikni bildiradi; har bir tugma ishlashiga kafolat emas. Vizual-o
 - `VisitRequestsTest.kt`: total/validation/history/month boundary regressiyalari.
 
 Mahsulot tanlashning Figma qismi: `ui/components/RequestPickerComponents.kt`, `RequestQuantitySheet.kt`, `RequestProductThumbnail.kt`, `ui/theme/RequestPickerDesign.kt`. `RequestCatalogCompatibilityTest.kt` UI saralashidan keyin eski draft ID/miqdorlari joyi o‘zgarmasligini tekshiradi.
+
+Umumiy picker UI: model/PickerProduct.kt — readonly ko‘rinish contracti; ui/components/ProductPickerLayout.kt — header/footer. RequestPickerComponents/Counter/Thumbnail/QuantitySheet ikkala tanlash oynasiga xizmat qiladi, lekin Request va Return draft/stock/saving qoidalari alohida. ReturnCatalog.ktdagi stepReturnPickerQuantity/returnPickerTotal va ReturnCatalogTest stock/draft regressiyalarini tekshiradi.

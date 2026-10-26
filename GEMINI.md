@@ -71,3 +71,9 @@ Pickerda mavjud mahsulotlar avval, tugaganlar oxirida. Yuqoridagi done_all/«В�
 Picker: rasm48/nom max2 qator/chegirma yuqorida; narx va120×40dp counter alohida to‘liq kenglikdagi pastki qatorda (tor title ustunida emas). Narx16/22 va UZS/шт13/18 bir xil qora. Bo‘sh, mavjud cardning istalgan joyi yoki + bosilsa1 dona; tanlanganda faqat counter/son bosiladi. + doim40dp va22dp belgi, joyi o‘zgarmaydi. Fon300ms chapga yoyilib/yig‘iladi, prefix fade/slide draw-only; son40×40 slotda markazda, SizeTransform yo‘q, increase yuqoriga/decrease pastga320ms. Faqat son bulk sheetni ochadi. Step latest draft va stock cap; IME inline tapda o‘zgarmaydi. Post-selection zayavka review va Admin/Return o‘zgarmagan.
 
 Inline miqdor tekshiruvi: debug build va 68 unit test muvaffaqiyatli, 0 xato. Qurilma UIini foydalanuvchi tekshiradi.
+
+## 2026-10-26: Qaytarish mahsulot tanlashi ham yangi uslubda
+
+ReturnProductPickerScreen Agent Visit/Return, Admin Visit/Return va Admin Menu/Returns/Create uchun bitta umumiy oyna. Request bilan Header/Footer/Card/Counter/Thumbnail/QuantitySheet ko‘rinishi qayta ishlatiladi; PickerProduct faqat readonly UI contract, qaytarish stock=available/barcode=id. Hech qachon Request stock/normalizerini Returnga ishlatmang. Return draft+step+total o‘z normalizeridan; bulk maxDigits2 va stockLabel=Можно вернуть. Manba sana/originalQuantity/qoldiq ko‘rinadi. Bo‘sh tanlovni Подтвердить bilan qaytarish saqlangan (cartni tozalash); Request Continue esa0da o‘chiq. Back/dismiss tashqi formani o‘zgartirmaydi. VisitReturnScreen, reason/save/session/history va tanlashdan keyingi formalar o‘zgarmagan. Qurilma UIini foydalanuvchi tekshiradi.
+
+2026-10-26 validation: assembleDebug and 70 unit tests passed, 0 failures. User performs device UI checks.

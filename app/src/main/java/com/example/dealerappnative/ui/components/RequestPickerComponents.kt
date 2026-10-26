@@ -21,7 +21,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.dealerappnative.R
-import com.example.dealerappnative.data.RequestCatalogProduct
+import com.example.dealerappnative.model.PickerProduct
 import com.example.dealerappnative.data.historyMoney
 import com.example.dealerappnative.ui.theme.DealerDesign
 import com.example.dealerappnative.ui.theme.RequestPickerDesign as Design
@@ -54,8 +54,9 @@ internal fun RequestPickerSearch(query: String, onQuery: (String) -> Unit, focus
 
 /** A full-width price/action row leaves long titles and quantity controls independent. */
 @Composable
-internal fun RequestPickerProduct(product: RequestCatalogProduct, quantity: Int,
-    onStep: (Int) -> Unit, onEditQuantity: () -> Unit) {
+internal fun RequestPickerProduct(product: PickerProduct, quantity: Int,
+    onStep: (Int) -> Unit, onEditQuantity: () -> Unit,
+    unavailableText: String = "Нет в наличии", supportingContent: @Composable ColumnScope.() -> Unit = {}) {
     Column(Modifier.fillMaxWidth()
         .softCardPress(enabled = product.stock > 0 && quantity == 0) { onStep(1) }
         .padding(horizontal = 16.dp, vertical = 12.dp)) {
@@ -65,7 +66,8 @@ internal fun RequestPickerProduct(product: RequestCatalogProduct, quantity: Int,
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(product.name, style = Design.productTitle, color = DealerDesign.text,
                     maxLines = 2, overflow = TextOverflow.Ellipsis)
-                if (product.stock <= 0) Text("Нет в наличии", style = Design.detail,
+                supportingContent()
+                if (product.stock <= 0) Text(unavailableText, style = Design.detail,
                     color = DealerDesign.secondary, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 product.previousPrice?.takeIf { it > product.price }?.let { previous ->
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {

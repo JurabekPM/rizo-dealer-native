@@ -18,7 +18,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.dealerappnative.R
-import com.example.dealerappnative.data.RequestCatalogProduct
+import com.example.dealerappnative.model.PickerProduct
 import com.example.dealerappnative.ui.theme.DealerDesign
 import com.example.dealerappnative.ui.theme.RequestPickerDesign
 import kotlinx.coroutines.Dispatchers
@@ -26,7 +26,7 @@ import kotlinx.coroutines.withContext
 
 /** Original Figma 48px tile / 32px image; decode sampled photos off the UI thread. */
 @Composable
-internal fun RequestProductThumbnail(product: RequestCatalogProduct, size: Dp = 48.dp, selected: Boolean = false) {
+internal fun RequestProductThumbnail(product: PickerProduct, size: Dp = 48.dp, selected: Boolean = false) {
     val resources = LocalContext.current.resources
     val imageSize = size * (2f / 3f)
     val pixels = with(LocalDensity.current) { imageSize.roundToPx() }.coerceAtLeast(1)

@@ -1,11 +1,14 @@
 package com.example.dealerappnative.data
 
 import com.example.dealerappnative.R
+import com.example.dealerappnative.model.PickerProduct
 
 internal data class ReturnCatalogProduct(
-    val name: String, val price: Long, val available: Int, val barcode: String,
-    val originalQuantity: Int = available, val photo: Int? = null
-) {
+    override val name: String, override val price: Long, val available: Int, val barcode: String,
+    val originalQuantity: Int = available, override val photo: Int? = null
+) : PickerProduct {
+    override val id: String get() = barcode
+    override val stock: Int get() = available
     // Stable sample source document, independent of the quantity being returned.
     val orderNumber: String get() = (40_873_230L + barcode.takeLast(4).toLong()).toString()
 }
@@ -38,3 +41,12 @@ internal val returnCatalog = listOf(
 internal fun normalizeReturnQuantities(values: List<Int>): List<Int> = returnCatalog.mapIndexed { index, product ->
     values.getOrElse(index) { 0 }.coerceIn(0, product.available)
 }
+
+/** Returns keep their own stock limits and draft indexes, independent of request availability. */
+internal fun stepReturnPickerQuantity(values: List<Int>, index: Int, step: Int): List<Int> =
+    normalizeReturnQuantities(values).toMutableList().apply {
+        this[index] = (this[index].toLong() + step).coerceIn(0L, returnCatalog[index].available.toLong()).toInt()
+    }
+
+internal fun returnPickerTotal(values: List<Int>): Long = normalizeReturnQuantities(values)
+    .mapIndexed { index, quantity -> returnCatalog[index].price * quantity.toLong() }.sum()

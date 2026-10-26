@@ -26,7 +26,7 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import com.example.dealerappnative.data.RequestCatalogProduct
+import com.example.dealerappnative.model.PickerProduct
 import com.example.dealerappnative.ui.theme.DealerDesign
 import com.example.dealerappnative.ui.theme.RequestPickerDesign as Design
 import kotlinx.coroutines.launch
@@ -34,8 +34,9 @@ import kotlinx.coroutines.launch
 /** Figma 12512:284426: compact title, 48-point input with separate unit, confirm. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun RequestQuantitySheet(product: RequestCatalogProduct, quantity: Int,
-    onDismiss: () -> Unit, keepKeyboardOpen: Boolean = false, onConfirm: (Int) -> Unit) {
+internal fun RequestQuantitySheet(product: PickerProduct, quantity: Int,
+    onDismiss: () -> Unit, keepKeyboardOpen: Boolean = false, maxDigits: Int = 4,
+    stockLabel: String = "В наличии", onConfirm: (Int) -> Unit) {
     val initial = quantity.takeIf { it > 0 }?.toString().orEmpty()
     var field by rememberSaveable(product.id, stateSaver = TextFieldValue.Saver) {
         mutableStateOf(TextFieldValue(initial, TextRange(0, initial.length)))
@@ -63,7 +64,7 @@ internal fun RequestQuantitySheet(product: RequestCatalogProduct, quantity: Int,
             Row(Modifier.fillMaxWidth().height(48.dp).clip(RoundedCornerShape(12.dp))
                 .border(2.dp, if (error) Color(0xFFF76659) else DealerDesign.accent, RoundedCornerShape(12.dp)),
                 verticalAlignment = Alignment.CenterVertically) {
-                BasicTextField(field, { if (it.text.length <= 4 && it.text.all(Char::isDigit)) field = it },
+                BasicTextField(field, { if (it.text.length <= maxDigits && it.text.all(Char::isDigit)) field = it },
                     modifier = Modifier.weight(1f).padding(horizontal = 12.dp).focusRequester(focus)
                         .semantics { contentDescription = "Количество: ${product.name}" },
                     textStyle = Design.body, cursorBrush = SolidColor(DealerDesign.accent),
@@ -76,7 +77,7 @@ internal fun RequestQuantitySheet(product: RequestCatalogProduct, quantity: Int,
                     Text("Штука", style = Design.detail, color = DealerDesign.text)
                 }
             }
-            if (error) Text("В наличии: ${product.stock} шт", style = Design.detail, color = Color(0xFFF76659),
+            if (error) Text("$stockLabel: ${product.stock} шт", style = Design.detail, color = Color(0xFFF76659),
                 modifier = Modifier.padding(top = 4.dp))
             Spacer(Modifier.height(16.dp))
             RequestPickerButton("Подтвердить", valid) {

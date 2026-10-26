@@ -1,10 +1,11 @@
 package com.example.dealerappnative.data
 
 import com.example.dealerappnative.R
+import com.example.dealerappnative.model.PickerProduct
 
-internal data class RequestCatalogProduct(val id: String, val name: String, val price: Long,
-    val stock: Int, val photo: Int? = null, val previousPrice: Long? = null,
-    val displayOrder: Int = Int.MAX_VALUE)
+internal data class RequestCatalogProduct(override val id: String, override val name: String, override val price: Long,
+    override val stock: Int, override val photo: Int? = null, override val previousPrice: Long? = null,
+    val displayOrder: Int = Int.MAX_VALUE) : PickerProduct
 
 /** Existing positions/IDs stay stable for restored drafts; display sorting is UI-only. */
 internal val requestCatalog = returnCatalog.mapIndexed { index, product ->
