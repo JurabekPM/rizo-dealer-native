@@ -236,7 +236,7 @@ stepReturnPickerQuantity har tapda oxirgi lokal draftdan, faqat Return qoldig‘
 ## 12. Vizitlar va rejadan tashqari oqim — 2026-10-26
 
 - Admin/Agent Visit details va Agent History detailsdagi operation chevronlari olib tashlangan. Besh turdagi operation uchun bir xil VisitResultBadge: list28/icon20, details32/icon24. Faqat haqiqatan yozilgan result shared transitionda qatnashadi; tugallanmagan qatorning accessibility matni ish bajarilganini aytmaydi. Boshqa menu/report chevronlari saqlangan.
-- AgentScreen Visits uchun haqiqiy LazyListStateni saqlaydi. Fixture ID tartibi rememberSaveable; session/return/request/unplanned snapshotlari o‘zgarmaganda cardlar qayta yig‘ilmaydi. Shared host Backdan600ms keyin olib tashlanadi (440ms bounds +160ms buffer); idle list lookahead qilmaydi. Logo/nom/qarz/results shared va eski Back scrolli saqlangan.
+- AgentScreen Visits uchun haqiqiy LazyListStateni saqlaydi. Fixture ID tartibi rememberSaveable; session/return/request/unplanned snapshotlari o‘zgarmaganda cardlar qayta yig‘ilmaydi. SharedTransitionLayout doimiy; Backdan600ms keyin faqat preparedId tozalanadi (440ms bounds +160ms buffer). Avvalgi hostni olib tashlash optimizatsiyasi scrollni buzishi aniqlanib bekor qilingan. Logo/nom/qarz/results shared va eski Back scrolli saqlangan.
 - Agent Visits pastida Внеплановые. Real-app rasmdagi uch radio (Визит / Заявка / Инкассация), so‘ng Figma579:32035 store picker. Search nom/ID; faol physical store o‘chiq va izohli. Boshqa faol vizit bo‘lsa ham faqat haqiqiy Startda umumiy bitta-faol-vizit qoidasi ishlaydi.
 - Tanlov paytida faqat vaqtinchalik draft. Начать визит actual vaqt bilan yangi unplanned-UUID session yozadi; agent_unplanned_visits physical store snapshotini alohida saqlaydi. Eski store/visit/session/return/request IDlar o‘zgarmaydi. Oldingi vizit tugagan bo‘lsa shu do‘konga yana yangi ID bilan kirish mumkin. Boshlamasdan Back hech narsa yozmaydi.
 - VisitStore.sourceStore optional, faqat yangi unplanned uchun. Xarita/telefon/ID shu physical store orqali; shared key va session visit UUID orqali. Agent xaritasi read-only.
@@ -247,3 +247,15 @@ stepReturnPickerQuantity har tapda oxirgi lokal draftdan, faqat Return qoldig‘
 Qurilmada UI tekshiruvini foydalanuvchi qiladi. Qotish sababi nazoratli scenario/FPS sinovi bilan tasdiqlanmagan; yuqoridagilar ro‘yxat holati va shared host umrini tuzatuvchi kod o‘zgarishlari. Oldindan tahrirlangan PendingAgentVisitSampleData.kt va VisitSampleConsistencyTest.kt tegilmaydi va commitga kirmaydi.
 
 2026-10-26 final validation: assembleDebug and 76 unit tests passed (0 failures, 0 errors); installed to Samsung SM_S916N with install -r. Device UI/FPS checks remain for the user.
+
+### 2026-10-26: detailsdan qaytganda scroll to‘xtashi — tasdiqlangan tuzatish
+
+Sabab foundation1.10.4 manbasidan tekshirildi: LazyListState.hasLookaheadOccurred true bo‘lgandan keyin u qayta false bo‘lmaydi. SharedTransitionLayoutni olib tashlab shu state bilan oddiy layoutga o‘tish applyMeasureResultni faqat approach natijasiga yozdiradi; asosiy scroll pozitsiyasi/chegaralari yangilanmay qoladi. Timer bilan hostni tezroq olib tashlash muammoni hal qilmaydi.
+
+VisitResultsTransition endi bitta barqaror SharedTransitionLayout + AnimatedContent ishlatadi. movableContentOf va idle/listni boshqa parentga ko‘chirish olib tashlangan.600ms cleanup faqat tanlangan shared IDni o‘chiradi; hostni emas. Faqat tanlangan card shared modifierlari faol, boshqa cardlarda ular yo‘q. Logo/nom/qarz/result kalitlari,440ms bounds, viewport/query/pager va business logic saqlangan. Umumiy host Admin/Agentga xizmat qiladi.
+
+Tekshiruv Samsung SM_S916N’da, foydalanuvchining aniq telefon sinovi ruxsati bilan bajarildi. Oldingi61a542e APKga yangi regression harnessi qo‘yilganda scrollingSurvivesRepeatedDetailWorkAndBack haqiqiy xatoni ushladi: Forward scroll stalled: (11,246) -> (11,246). Yangi APKda shu testning3 sikli va hoistedStateScrollsAfterLeavingAndReturningToVisitsTab o‘tdi (2/2). Harness faqat80ta synthetic card/in-memory ish holati, actual shared komponent va LazyListState ishlatadi; user session/preferences/financial data yo‘q.
+
+Telefondagi haqiqiy Agent prototipida yakunlangan card → mavjud Заявка → Back → Back ham bajarildi; Phone Link orqali list pastga/yuqoriga siljishi ko‘rildi. Qo‘shimcha FPS benchmark qilinmadi. Phone Link blackscreen qatlami oddiy ADB pointer eventlarini yutgani sabab native window scroll ishlatildi; bu app sozlamasi o‘zgartirilmadi. Test harness eski Espresso3.5.1 ning yangi Android InputManager incompatibilitysini chetlash uchun public ActivityScenario/instrumentation sync + list dispatchRawDelta ishlatadi, dependencies yangilanmagan.
+
+assembleDebug, assembleDebugAndroidTest va76 unit test (0 failures) o‘tdi. Yangi APK install-r bilan telefonda. Oldingi ikki unrelated dirty fayl aynan saqlangan.

@@ -20,7 +20,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.withFrameNanos
-import androidx.compose.runtime.movableContentOf
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.LaunchedEffect
 import kotlinx.coroutines.launch
@@ -60,22 +59,15 @@ internal fun VisitResultsTransition(
         }
     }
     val latestOpen by rememberUpdatedState(openVisit)
-    // Moving this content preserves its identity when the lookahead host is added/removed.
-    val listContent = remember {
-        movableContentOf<VisitResultTransitionScope?> { transition ->
-            CompositionLocalProvider(LocalVisitResultTransition provides transition) {
-                latestContent(null, latestOpen)
-            }
-        }
-    }
-    if (preparedId == null && selectedId == null) {
-        listContent(null) // Idle/first-entry scrolling has no SharedTransitionLayout or lookahead pass.
-    } else SharedTransitionLayout(Modifier.fillMaxSize()) {
+    // LazyListState retains its lookahead measurement mode once used inside this host.
+    // Removing/reparenting the host leaves subsequent scroll remeasures in approach-only
+    // mode: scroll offsets/bounds stop updating. Keep one measurement hierarchy alive.
+    SharedTransitionLayout(Modifier.fillMaxSize()) {
         val sharedScope = this
         val screenTransition = updateTransition(selectedId, label = "Visit navigation")
         LaunchedEffect(selectedId, opening) {
             if (selectedId == null && !opening) {
-                // Bounds use 440 ms; release the host after a buffer even if shared state stays active.
+                // Stop registering shared modifiers after the return; keep the layout host stable.
                 delay(VisitMotionDuration + 160L)
                 preparedId = null
             }
@@ -86,7 +78,7 @@ internal fun VisitResultsTransition(
             }) { targetId ->
             val transition = remember(sharedScope, this, preparedId) { VisitResultTransitionScope(sharedScope, this, preparedId) }
             CompositionLocalProvider(LocalVisitResultTransition provides transition) {
-                if (targetId == null) listContent(transition) else latestContent(targetId, latestOpen)
+                latestContent(targetId, latestOpen)
             }
         }
     }

@@ -221,3 +221,8 @@ Umumiy picker UI: model/PickerProduct.kt — readonly ko‘rinish contracti; ui/
 - screens/AgentVisitCollectionScreen.kt: active vizitdagi UZS amount; AgentVisitSession.recordCollection/AgentVisitSessions.saveCollection.
 - VisitStore.sourceStore + VisitMapStore.storeForVisit: maps/phone physical ID; session/shared animation visit ID.
 - UnplannedVisitTest.kt: identity isolation, active/start rules, notes/results preservation, actual collection history and repeated-store monthly sales.
+
+## Vizit scroll regressiyasi
+
+- ui/components/VisitResultsTransition.kt: doimiy shared/lookahead host; uni conditional olib tashlamang yoki listni oddiy rootga ko‘chirmang.
+- app/src/androidTest/java/com/example/dealerappnative/VisitScrollRegressionTest.kt: synthetic80-card list;3×detail/work/Back, ikki tomon scroll, tab detach/reattach, viewport equality. Faqat o‘z in-memory ma’lumoti. Mavjud Espresso eski telefon Androidida ishlamagani uchun public platform sync va state scroll consumeri orqali ishlaydi.

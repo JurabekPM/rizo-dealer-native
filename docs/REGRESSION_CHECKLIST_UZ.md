@@ -141,3 +141,13 @@ Figma picker tuzatishi: klaviatura bilan header72/search40, X maydon ichida; sel
 - [ ] Restartda unplanned metadata/session/record saqlansin. Map/call aynan o‘sha physical storega, Agent map readonly.
 
 2026-10-26 final validation: assembleDebug and 76 unit tests passed (0 failures, 0 errors); installed to Samsung SM_S916N with install -r. Device UI/FPS checks remain for the user.
+
+## Detailsdan Back scroll xatosi — tasdiqlangan (2026-10-26)
+
+- [x] Oldingi APKda Android regression: Forward scroll stalled (11,246) -> (11,246).
+- [x] Yangi APKda synthetic shared list3×detail/work/Back, oldingi viewport va yetarli forward/backward scroll: PASS.
+- [x] Yangi APKda hoisted state bilan Visitsdan chiqish/qaytish va scroll: PASS.
+- [x] Samsungdagi haqiqiy Agent card → mavjud Заявка → ikki Back, Phone Link scroll down/up.
+- [x] assembleDebug + assembleDebugAndroidTest +76 unit tests;2 Android regressions.
+
+SharedTransitionLayoutni idle paytida olib tashlash regressiyani qaytaradi.600ms timer faqat preparedIdni tozalashi kerak. Barcha UI/FPS holatlari qamralgan deb hisoblamang; vizit ma’lumotlari test uchun o‘zgartirilmasin.

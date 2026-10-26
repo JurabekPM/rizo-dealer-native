@@ -82,6 +82,10 @@ ReturnProductPickerScreen Agent Visit/Return, Admin Visit/Return va Admin Menu/R
 
 Handoff §12 va figma-reference/agent-unplanned/ ni o‘qing. Agent Visits → Внеплановые → Визит/Заявка/Инкассация → physical store tanlash. Startdan oldin yozuv yo‘q; actual Start yangi unplanned-UUID session va agent_unplanned_visits snapshot yozadi. Eski store/session IDni qayta ishlatib ma’lumotni bosmang. Bir active visit va finished/no-work qoidalari saqlangan. Optional collectionAmount UZS, active-only; save visitni tugatmaydi. History/physical-store filters/monthly sales yangi IDlarni ham ko‘radi. Agent map readonly.
 
-Visit icons barcha operationlarda bir xil badge; faqat yozilgan results shared. Operation arrows olib tashlangan, menu arrows qolgan. VisitsListState AgentScreen’da, fixture ID tartibi saveable, card enrichment memoized. Shared transition host Backdan600ms keyin bo‘shaydi; idle listda lookahead qoldirmang. Oldingi logika va shared ko‘rinishlarni tasodifan qaytarmang. UI sinovi foydalanuvchining o‘zida.
+Visit icons barcha operationlarda bir xil badge; faqat yozilgan results shared. Operation arrows olib tashlangan, menu arrows qolgan. VisitsListState AgentScreen’da, fixture ID tartibi saveable, card enrichment memoized. SharedTransitionLayout har doim shu hierarchyda qoladi;600ms keyin faqat preparedId/shared modifierlar bo‘shaydi. LazyListState lookahead ichida bo‘lgandan keyin hostni olib tashlamang: bu scroll hisobini to‘xtatadi. Oldingi logika va shared ko‘rinishlarni tasodifan qaytarmang. UI sinovi foydalanuvchining o‘zida.
 
 2026-10-26 final validation: assembleDebug and 76 unit tests passed (0 failures, 0 errors); installed to Samsung SM_S916N with install -r. Device UI/FPS checks remain for the user.
+
+## Vizit scroll tuzatishi — 2026-10-26
+
+Handoff §12 oxiridagi sabab va evidencega qarang. Timerdan keyin SharedTransitionLayoutni butunlay olib tashlash noto‘g‘ri edi: LazyListState lookahead holati saqlanib scroll to‘xtab qolgan. Doimiy hostni saqlang, faqat shared ID/modifierlarni600ms keyin bo‘shating; movable list/reparenting yo‘q. Oldingi76 unit test va Samsungda2 isolated Android regression o‘tdi. Oldingi APKda shu test real forward-scroll xatosini takrorladi. Foydalanuvchi ruxsati bilan haqiqiy Agent card/request/Back va Phone Link scroll ham tekshirildi; session/preferences almashtirilmadi.
