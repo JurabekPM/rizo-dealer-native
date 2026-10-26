@@ -34,6 +34,9 @@ internal data class HistoryOperation(val result: VisitResult, val documentId: St
 /** Fictional document lines are stable per visit ID; only recorded session results create documents. */
 internal fun historyOperations(entry: AgentHistoryEntry): List<HistoryOperation> =
     if (entry.session.isActive) emptyList() else entry.session.results.distinct().map { result ->
+    if (result == VisitResult.Collection && entry.session.collectionAmount != null) {
+        return@map HistoryOperation(result, "IC-${entry.session.startedAt}", emptyList(), entry.session.collectionAmount)
+    }
     if (result == VisitResult.Request && entry.requestRecord != null) {
         val record = entry.requestRecord
         return@map HistoryOperation(result, record.documentId,
@@ -96,10 +99,12 @@ internal data class HistoryStorePlan(val visit: VisitStore, val target: Long, va
 
 /** Monthly targets are demo plans; actual totals always come from the same finished visit documents. */
 internal fun historyStorePlans(section: HistorySection, month: HistoryMonth, entries: List<AgentHistoryEntry>): List<HistoryStorePlan> =
-    agentVisitCards.map { visit ->
+    (agentVisitCards + entries.map { entry ->
+        entry.visit.sourceStore?.let { entry.visit.copy(id = it.id) } ?: entry.visit
+    }).distinctBy { it.id }.map { visit ->
         val target = (if (section == HistorySection.CollectionPlan) 800_000L else 2_000_000L) +
             (visit.id.hashCode().toLong() and 0x7fffffff) % 7 * 250_000L
-        val operations = entries.filter { it.visit.id == visit.id && HistoryMonth.at(it.session.startedAt) == month }
+        val operations = entries.filter { (it.visit.sourceStore?.id ?: it.visit.id) == visit.id && HistoryMonth.at(it.session.startedAt) == month }
             .flatMap { entry -> historyOperations(entry).filter { it.result == section.result }.map { entry to it } }
         HistoryStorePlan(visit, target, operations)
     }

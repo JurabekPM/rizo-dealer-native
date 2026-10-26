@@ -173,8 +173,7 @@ private fun EmployeeCard(employeeName: String, phoneNumber: String) {
 @Composable
 private fun OperationRow(operation: VisitOperation, storeId: String, completed: Boolean, onClick: (() -> Unit)? = null) {
     Row(Modifier.fillMaxWidth().height(68.dp).softCardPress(onClick = onClick), verticalAlignment = Alignment.CenterVertically) {
-        if (completed) VisitResultBadge(operation.result, storeId, inDetails = true)
-        else DealerIcon(operation.iconRes, operation.iconColor)
+        VisitResultBadge(operation.result, if (completed) storeId else null, inDetails = true, completed = completed)
         Spacer(Modifier.width(12.dp))
         Column(Modifier.weight(1f)) {
             Text(operation.title, style = DealerDesign.body)
@@ -182,7 +181,6 @@ private fun OperationRow(operation: VisitOperation, storeId: String, completed: 
             Text(operation.description, style = DealerDesign.detail, color = DealerDesign.secondary,
                 maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
-        if (onClick != null) DealerIcon(R.drawable.ic_chevron, size = 16.dp)
     }
 }
 

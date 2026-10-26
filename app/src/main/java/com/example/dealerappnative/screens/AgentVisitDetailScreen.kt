@@ -34,19 +34,24 @@ import com.example.dealerappnative.ui.theme.DealerDesign
 /** Visit -> History, Figma 14776:218419; store details keep their own screen. */
 @Composable
 internal fun AgentVisitDetailScreen(store: StoreUiModel, visit: VisitStore,
-    sessions: AgentVisitSessions, onBack: () -> Unit) {
+    sessions: AgentVisitSessions, onBack: () -> Unit, initialOperation: VisitResult? = null, onStart: (() -> Boolean)? = null) {
     val session = sessions.sessions[store.id]
     val detailListState = rememberLazyListState()
-    var requestVisible by rememberSaveable(store.id) { mutableStateOf(false) }
+    var requestVisible by rememberSaveable(store.id) { mutableStateOf(initialOperation == VisitResult.Request) }
     if (requestVisible) {
-        AgentVisitRequestScreen(visit, sessions, onBack = { requestVisible = false })
+        AgentVisitRequestScreen(visit, sessions, onBack = { requestVisible = false }, onStart = onStart)
+        return
+    }
+    var collectionVisible by rememberSaveable(store.id) { mutableStateOf(initialOperation == VisitResult.Collection) }
+    if (collectionVisible) {
+        AgentVisitCollectionScreen(visit, sessions, onBack = { collectionVisible = false }, onStart = onStart)
         return
     }
     var returnVisible by rememberSaveable(store.id) { mutableStateOf(false) }
     if (returnVisible) {
         VisitReturnScreen(visit, session, allowCreate = session?.isActive == true,
             onBack = { returnVisible = false }, onSave = { sessions.addReturn(store.id) },
-            onStart = { sessions.start(store.id, visit.results) })
+            onStart = { onStart?.invoke() ?: sessions.start(store.id, visit.results) })
         return
     }
     var finishSheet by rememberSaveable(store.id) { mutableStateOf(false) }
@@ -63,7 +68,7 @@ internal fun AgentVisitDetailScreen(store: StoreUiModel, visit: VisitStore,
         }
         LazyColumn(Modifier.weight(1f), state = detailListState, contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            item(key = "store") { VisitStoreSummary(store) }
+            item(key = "store") { VisitStoreSummary(store, visit.sourceStore ?: store) }
             if (session != null) item(key = "time") { AgentVisitTiming(session) }
             item(key = "balance") {
                 Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(Color.White)
@@ -85,6 +90,7 @@ internal fun AgentVisitDetailScreen(store: StoreUiModel, visit: VisitStore,
                             onClick = when (result) {
                                 VisitResult.Return -> ({ returnVisible = true })
                                 VisitResult.Request -> ({ requestVisible = true })
+                                VisitResult.Collection -> ({ collectionVisible = true })
                                 else -> null
                             })
                         if (index < VisitResult.entries.lastIndex) HorizontalDivider(color = DealerDesign.divider,
@@ -101,7 +107,7 @@ internal fun AgentVisitDetailScreen(store: StoreUiModel, visit: VisitStore,
             if (session == null) "Начать визит" else "Завершить визит") {
             keyboard?.hide()
             when {
-                session == null -> if (!sessions.start(store.id, visit.results)) warning = true
+                session == null -> if (!(onStart?.invoke() ?: sessions.start(store.id, visit.results))) warning = true
                 session.needsReason -> finishSheet = true
                 else -> sessions.finish(store.id)
             }
@@ -114,7 +120,8 @@ internal fun AgentVisitDetailScreen(store: StoreUiModel, visit: VisitStore,
     if (warning) AlertDialog(onDismissRequest = { warning = false }, containerColor = Color.White,
         title = { Text("Уже идёт визит", style = AgentVisitDesign.screenTitle) },
         text = { Text("Сначала завершите визит: " +
-            (agentVisitStores.find { it.id == sessions.activeStoreId }?.name ?: "другой магазин"),
+            (sessions.unplanned.records[sessions.activeStoreId]?.store?.name
+                ?: agentVisitStores.find { it.id == sessions.activeStoreId }?.name ?: "другой магазин"),
             style = AgentVisitDesign.name) },
         confirmButton = { SoftTextButton(onClick = { warning = false }) {
             Text("Понятно", style = AgentVisitDesign.emphasis, color = DealerDesign.accent)
@@ -122,7 +129,7 @@ internal fun AgentVisitDetailScreen(store: StoreUiModel, visit: VisitStore,
 }
 
 @Composable
-private fun VisitStoreSummary(store: StoreUiModel) {
+private fun VisitStoreSummary(store: StoreUiModel, actionStore: StoreUiModel) {
     val actions = LocalStoreActions.current
     Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(Color.White).padding(16.dp)) {
         Row(Modifier.fillMaxWidth().heightIn(min = 44.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -138,8 +145,8 @@ private fun VisitStoreSummary(store: StoreUiModel) {
         }
         Spacer(Modifier.height(8.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            VisitSummaryAction("Открыть карту", R.drawable.ic_route, Modifier.weight(1f)) { actions.openMap(store) }
-            VisitSummaryAction("Позвонить", R.drawable.ic_phone_call, Modifier.weight(1f)) { actions.dial(store.phoneNumber) }
+            VisitSummaryAction("Открыть карту", R.drawable.ic_route, Modifier.weight(1f)) { actions.openMap(actionStore) }
+            VisitSummaryAction("Позвонить", R.drawable.ic_phone_call, Modifier.weight(1f)) { actions.dial(actionStore.phoneNumber) }
         }
     }
 }
@@ -158,7 +165,7 @@ private fun VisitSummaryAction(label: String, icon: Int, modifier: Modifier, onC
 
 @Composable
 private fun VisitOperationRow(visit: VisitStore, result: VisitResult, completed: Boolean, onClick: (() -> Unit)? = null) {
-    val (title, icon, description) = when (result) {
+    val (title, _, description) = when (result) {
         VisitResult.Delivery -> Triple("Доставка", R.drawable.ic_box, if (completed) visit.details.deliveries else "Нет доставок")
         VisitResult.Request -> Triple("Заявка", R.drawable.ic_visit, if (completed) visit.details.request else "Нет заявки")
         VisitResult.Revision -> Triple("Ревизия", R.drawable.ic_edit, if (completed) visit.details.revisions else "Нет ревизии")
@@ -167,8 +174,7 @@ private fun VisitOperationRow(visit: VisitStore, result: VisitResult, completed:
     }
     Row(Modifier.fillMaxWidth().heightIn(min = 64.dp).softCardPress(onClick = onClick).padding(vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically) {
-        if (completed) VisitResultBadge(result, visit.id, inDetails = true)
-        else DealerIcon(icon, if (result == VisitResult.Collection) Color.Unspecified else DealerDesign.secondary)
+        VisitResultBadge(result, if (completed) visit.id else null, inDetails = true, completed = completed)
         Spacer(Modifier.width(12.dp))
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
             Text(title, style = AgentVisitDesign.emphasis, color = DealerDesign.text)
@@ -179,6 +185,5 @@ private fun VisitOperationRow(visit: VisitStore, result: VisitResult, completed:
             Spacer(Modifier.width(8.dp))
             Text("Завершено", style = AgentVisitDesign.status, color = Color(0xFF22A447))
         }
-        if (onClick != null) { Spacer(Modifier.width(8.dp)); DealerIcon(R.drawable.ic_chevron, size = 16.dp) }
     }
 }

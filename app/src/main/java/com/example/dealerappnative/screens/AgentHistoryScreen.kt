@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.example.dealerappnative.R
 import com.example.dealerappnative.data.AgentVisitSessions
 import com.example.dealerappnative.data.agentVisitCards
+import com.example.dealerappnative.data.unplannedVisitCard
 import com.example.dealerappnative.data.LocalVisitReturns
 import com.example.dealerappnative.data.HistorySection
 import com.example.dealerappnative.model.*
@@ -40,10 +41,17 @@ internal fun AgentHistoryScreen(sessions: AgentVisitSessions, onDetailVisible: (
     // Explicit demo scheduling metadata, independent of status/results shown on cards.
     val unplannedIds = remember { agentVisitCards.filter { it.results.isNotEmpty() }
         .filterIndexed { index, _ -> index % 4 == 1 }.map { it.id }.toSet() }
-    val entries = agentVisitCards.mapNotNull { visit ->
+    val unplanned = sessions.unplanned.records.toMap()
+    val allCards = remember(unplanned) {
+        unplanned.values.map(::unplannedVisitCard) + agentVisitCards
+    }
+    val filterStores = remember(allCards) {
+        allCards.map { card -> card.sourceStore?.let { card.copy(id = it.id) } ?: card }.distinctBy { it.id }
+    }
+    val entries = allCards.mapNotNull { visit ->
         sessions.sessions[visit.id]?.takeUnless { it.isActive }?.let {
             AgentHistoryEntry(sessions.requests.enrich(returns.enrich(visit.copy(results = it.results))), it,
-                visit.id in unplannedIds, returns.records[visit.id], sessions.requests.records[visit.id])
+                visit.id in unplannedIds || visit.id in unplanned, returns.records[visit.id], sessions.requests.records[visit.id])
         }
     }.sortedByDescending { it.session.startedAt }
     val visible = entries.filter(filter::matches)
@@ -90,7 +98,7 @@ internal fun AgentHistoryScreen(sessions: AgentVisitSessions, onDetailVisible: (
             }
         }
     }
-    if (showFilter) AgentHistoryFilterSheet(filter, agentVisitCards, onDismiss = { showFilter = false }, onApply = {
+    if (showFilter) AgentHistoryFilterSheet(filter, filterStores, onDismiss = { showFilter = false }, onApply = {
         filter = it; showFilter = false; listState.requestScrollToItem(0)
     })
 }

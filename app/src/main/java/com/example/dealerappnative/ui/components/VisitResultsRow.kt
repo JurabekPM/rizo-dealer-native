@@ -34,13 +34,19 @@ internal fun VisitResultsRow(results: List<VisitResult>, storeId: String? = null
 
 /** The same badge is shared from its compact stack into the corresponding detail row. */
 @Composable
-internal fun VisitResultBadge(result: VisitResult, storeId: String?, layer: Int = result.ordinal, inDetails: Boolean = false) {
+internal fun VisitResultBadge(result: VisitResult, storeId: String?, layer: Int = result.ordinal, inDetails: Boolean = false, completed: Boolean = true) {
     val icon = resultIcon(result)
     val badgeSize = if (inDetails) 32.dp else 28.dp
     val iconSize = if (inDetails) 24.dp else 20.dp
     Box(Modifier.size(badgeSize).zIndex(layer.toFloat()).sharedVisitResult(storeId, result, layer)
         .background(DealerDesign.background, CircleShape).border(1.5.dp, Color.White, CircleShape)
-        .semantics { contentDescription = icon.label }, contentAlignment = Alignment.Center) {
+        .semantics { contentDescription = if (completed) icon.label else when (result) {
+            VisitResult.Delivery -> "Доставка"
+            VisitResult.Request -> "Заявка"
+            VisitResult.Revision -> "Ревизия"
+            VisitResult.Collection -> "Инкассация"
+            VisitResult.Return -> "Возврат"
+        } }, contentAlignment = Alignment.Center) {
         DealerIcon(icon.resource, if (result == VisitResult.Collection) Color.Unspecified else DealerDesign.secondary,
             size = iconSize)
     }

@@ -50,7 +50,7 @@ internal fun HistoryStoreSummary(visit: VisitStore, showId: Boolean = false) {
             Spacer(Modifier.width(12.dp))
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                 Text(visit.name, style = AgentVisitDesign.name, color = DealerDesign.text, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                Text(if (showId) visit.id else visit.address, style = AgentVisitDesign.detail, color = DealerDesign.secondary, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(if (showId) store.id else visit.address, style = AgentVisitDesign.detail, color = DealerDesign.secondary, maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
         }
         Spacer(Modifier.height(8.dp))

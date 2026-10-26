@@ -19,7 +19,8 @@ internal data class AgentVisitSession(
     val comment: String = "",
     val photoUris: List<String> = emptyList(),
     val results: List<VisitResult> = emptyList(),
-    val reason: VisitFinishReason? = null
+    val reason: VisitFinishReason? = null,
+    val collectionAmount: Long? = null
 ) {
     val isActive: Boolean get() = finishedAt == null
     val needsReason: Boolean get() = results.isEmpty()
@@ -35,4 +36,15 @@ internal data class AgentVisitSession(
     }
 
     fun elapsedMillis(now: Long): Long = ((finishedAt ?: now) - startedAt).coerceAtLeast(0)
+}
+
+internal fun canStartAgentVisit(id: String, results: List<VisitResult>, sessions: Map<String, AgentVisitSession>): Boolean =
+    results.isEmpty() && id !in sessions && sessions.values.none { it.isActive }
+
+internal fun canSaveVisitCollection(session: AgentVisitSession?, amount: Long): Boolean = session?.isActive == true && amount > 0
+
+
+internal fun AgentVisitSession.recordCollection(amount: Long): AgentVisitSession {
+    require(canSaveVisitCollection(this, amount)) { "Collection requires an active visit and a positive UZS amount." }
+    return copy(collectionAmount = amount, results = (results + VisitResult.Collection).distinct())
 }

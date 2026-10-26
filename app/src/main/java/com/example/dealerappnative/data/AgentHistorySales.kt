@@ -21,7 +21,7 @@ internal fun historySalesStores(month: HistoryMonth, entries: List<AgentHistoryE
                     VisitResult.Request -> entry.requestRecord?.createdAt ?: entry.session.startedAt
                     else -> entry.session.startedAt
                 }) == month
-        }.map { entry to it } }.groupBy { it.first.visit.id }
+        }.map { entry to it } }.groupBy { it.first.visit.sourceStore?.id ?: it.first.visit.id }
     return historyStorePlans(HistorySection.RequestPlan, month, entries).map { plan ->
         HistorySalesStore(plan.visit, plan.target, documents[plan.visit.id].orEmpty()
             .sortedByDescending { it.first.session.finishedAt })

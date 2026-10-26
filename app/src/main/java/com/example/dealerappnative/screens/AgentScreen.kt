@@ -1,6 +1,7 @@
 package com.example.dealerappnative.screens
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,6 +28,7 @@ internal fun AgentScreen(onBack: () -> Unit) {
     val context = LocalContext.current.applicationContext
     val visitSessions = remember(context) { AgentVisitSessions(context) }
     val screenState = rememberSaveableStateHolder()
+    val visitsListState = rememberLazyListState()
     var tabDetailVisible by rememberSaveable { mutableStateOf(false) }
     var storesVisible by rememberSaveable { mutableStateOf(false) }
     var storeDebtsVisible by rememberSaveable { mutableStateOf(false) }
@@ -47,7 +49,7 @@ internal fun AgentScreen(onBack: () -> Unit) {
             Box(Modifier.weight(1f)) {
                 screenState.SaveableStateProvider(destination.name) {
                     when (destination) {
-                        AgentDestination.Visits -> AgentVisitsScreen(visitSessions, onDetailVisible = { tabDetailVisible = it })
+                        AgentDestination.Visits -> AgentVisitsScreen(visitSessions, visitsListState, onDetailVisible = { tabDetailVisible = it })
                         AgentDestination.Stores -> AgentStoresScreen(onBack = { destination = AgentDestination.Visits },
                             onDetailVisible = { tabDetailVisible = it })
                         AgentDestination.Statistics -> AgentStatisticsScreen(onStoreDebtsClick = { storeDebtsVisible = true })

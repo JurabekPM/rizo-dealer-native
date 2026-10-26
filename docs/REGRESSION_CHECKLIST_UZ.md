@@ -129,3 +129,15 @@ Figma picker tuzatishi: klaviatura bilan header72/search40, X maydon ichida; sel
 - Agent faol Visit→Return, Admin Visit→Return va Admin Menu→Returns→Create→store orqali yangi umumiy tanlash ochilsin.
 - Card/+1, markazdagi son/bulk sheet, animatsiya, qidiruv X, footer count/total ishlasin. Returndagi qoldiq/date/original qty saqlansin; Requestning kattaroq stocki Returnga o‘tmasin, bulk2 digit/0..available.
 - Back va sheet cancel tashqi draftni o‘zgartirmasin; Подтвердить0 ham oldingi tanlovni tozalasin. Tanlash save qilmasin; Возвратитьdan keyingina reason sheet va final save. Completed return read-only, Agent active-visit talabi va Admin sabab boshqaruvi saqlansin.
+
+## Vizit va Внеплановые — 2026-10-26
+
+- [ ] Admin/Agent visit details: besh icon bir xil badge, faqat mavjud results shared; ortiqcha operation arrows yo‘q. Menu arrows saqlangan.
+- [ ] Agent Visitsni pastga scroll → Stores/Statistics/History → Visits: o‘sha query/tartib/viewport. Detail→Back, tez qayta ochish va map roundtrip shared/scrollni buzmasin.
+- [ ] Внеплановые: Continue tanlovsiz o‘chiq. Har uch tur→store list; name/ID search. Faol store o‘chiq va hintli. Cancel/Back yozuv yaratmasin.
+- [ ] Boshqa vizit faol bo‘lsa Start rad qilinsin. Tugatib keyin yangi vizit actual Start vaqti bilan boshlansin; eski vizitlar/suratlar/izoh/hujjatlar saqlansin.
+- [ ] Request/Collection tanlovi tegishli formaga; Startdan keyingina saqlash. Positive UZS collection result qo‘shadi, session active qoladi. No-work finish reason sheet o‘z holida.
+- [ ] Finished unplanned Historyda, unplanned filter va physical store filterda ko‘rinsin; aynan o‘z summasi/surati/izohi; qayta start yo‘q. Takroriy do‘kon orderlari salesda bir do‘konga jami, order/return createdAt oyi bo‘yicha.
+- [ ] Restartda unplanned metadata/session/record saqlansin. Map/call aynan o‘sha physical storega, Agent map readonly.
+
+2026-10-26 final validation: assembleDebug and 76 unit tests passed (0 failures, 0 errors); installed to Samsung SM_S916N with install -r. Device UI/FPS checks remain for the user.

@@ -24,6 +24,7 @@ import androidx.compose.runtime.movableContentOf
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.LaunchedEffect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
@@ -72,10 +73,10 @@ internal fun VisitResultsTransition(
     } else SharedTransitionLayout(Modifier.fillMaxSize()) {
         val sharedScope = this
         val screenTransition = updateTransition(selectedId, label = "Visit navigation")
-        LaunchedEffect(selectedId, opening, screenTransition.currentState,
-            screenTransition.isRunning, sharedScope.isTransitionActive) {
-            if (selectedId == null && !opening && screenTransition.currentState == null &&
-                !screenTransition.isRunning && !sharedScope.isTransitionActive) {
+        LaunchedEffect(selectedId, opening) {
+            if (selectedId == null && !opening) {
+                // Bounds use 440 ms; release the host after a buffer even if shared state stays active.
+                delay(VisitMotionDuration + 160L)
                 preparedId = null
             }
         }

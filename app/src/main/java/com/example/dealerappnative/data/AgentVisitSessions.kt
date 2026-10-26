@@ -8,6 +8,10 @@ import com.example.dealerappnative.model.VisitResult
 import com.example.dealerappnative.model.VisitRequestItem
 import com.example.dealerappnative.model.VisitRequestRecord
 import com.example.dealerappnative.model.canSaveVisitRequest
+import com.example.dealerappnative.model.canSaveVisitCollection
+import com.example.dealerappnative.model.canStartAgentVisit
+import com.example.dealerappnative.model.UnplannedVisit
+import com.example.dealerappnative.model.recordCollection
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -16,6 +20,7 @@ internal class AgentVisitSessions(context: Context) {
     private val preferences = context.applicationContext.getSharedPreferences("agent_visit_sessions", Context.MODE_PRIVATE)
     val sessions = mutableStateMapOf<String, AgentVisitSession>()
     val requests = VisitRequestStore(context)
+    val unplanned = AgentUnplannedVisitStore(context)
 
     init {
         preferences.all.forEach { (id, value) ->
@@ -29,7 +34,8 @@ internal class AgentVisitSessions(context: Context) {
                     results = json.optJSONArray("results").strings().mapNotNull { name ->
                         VisitResult.entries.find { it.name == name }
                     },
-                    reason = VisitFinishReason.entries.find { it.name == json.optString("reason") }
+                    reason = VisitFinishReason.entries.find { it.name == json.optString("reason") },
+                    collectionAmount = if (json.has("collectionAmount")) json.getLong("collectionAmount") else null
                 )
             }
         }
@@ -53,8 +59,21 @@ internal class AgentVisitSessions(context: Context) {
     val activeStoreId: String? get() = sessions.entries.firstOrNull { it.value.isActive }?.key
 
     fun start(storeId: String, results: List<VisitResult>): Boolean {
-        if (results.isNotEmpty() || sessions.containsKey(storeId) || activeStoreId != null) return false
+        if (!canStartAgentVisit(storeId, results, sessions)) return false
         save(storeId, AgentVisitSession(startedAt = System.currentTimeMillis(), results = results.toList()))
+        return true
+    }
+
+    fun startUnplanned(visit: UnplannedVisit): Boolean {
+        if (!start(visit.id, emptyList())) return false
+        unplanned.save(visit.copy(createdAt = sessions.getValue(visit.id).startedAt))
+        return true
+    }
+
+    fun saveCollection(storeId: String, amount: Long): Boolean {
+        val session = sessions[storeId] ?: return false
+        if (!canSaveVisitCollection(session, amount)) return false
+        save(storeId, session.recordCollection(amount))
         return true
     }
 
@@ -101,6 +120,7 @@ internal class AgentVisitSessions(context: Context) {
             .put("photos", JSONArray(session.photoUris)).put("results", JSONArray(session.results.map { it.name }))
         session.finishedAt?.let { json.put("finishedAt", it) }
         session.reason?.let { json.put("reason", it.name) }
+        session.collectionAmount?.let { json.put("collectionAmount", it) }
         preferences.edit().putString(storeId, json.toString()).apply()
     }
 }

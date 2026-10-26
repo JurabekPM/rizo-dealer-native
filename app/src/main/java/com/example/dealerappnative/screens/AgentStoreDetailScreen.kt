@@ -144,9 +144,6 @@ private fun AgentStoreAction(label: String, icon: Int, modifier: Modifier, onCli
 private fun AgentVisitOperationRow(title: String, icon: Int, result: VisitResult,
     storeId: String, completed: List<VisitResult>, divider: Boolean = true) {
     AgentMenuRow(title, icon, divider = divider, leadingContent = {
-        if (result in completed) VisitResultBadge(result, storeId, inDetails = true)
-        else if (result == VisitResult.Collection) {
-            DealerIcon(R.drawable.img_visit_collection_result, Color.Unspecified, 24.dp)
-        } else DealerIcon(icon, AgentDesign.secondary, 24.dp)
+        VisitResultBadge(result, if (result in completed) storeId else null, inDetails = true, completed = result in completed)
     })
 }

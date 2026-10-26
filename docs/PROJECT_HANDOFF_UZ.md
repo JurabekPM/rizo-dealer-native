@@ -232,3 +232,18 @@ PickerProduct — faqat readonly UI contract. RequestCatalogProductning konstruk
 stepReturnPickerQuantity har tapda oxirgi lokal draftdan, faqat Return qoldig‘igacha hisoblaydi; returnPickerTotal Long jami to‘liq draftdan. Back/dismiss tranzaksion, faqat Подтвердить tashqi tanlovga qo‘llaydi. Returnda empty draft confirm avvalgidek mumkin (barcha oldingi mahsulotni olib tashlash uchun); Request Continue0da o‘chiq. Bu save emas: VisitReturnScreenning Возвратить→reason sheet→validation→store.save oqimi, active-visit/read-only cheklovlari va tarix o‘zgarmadi. Unit tests qoldiq ajratilishi, total va draft izolyatsiyasini qamraydi; qurilma UIini foydalanuvchi tekshiradi.
 
 2026-10-26 validation: assembleDebug and 70 unit tests passed, 0 failures. User performs device UI checks.
+
+## 12. Vizitlar va rejadan tashqari oqim — 2026-10-26
+
+- Admin/Agent Visit details va Agent History detailsdagi operation chevronlari olib tashlangan. Besh turdagi operation uchun bir xil VisitResultBadge: list28/icon20, details32/icon24. Faqat haqiqatan yozilgan result shared transitionda qatnashadi; tugallanmagan qatorning accessibility matni ish bajarilganini aytmaydi. Boshqa menu/report chevronlari saqlangan.
+- AgentScreen Visits uchun haqiqiy LazyListStateni saqlaydi. Fixture ID tartibi rememberSaveable; session/return/request/unplanned snapshotlari o‘zgarmaganda cardlar qayta yig‘ilmaydi. Shared host Backdan600ms keyin olib tashlanadi (440ms bounds +160ms buffer); idle list lookahead qilmaydi. Logo/nom/qarz/results shared va eski Back scrolli saqlangan.
+- Agent Visits pastida Внеплановые. Real-app rasmdagi uch radio (Визит / Заявка / Инкассация), so‘ng Figma579:32035 store picker. Search nom/ID; faol physical store o‘chiq va izohli. Boshqa faol vizit bo‘lsa ham faqat haqiqiy Startda umumiy bitta-faol-vizit qoidasi ishlaydi.
+- Tanlov paytida faqat vaqtinchalik draft. Начать визит actual vaqt bilan yangi unplanned-UUID session yozadi; agent_unplanned_visits physical store snapshotini alohida saqlaydi. Eski store/visit/session/return/request IDlar o‘zgarmaydi. Oldingi vizit tugagan bo‘lsa shu do‘konga yana yangi ID bilan kirish mumkin. Boshlamasdan Back hech narsa yozmaydi.
+- VisitStore.sourceStore optional, faqat yangi unplanned uchun. Xarita/telefon/ID shu physical store orqali; shared key va session visit UUID orqali. Agent xaritasi read-only.
+- Заявка tanlovi mavjud AgentVisitRequestScreenni, Инкассация esa kichik lokal UZS amount formasini ochadi; ikkisi Startni shu yangi visitga bog‘laydi. Positive Long collectionAmount optional JSON maydoni; eski JSONsiz ham o‘qiladi. Saqlash Collection resultini qo‘shadi, vizitni tugatmaydi. Return/request va notes/times saqlanadi; finish qoidalari o‘z holida.
+- Yakunlangan unplanned vizitlar Agent Historyga kiradi, unplannedOnly va physical store filtrlari ishlaydi. Order/return/collection hujjatlari o‘z snapshotlaridan. Monthly sales bir do‘kondagi turli visit ID hujjatlarini physical ID orqali jamlaydi; Request/Return oy sanasi avvalgidek record.createdAt.
+- Figma source eksporti: figma-reference/agent-unplanned/. Collection summasi formasi aniq collection Figma eksportiga teng deb da’vo qilinmaydi; mavjud uslubdagi lokal prototype davomidir.
+
+Qurilmada UI tekshiruvini foydalanuvchi qiladi. Qotish sababi nazoratli scenario/FPS sinovi bilan tasdiqlanmagan; yuqoridagilar ro‘yxat holati va shared host umrini tuzatuvchi kod o‘zgarishlari. Oldindan tahrirlangan PendingAgentVisitSampleData.kt va VisitSampleConsistencyTest.kt tegilmaydi va commitga kirmaydi.
+
+2026-10-26 final validation: assembleDebug and 76 unit tests passed (0 failures, 0 errors); installed to Samsung SM_S916N with install -r. Device UI/FPS checks remain for the user.

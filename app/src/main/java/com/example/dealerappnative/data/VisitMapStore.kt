@@ -20,6 +20,7 @@ internal fun sampleVisitLocation(id: String, address: String): StoreLocation {
 
 /** Resolve by stable ID, never by a possibly repeated store title. */
 internal fun storeForVisit(visit: VisitStore): StoreUiModel {
+    visit.sourceStore?.let { return it }
     val known = agentVisitStores.find { it.id == visit.id }
         ?: sampleStores.find { it.id == visit.id }
     val point = sampleVisitLocation(visit.id, visit.address)

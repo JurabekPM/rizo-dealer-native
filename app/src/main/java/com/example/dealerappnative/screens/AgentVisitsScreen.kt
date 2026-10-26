@@ -1,6 +1,5 @@
 package com.example.dealerappnative.screens
 
-import com.example.dealerappnative.ui.components.softCardPress
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -15,9 +14,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,8 +26,8 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.runtime.setValue
@@ -39,84 +37,160 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.dealerappnative.R
 import com.example.dealerappnative.data.AgentVisitSessions
-import com.example.dealerappnative.model.VisitStatus
-import com.example.dealerappnative.model.VisitStore
 import com.example.dealerappnative.data.LocalVisitReturns
+import com.example.dealerappnative.data.StoreLocationPreferences
 import com.example.dealerappnative.data.agentVisitCards
 import com.example.dealerappnative.data.agentVisitStores
+import com.example.dealerappnative.data.historyMoney
+import com.example.dealerappnative.data.unplannedVisitCard
+import com.example.dealerappnative.model.UnplannedVisit
+import com.example.dealerappnative.model.UnplannedVisitKind
+import com.example.dealerappnative.model.VisitResult
+import com.example.dealerappnative.model.VisitStatus
+import com.example.dealerappnative.model.VisitStore
+import com.example.dealerappnative.ui.components.AgentUnplannedSheet
+import com.example.dealerappnative.ui.components.AgentVisitAction
+import com.example.dealerappnative.ui.components.DealerIcon
+import com.example.dealerappnative.ui.components.SearchField
 import com.example.dealerappnative.ui.components.VisitListViewport
 import com.example.dealerappnative.ui.components.VisitResultsTransition
 import com.example.dealerappnative.ui.components.VisitStoreCard
-import com.example.dealerappnative.ui.components.DealerIcon
-import com.example.dealerappnative.ui.components.SearchField
+import com.example.dealerappnative.ui.components.softCardPress
 import com.example.dealerappnative.ui.theme.AgentVisitDesign
 import com.example.dealerappnative.ui.theme.DealerDesign
+import java.util.UUID
 
 /** Agent Visits: Figma frame 1370:61589, without its simulated iOS system bars. */
 @Composable
-internal fun AgentVisitsScreen(visitSessions: AgentVisitSessions, onDetailVisible: (Boolean) -> Unit) {
-    // Position the already-active visit near the top once, without moving cards
-    // during start/finish or shared transitions.
-    val orderedCards = remember(visitSessions) {
+internal fun AgentVisitsScreen(visitSessions: AgentVisitSessions, listState: LazyListState, onDetailVisible: (Boolean) -> Unit) {
+    // Keep fixture ordering stable when a visit starts/finishes or a shared transition runs.
+    val orderedIds = rememberSaveable {
         val activeId = visitSessions.activeStoreId
         val active = agentVisitCards.firstOrNull { it.id == activeId }
-        if (active == null) agentVisitCards else agentVisitCards.filter { it.id != activeId }
+        val ordered = if (active == null) agentVisitCards else agentVisitCards.filter { it.id != activeId }
             .toMutableList().apply { add(2.coerceAtMost(size), active) }
+        ordered.map { it.id }
+    }
+    val orderedCards = remember(orderedIds) {
+        val byId = agentVisitCards.associateBy { it.id }
+        orderedIds.mapNotNull(byId::get)
     }
     val returns = LocalVisitReturns.current
-    val cards = orderedCards.map(returns::enrich).map(visitSessions.requests::enrich).map { card ->
-        visitSessions.sessions[card.id]?.let { session ->
-            card.copy(status = when {
-                session.isActive -> VisitStatus.Active
-                session.isAttempt -> VisitStatus.Attempted
-                else -> VisitStatus.Completed
-            }, results = session.results)
-        } ?: card.copy(status = if (card.results.isNotEmpty()) VisitStatus.Completed else VisitStatus.NotVisited)
+    val sessionSnapshot = visitSessions.sessions.toMap()
+    val returnSnapshot = returns.records.toMap()
+    val requestSnapshot = visitSessions.requests.records.toMap()
+    val unplannedSnapshot = visitSessions.unplanned.records.toMap()
+    val cards = remember(orderedCards, sessionSnapshot, returnSnapshot, requestSnapshot, unplannedSnapshot) {
+        val base = unplannedSnapshot.values.sortedByDescending { it.createdAt }.map(::unplannedVisitCard) + orderedCards
+        base.map(returns::enrich).map(visitSessions.requests::enrich).map { card ->
+            sessionSnapshot[card.id]?.let { session ->
+                card.copy(status = when {
+                    session.isActive -> VisitStatus.Active
+                    session.isAttempt -> VisitStatus.Attempted
+                    else -> VisitStatus.Completed
+                }, results = session.results, details = session.collectionAmount?.let {
+                    card.details.copy(collection = historyMoney(it))
+                } ?: card.details)
+            } ?: card.copy(status = if (card.results.isNotEmpty()) VisitStatus.Completed else VisitStatus.NotVisited)
+        }
     }
     var selectedId by rememberSaveable { mutableStateOf<String?>(null) }
+    var choiceVisible by rememberSaveable { mutableStateOf(false) }
+    var unplannedKind by rememberSaveable { mutableStateOf<UnplannedVisitKind?>(null) }
+    var pendingId by rememberSaveable { mutableStateOf<String?>(null) }
+    var pendingStoreId by rememberSaveable { mutableStateOf<String?>(null) }
+    var pendingAt by rememberSaveable { mutableStateOf(0L) }
+    val context = LocalContext.current
+    val locations = remember(context) { StoreLocationPreferences(context.applicationContext) }
+    val pending = remember(pendingId, pendingStoreId, pendingAt, unplannedKind) {
+        val id = pendingId
+        val kind = unplannedKind
+        val source = unplannedStoreChoices.find { it.id == pendingStoreId }
+        if (id == null || kind == null || source == null) null else {
+            val location = locations.read(source)
+            UnplannedVisit(id, source.copy(latitude = location.latitude, longitude = location.longitude,
+                address = location.address, distance = location.route?.distanceText ?: source.distance), kind, pendingAt)
+        }
+    }
     val state = rememberSaveableStateHolder()
-    val listState = rememberLazyListState()
     var query by rememberSaveable { mutableStateOf("") }
     var savedIndex by rememberSaveable { mutableIntStateOf(0) }
     var savedOffset by rememberSaveable { mutableIntStateOf(0) }
     val closeVisit: () -> Unit = {
-        // A new card tap opens visit details, not its previously open return form.
-        // Map/call round-trips do not close this visit and retain their saved state.
-        selectedId?.let { state.removeState("visit-detail-$it") }
-        listState.requestScrollToItem(savedIndex, savedOffset)
-        onDetailVisible(false)
-        selectedId = null
+        val id = selectedId
+        id?.let { state.removeState("visit-detail-$it") }
+        if (id == pendingId && id !in sessionSnapshot) {
+            // A never-started draft returns to store selection and writes no session.
+            selectedId = null
+        } else {
+            if (id == pendingId && unplannedKind != null) listState.requestScrollToItem(0)
+            else listState.requestScrollToItem(savedIndex, savedOffset)
+            unplannedKind = null
+            selectedId = null
+            onDetailVisible(false)
+        }
     }
-    val selected = agentVisitStores.firstOrNull { it.id == selectedId }
-    LaunchedEffect(selected != null) { onDetailVisible(selected != null) }
+    val childVisible = selectedId != null || unplannedKind != null
+    LaunchedEffect(childVisible) { onDetailVisible(childVisible) }
     DisposableEffect(Unit) { onDispose { onDetailVisible(false) } }
-    BackHandler(enabled = selected != null, onBack = closeVisit)
+    BackHandler(enabled = selectedId != null, onBack = closeVisit)
+    if (unplannedKind != null && selectedId == null) {
+        val activeId = visitSessions.activeStoreId
+        val activeSourceId = unplannedSnapshot[activeId]?.store?.id ?: activeId
+        state.SaveableStateProvider("unplanned-stores") {
+            AgentUnplannedVisitsScreen(activeSourceId, onBack = {
+                unplannedKind = null; onDetailVisible(false); state.removeState("unplanned-stores")
+            }) { store ->
+                pendingId = "unplanned-${UUID.randomUUID()}"
+                pendingStoreId = store.id
+                pendingAt = System.currentTimeMillis()
+                selectedId = pendingId
+            }
+        }
+        return
+    }
     VisitResultsTransition(selectedId, onSelect = {
         savedIndex = listState.firstVisibleItemIndex
         savedOffset = listState.firstVisibleItemScrollOffset
         onDetailVisible(true)
         selectedId = it
     }) { targetId, openVisit ->
-        val targetStore = agentVisitStores.firstOrNull { it.id == targetId }
-        if (targetStore != null) state.SaveableStateProvider("visit-detail-${targetStore.id}") {
-            AgentVisitDetailScreen(targetStore, cards.first { it.id == targetStore.id }, visitSessions, onBack = closeVisit)
+        val unplanned = unplannedSnapshot[targetId] ?: pending?.takeIf { it.id == targetId }
+        val targetStore = unplanned?.store?.copy(id = unplanned.id) ?: agentVisitStores.firstOrNull { it.id == targetId }
+        val targetCard = cards.firstOrNull { it.id == targetId } ?: unplanned?.let(::unplannedVisitCard)
+        if (targetStore != null && targetCard != null) state.SaveableStateProvider("visit-detail-${targetStore.id}") {
+            AgentVisitDetailScreen(targetStore, targetCard, visitSessions, onBack = closeVisit,
+                initialOperation = if (unplanned != null && targetId !in sessionSnapshot) when (unplanned.kind) {
+                    UnplannedVisitKind.Request -> VisitResult.Request
+                    UnplannedVisitKind.Collection -> VisitResult.Collection
+                    UnplannedVisitKind.Visit -> null
+                } else null,
+                onStart = unplanned?.let { metadata -> ({ visitSessions.startUnplanned(metadata) }) })
         } else state.SaveableStateProvider("visits") {
             VisitListViewport(active = selectedId == null) {
-                AgentVisitsList(cards, onStoreClick = openVisit, query = query, onQueryChange = { query = it }, listState = listState)
+                AgentVisitsList(cards, onStoreClick = openVisit, query = query, onQueryChange = { query = it },
+                    listState = listState, onUnplanned = { choiceVisible = true })
             }
         }
+    }
+    if (choiceVisible) AgentUnplannedSheet(onDismiss = { choiceVisible = false }) {
+        choiceVisible = false
+        unplannedKind = it
+        state.removeState("unplanned-stores")
+        onDetailVisible(true)
     }
 }
 
 @Composable
 private fun AgentVisitsList(cards: List<VisitStore>, onStoreClick: (String) -> Unit, query: String,
-    onQueryChange: (String) -> Unit, listState: LazyListState) {
+    onQueryChange: (String) -> Unit, listState: LazyListState, onUnplanned: () -> Unit) {
     val search = query.trim()
     val stores = remember(search, cards) {
         cards.filter { it.name.contains(search, true) || it.id.contains(search) || it.address.contains(search, true) }
@@ -151,6 +225,7 @@ private fun AgentVisitsList(cards: List<VisitStore>, onStoreClick: (String) -> U
                 DealerIcon(R.drawable.ic_route, Color.Black)
             }
         }
+        AgentVisitAction("Внеплановые", onClick = onUnplanned)
     }
 }
 

@@ -77,3 +77,11 @@ Inline miqdor tekshiruvi: debug build va 68 unit test muvaffaqiyatli, 0 xato. Qu
 ReturnProductPickerScreen Agent Visit/Return, Admin Visit/Return va Admin Menu/Returns/Create uchun bitta umumiy oyna. Request bilan Header/Footer/Card/Counter/Thumbnail/QuantitySheet ko‘rinishi qayta ishlatiladi; PickerProduct faqat readonly UI contract, qaytarish stock=available/barcode=id. Hech qachon Request stock/normalizerini Returnga ishlatmang. Return draft+step+total o‘z normalizeridan; bulk maxDigits2 va stockLabel=Можно вернуть. Manba sana/originalQuantity/qoldiq ko‘rinadi. Bo‘sh tanlovni Подтвердить bilan qaytarish saqlangan (cartni tozalash); Request Continue esa0da o‘chiq. Back/dismiss tashqi formani o‘zgartirmaydi. VisitReturnScreen, reason/save/session/history va tanlashdan keyingi formalar o‘zgarmagan. Qurilma UIini foydalanuvchi tekshiradi.
 
 2026-10-26 validation: assembleDebug and 70 unit tests passed, 0 failures. User performs device UI checks.
+
+## 2026-10-26: Внеплановые va visit scroll
+
+Handoff §12 va figma-reference/agent-unplanned/ ni o‘qing. Agent Visits → Внеплановые → Визит/Заявка/Инкассация → physical store tanlash. Startdan oldin yozuv yo‘q; actual Start yangi unplanned-UUID session va agent_unplanned_visits snapshot yozadi. Eski store/session IDni qayta ishlatib ma’lumotni bosmang. Bir active visit va finished/no-work qoidalari saqlangan. Optional collectionAmount UZS, active-only; save visitni tugatmaydi. History/physical-store filters/monthly sales yangi IDlarni ham ko‘radi. Agent map readonly.
+
+Visit icons barcha operationlarda bir xil badge; faqat yozilgan results shared. Operation arrows olib tashlangan, menu arrows qolgan. VisitsListState AgentScreen’da, fixture ID tartibi saveable, card enrichment memoized. Shared transition host Backdan600ms keyin bo‘shaydi; idle listda lookahead qoldirmang. Oldingi logika va shared ko‘rinishlarni tasodifan qaytarmang. UI sinovi foydalanuvchining o‘zida.
+
+2026-10-26 final validation: assembleDebug and 76 unit tests passed (0 failures, 0 errors); installed to Samsung SM_S916N with install -r. Device UI/FPS checks remain for the user.

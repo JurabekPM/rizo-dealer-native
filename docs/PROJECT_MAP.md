@@ -211,3 +211,13 @@ Fayl nomi mavjudlikni bildiradi; har bir tugma ishlashiga kafolat emas. Vizual-o
 Mahsulot tanlashning Figma qismi: `ui/components/RequestPickerComponents.kt`, `RequestQuantitySheet.kt`, `RequestProductThumbnail.kt`, `ui/theme/RequestPickerDesign.kt`. `RequestCatalogCompatibilityTest.kt` UI saralashidan keyin eski draft ID/miqdorlari joyi o‘zgarmasligini tekshiradi.
 
 Umumiy picker UI: model/PickerProduct.kt — readonly ko‘rinish contracti; ui/components/ProductPickerLayout.kt — header/footer. RequestPickerComponents/Counter/Thumbnail/QuantitySheet ikkala tanlash oynasiga xizmat qiladi, lekin Request va Return draft/stock/saving qoidalari alohida. ReturnCatalog.ktdagi stepReturnPickerQuantity/returnPickerTotal va ReturnCatalogTest stock/draft regressiyalarini tekshiradi.
+
+## Rejadan tashqari Agent vizit — 2026-10-26
+
+- ui/components/AgentUnplannedSheet.kt: uch amal tanlovi.
+- screens/AgentUnplannedVisitsScreen.kt: searchable physical store picker; active store hint.
+- screens/AgentVisitsScreen.kt: list/draft/detail, UUID va saqlangan unplanned vizitlar.
+- model/UnplannedVisit.kt, data/AgentUnplannedVisitStore.kt: physical-store snapshot va alohida lokal yozuv.
+- screens/AgentVisitCollectionScreen.kt: active vizitdagi UZS amount; AgentVisitSession.recordCollection/AgentVisitSessions.saveCollection.
+- VisitStore.sourceStore + VisitMapStore.storeForVisit: maps/phone physical ID; session/shared animation visit ID.
+- UnplannedVisitTest.kt: identity isolation, active/start rules, notes/results preservation, actual collection history and repeated-store monthly sales.

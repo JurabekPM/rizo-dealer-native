@@ -20,7 +20,8 @@ internal data class VisitStore(
     val address: String,
     val details: VisitDetails,
     val debtDirection: DebtDirection = DebtDirection.StoreOwesDealer,
-    val results: List<VisitResult> = emptyList()
+    val results: List<VisitResult> = emptyList(),
+    val sourceStore: StoreUiModel? = null
 )
 
 @Immutable

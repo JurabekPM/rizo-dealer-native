@@ -30,7 +30,8 @@ import com.example.dealerappnative.ui.theme.DealerDesign
 
 /** Figma Applicant / Visit -> Заявка. Saving the request does not finish its visit. */
 @Composable
-internal fun AgentVisitRequestScreen(visit: VisitStore, sessions: AgentVisitSessions, onBack: () -> Unit) {
+internal fun AgentVisitRequestScreen(visit: VisitStore, sessions: AgentVisitSessions, onBack: () -> Unit,
+    onStart: (() -> Boolean)? = null) {
     val session = sessions.sessions[visit.id]
     val record = sessions.requests.records[visit.id]
     val context = LocalContext.current
@@ -83,7 +84,7 @@ internal fun AgentVisitRequestScreen(visit: VisitStore, sessions: AgentVisitSess
                 } }
             }
             if (session == null) AgentVisitAction("Начать визит") {
-                if (!sessions.start(visit.id, visit.results))
+                if (!(onStart?.invoke() ?: sessions.start(visit.id, visit.results)))
                     Toast.makeText(context, "Сначала завершите текущий визит", Toast.LENGTH_SHORT).show()
             }
         } else {

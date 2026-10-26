@@ -33,7 +33,7 @@ internal data class AgentHistoryFilter(
     fun matches(entry: AgentHistoryEntry): Boolean {
         if (entry.session.isActive) return false
         val day = StatisticsDates.today(entry.session.startedAt)
-        return (storeId == null || storeId == entry.visit.id) &&
+        return (storeId == null || storeId == entry.visit.id || storeId == entry.visit.sourceStore?.id) &&
             (type == null || type.matches(entry.session.results)) &&
             (status == null || status == entry.status) &&
             (from == null || day >= from) && (to == null || day <= to) &&

@@ -46,14 +46,7 @@ internal fun AgentHistoryVisitDetailScreen(entry: AgentHistoryEntry, onBack: () 
                         Row(Modifier.fillMaxWidth().heightIn(min = 64.dp)
                             .softCardPress(enabled = operation != null) { openedResult = result }.padding(vertical = 12.dp),
                             verticalAlignment = Alignment.CenterVertically) {
-                            if (operation != null) VisitResultBadge(result, entry.visit.id, inDetails = true)
-                            else DealerIcon(when (result) {
-                                VisitResult.Delivery -> R.drawable.ic_box
-                                VisitResult.Request -> R.drawable.ic_visit
-                                VisitResult.Revision -> R.drawable.ic_edit
-                                VisitResult.Collection -> R.drawable.img_visit_collection_result
-                                VisitResult.Return -> R.drawable.ic_return
-                            }, if (result == VisitResult.Collection) Color.Unspecified else DealerDesign.secondary)
+                            VisitResultBadge(result, if (operation != null) entry.visit.id else null, inDetails = true, completed = operation != null)
                             Spacer(Modifier.width(12.dp))
                             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                                 Text(if (operation == null) historyOperationTitle(result) else operation.title + " #" + operation.documentId,
@@ -64,7 +57,6 @@ internal fun AgentHistoryVisitDetailScreen(entry: AgentHistoryEntry, onBack: () 
                             if (operation != null) {
                                 Spacer(Modifier.width(8.dp))
                                 Text("Завершено", style = AgentVisitDesign.detail, color = Color(0xFF22A447))
-                                DealerIcon(R.drawable.ic_chevron, size = 16.dp)
                             }
                         }
                         if (index < VisitResult.entries.lastIndex) HorizontalDivider(color = DealerDesign.divider,
