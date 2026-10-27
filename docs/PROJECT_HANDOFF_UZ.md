@@ -63,7 +63,7 @@ Agent qaytarish arxivi `AgentHistoryArchiveScreen`: oy → return hujjatlar. Sot
 `model/AgentVisitSession.kt` va `data/AgentVisitSessions.kt`:
 
 1. Yangi session faqat «Начать визит» bosilganda `System.currentTimeMillis()` bilan boshlanadi. Sana 00:00iga bog‘lamang, tunda avtomatik reset yo‘q.
-2. Bir paytda bitta faol Agent viziti. Boshqasi faol bo‘lsa boshlash rad etiladi. Mavjud/yakunlangan sessionni qayta boshlash yo‘q.
+2. Bir paytda turli do‘konlarda bir nechta faol Agent viziti mumkin. Bittasining boshlanishi/yakunlanishi boshqasiga ta’sir qilmaydi. Mavjud/yakunlangan sessionni qayta boshlash yo‘q.
 3. Button boshlanganidan keyin «Завершить визит»; izoh va rasm joylari bor. Rasmlar native photo picker/local URI, eng ko‘pi 6 ta.
 4. Ish/natija bo‘lmasa yakunlash sababi kerak. Other bo‘lsa bo‘sh bo‘lmagan izoh kerak. «Магазин закрыт» yakunlanganda attempted/cancelled ko‘rinishi hosil qiladi.
 5. Natijali sample kartalar allaqachon yakunlangan sessionlar bilan ochiladi. Ularni “yangi vizit”ga aylantirmang. Sample vaqt/rasmlar `CompletedAgentVisitSamples`da.
@@ -184,7 +184,7 @@ Handoff yaratilganda Git yo‘q edi; 2026-10-22 kuni Git ishga tushirildi. Joriy
 
 Agent → Визиты → do‘kon → Заявка endi ishlaydi. Alohida bottom-navigation bandi qo‘shilmadi; Admin Заявки va umumiy Return oqimi o‘zgarmadi.
 
-- Yangi zayavka faqat faol vizitda. Boshlanmagan vizitda «Начать визит» bilan haqiqiy boshlanish vaqti yoziladi; bir faol vizit qoidasi saqlangan. Yakunlangan vizitda yangi zayavka yaratilmaydi.
+- Yangi zayavka faqat faol vizitda. Boshlanmagan vizitda «Начать визит» bilan haqiqiy boshlanish vaqti yoziladi; turli do‘konlarda parallel vizit mumkin. Yakunlangan vizitda yangi zayavka yaratilmaydi.
 - Figma bo‘sh holati/asl illustratsiya → Добавить → mahsulot qidirish (nom/barcode), miqdor sheeti → Продолжить → umumiy summa, tovarlar soni, X va minus/count/plus → Завершить → Внимание / Да.
 - Picker mustaqil draft: Back tashqi formani o‘zgartirmaydi. Sheet miqdori 0..katalog stock oralig‘ida, stock 0 bo‘lsa tanlanmaydi. 0 miqdor cartdan chiqaradi. Bekor qilish/bo‘sh forma result yoki hujjat yozmaydi.
 - `RequestCatalog.kt` — 20 demo pozitsiya, buyurtma uchun alohida stock; returnning do‘kondagi qoldig‘i yoki manba hujjati order UIiga ko‘chirilmagan. Asl mavjud mahsulot rasmlari qayta ishlatiladi, qolganida neutral placeholder.
@@ -237,7 +237,7 @@ stepReturnPickerQuantity har tapda oxirgi lokal draftdan, faqat Return qoldig‘
 
 - Admin/Agent Visit details va Agent History detailsdagi operation chevronlari olib tashlangan. Besh turdagi operation uchun bir xil VisitResultBadge: list28/icon20, details32/icon24. Faqat haqiqatan yozilgan result shared transitionda qatnashadi; tugallanmagan qatorning accessibility matni ish bajarilganini aytmaydi. Boshqa menu/report chevronlari saqlangan.
 - AgentScreen Visits uchun haqiqiy LazyListStateni saqlaydi. Fixture ID tartibi rememberSaveable; session/return/request/unplanned snapshotlari o‘zgarmaganda cardlar qayta yig‘ilmaydi. SharedTransitionLayout doimiy; Backdan600ms keyin faqat preparedId tozalanadi (440ms bounds +160ms buffer). Avvalgi hostni olib tashlash optimizatsiyasi scrollni buzishi aniqlanib bekor qilingan. Logo/nom/qarz/results shared va eski Back scrolli saqlangan.
-- Agent Visits pastida Внеплановые. Real-app rasmdagi uch radio (Визит / Заявка / Инкассация), so‘ng Figma579:32035 store picker. Search nom/ID; faol physical store o‘chiq va izohli. Boshqa faol vizit bo‘lsa ham faqat haqiqiy Startda umumiy bitta-faol-vizit qoidasi ishlaydi.
+- Agent Visits pastida Внеплановые. Real-app rasmdagi uch radio (Визит / Заявка / Инкассация), so‘ng Figma579:32035 store picker. Search nom/ID; faol physical store o‘chiq va izohli. Boshqa do‘konda faol vizit bo‘lishi Startni bloklamaydi; tanlangan physical storedagi active dublikat bloklanadi.
 - Tanlov paytida faqat vaqtinchalik draft. Начать визит actual vaqt bilan yangi unplanned-UUID session yozadi; agent_unplanned_visits physical store snapshotini alohida saqlaydi. Eski store/visit/session/return/request IDlar o‘zgarmaydi. Oldingi vizit tugagan bo‘lsa shu do‘konga yana yangi ID bilan kirish mumkin. Boshlamasdan Back hech narsa yozmaydi.
 - VisitStore.sourceStore optional, faqat yangi unplanned uchun. Xarita/telefon/ID shu physical store orqali; shared key va session visit UUID orqali. Agent xaritasi read-only.
 - Заявка tanlovi mavjud AgentVisitRequestScreenni, Инкассация esa kichik lokal UZS amount formasini ochadi; ikkisi Startni shu yangi visitga bog‘laydi. Positive Long collectionAmount optional JSON maydoni; eski JSONsiz ham o‘qiladi. Saqlash Collection resultini qo‘shadi, vizitni tugatmaydi. Return/request va notes/times saqlanadi; finish qoidalari o‘z holida.
@@ -262,10 +262,20 @@ assembleDebug, assembleDebugAndroidTest va76 unit test (0 failures) o‘tdi. Yan
 
 ## 13. Faol vizit: kamera va soatli hisoblagich — 2026-10-27
 
-- AgentVisitNotesning mavjud96dp «Добавить фото» cardi endi VisitPhotoAdder orqali ixcham source sheet ochadi: «Сделать фото» / «Выбрать из галереи». Galereya avvalgi PickMultipleVisualMedia(6), persistable grant/private copy oqimini saqlaydi. Faqat faol vizit, umumiy limit6; completed/history read-only.
+- AgentVisitNotesning mavjud96dp «Добавить фото» cardi VisitPhotoAdder orqali bevosita tashqi kamerani ochadi. Galereya tanlovi va source sheet foydalanuvchi ko‘rsatmasiga ko‘ra olib tashlangan; oldin saqlangan gallery URIlar hamon o‘qiladi. Faqat faol vizit, umumiy limit6; completed/history read-only.
 - Kamera tashqi kamera ilovasini ActivityResultContracts.TakePicture orqali ochadi. VisitTakePictureContract aniq content URI uchun vaqtinchalik read/write grant + ClipData beradi. Yangi dependencies yoki CAMERА/storage runtime permission qo‘shilmagan; bu CameraX/in-app preview emas.
 - VisitCameraPhotos full-resolution JPEGni filesDir/visit_photos/camera ichida saqlaydi. Manifestdagi exported=false FileProvider faqat shu katalogni ochadi; root/files wildcard yo‘q. Context package+.visit_photos authority. Kamera cache emas, shu sabab app qayta ochilganda ham photoUris string bilan o‘qiladi. Pending URI rememberSaveable(session.startedAt), ActivityResult qaytishiga mos.
 - Kamera cancel/error/empty-or-invalid image holati evidence qo‘shmaydi; faqat o‘zi yaratgan visit_*.jpg vaqtinchalik fayli tozalanadi. Qaytishda active session va6-limit qayta tekshiriladi. Kamera mavjud bo‘lmasa tushunarli toast; AddPhoto ochiq holatda qotib qolmaydi. Foto o‘chirish va mavjud JSON/session/result/timer manbasi o‘zgarmagan.
 - AgentVisitTiming faol hisoblagichi har doim HH:mm:ss (00:00:00,00:01:05,01:00:00). model/VisitDuration.kt formati Locale.ROOT,24soatda aylanmaydi. Actual startedAt/finishedAt asosiy manba bo‘lib qoladi; tugagan vizitning status/vaqt qatori va history dizayni o‘zgarmagan.
 
 Validation: assembleDebug, assembleDebugAndroidTest,79 unit test (0 failures). Samsung SM_S916N’da3 camera-storage/contract testi o‘tdi: secure provider/grants, generated JPEG URI restore/read+native thumbnail, cancel/empty file cleanup. Test real kamerani/galereyani ochmaydi va faqat yangi test rasmlarini ishlatadi. Haqiqiy kamera shutteri/source sheet UI foydalanuvchi sinovi uchun; avtomatik end-to-end capture tekshirildi deb hisoblamang. install-r bilan APK telefonga qo‘yildi. Boshqa oldindan tahrirlangan2 fayl saqlangan.
+
+## 14. Parallel vizitlar, Новый/Активный, faqat kamera — 2026-10-27
+
+- User global bitta-faol-vizit cheklovini bekor qildi. canStartAgentVisit endi faqat shu ID mavjudligi/oldingi recorded resultsni tekshiradi. AgentVisitSessions.activeVisitIds/activeStoreIds barcha faol session/physical storelarni qaytaradi. Turli do‘konlarda istalgan bir necha active session bo‘ladi; finished ID o‘zgarmaydi, qayta boshlatilmaydi.
+- Same-store active duplicate cheklovi saqlangan: rejasiz picker barcha faol physical storelarni o‘chiradi (avval faqat bittasini); startUnplanned/start ham shu dublikatni tekshiradi. Boshqa do‘kon faol bo‘lgani uchun umumiy warning/toast yo‘q. Demo faqat dastlabki seed sifatida qolgan, global limit emas.
+- agentVisitStatus shu sessiondan olinadi: boshlanmagan Новый, active Активный, finished Завершено, StoreClosed Попытка. Active cardda result bor bo‘lsa ham actual session active ekanligi ustun. UI enum label/color: New gray84919A, Active blue2563EB; NotVisited ichki nomi caller/fixture mosligi uchun o‘zgarmagan. Admin/Agent umumiy status labelni ishlatadi.
+- Har bir sessionning startedAt, HH:mm:ss, notes/photos/requests/collection/returns mustaqil. Bittasini finish qilish qolganlarini tugatmaydi; finished/no-work sabab va6-foto qoidalari saqlangan. Tarixga faqat finished session kiradi.
+- VisitPhotoAdder gallery launcher/source sheetni olib tashladi. Добавить фото darhol TakePicture. Mavjud rasmlar/session JSON/FileProvider/capture-cancel qoidalari o‘zgarmagan. Real kamera shutteri test uchun ishlatilmadi.
+
+Validation: assembleDebug/assembleDebugAndroidTest,82 unit test PASS. Samsungda5 native test PASS (AgentParallelVisitsTest2 +VisitCameraPhotosTest3). Parallel testlar UUID prefixli o‘z SharedPreferencesi bilan actual AgentVisitSessionsni ishlatadi: A/B/unplanned-C birga start; B finish; A/C active; notes/photos/amount/start restore; same-store duplicate rad, boshqa store ruxsat. Test faqat o‘z pref namespaceini tozalaydi, user ma’lumotlariga tegmaydi. APK install-r bilan yangilangan. Oldindan dirty PendingAgentVisitSampleData.kt va VisitSampleConsistencyTest.kt tegilmagan.

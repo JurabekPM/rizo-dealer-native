@@ -53,7 +53,7 @@ import com.example.dealerappnative.data.unplannedVisitCard
 import com.example.dealerappnative.model.UnplannedVisit
 import com.example.dealerappnative.model.UnplannedVisitKind
 import com.example.dealerappnative.model.VisitResult
-import com.example.dealerappnative.model.VisitStatus
+import com.example.dealerappnative.model.agentVisitStatus
 import com.example.dealerappnative.model.VisitStore
 import com.example.dealerappnative.ui.components.AgentUnplannedSheet
 import com.example.dealerappnative.ui.components.AgentVisitAction
@@ -72,8 +72,8 @@ import java.util.UUID
 internal fun AgentVisitsScreen(visitSessions: AgentVisitSessions, listState: LazyListState, onDetailVisible: (Boolean) -> Unit) {
     // Keep fixture ordering stable when a visit starts/finishes or a shared transition runs.
     val orderedIds = rememberSaveable {
-        val activeId = visitSessions.activeStoreId
-        val active = agentVisitCards.firstOrNull { it.id == activeId }
+        val active = agentVisitCards.firstOrNull { it.id in visitSessions.activeVisitIds }
+        val activeId = active?.id
         val ordered = if (active == null) agentVisitCards else agentVisitCards.filter { it.id != activeId }
             .toMutableList().apply { add(2.coerceAtMost(size), active) }
         ordered.map { it.id }
@@ -90,15 +90,9 @@ internal fun AgentVisitsScreen(visitSessions: AgentVisitSessions, listState: Laz
     val cards = remember(orderedCards, sessionSnapshot, returnSnapshot, requestSnapshot, unplannedSnapshot) {
         val base = unplannedSnapshot.values.sortedByDescending { it.createdAt }.map(::unplannedVisitCard) + orderedCards
         base.map(returns::enrich).map(visitSessions.requests::enrich).map { card ->
-            sessionSnapshot[card.id]?.let { session ->
-                card.copy(status = when {
-                    session.isActive -> VisitStatus.Active
-                    session.isAttempt -> VisitStatus.Attempted
-                    else -> VisitStatus.Completed
-                }, results = session.results, details = session.collectionAmount?.let {
-                    card.details.copy(collection = historyMoney(it))
-                } ?: card.details)
-            } ?: card.copy(status = if (card.results.isNotEmpty()) VisitStatus.Completed else VisitStatus.NotVisited)
+            val session = sessionSnapshot[card.id]
+            card.copy(status = agentVisitStatus(session, card.results), results = session?.results ?: card.results,
+                details = session?.collectionAmount?.let { card.details.copy(collection = historyMoney(it)) } ?: card.details)
         }
     }
     var selectedId by rememberSaveable { mutableStateOf<String?>(null) }
@@ -142,10 +136,9 @@ internal fun AgentVisitsScreen(visitSessions: AgentVisitSessions, listState: Laz
     DisposableEffect(Unit) { onDispose { onDetailVisible(false) } }
     BackHandler(enabled = selectedId != null, onBack = closeVisit)
     if (unplannedKind != null && selectedId == null) {
-        val activeId = visitSessions.activeStoreId
-        val activeSourceId = unplannedSnapshot[activeId]?.store?.id ?: activeId
+        val activeSourceIds = visitSessions.activeStoreIds
         state.SaveableStateProvider("unplanned-stores") {
-            AgentUnplannedVisitsScreen(activeSourceId, onBack = {
+            AgentUnplannedVisitsScreen(activeSourceIds, onBack = {
                 unplannedKind = null; onDetailVisible(false); state.removeState("unplanned-stores")
             }) { store ->
                 pendingId = "unplanned-${UUID.randomUUID()}"

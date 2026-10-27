@@ -107,7 +107,7 @@ Bu 2026-10-22 hujjat topshirish paytidagi source SHA-256 holati bilan solishtira
 
 ## Agent Заявка — yangi oqim (2026-10-24)
 
-- Boshlanmagan vizitda Заявка → Начать визит; boshqa vizit faol bo‘lsa boshlamasin. Yakunlangan vizit qayta ochilmasin.
+- Boshlanmagan vizitda Заявка → Начать визит; boshqa do‘kon viziti faol bo‘lsa ham boshlansin. Yakunlangan vizit qayta ochilmasin.
 - Faol vizit → Заявка → Добавить → nom/barcode qidirish → qty sheet → Продолжить. Picker Back cartni o‘zgartirmasin; X qidiruv matnini tozalasin.
 - 0/stockdan ko‘p/noto‘g‘ri miqdor tekshirilsin, stock 0 mahsulot tanlanmasin. Minus0 yoki X mahsulotni olib tashlasin. Total = price×qty jami.
 - Завершить → Нет/dismiss hujjat/result yozmasin. Да request yozsin va vizit davom etsin. Qayta kirishda o‘z nom/narx/qty/total chiqsin; faol vizitda Редактировать ishlasin.
@@ -135,7 +135,7 @@ Figma picker tuzatishi: klaviatura bilan header72/search40, X maydon ichida; sel
 - [ ] Admin/Agent visit details: besh icon bir xil badge, faqat mavjud results shared; ortiqcha operation arrows yo‘q. Menu arrows saqlangan.
 - [ ] Agent Visitsni pastga scroll → Stores/Statistics/History → Visits: o‘sha query/tartib/viewport. Detail→Back, tez qayta ochish va map roundtrip shared/scrollni buzmasin.
 - [ ] Внеплановые: Continue tanlovsiz o‘chiq. Har uch tur→store list; name/ID search. Faol store o‘chiq va hintli. Cancel/Back yozuv yaratmasin.
-- [ ] Boshqa vizit faol bo‘lsa Start rad qilinsin. Tugatib keyin yangi vizit actual Start vaqti bilan boshlansin; eski vizitlar/suratlar/izoh/hujjatlar saqlansin.
+- [ ] Boshqa do‘kon faol bo‘lsa Start ruxsat etilsin. Har yangi vizit actual Start vaqti bilan boshlansin; eski vizitlar/suratlar/izoh/hujjatlar saqlansin.
 - [ ] Request/Collection tanlovi tegishli formaga; Startdan keyingina saqlash. Positive UZS collection result qo‘shadi, session active qoladi. No-work finish reason sheet o‘z holida.
 - [ ] Finished unplanned Historyda, unplanned filter va physical store filterda ko‘rinsin; aynan o‘z summasi/surati/izohi; qayta start yo‘q. Takroriy do‘kon orderlari salesda bir do‘konga jami, order/return createdAt oyi bo‘yicha.
 - [ ] Restartda unplanned metadata/session/record saqlansin. Map/call aynan o‘sha physical storega, Agent map readonly.
@@ -156,9 +156,18 @@ SharedTransitionLayoutni idle paytida olib tashlash regressiyani qaytaradi.600ms
 
 - [x]79 unit tests; elapsed0,59sec,1min,1h,25h,negative,midnight and frozen finish.
 - [x] Samsungda3 storage/contract test: temporary URI grants/non-exported provider, test JPEG restore/read+thumbnail, cancelled/empty capture cleanup.
-- [ ] Faol visit → Добавить фото → Сделать фото; kamera confirmdan keyin o‘sha visitda preview, qayta kirish/app restartda saqlanishi.
-- [ ] Kamera Back/cancel, source sheet dismiss va galereya cancel hech narsa qo‘shmasin; unavailable camera toast va qayta urinish.
-- [ ] Galereya oldingidek ko‘p tanlash, persisted URI/private copy; kamera+galereya umumiy6-limit, completed/historyda add/remove yo‘q.
+- [ ] Faol visit → Добавить фото → bevosita kamera; kamera confirmdan keyin o‘sha visitda preview, qayta kirish/app restartda saqlanishi.
+- [ ] Kamera Back/cancel hech narsa qo‘shmasin; unavailable camera toast va qayta urinish.
+- [ ] Galereya tanlovi ochilmasin, eski saqlangan URIlar o‘qilsin; kamera6-limit, completed/historyda add/remove yo‘q.
 - [ ] Kamera paytida Activity/process recreationdan keyin pending URI o‘sha visitga qaytsin; actual timer kamera vaqtini ham hisoblasin, doim HH:mm:ss.
 
 Bu yangi camera UI sinovlari hali avtomatik bajarilmagan; real kamera shutterini user ishlatadi. Shared transition/scroll host o‘z holida qoladi.
+
+## Parallel vizit va camera-only — 2026-10-27
+
+- [x]82 unit tests; actual lifecycle/status labels va parallel start/no-restart.
+- [x] Samsungda2 isolated parallel-session/persistence +3 capture-storage/contract testi.
+- [ ] Agentda ikki turli do‘konni boshlash: ikkisi Активный, har birining timer/izoh/fotosi alohida. Birini tugatish boshqasiga ta’sir qilmasin; historyga faqat finished yozuv.
+- [ ] Boshlanmaganlar Новый, Не посещено yo‘q; boshlangani Активный, finished/attempt statuslari o‘z holida.
+- [ ] Unplanned picker barcha active physical storelarni bloklasin; boshqa do‘konlar ishlasin. Finished ID qayta boshlanmasin.
+- [ ] Добавить фото bevosita kamera, galereya/source sheet yo‘q; eski foto ko‘rinsin, cancel/6-limit saqlansin.

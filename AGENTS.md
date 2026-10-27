@@ -39,7 +39,8 @@ Current behavior reviewed **2026-10-22**. Read `GEMINI.md` and `docs/PROJECT_HAN
 
 - StoreOwesDealer = red with minus; DealerOwesStore = green without minus. Use DebtDirection, not duplicated formatting. USD/UZS remain separate; return/order money uses Long UZS, USD receivables use BigDecimal.
 - Store list cards may show debt; Admin Menu/Stores details still show ID under the store name.
-- Agent visit begins at the actual Start tap, never midnight. One active visit; finished sessions cannot restart. No-work finish requires a reason; Other requires comment. StoreClosed is an attempted visit. Photos/comments/times/results persist locally.
+- Agent visit begins at the actual Start tap, never midnight. Multiple distinct stores may have active visits at once; the same physical store cannot have duplicate active visits. Finished sessions cannot restart. No-work finish requires a reason; Other requires comment. StoreClosed is an attempted visit. Photos/comments/times/results persist locally. Unstarted status is Новый (neutral), running is Активный (blue); retain the compatibility NotVisited enum identity.
+- Adding visit photos is camera-only: Add photo opens TakePicture directly. Existing saved gallery photos remain readable; keep the six-photo cap.
 - Five VisitResults must match status and recorded work. Adding Return does not finish a visit.
 - Agent new Return requires an active visit. Both roles reuse VisitReturnScreen. Existing completed returns are read-only.
 - Return reason is not a standalone card in the product form: products -> Возвратить -> reason sheet -> final validation/save. Dismissing sheet must not save or add a result.

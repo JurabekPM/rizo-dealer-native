@@ -111,7 +111,7 @@ internal fun VisitReturnScreen(visit: VisitStore, session: AgentVisitSession? = 
         if (allowCreate) Column(Modifier.fillMaxWidth().background(Color.White).padding(16.dp)) {
             ReturnPrimaryButton("Возвратить", items.isNotEmpty()) { reasonVisible = true }
         } else if (onStart != null && session == null) AgentVisitAction("Начать визит", onClick = {
-            if (!onStart()) Toast.makeText(context, "Сначала завершите текущий визит", Toast.LENGTH_SHORT).show()
+            if (!onStart()) Toast.makeText(context, "Для этого магазина визит уже начат или завершён", Toast.LENGTH_SHORT).show()
         })
     }
     quantityIndex?.let { index -> ReturnQuantitySheet(returnCatalog[index], currentQuantities[index], onDismiss = { quantityIndex = null }) {

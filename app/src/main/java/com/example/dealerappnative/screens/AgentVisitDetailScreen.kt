@@ -23,7 +23,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.dealerappnative.R
 import com.example.dealerappnative.data.AgentVisitSessions
-import com.example.dealerappnative.data.agentVisitStores
 import com.example.dealerappnative.model.StoreUiModel
 import com.example.dealerappnative.model.VisitResult
 import com.example.dealerappnative.model.VisitStore
@@ -118,11 +117,8 @@ internal fun AgentVisitDetailScreen(store: StoreUiModel, visit: VisitStore,
             if (sessions.finish(store.id, it)) { keyboard?.hide(); finishSheet = false }
         })
     if (warning) AlertDialog(onDismissRequest = { warning = false }, containerColor = Color.White,
-        title = { Text("Уже идёт визит", style = AgentVisitDesign.screenTitle) },
-        text = { Text("Сначала завершите визит: " +
-            (sessions.unplanned.records[sessions.activeStoreId]?.store?.name
-                ?: agentVisitStores.find { it.id == sessions.activeStoreId }?.name ?: "другой магазин"),
-            style = AgentVisitDesign.name) },
+        title = { Text("Не удалось начать визит", style = AgentVisitDesign.screenTitle) },
+        text = { Text("Для этого магазина визит уже начат или завершён.", style = AgentVisitDesign.name) },
         confirmButton = { SoftTextButton(onClick = { warning = false }) {
             Text("Понятно", style = AgentVisitDesign.emphasis, color = DealerDesign.accent)
         } })

@@ -229,7 +229,14 @@ Umumiy picker UI: model/PickerProduct.kt — readonly ko‘rinish contracti; ui/
 
 ## Faol vizit kamera/timer — 2026-10-27
 
-- ui/components/VisitPhotoAdder.kt: Camera/Gallery sheet, ActivityResult va pending URI; AgentVisitControls.kt faqat mavjud tile/notes/preview/timingni joylashtiradi.
+- ui/components/VisitPhotoAdder.kt: camera-only direct capture, ActivityResult va pending URI; AgentVisitControls.kt faqat mavjud tile/notes/preview/timingni joylashtiradi.
 - data/VisitCameraPhotos.kt + res/xml/visit_photo_paths.xml + AndroidManifest provider: tor doiradagi durable capture fayllari, empty/cancel cleanup.
 - model/VisitDuration.kt / VisitDurationTest.kt: HH:mm:ss boundary, midnight/24h, actual timestamp/frozen finish.
 - androidTest/VisitCameraPhotosTest.kt: o‘z generated test JPEG, URI/grants/provider/thumbnail/cancel; real kamera yoki user galereyasi ochilmaydi.
+
+## Parallel vizitlar
+
+- model/AgentVisitSession.kt: canStartAgentVisit va agentVisitStatus; model/VisitStore.kt UI label/color (NotVisited compatibility identity).
+- data/AgentVisitSessions.kt: activeVisitIds/activeStoreIds, per-store independent start/finish, same-store duplicate guard.
+- screens/AgentUnplannedVisitsScreen.kt: Set<String> physical active stores; singular business activeStoreIddan foydalanmang.
+- VisitStatusTest/UnplannedVisitTest va androidTest/AgentParallelVisitsTest: lifecycle labels, new parallel rule, actual isolated persistence.

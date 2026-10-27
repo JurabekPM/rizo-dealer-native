@@ -39,7 +39,7 @@ internal data class AgentVisitSession(
 }
 
 internal fun canStartAgentVisit(id: String, results: List<VisitResult>, sessions: Map<String, AgentVisitSession>): Boolean =
-    results.isEmpty() && id !in sessions && sessions.values.none { it.isActive }
+    results.isEmpty() && id !in sessions
 
 internal fun canSaveVisitCollection(session: AgentVisitSession?, amount: Long): Boolean = session?.isActive == true && amount > 0
 
@@ -47,4 +47,12 @@ internal fun canSaveVisitCollection(session: AgentVisitSession?, amount: Long): 
 internal fun AgentVisitSession.recordCollection(amount: Long): AgentVisitSession {
     require(canSaveVisitCollection(this, amount)) { "Collection requires an active visit and a positive UZS amount." }
     return copy(collectionAmount = amount, results = (results + VisitResult.Collection).distinct())
+}
+
+/** A running visit belongs to its own store; other active sessions do not change its status. */
+internal fun agentVisitStatus(session: AgentVisitSession?, results: List<VisitResult>): VisitStatus = when {
+    session?.isActive == true -> VisitStatus.Active
+    session?.isAttempt == true -> VisitStatus.Attempted
+    session != null || results.isNotEmpty() -> VisitStatus.Completed
+    else -> VisitStatus.NotVisited // compatibility enum; visible label is Новый
 }

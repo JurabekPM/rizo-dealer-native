@@ -48,7 +48,7 @@ internal class AgentVisitSessions(context: Context) {
         }
         // One explicit live demo, seeded only once. Real user-started visits win.
         if (!preferences.getBoolean("_live_demo_seeded_v1", false)) {
-            if (activeStoreId == null && !sessions.containsKey(demoActiveAgentVisitId)) {
+            if (activeVisitIds.isEmpty() && !sessions.containsKey(demoActiveAgentVisitId)) {
                 save(demoActiveAgentVisitId, AgentVisitSession(startedAt = now - 7 * 60_000L,
                     comment = "Проверяю остатки и обсуждаю ассортимент."))
             }
@@ -56,15 +56,18 @@ internal class AgentVisitSessions(context: Context) {
         }
     }
 
-    val activeStoreId: String? get() = sessions.entries.firstOrNull { it.value.isActive }?.key
+    val activeVisitIds: Set<String> get() = sessions.filterValues { it.isActive }.keys
+    val activeStoreIds: Set<String> get() = activeVisitIds.map { id -> unplanned.records[id]?.store?.id ?: id }.toSet()
 
     fun start(storeId: String, results: List<VisitResult>): Boolean {
-        if (!canStartAgentVisit(storeId, results, sessions)) return false
+        if (!canStartAgentVisit(storeId, results, sessions) || storeId in activeStoreIds) return false
         save(storeId, AgentVisitSession(startedAt = System.currentTimeMillis(), results = results.toList()))
         return true
     }
 
     fun startUnplanned(visit: UnplannedVisit): Boolean {
+        // Different stores may run in parallel; do not duplicate an active physical store.
+        if (visit.store.id in activeStoreIds) return false
         if (!start(visit.id, emptyList())) return false
         unplanned.save(visit.copy(createdAt = sessions.getValue(visit.id).startedAt))
         return true

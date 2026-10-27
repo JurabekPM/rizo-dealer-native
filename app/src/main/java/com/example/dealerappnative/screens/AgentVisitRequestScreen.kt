@@ -85,7 +85,7 @@ internal fun AgentVisitRequestScreen(visit: VisitStore, sessions: AgentVisitSess
             }
             if (session == null) AgentVisitAction("Начать визит") {
                 if (!(onStart?.invoke() ?: sessions.start(visit.id, visit.results)))
-                    Toast.makeText(context, "Сначала завершите текущий визит", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Для этого магазина визит уже начат или завершён", Toast.LENGTH_SHORT).show()
             }
         } else {
             LazyColumn(Modifier.weight(1f), state = listState, contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp),

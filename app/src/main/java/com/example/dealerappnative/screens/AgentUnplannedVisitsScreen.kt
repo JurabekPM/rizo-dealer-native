@@ -27,7 +27,7 @@ internal val unplannedStoreChoices = (sampleStores + agentVisitStores).distinctB
 
 /** Figma 579:32035: store selection, with the already-active store disabled. */
 @Composable
-internal fun AgentUnplannedVisitsScreen(activeStoreId: String?, onBack: () -> Unit, onSelect: (StoreUiModel) -> Unit) {
+internal fun AgentUnplannedVisitsScreen(activeStoreIds: Set<String>, onBack: () -> Unit, onSelect: (StoreUiModel) -> Unit) {
     var query by rememberSaveable { mutableStateOf("") }
     val listState = rememberLazyListState()
     val stores = remember(query) { unplannedStoreChoices.filter {
@@ -43,7 +43,7 @@ internal fun AgentUnplannedVisitsScreen(activeStoreId: String?, onBack: () -> Un
         LazyColumn(Modifier.weight(1f), state = listState, contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)) {
             items(stores, key = { it.id }, contentType = { "unplanned-store" }) { store ->
-                val active = store.id == activeStoreId
+                val active = store.id in activeStoreIds
                 HistorySurface(onClick = if (active) null else ({ onSelect(store) })) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         DealerIcon(R.drawable.ic_store)

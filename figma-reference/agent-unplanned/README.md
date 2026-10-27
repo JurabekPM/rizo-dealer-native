@@ -8,4 +8,4 @@ The source shows: searchable store list (name/ID/address), disabled active-store
 
 Reuse DealerDesign/AgentVisitDesign and original drawables. The approved current typography and result badge treatment take precedence over older source text weights. Existing details retain their current five operations and notes; do not rebuild other flows from this export. The collection amount form is a small local prototype extension of the selected Инкассация path; a separate exact Figma collection form was not supplied here.
 
-Cancelling selection writes nothing. Start creates an independent unplanned visit ID and physical-store snapshot, preserving existing visits. One active visit remains enforced. No real financial transaction or backend request is made.
+Cancelling selection writes nothing. Start creates an independent unplanned visit ID and physical-store snapshot, preserving existing visits. User override2026-10-27: multiple distinct stores may have active visits; duplicate active visits at the same physical store remain blocked. No real financial transaction or backend request is made.

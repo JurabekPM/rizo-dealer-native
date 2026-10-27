@@ -27,10 +27,10 @@ class UnplannedVisitTest {
         assertEquals("26.10.2026", first.details.date)
     }
 
-    @Test fun oneActiveVisitAndNoRestartRulesAlsoApplyToUnplannedIds() {
+    @Test fun parallelVisitsAreAllowedButExistingVisitIdsCannotRestart() {
         val active = AgentVisitSession(started)
         val completed = active.copy(finishedAt = started + 60_000L)
-        assertFalse(canStartAgentVisit("unplanned-new", emptyList(), mapOf(source.id to active)))
+        assertTrue(canStartAgentVisit("unplanned-new", emptyList(), mapOf(source.id to active)))
         assertFalse(canStartAgentVisit("unplanned-old", emptyList(), mapOf("unplanned-old" to completed)))
         assertFalse(canStartAgentVisit("unplanned-new", listOf(VisitResult.Request), emptyMap()))
         assertTrue(canStartAgentVisit("unplanned-new", emptyList(), mapOf(source.id to completed)))

@@ -4,10 +4,10 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 
 internal enum class VisitStatus(val label: String, val color: Color) {
-    Active("Активно", Color(0xFF2563EB)),
+    Active("Активный", Color(0xFF2563EB)),
     Attempted("Попытка визита", Color(0xFFB7791F)),
     Completed("Завершено", Color(0xFF5EA783)),
-    NotVisited("Не посещено", Color(0xFFD67D7D))
+    NotVisited("Новый", Color(0xFF84919A))
 }
 
 @Immutable

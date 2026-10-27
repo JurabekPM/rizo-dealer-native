@@ -59,7 +59,7 @@ internal fun AgentVisitCollectionScreen(visit: VisitStore, sessions: AgentVisitS
         }
         if (session == null) AgentVisitAction("Начать визит") {
             if (!(onStart?.invoke() ?: sessions.start(visit.id, visit.results)))
-                Toast.makeText(context, "Сначала завершите текущий визит", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Для этого магазина визит уже начат или завершён", Toast.LENGTH_SHORT).show()
         } else if (session.isActive) AgentVisitAction("Сохранить", enabled = canSaveVisitCollection(session, value)) {
             if (sessions.saveCollection(visit.id, value)) onBack()
         }
