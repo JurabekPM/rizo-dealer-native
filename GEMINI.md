@@ -89,3 +89,7 @@ Visit icons barcha operationlarda bir xil badge; faqat yozilgan results shared. 
 ## Vizit scroll tuzatishi — 2026-10-26
 
 Handoff §12 oxiridagi sabab va evidencega qarang. Timerdan keyin SharedTransitionLayoutni butunlay olib tashlash noto‘g‘ri edi: LazyListState lookahead holati saqlanib scroll to‘xtab qolgan. Doimiy hostni saqlang, faqat shared ID/modifierlarni600ms keyin bo‘shating; movable list/reparenting yo‘q. Oldingi76 unit test va Samsungda2 isolated Android regression o‘tdi. Oldingi APKda shu test real forward-scroll xatosini takrorladi. Foydalanuvchi ruxsati bilan haqiqiy Agent card/request/Back va Phone Link scroll ham tekshirildi; session/preferences almashtirilmadi.
+
+## 2026-10-27: vizit fotosi va HH:mm:ss
+
+Faol vizitdagi Добавить фото → kamera/galereya sheet. VisitPhotoAdder: mavjud picker + TakePicture/vaqtinchalik per-file grant, saveable pending URI. VisitCameraPhotos filesDir/visit_photos/camera va cheklangan exported=false FileProvider bilan full-resolution rasm saqlaydi. Cancel/empty/errorda result/foto yozilmaydi;6-limit va active-only/history readonly saqlangan. KameraX/dependencies/runtime camera permission qo‘shmang. formatVisitElapsed: doim00:00:00, actual elapsed millis,24soatda wrap yo‘q; finished/history status qatorlarini bu task uchun o‘zgartirmang. Handoff §13.79 unit+3 native storage/contract testi o‘tdi, real kamera UI/shutter sinovi foydalanuvchiga qolgan.

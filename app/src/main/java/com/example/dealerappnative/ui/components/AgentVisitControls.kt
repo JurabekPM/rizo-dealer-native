@@ -1,20 +1,12 @@
 package com.example.dealerappnative.ui.components
 
-import android.content.Intent
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.util.Size
-import android.widget.Toast
-import java.io.File
-import java.util.UUID
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -38,11 +30,11 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.example.dealerappnative.R
 import com.example.dealerappnative.model.AgentVisitSession
+import com.example.dealerappnative.model.formatVisitElapsed
 import com.example.dealerappnative.ui.theme.AgentVisitDesign
 import com.example.dealerappnative.ui.theme.DealerDesign
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -55,8 +47,7 @@ internal fun AgentVisitTiming(session: AgentVisitSession) {
         while (session.isActive) { value = System.currentTimeMillis(); delay(1000) }
     }
     val seconds = session.elapsedMillis(now) / 1000
-    val elapsed = if (seconds >= 3600) "%d:%02d:%02d".format(seconds / 3600, seconds / 60 % 60, seconds % 60)
-        else "%02d:%02d".format(seconds / 60, seconds % 60)
+    val elapsed = formatVisitElapsed(session.elapsedMillis(now))
     val date = remember { SimpleDateFormat("dd.MM.yyyy | HH:mm", Locale.getDefault()) }
     val finished = !session.isActive
     Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(Color.White).padding(16.dp)) {
@@ -120,48 +111,12 @@ internal fun VisitCommentField(value: String, onChange: (String) -> Unit, readOn
 @Composable
 internal fun AgentVisitNotes(session: AgentVisitSession, onComment: (String) -> Unit,
     onAddPhotos: (List<String>) -> Unit, onRemovePhoto: (String) -> Unit) {
-    val context = LocalContext.current
-    val scope = rememberCoroutineScope()
-    val picker = rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(6)) { uris ->
-        scope.launch {
-            // Android's picker grants only the selected images. Older providers may
-            // need a private local copy instead of a persistable URI permission.
-            val readable = withContext(Dispatchers.IO) {
-                uris.take((6 - session.photoUris.size).coerceAtLeast(0)).mapNotNull { uri ->
-                    runCatching {
-                        val persisted = runCatching {
-                            context.contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                        }.isSuccess
-                        if (persisted) uri.toString() else {
-                            val directory = File(context.filesDir, "visit_photos").apply { mkdirs() }
-                            val file = File(directory, "${UUID.randomUUID()}.jpg")
-                            try {
-                                requireNotNull(context.contentResolver.openInputStream(uri)).use { input ->
-                                    file.outputStream().use { output -> input.copyTo(output) }
-                                }
-                                Uri.fromFile(file).toString()
-                            } catch (error: Exception) { file.delete(); throw error }
-                        }
-                    }.getOrNull()
-                }
-            }
-            onAddPhotos(readable)
-            if (uris.isNotEmpty() && readable.isEmpty())
-                Toast.makeText(context, "Не удалось добавить фото. Попробуйте другое изображение.", Toast.LENGTH_LONG).show()
-        }
-    }
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(Color.White).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)) {
             LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 if (session.isActive && session.photoUris.size < 6) item(key = "add") {
-                    Column(Modifier.size(96.dp).softCardPress {
-                            picker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-                        }.clip(RoundedCornerShape(12.dp)).border(1.dp, DealerDesign.divider, RoundedCornerShape(12.dp)), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-                        DealerIcon(R.drawable.ic_visit_camera, DealerDesign.accent, 24.dp)
-                        Spacer(Modifier.height(6.dp))
-                        Text("Добавить фото", style = AgentVisitDesign.detail, color = DealerDesign.accent)
-                    }
+                    VisitPhotoAdder(session, onAddPhotos)
                 }
                 items(session.photoUris, key = { it }) { uri ->
                     VisitPhoto(uri, session.isActive, onRemove = { onRemovePhoto(uri) })

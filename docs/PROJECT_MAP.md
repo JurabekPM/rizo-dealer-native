@@ -226,3 +226,10 @@ Umumiy picker UI: model/PickerProduct.kt — readonly ko‘rinish contracti; ui/
 
 - ui/components/VisitResultsTransition.kt: doimiy shared/lookahead host; uni conditional olib tashlamang yoki listni oddiy rootga ko‘chirmang.
 - app/src/androidTest/java/com/example/dealerappnative/VisitScrollRegressionTest.kt: synthetic80-card list;3×detail/work/Back, ikki tomon scroll, tab detach/reattach, viewport equality. Faqat o‘z in-memory ma’lumoti. Mavjud Espresso eski telefon Androidida ishlamagani uchun public platform sync va state scroll consumeri orqali ishlaydi.
+
+## Faol vizit kamera/timer — 2026-10-27
+
+- ui/components/VisitPhotoAdder.kt: Camera/Gallery sheet, ActivityResult va pending URI; AgentVisitControls.kt faqat mavjud tile/notes/preview/timingni joylashtiradi.
+- data/VisitCameraPhotos.kt + res/xml/visit_photo_paths.xml + AndroidManifest provider: tor doiradagi durable capture fayllari, empty/cancel cleanup.
+- model/VisitDuration.kt / VisitDurationTest.kt: HH:mm:ss boundary, midnight/24h, actual timestamp/frozen finish.
+- androidTest/VisitCameraPhotosTest.kt: o‘z generated test JPEG, URI/grants/provider/thumbnail/cancel; real kamera yoki user galereyasi ochilmaydi.

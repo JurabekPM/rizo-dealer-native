@@ -151,3 +151,14 @@ Figma picker tuzatishi: klaviatura bilan header72/search40, X maydon ichida; sel
 - [x] assembleDebug + assembleDebugAndroidTest +76 unit tests;2 Android regressions.
 
 SharedTransitionLayoutni idle paytida olib tashlash regressiyani qaytaradi.600ms timer faqat preparedIdni tozalashi kerak. Barcha UI/FPS holatlari qamralgan deb hisoblamang; vizit ma’lumotlari test uchun o‘zgartirilmasin.
+
+## Kamera va elapsed HH:mm:ss — 2026-10-27
+
+- [x]79 unit tests; elapsed0,59sec,1min,1h,25h,negative,midnight and frozen finish.
+- [x] Samsungda3 storage/contract test: temporary URI grants/non-exported provider, test JPEG restore/read+thumbnail, cancelled/empty capture cleanup.
+- [ ] Faol visit → Добавить фото → Сделать фото; kamera confirmdan keyin o‘sha visitda preview, qayta kirish/app restartda saqlanishi.
+- [ ] Kamera Back/cancel, source sheet dismiss va galereya cancel hech narsa qo‘shmasin; unavailable camera toast va qayta urinish.
+- [ ] Galereya oldingidek ko‘p tanlash, persisted URI/private copy; kamera+galereya umumiy6-limit, completed/historyda add/remove yo‘q.
+- [ ] Kamera paytida Activity/process recreationdan keyin pending URI o‘sha visitga qaytsin; actual timer kamera vaqtini ham hisoblasin, doim HH:mm:ss.
+
+Bu yangi camera UI sinovlari hali avtomatik bajarilmagan; real kamera shutterini user ishlatadi. Shared transition/scroll host o‘z holida qoladi.
