@@ -16,12 +16,17 @@ import java.math.BigDecimal
 
 /** Activity tiles appear only at the history's top; the store identity stays in the AppBar. */
 @Composable
-internal fun StoreStatementOverview(totals: List<StatementCurrencyTotals>) {
-    if (totals.isNotEmpty()) Row(Modifier.fillMaxWidth().background(Color.White).horizontalScroll(rememberScrollState())
-        .padding(horizontal = 16.dp, vertical = 8.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        StatementTotalTile("Заказы", totals.map { it.currency to it.orders }, Design.text)
-        StatementTotalTile("Оплачено", totals.map { it.currency to it.payments }, Color(0xFF15803D))
-        StatementTotalTile("Возвраты", totals.map { it.currency to it.returns }, Color(0xFF15803D))
+internal fun StoreStatementOverview(totals: List<StatementCurrencyTotals>, count: Int, filtered: Boolean) {
+    Column(Modifier.fillMaxWidth().background(Color.White).padding(vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        if (totals.isNotEmpty()) Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState())
+            .padding(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            StatementTotalTile("Заказы", totals.map { it.currency to it.orders }, Design.order)
+            StatementTotalTile("Оплачено", totals.map { it.currency to it.payments }, Design.payment)
+            StatementTotalTile("Возвраты", totals.map { it.currency to it.returns }, Design.returned)
+        }
+        Text((if (filtered) "Найдено операций: " else "Всего операций: ") + count,
+            style = Design.caption, color = Design.secondary, modifier = Modifier.padding(horizontal = 16.dp))
     }
 }
 
@@ -29,7 +34,7 @@ internal fun StoreStatementOverview(totals: List<StatementCurrencyTotals>) {
 private fun StatementTotalTile(label: String, values: List<Pair<String, BigDecimal>>, color: Color) {
     Column(Modifier.widthIn(min = 120.dp).background(Design.surface, RoundedCornerShape(12.dp)).padding(12.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        Text(label, style = Design.caption, color = Design.secondary)
+        Text(label, style = Design.label, color = color)
         values.forEach { (currency, amount) -> Text(statementMoney(amount, currency), style = Design.amount, color = color, maxLines = 1) }
     }
 }

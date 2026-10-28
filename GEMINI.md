@@ -142,3 +142,8 @@ Handoff §23: fixed store AppBar; native enterAlways pill filters reappear on sl
 ## Latest statement pinning/toggles correction
 
 Handoff §24 overrides §23: store icon/name/address +32dp optical filter chips pinned, NO enterAlways/nestedScroll on statement. Tiles only at top; no duplicate identity or За весь период/count bar. Small total count in first month heading. Independent operation Set filters (OR), date/currency AND; second tap removes a type, date chip repeat clears date. Figma metrics documented in figma-reference/store-statement/market-filters.md. No persisted financial schema changes.
+
+
+## Latest statement colors/count
+
+Handoff §25: Order red, Payment green, Return blue in summary + row titles/amounts; Request neutral. Overall count is a small Всего операций/Найдено операций caption below summary, never beside any month. Filters/AppBar stay pinned; data/money/filter logic unchanged.

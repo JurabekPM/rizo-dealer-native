@@ -37,12 +37,12 @@ internal fun StoreStatementCard(entry: StoreStatementEntry, clientName: String, 
     val shape = if (grouped) RoundedCornerShape(bottomStart = if (lastInGroup) 12.dp else 0.dp,
         bottomEnd = if (lastInGroup) 12.dp else 0.dp) else RoundedCornerShape(12.dp)
     val rotation by animateFloatAsState(if (expanded) -90f else 90f, tween(280), label = "statement-chevron")
-    val amountColor = when (entry.kind.direction) { -1 -> Color(0xFFDC2626); 1 -> Color(0xFF15803D); else -> Design.text }
+    val amountColor = Design.operationColor(entry.kind)
     Column(Modifier.fillMaxWidth().clip(shape).background(Color.White).animateContentSize(tween(280))) {
         Row(Modifier.fillMaxWidth().softCardPress(onClick = onToggle).padding(horizontal = 16.dp, vertical = 14.dp), verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                    Text(entry.title, style = Design.name, color = Design.text, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
+                    Text(entry.title, style = Design.name, color = amountColor, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
                     Spacer(Modifier.width(12.dp))
                     Text(statementAmount(entry), style = Design.amount, color = amountColor, maxLines = 1)
                 }
@@ -61,7 +61,7 @@ internal fun StoreStatementCard(entry: StoreStatementEntry, clientName: String, 
             HorizontalDivider(color = DealerDesign.divider)
             StatementInfo("Документ", entry.title)
             StatementInfo("Клиент", clientName)
-            StatementInfo("Статус", entry.status, if (entry.kind == StatementKind.Request) DealerDesign.secondary else Color(0xFF15803D))
+            StatementInfo("Статус", entry.status)
             StatementInfo(entry.dateLabel, date)
             if (entry.kind == StatementKind.Request) Text("Заявка ещё не является проведённой продажей", style = Design.body, color = Design.secondary)
             if (entry.lines.isNotEmpty()) {

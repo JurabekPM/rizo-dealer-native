@@ -55,14 +55,13 @@ internal fun StoreStatementScreen(store: StoreUiModel, onBack: () -> Unit) {
         if (entries == null) Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
             Text("Загружаем историю…", style = Design.body, color = Design.secondary)
         } else LazyColumn(Modifier.weight(1f), state = list, contentPadding = PaddingValues(bottom = 16.dp)) {
-            item(key = "context") { StoreStatementOverview(totals) }
-            months.forEachIndexed { monthIndex, month ->
+            item(key = "context") { StoreStatementOverview(totals, visible.size, filter.active) }
+            months.forEach { month ->
                 item(key = "month-${month.key}") {
                     Row(Modifier.fillMaxWidth().padding(top = 8.dp)
                         .background(Color.White, RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
                         .padding(horizontal = 16.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
                         Text(month.title, style = Design.name, color = Design.text, modifier = Modifier.weight(1f))
-                        if (monthIndex == 0) Text("Всего ${visible.size}", style = Design.caption, color = Design.secondary)
                     }
                 }
                 itemsIndexed(month.entries, key = { _, entry -> entry.id }) { index, entry ->

@@ -2,6 +2,7 @@ package com.example.dealerappnative.ui.theme
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import com.example.dealerappnative.model.StatementKind
 
 /** Local to the statement flow; other Admin/Agent typography stays unchanged. */
 internal object StatementDesign {
@@ -10,6 +11,15 @@ internal object StatementDesign {
     val surface = Color(0xFFF5F5F5)
     val border = Color(0xFFE9EDF0)
     val selected = Color(0xFFF8F2FD)
+    val order = Color(0xFFB91C1C)
+    val payment = Color(0xFF15803D)
+    val returned = Color(0xFF1D4ED8)
+    fun operationColor(kind: StatementKind): Color = when (kind) {
+        StatementKind.Order -> order
+        StatementKind.Payment -> payment
+        StatementKind.Return -> returned
+        StatementKind.Request -> text
+    }
     val title = DealerDesign.type(20, 26, FontWeight.SemiBold, -.25f)
     val name = DealerDesign.type(14, 20, FontWeight.SemiBold, -.15f)
     val amount = DealerDesign.type(15, 20, FontWeight.SemiBold, -.2f)

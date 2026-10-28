@@ -402,3 +402,12 @@ Quick filters Оплаты/Заказы/Возвраты are independently toggl
 Two added StoreStatementTest cases verify union/repeat-off/clear-all, currency/date independence and separate date clearing. Other UI, visit lifecycle, map and accounting stores untouched. Actual UI checks remain with the user.
 
 2026-10-28 pinned statement validation: assembleDebug/assembleDebugAndroidTest and101 unit tests passed (0 failures/errors), including two multi-type toggle/date/currency cases. App installed with install-r on Samsung SM_S916N. No prototype UI navigation or actual financial writes; visual checking remains with the user.
+
+
+## 25. Statement operation colors + overall count — 2026-10-28
+
+User clarified payment and return must be visually distinct and overall count must not appear opposite one month. StatementDesign now owns explicit Order red#B91C1C, Payment green#15803D, Return blue#1D4ED8. Summary labels/amounts and matching transaction titles/amounts share these colors; Request remains neutral and signs/currencies are unchanged. Expanded status is neutral text so return status no longer looks like a payment marker.
+
+Removed Всего N from the first month's heading. A single small caption below the overall activity tiles reads Всего операций: N, or Найдено операций: N with active filters. It describes the whole visible multi-month result and scrolls with the overall summary, independent of month headings. Pinned store/filters,32dp Figma chips, toggles, dates, exact totals and persistence unchanged. Visual-only scoped correction; no redundant new tests.
+
+2026-10-28 statement color/count validation: assembleDebug and101 existing unit tests passed (0 failures/errors). Installed with install-r on Samsung SM_S916N. Visual-only change, no new tests or automatic prototype UI navigation; user checks the result.
