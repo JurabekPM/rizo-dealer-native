@@ -107,3 +107,8 @@ Admin Menu tepasidagi qalamcha DealerProfileScreenni ochadi (Chrome legal entity
 ## 2026-10-28: Admin profil ikki tabli
 
 Menyu yuqori profil qatori va qalamchasi → AdminProfileScreen: Физические лица (admin self, default) / Юридические лица (mavjud diler formasi). Handoff §16 overrides §15 entry. Bitta Save ikkala draftni validate qilib bir SharedPreferences.Editor bilan saqlaydi: administrator_dealer_profile/profile unchanged + new administrator key. Back cancels both, switch/pager/map/rotation keeps drafts/list states. Name/phone Admin Menu’da yangilanadi; Agent o‘zgarmaydi. Role/company readonly, password/access flags yo‘q. Tabs oq indikator pagerdan, hover yo‘q.
+
+
+## Latest 2026-10-28: Fizicheskie litsa is a PEOPLE DIRECTORY
+
+Handoff §17 overrides §16 direct-self-tab/global Save. Personal tab:10 fictional staff/all10 source roles, search/add/card edit. Each person Save persists its own directory change and returns; legal has separate Save and unsaved draft remains. people JSON added in administrator_dealer_profile, legacy administrator snapshot kept in sync for current-administrator only. Editing others never changes Menu identity. No auth/permission/backend changes.

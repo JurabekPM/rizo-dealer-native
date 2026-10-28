@@ -154,7 +154,7 @@ internal fun DealerApp(initialTab: Int = 0) {
         ) { contentPadding ->
             Box(Modifier.fillMaxSize().padding(contentPadding)) {
                 if (dealerProfileVisible) {
-                    AdminProfileScreen(onBack = closeChildScreen, onSaved = { administrator = it; closeChildScreen() })
+                    AdminProfileScreen(onBack = closeChildScreen, onAdministratorChanged = { administrator = it })
                 } else if (revisionsVisible) {
                     AdminRevisionsScreen(onBack = closeChildScreen)
                 } else if (returnsVisible) {

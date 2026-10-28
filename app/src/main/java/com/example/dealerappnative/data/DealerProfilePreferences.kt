@@ -1,6 +1,8 @@
 package com.example.dealerappnative.data
 
 import android.content.Context
+import com.example.dealerappnative.model.DealerPerson
+import com.example.dealerappnative.model.dealerPeopleError
 import com.example.dealerappnative.model.AdminPersonalProfile
 import com.example.dealerappnative.model.normalizeAdminPhone
 import com.example.dealerappnative.model.DealerProfile
@@ -14,10 +16,22 @@ import org.json.JSONObject
 /** Separate namespace: never writes store locations, Agent profile or visit preferences. */
 internal class DealerProfilePreferences(context: Context) {
     private val preferences = context.applicationContext.getSharedPreferences("administrator_dealer_profile", Context.MODE_PRIVATE)
+    fun readPeople(): List<DealerPerson> = decodeDealerPeople(preferences.getString("people", null), readAdministrator())
+    suspend fun savePeople(people: List<DealerPerson>): Boolean = withContext(Dispatchers.IO) {
+        if (dealerPeopleError(people) != null) return@withContext false
+        val normalized = people.map { it.copy(profile = it.profile.copy(name = it.profile.name.trim(), phone = normalizeAdminPhone(it.profile.phone),
+            region = it.profile.region.trim(), district = it.profile.district.trim())) }
+        preferences.edit().putString("people", encodeDealerPeople(normalized))
+            .putString("administrator", encodeAdminPersonalProfile(normalized.first { it.isCurrentAdministrator }.profile)).commit()
+    }
     fun readAdministrator(): AdminPersonalProfile = decodeAdminPersonalProfile(preferences.getString("administrator", null))
     suspend fun saveProfiles(dealer: DealerProfile, person: AdminPersonalProfile): Boolean = withContext(Dispatchers.IO) {
         if (dealer.validationError() != null || person.validationError() != null) return@withContext false
-        preferences.edit().putString("profile", encodeDealerProfile(dealer.copy(name = dealer.name.trim(), address = dealer.address.trim(),
+        val directory = if (preferences.contains("people")) readPeople().map {
+            if (it.isCurrentAdministrator) it.copy(profile = person.copy(name = person.name.trim(), phone = normalizeAdminPhone(person.phone), region = person.region.trim(), district = person.district.trim())) else it
+        } else null
+        if (directory != null && dealerPeopleError(directory) != null) return@withContext false
+        preferences.edit().apply { if (directory != null) putString("people", encodeDealerPeople(directory)) }.putString("profile", encodeDealerProfile(dealer.copy(name = dealer.name.trim(), address = dealer.address.trim(),
             region = dealer.region.trim(), district = dealer.district.trim())))
             .putString("administrator", encodeAdminPersonalProfile(person.copy(name = person.name.trim(), phone = normalizeAdminPhone(person.phone),
                 region = person.region.trim(), district = person.district.trim()))).commit()

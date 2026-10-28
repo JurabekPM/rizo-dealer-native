@@ -311,3 +311,18 @@ Latest user override replaces the single legal editor entry in §15. Admin Menu 
 - DealerApp/MenuScreen callers, ui/components/AdminProfileTabs, model/AdminPersonalProfile, data/AdminPersonalProfileJson and new forms comprise this scoped change. Tests add 3 personal validation cases and 2 native atomic-save/backward-compatibility cases in DealerProfilePersistenceTest (now4). UI remains for user testing.
 
 2026-10-28 two-tab validation: debug/app-test builds and 89 unit tests passed (0 failures/errors). Samsung SM_S916N app/test install-r Success; DealerProfilePersistenceTest OK (4 tests, isolated preferences only). No real prototype UI/profile was edited during these tests; visual checks remain with the user.
+
+
+## 17. Ko‘p jismoniy shaxs — 2026-10-28, latest user correction
+
+User clarified that Физические лица contains MANY people and supplied ten roles. This supersedes §16's personal-tab direct form and global two-draft Save. The two-tab host remains; legal form is intact.
+
+- Personal tab → AdminPeopleScreen list of10 fictional samples (current administrator +9 other roles), searchable by name/phone/role, stable-ID lazy cards, current self marked Вы, fixed Добавить сотрудника. Each card opens AdminPersonEditScreen; new UUID for each addition, blank name/partial phone never persist before Save.
+- A person editor reuses AdminPersonalProfileScreen, with an editable role for other people. Role choices match supplied source: Администратор, Бухгалтер, Мерчендайзер, Главный кассир, Кассир, Консультант, Супер-курьер, Курьер (товары), Курьер-инкассатор, Торговый агент. Current admin role stays readonly; associated legal entity stays readonly. No live authentication, web permission changes or messages/invitations.
+- Each person's Save commits the people directory + current-admin compatibility snapshot atomically and returns to the list. Back cancels only that person's draft. Legal draft survives list/editor/map/tab changes and has its own Save; person saves do NOT commit/discard a pending legal draft. This avoids an extra Done + global Save step for people.
+- model/DealerPerson.kt: stable IDs, upsert, directory validation (one current-admin ID, known roles, valid profiles, unique IDs/normalized phones). data/DealerPeopleData.kt: sample data and JSON. No source-page private staff names/phones copied to samples.
+- DealerProfilePreferences adds people JSON in EXISTING administrator_dealer_profile. When absent, readPeople migrates old administrator snapshot into current-administrator and adds demo colleagues in memory. Saving legal alone preserves all people. saveProfiles legacy API keeps the current directory record in sync. Editing another employee never changes the Menu identity; editing current admin refreshes Menu name/phone only. Agent role/app/session data remain unchanged.
+- AdminProfileScreen hoists saved directory, query, two list states and selected/new-person ID. New person draft and legal draft survive rotation; cancel leaves saved data. List search/scroll returns on closing the editor. Existing DealerProfile map/media/hours and camera-only Visit photo behavior remain.
+- Tests add DealerPeopleTest3 (samples/roles/identity/upsert/validation) +2 isolated device directory tests; DealerProfilePersistenceTest now6. Earlier self-form/atomic legal API tests remain for compatibility. Final validation below.
+
+2026-10-28 directory validation: assembleDebug/assembleDebugAndroidTest and92 unit tests passed (0 failures/errors). Samsung SM_S916N install-r Success;6 isolated DealerProfilePersistenceTest cases passed, covering old legal/self JSON, directory reload/edit/add/duplicate rejection and identity isolation. No real prototype UI or user records were modified during tests.

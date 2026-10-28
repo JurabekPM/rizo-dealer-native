@@ -250,3 +250,8 @@ MenuScreen top pencil → DealerApp → screens/DealerProfileScreen.kt. model/De
 ## Admin profil tablari
 
 MenuScreen whole header/pencil → DealerApp → screens/AdminProfileScreen.kt (draft/Savers/pager/save/map) → AdminPersonalProfileScreen.kt / DealerProfileScreen.kt. ui/components/AdminProfileTabs.kt; model/AdminPersonalProfile.kt; data/AdminPersonalProfileJson.kt, DealerProfileOptions.kt; DealerProfilePreferences.saveProfiles one atomic editor. Tests: AdminPersonalProfileTest + DealerProfilePersistenceTest. Handoff §16.
+
+
+## Multi-person directory
+
+AdminProfileScreen → AdminPeopleScreen → AdminPersonEditScreen → shared AdminPersonalProfileScreen. model/DealerPerson.kt; data/DealerPeopleData.kt; DealerProfilePreferences.readPeople/savePeople (people + self snapshot). DealerPeopleTest + DealerProfilePersistenceTest directory cases. Handoff §17 is current.

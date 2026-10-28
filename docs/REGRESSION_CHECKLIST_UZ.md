@@ -188,3 +188,10 @@ Bu yangi camera UI sinovlari hali avtomatik bajarilmagan; real kamera shutterini
 - Edit both tabs, switch/map/rotate, Save persists both and Menu name/phone updates. Back without Save cancels both drafts.
 - Invalid personal phone/date/name or legal field prevents BOTH writes and brings its tab forward. Existing legal-only profiles load intact; old dealer-only save does not erase administrator data.
 - Role/company readonly, no self access/password editing; Agent/visits/debts/maps/store prefs unchanged.
+
+
+## Multi-person Admin directory
+
+- Physical tab lists10 people/all source roles, current admin marked Вы; search by name/phone/role, lazy scroll retained after edit.
+- Add → independent UUID, Save persists; Back cancels. Edit one name/phone/role leaves all other records intact. Duplicate phone rejected. Current admin role readonly.
+- Only current-admin name/phone change Menu identity. Legal draft survives opening an employee; staff Save never saves it. Legal Save never replaces people. Legacy legal/self data migrate without reset; Agent untouched.

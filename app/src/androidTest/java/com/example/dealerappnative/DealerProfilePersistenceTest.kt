@@ -78,6 +78,41 @@ class DealerProfilePersistenceTest {
         assertEquals(person, decodeAdminPersonalProfile(encodeAdminPersonalProfile(person)))
     }
 
+    @Test fun peopleDirectoryMigratesLegacySelfAndEditsOnlyItsOwnPerson() = runBlocking {
+        val store = DealerProfilePreferences(context)
+        val company = DealerProfile(name = "Keep company")
+        val self = AdminPersonalProfile(name = "Saved current admin")
+        assertTrue(store.saveProfiles(company, self))
+        val before = store.readPeople()
+        assertEquals(self, before.first { it.isCurrentAdministrator }.profile)
+        val edited = before[1].copy(profile = before[1].profile.copy(name = "Changed employee"), role = "Кассир")
+        val next = upsertDealerPerson(before, edited)
+        assertEquals(next, decodeDealerPeople(encodeDealerPeople(next), self))
+        assertTrue(store.savePeople(next))
+        assertEquals(next, DealerProfilePreferences(context).readPeople())
+        assertEquals(company, store.read())
+        assertEquals(self, store.readAdministrator())
+        val changedSelf = before.first().copy(profile = self.copy(name = "Updated current admin"))
+        assertTrue(store.savePeople(upsertDealerPerson(next, changedSelf)))
+        assertEquals("Updated current admin", store.readAdministrator().name)
+        assertEquals(edited, store.readPeople().first { it.id == edited.id })
+        assertTrue(store.save(company.copy(tariff = "Premium")))
+        assertEquals(edited, store.readPeople().first { it.id == edited.id })
+    }
+
+    @Test fun addingPersonIsDurableAndInvalidDirectoryCannotOverwriteSavedPeople() = runBlocking {
+        val store = DealerProfilePreferences(context)
+        val before = store.readPeople()
+        val added = DealerPerson("new-person", AdminPersonalProfile(name = "New Employee", phone = "+998991234567"), "Мерчендайзер")
+        assertTrue(store.savePeople(upsertDealerPerson(before, added)))
+        val saved = store.readPeople()
+        assertEquals(11, saved.size)
+        assertFalse(store.savePeople(saved + added.copy(id = "duplicate-phone")))
+        assertEquals(saved, store.readPeople())
+        assertFalse(store.savePeople(saved.filterNot { it.isCurrentAdministrator }))
+        assertEquals(saved, DealerProfilePreferences(context).readPeople())
+    }
+
     private class ProfileTestContext(base: Context) : ContextWrapper(base) {
         private val prefix = "dealer_profile_test_${UUID.randomUUID()}_"
         private val owned = mutableSetOf<String>()

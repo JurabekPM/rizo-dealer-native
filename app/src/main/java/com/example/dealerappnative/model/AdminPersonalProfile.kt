@@ -23,9 +23,9 @@ internal fun displayAdminPhone(value: String): String {
 }
 
 internal fun AdminPersonalProfile.validationError(today: LocalDate = LocalDate.now(ZoneId.of("Asia/Tashkent"))): String? = when {
-    name.trim().length !in 2..120 -> "Укажите ФИО администратора"
+    name.trim().length !in 2..120 -> "Укажите ФИО"
     !normalizeAdminPhone(phone).matches(Regex("\\+[1-9][0-9]{7,14}")) -> "Укажите телефон с кодом страны, например +998 90 123 45 67"
-    country.isBlank() || region.isBlank() || district.isBlank() -> "Укажите страну, регион и район администратора"
+    country.isBlank() || region.isBlank() || district.isBlank() -> "Укажите страну, регион и район"
     gender !in listOf("Не указан", "Мужской", "Женский") -> "Выберите пол"
     birthDate.isNotBlank() && runCatching { LocalDate.parse(birthDate).let { it.isAfter(today) || it.year < 1900 } }.getOrDefault(true) -> "Проверьте дату рождения"
     else -> null

@@ -30,7 +30,8 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 internal fun AdminPersonalProfileScreen(profile: AdminPersonalProfile, dealerName: String,
-    listState: LazyListState, onChange: (AdminPersonalProfile) -> Unit) {
+    listState: LazyListState, onChange: (AdminPersonalProfile) -> Unit,
+    role: String = "Администратор", onRoleChange: ((String) -> Unit)? = null) {
     val context = LocalContext.current
     val today = LocalDate.now(ZoneId.of("Asia/Tashkent"))
     LazyColumn(Modifier.fillMaxSize(), state = listState, contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp),
@@ -70,7 +71,8 @@ internal fun AdminPersonalProfileScreen(profile: AdminPersonalProfile, dealerNam
             else DealerProfileField("Район", profile.district, { onChange(profile.copy(district = it)) })
         } }
         item(key = "account") { DealerProfileSection("Учётная запись") {
-            AdminAccountInfo("Роль", "Администратор")
+            if (onRoleChange != null) DealerProfileChoice("Роль", role, com.example.dealerappnative.model.dealerPersonRoles, onRoleChange)
+            else AdminAccountInfo("Роль", role)
             AdminAccountInfo("Юридическое лицо", dealerName)
         } }
     }
