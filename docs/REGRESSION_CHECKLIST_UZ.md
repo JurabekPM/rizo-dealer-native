@@ -210,3 +210,11 @@ Bu yangi camera UI sinovlari hali avtomatik bajarilmagan; real kamera shutterini
 - Photo limit5MB; invalid/cancel no overwrite; picker outside lazy row. Rotate while picking retains owner; no Visit gallery restoration.
 - Physical list: title left, scroll up hides search into right toolbar icon and actions row; reverse scroll reveals count/Add before search. Tabs always pinned. Toolbar tap opens inline input; X clears without closing; Back closes input, then navigates.
 - Return from details retains query/list/header. Legal scroll does not alter people header. No list-wide recomposition on header frames.
+
+
+## Store statement — Admin va Agent
+
+- Store/visit detailsda saldo ostidan История взаиморасчётов ochiladi; Back oldingi scroll/session holatini saqlaydi.
+- Boshqa do‘kon/UUID vizit yozuvlari aralashmaydi; to‘lov sarlavhasi mijoz ismiga qo‘shilmaydi, status alohida.
+- Tur/valyuta/davr filtrlarini Apply/Reset/dismiss sinang; inclusive Tashkent kun chegaralari. Har satrni ochib mahsulot/sana/status/izohni tekshiring.
+- UZS/USD qo‘shilmaydi, zayavka posted sale emas. Existing balance/schemas va map/dial/visit lifecycle o‘zgarmasin; reconciliation-request tugmasi yo‘q.

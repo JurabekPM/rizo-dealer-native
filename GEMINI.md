@@ -122,3 +122,8 @@ Handoff §18. Both existing person and legal entity open readonly details. Penci
 ## 2026-10-28: people photo/collapsing header
 
 Handoff §19. Optional AdminPersonalProfile.photoUri backward compatible; editor-only OpenDocument5MB, draft until Save. Photo displayed in employee list/details and current-admin Menu only; Visit still camera-only. AdminPeopleHeader: enterAlways92dp collapse (search48/actions44), AppBar inline search/X, left title, tabs pinned outside collapse. Query/list/header hoisted; no per-card scroll observers. Other screens/persistence identities unchanged.
+
+
+## 2026-10-28: do‘kon o‘zaro hisob-kitob tarixi
+
+Handoff §21. Admin/Agent store+visit details → История взаиморасчётов, beside saldo. Shared StoreActionsHost dialog keeps underlying UI mounted. Read-only local records + per-store fixtures, physical ID links (including unplanned UUID), no account recalculation/schema change/new service. Requests remain neutral, not posted sales; USD/UZS separate. Old collection date says Дата визита. Payment title is generic Оплата; name/status separate. No Запросить сверку. Filters + expandable lines in StoreStatementScreen/components. Do not construct AgentVisitSessions just to read history.

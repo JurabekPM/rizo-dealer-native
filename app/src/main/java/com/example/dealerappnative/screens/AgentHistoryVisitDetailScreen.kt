@@ -38,6 +38,7 @@ internal fun AgentHistoryVisitDetailScreen(entry: AgentHistoryEntry, onBack: () 
         LazyColumn(Modifier.weight(1f), state = listState, contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)) {
             item(key = "store") { HistoryStoreSummary(entry.visit) }
+            item(key = "statement") { StoreStatementEntry(storeForVisit(entry.visit)) }
             item(key = "dates") { HistoryVisitTimeline(entry.session) }
             item(key = "operations") {
                 HistorySurface(verticalPadding = 0.dp) {

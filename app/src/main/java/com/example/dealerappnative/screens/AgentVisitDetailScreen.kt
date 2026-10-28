@@ -81,6 +81,7 @@ internal fun AgentVisitDetailScreen(store: StoreUiModel, visit: VisitStore,
                         modifier = Modifier.sharedVisitStorePart(store.id, VisitStorePart.Debt))
                 }
             }
+            item(key = "statement") { StoreStatementEntry(visit.sourceStore ?: store) }
             item(key = "operations") {
                 Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(Color.White)
                     .padding(horizontal = 16.dp)) {

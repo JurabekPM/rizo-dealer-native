@@ -265,3 +265,8 @@ AdminPersonEditScreen gates AdminPersonDetailsScreen vs AdminPersonalProfileScre
 ## Person photo + people toolbar
 
 ui/components/PersonPhotoPicker.kt (editor-owned picker + photo field); AdminPersonalProfile.photoUri / AdminPersonalProfileJson; ProfileAvatar at list/details/Menu. AdminPeopleHeader.kt; AdminProfileScreen hoisted TopAppBarState/enterAlways connection/query; AdminPeopleScreen list only. Handoff §19. DealerProfilePersistenceTest7.
+
+
+## Store statement / o‘zaro hisob-kitob tarixi
+
+StoreDetailScreen / AgentStoreDetailScreen / VisitDetailScreen / AgentVisitDetailScreen / AgentHistoryVisitDetailScreen → StoreStatementEntry → LocalStoreActions.openStatement → StoreActionsHost → StoreStatementScreen. model/StoreStatement, data/StoreStatementData + StoreStatementSamples, UI StoreStatementCard/Filters. StoreStatementTest + native StoreStatementReadTest. Handoff §21.

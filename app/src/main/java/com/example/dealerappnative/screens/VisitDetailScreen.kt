@@ -3,6 +3,7 @@ package com.example.dealerappnative.screens
 import com.example.dealerappnative.ui.components.SoftIconButton
 import com.example.dealerappnative.ui.components.softCardPress
 import com.example.dealerappnative.ui.components.LocalStoreActions
+import com.example.dealerappnative.ui.components.StoreStatementEntry
 import com.example.dealerappnative.data.storeForVisit
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.*
@@ -73,6 +74,7 @@ internal fun VisitDetailScreen(store: VisitStore, onBack: () -> Unit) {
             item { StoreSummary(store) }
             item { VisitValueRow("Конечное сальдо", store.debtDirection.formatAmount(store.debt), store.debtDirection.color,
                 showChevron = true, valueModifier = Modifier.sharedVisitStorePart(store.id, VisitStorePart.Debt)) }
+            item { StoreStatementEntry(storeForVisit(store)) }
             item { VisitValueRow("Дата визита", store.details.date, DealerDesign.text) }
             item { EmployeeCard(store.details.employee, store.details.employeePhone) }
             item {

@@ -2,6 +2,7 @@ package com.example.dealerappnative.screens
 
 import com.example.dealerappnative.ui.components.softCardPress
 import com.example.dealerappnative.ui.components.LocalStoreActions
+import com.example.dealerappnative.ui.components.StoreStatementEntry
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -57,6 +58,7 @@ internal fun StoreDetailScreen(store: StoreUiModel, onBack: () -> Unit, onOpenMa
                     Box(Modifier.rotate(90f)) { DealerIcon(R.drawable.ic_chevron) }
                 }
             }
+            item { StoreStatementEntry(store) }
             item {
                 Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(DealerDesign.radius)).background(Color.White)) {
                     Text("Отчёты", style = DealerDesign.type(22, 28),

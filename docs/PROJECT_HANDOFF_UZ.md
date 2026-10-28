@@ -357,3 +357,15 @@ User clarified that Физические лица contains MANY people and suppl
 ## 20. Admin Menu cleanup - 2026-10-28
 
 User removed the Information about dealer row from MenuScreen.menuItems. Profile row/pencil still opens the existing personal/legal tabs. Other menu entries, Agent screens, data and drawable assets are unchanged.
+
+
+## 21. Do‘kon o‘zaro hisob-kitob tarixi — 2026-10-28
+
+- Admin/Agent store and visit details now expose «История взаиморасчётов» immediately after saldo; completed History visits also expose it. No «Запросить сверку» action/tab, no financial writes. Payment titles are «Оплата №…» or «Оплата»; client name and status are separate detail fields, never concatenated.
+- StoreActionsHost opens StoreStatementScreen as a shared full-screen read-only dialog. The underlying details/SharedTransition/list remain mounted; saveable filters/expansion/scroll keyed by physical store ID. StatementStoreSaver preserves the full store separately from the unchanged map saver. All existing map/dial/edit-location rules remain.
+- data/StoreStatementData reads existing SharedPreferences directly OFF main, without constructing AgentVisitSessions (which would seed/write sessions). Reads agent_visit_requests, visit_returns, agent_visit_sessions and explicit agent_unplanned_visits UUID→storeId links. Identity is never inferred from a name. Local returns preserve reasonLabel/comment snapshots; order/return prices stay exact UZS. Old collection sessions have no payment timestamp; displayed date explicitly says «Дата визита», using startedAt.
+- Per-store deterministic sample history supplies orders/payments/returns for prototype preview. Local saved documents are added read-only. No balance/running-total is derived; USD/UZS stay separate. Requests are neutral, labelled «Создана»/«Ожидает выполнения», not posted negative sales. Orders debit red; payments/returns credit green. Current store saldo and all persisted schemas are untouched.
+- Filters: operation type, currency, inclusive date/day/range (Tashkent timestamp grouping, StatisticsDates date-picker convention). Filter sheet uses draft until Apply; Reset resets draft. Expandable rows show date/status/client/products/comment. Stable-ID keyed LazyColumn, compact native typography, original icons and soft press only on actions.
+- New sources: model/StoreStatement.kt; data/StoreStatementData.kt, StoreStatementSamples.kt; screens/StoreStatementScreen.kt; ui/components/StoreStatementEntry.kt, StoreStatementCard.kt, StoreStatementFilters.kt. StoreStatementTest covers money/signs/currency/date boundaries/physical links; StoreStatementReadTest isolates native JSON reads in UUID-prefixed prefs, verifies corrupted-record skipping and no writes. Actual UI checking remains with the user.
+
+2026-10-28 statement validation: assembleDebug/assembleDebugAndroidTest and 96 unit tests passed (0 failures/errors). Samsung SM_S916N app/test install-r Success; StoreStatementReadTest OK (2 tests). Native tests used only UUID-prefixed preferences; no prototype UI, real records, photos or maps were operated. UI checks remain with the user.

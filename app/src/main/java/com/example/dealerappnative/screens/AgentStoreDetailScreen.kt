@@ -3,6 +3,7 @@ package com.example.dealerappnative.screens
 import com.example.dealerappnative.ui.components.SoftIconButton
 import com.example.dealerappnative.ui.components.softCardPress
 import com.example.dealerappnative.ui.components.LocalStoreActions
+import com.example.dealerappnative.ui.components.StoreStatementEntry
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -73,6 +74,7 @@ internal fun AgentStoreDetailScreen(store: StoreUiModel, onBack: () -> Unit, vis
                     Box(Modifier.rotate(90f)) { DealerIcon(R.drawable.ic_chevron, AgentDesign.secondary) }
                 }
             }
+            item(key = "statement") { StoreStatementEntry(store) }
             item(key = "reports") {
                 Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(AgentDesign.radius)).background(Color.White)) {
                     Text("Отчёты", style = AgentDesign.reportTitle, color = AgentDesign.text,
