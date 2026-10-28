@@ -378,3 +378,14 @@ User asked for a softer, clearer design based on screenshots. StatementDesign is
 Filter sheet: light handle, compact grouped choices, subtle animated selected fill/border, top Reset, fixed full-width Apply footer, independently scrollable body for small screens/large fonts. No duplicated “all period” field: explicit Указать даты opens existing date/range picker. Draft/apply/dismiss, IDs, date/currency/type logic, read-only data and underlying visit/store state stay unchanged. No new dependencies or redundant UI-mirroring tests. User performs visual checks.
 
 2026-10-28 statement design validation: assembleDebug and96 unit tests passed (0 failures/errors). Updated app installed with install-r on Samsung SM_S916N. No new data/schema or financial logic changes; no automatic UI navigation. Visual checking remains with the user.
+
+
+## 23. Market reference applied to statement — 2026-10-28
+
+User supplied Rizo Market screenshots and approved adaptation to Взаиморасчёты. Shared Admin/Agent UI now has a fixed title/store-name/back/filter AppBar with an active-filter dot; pill quick filters (date/all/payments/orders/returns). A single Material enterAlways TopAppBarState hides the quick-filter row on upward scroll and restores it on a slight reverse scroll (native snap260ms). Large store/address/activity totals and operation count remain in the keyed LazyColumn; they reappear only at the list top. No per-card scroll observers, no conditional shared-transition changes.
+
+StatementOverview model groups rows into local Tashkent months, including year boundaries, and calculates independent exact BigDecimal totals for posted Order/Payment/Return per currency. Neutral Request is excluded from order totals. This is period/filter activity, NOT current/remaining debt; no sample balance is reconstructed and USD/UZS never combine. Overview tiles use horizontal scrolling and one line per currency. Filters still use draft until Apply; quick type taps immediately filter; date uses the existing day/range picker.
+
+Monthly white sections have lazily composed individual transaction rows, stable document keys and inset dividers; no entire-month eager Column. Expanded document/client/status/date/lines/comment remain, with full timestamp. Compact row dates omit the repeated year shown in the month header. Reader, physical store links, persistence and other screens unchanged. New StatementOverviewTest covers totals/currency/request exclusion, Tashkent month/year boundaries and empty/filtered data. UI remains for user testing.
+
+2026-10-28 monthly statement validation: assembleDebug and99 unit tests passed (0 failures/errors), including3 new activity/month boundary cases. Installed with install-r on Samsung SM_S916N. No automatic prototype UI navigation or device FPS/gesture claims; visual interaction checking remains with the user.

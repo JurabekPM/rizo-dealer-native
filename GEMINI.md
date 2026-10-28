@@ -132,3 +132,8 @@ Handoff §21. Admin/Agent store+visit details → История взаимор�
 ## Statement design — latest
 
 Handoff §22. StatementDesign is LOCAL; context card now scrolls with history. Filters use top Reset + fixed bottom Apply, explicit Указать даты, lighter selection and medium/semibold charcoal text. Do not restore duplicate period labels or change ledger data/filter semantics. Other app styles unchanged.
+
+
+## Latest statement / Market reference adaptation
+
+Handoff §23: fixed store AppBar; native enterAlways pill filters reappear on slight reverse scroll. Overview/address/count only in list top. History grouped by Tashkent month but each row remains lazy. Exact per-currency activity totals (Order/Payment/Return), no remaining-debt inference; Request unposted. model/StatementOverview.kt + StatementOverviewTest; ui/components/StoreStatementOverview.kt, StoreStatementHeader.kt. Existing filter sheet and reader unchanged.

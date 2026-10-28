@@ -29,11 +29,16 @@ internal fun statementDate(time: Long): String = SimpleDateFormat("dd.MM.yyyy ·
     .apply { timeZone = TimeZone.getTimeZone("Asia/Tashkent") }.format(Date(time))
 
 @Composable
-internal fun StoreStatementCard(entry: StoreStatementEntry, clientName: String, expanded: Boolean, onToggle: () -> Unit) {
+internal fun StoreStatementCard(entry: StoreStatementEntry, clientName: String, expanded: Boolean,
+    grouped: Boolean = false, lastInGroup: Boolean = true, onToggle: () -> Unit) {
     val date = remember(entry.occurredAt) { statementDate(entry.occurredAt) }
+    val shortDate = remember(entry.occurredAt) { SimpleDateFormat("d MMM, HH:mm", Locale.forLanguageTag("ru"))
+        .apply { timeZone = TimeZone.getTimeZone("Asia/Tashkent") }.format(Date(entry.occurredAt)) }
+    val shape = if (grouped) RoundedCornerShape(bottomStart = if (lastInGroup) 12.dp else 0.dp,
+        bottomEnd = if (lastInGroup) 12.dp else 0.dp) else RoundedCornerShape(12.dp)
     val rotation by animateFloatAsState(if (expanded) -90f else 90f, tween(280), label = "statement-chevron")
     val amountColor = when (entry.kind.direction) { -1 -> Color(0xFFDC2626); 1 -> Color(0xFF15803D); else -> Design.text }
-    Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(Color.White).animateContentSize(tween(280))) {
+    Column(Modifier.fillMaxWidth().clip(shape).background(Color.White).animateContentSize(tween(280))) {
         Row(Modifier.fillMaxWidth().softCardPress(onClick = onToggle).padding(horizontal = 16.dp, vertical = 14.dp), verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
@@ -45,7 +50,7 @@ internal fun StoreStatementCard(entry: StoreStatementEntry, clientName: String, 
                     Text(entry.method, style = Design.caption, color = Design.secondary, maxLines = 1,
                         overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
                     Spacer(Modifier.width(8.dp))
-                    Text((if (entry.dateLabel == "Дата визита") "Визит · " else "") + date,
+                    Text((if (entry.dateLabel == "Дата визита") "Визит · " else "") + (if (grouped) shortDate else date),
                         style = Design.caption, color = Design.secondary, maxLines = 1)
                 }
             }
@@ -73,6 +78,7 @@ internal fun StoreStatementCard(entry: StoreStatementEntry, clientName: String, 
                 Text(entry.comment, style = Design.body, color = Design.text)
             }
         }
+        if (grouped && !lastInGroup) HorizontalDivider(Modifier.padding(horizontal = 16.dp), color = DealerDesign.divider)
     }
 }
 

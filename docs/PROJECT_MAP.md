@@ -270,3 +270,8 @@ ui/components/PersonPhotoPicker.kt (editor-owned picker + photo field); AdminPer
 ## Store statement / o‘zaro hisob-kitob tarixi
 
 StoreDetailScreen / AgentStoreDetailScreen / VisitDetailScreen / AgentVisitDetailScreen / AgentHistoryVisitDetailScreen → StoreStatementEntry → LocalStoreActions.openStatement → StoreActionsHost → StoreStatementScreen. model/StoreStatement, data/StoreStatementData + StoreStatementSamples, UI StoreStatementCard/Filters. StoreStatementTest + native StoreStatementReadTest. Handoff §21.
+
+
+## Statement monthly presentation
+
+model/StatementOverview.kt → statementTotals/statementMonths (exact per-currency activity, Tashkent month). StoreStatementHeader.kt now hosts fixed AppBar + enterAlways quick-filter pills; StoreStatementOverview.kt renders large context/totals. StoreStatementScreen keeps month rows lazy. StatementOverviewTest; handoff §23.
