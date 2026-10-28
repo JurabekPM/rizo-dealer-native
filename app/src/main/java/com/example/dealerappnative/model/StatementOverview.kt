@@ -18,6 +18,10 @@ internal fun statementTotals(entries: List<StoreStatementEntry>): List<Statement
         StatementCurrencyTotals(currency, total(StatementKind.Order), total(StatementKind.Payment), total(StatementKind.Return))
     }
 
+/** Type chips narrow the history only; summary cards retain all activity within date/currency. */
+internal fun statementOverviewTotals(entries: List<StoreStatementEntry>, filter: StatementFilter): List<StatementCurrencyTotals> =
+    statementTotals(entries.filter(filter.copy(types = emptySet())::matches))
+
 internal fun statementMonths(entries: List<StoreStatementEntry>): List<StatementMonth> {
     val zone = ZoneId.of("Asia/Tashkent")
     val ru = Locale.forLanguageTag("ru")

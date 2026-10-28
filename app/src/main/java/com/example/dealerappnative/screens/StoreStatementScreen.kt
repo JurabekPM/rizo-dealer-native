@@ -39,7 +39,7 @@ internal fun StoreStatementScreen(store: StoreUiModel, onBack: () -> Unit) {
     val filter = StatementFilter(types, currency, from, to)
     val visible = remember(entries, filter) { entries.orEmpty().filter(filter::matches) }
     val months = remember(visible) { statementMonths(visible) }
-    val totals = remember(visible) { statementTotals(visible) }
+    val totals = remember(entries, currency, from, to) { statementOverviewTotals(entries.orEmpty(), filter) }
     val currencies = remember(entries) { entries.orEmpty().map { it.currency }.distinct().sorted() }
     val list = rememberLazyListState()
     val scope = rememberCoroutineScope()

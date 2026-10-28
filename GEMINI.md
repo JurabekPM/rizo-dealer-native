@@ -147,3 +147,8 @@ Handoff §24 overrides §23: store icon/name/address +32dp optical filter chips 
 ## Latest statement colors/count
 
 Handoff §25: Order red, Payment green, Return blue in summary + row titles/amounts; Request neutral. Overall count is a small Всего операций/Найдено операций caption below summary, never beside any month. Filters/AppBar stay pinned; data/money/filter logic unchanged.
+
+
+## Latest statement summary correction
+
+Handoff §26: Order BLUE, Return RED, Payment GREEN. Type chips affect list/count only; summary ignores type selection but respects date/currency (statementOverviewTotals). Do not derive cards from the already type-filtered visible list; this incorrectly zeroes other cards. Existing financial records/signs unchanged.

@@ -41,4 +41,22 @@ class StatementOverviewTest {
         assertEquals(BigDecimal.ZERO, statementTotals(payments).single().orders)
         assertEquals(BigDecimal("20"), statementTotals(payments).single().payments)
     }
+    @Test fun operationChipsNeverZeroOtherSummaryCardsButDatesAndCurrenciesStillApply() {
+        val rows = listOf(entry("o", StatementKind.Order, "100"), entry("p", StatementKind.Payment, "20"),
+            entry("r", StatementKind.Return, "5"), entry("request", StatementKind.Request, "999"),
+            entry("uzs", StatementKind.Order, "100000", "UZS"),
+            entry("old", StatementKind.Order, "700", time = "2026-09-28T07:00:00Z"))
+        val day = StatisticsDates.day(2026, 10, 28)
+        val base = StatementFilter(currency = "USD", from = day, to = day)
+        val expected = StatementCurrencyTotals("USD", BigDecimal("100"), BigDecimal("20"), BigDecimal("5"))
+        StatementType.entries.forEach { type ->
+            assertEquals(listOf(expected), statementOverviewTotals(rows, base.toggleType(type)))
+        }
+        val selected = base.toggleType(StatementType.Payments).toggleType(StatementType.Returns)
+        assertEquals(2, rows.count(selected::matches))
+        assertEquals(listOf(expected), statementOverviewTotals(rows, selected))
+        assertEquals(2, statementOverviewTotals(rows, selected.copy(currency = null)).size)
+        assertEquals(BigDecimal("800"), statementOverviewTotals(rows, selected.copy(from = null, to = null)).single().orders)
+    }
+
 }

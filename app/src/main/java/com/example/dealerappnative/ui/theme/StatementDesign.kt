@@ -11,9 +11,9 @@ internal object StatementDesign {
     val surface = Color(0xFFF5F5F5)
     val border = Color(0xFFE9EDF0)
     val selected = Color(0xFFF8F2FD)
-    val order = Color(0xFFB91C1C)
+    val order = Color(0xFF1D4ED8)
     val payment = Color(0xFF15803D)
-    val returned = Color(0xFF1D4ED8)
+    val returned = Color(0xFFB91C1C)
     fun operationColor(kind: StatementKind): Color = when (kind) {
         StatementKind.Order -> order
         StatementKind.Payment -> payment

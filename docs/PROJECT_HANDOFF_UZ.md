@@ -411,3 +411,12 @@ User clarified payment and return must be visually distinct and overall count mu
 Removed Всего N from the first month's heading. A single small caption below the overall activity tiles reads Всего операций: N, or Найдено операций: N with active filters. It describes the whole visible multi-month result and scrolls with the overall summary, independent of month headings. Pinned store/filters,32dp Figma chips, toggles, dates, exact totals and persistence unchanged. Visual-only scoped correction; no redundant new tests.
 
 2026-10-28 statement color/count validation: assembleDebug and101 existing unit tests passed (0 failures/errors). Installed with install-r on Samsung SM_S916N. Visual-only change, no new tests or automatic prototype UI navigation; user checks the result.
+
+
+## 26. Summary scope + color swap — 2026-10-28 (latest)
+
+User swapped order/return colors: Order now BLUE#1D4ED8, Return RED#B91C1C, Payment remains GREEN#15803D. Shared palette applies to summary + transaction title/amount; money signs and meanings unchanged.
+
+Operation type chips now narrow ONLY the history list/count, not summary cards. statementOverviewTotals clears type selection before applying the existing date/currency filter, then computes exact per-currency posted totals. Selecting Payments no longer makes Orders/Returns zero. Period/currency still scope all three cards; no invented totals for a genuinely empty period. Screen memoization uses entries/currency/from/to, so type taps do not recalculate cards. List filters, independent toggles, count labels and persistence unchanged. New StatementOverviewTest case covers every type/multiple types, date/currency boundaries, unposted Request exclusion and preservation of other totals.
+
+2026-10-28 summary-scope validation: assembleDebug and102 unit tests passed (0 failures/errors). New regression covers stable summary cards under type filters with date/currency scoping. Installed with install-r on Samsung SM_S916N; no automatic prototype UI navigation or real data changes. User checks visuals.
