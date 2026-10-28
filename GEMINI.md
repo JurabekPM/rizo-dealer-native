@@ -127,3 +127,8 @@ Handoff §19. Optional AdminPersonalProfile.photoUri backward compatible; editor
 ## 2026-10-28: do‘kon o‘zaro hisob-kitob tarixi
 
 Handoff §21. Admin/Agent store+visit details → История взаиморасчётов, beside saldo. Shared StoreActionsHost dialog keeps underlying UI mounted. Read-only local records + per-store fixtures, physical ID links (including unplanned UUID), no account recalculation/schema change/new service. Requests remain neutral, not posted sales; USD/UZS separate. Old collection date says Дата визита. Payment title is generic Оплата; name/status separate. No Запросить сверку. Filters + expandable lines in StoreStatementScreen/components. Do not construct AgentVisitSessions just to read history.
+
+
+## Statement design — latest
+
+Handoff §22. StatementDesign is LOCAL; context card now scrolls with history. Filters use top Reset + fixed bottom Apply, explicit Указать даты, lighter selection and medium/semibold charcoal text. Do not restore duplicate period labels or change ledger data/filter semantics. Other app styles unchanged.

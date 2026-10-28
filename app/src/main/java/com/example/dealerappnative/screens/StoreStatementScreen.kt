@@ -10,7 +10,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.contentDescription
@@ -21,7 +20,7 @@ import com.example.dealerappnative.R
 import com.example.dealerappnative.data.loadStoreStatement
 import com.example.dealerappnative.model.*
 import com.example.dealerappnative.ui.components.*
-import com.example.dealerappnative.ui.theme.AgentVisitDesign as Design
+import com.example.dealerappnative.ui.theme.StatementDesign as Design
 import com.example.dealerappnative.ui.theme.DealerDesign
 import kotlinx.coroutines.launch
 
@@ -52,32 +51,28 @@ internal fun StoreStatementScreen(store: StoreUiModel, onBack: () -> Unit) {
                 DealerIcon(R.drawable.ic_collection_filter, if (filter.active) DealerDesign.accent else DealerDesign.text)
             }
         })
-        Column(Modifier.fillMaxWidth().background(Color.White).padding(horizontal = 16.dp).padding(top = 8.dp, bottom = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text(store.name, style = Design.name, maxLines = 2, overflow = TextOverflow.Ellipsis)
-            Text(store.address, style = Design.detail, color = DealerDesign.secondary, maxLines = 1, overflow = TextOverflow.Ellipsis)
-        }
-        Row(Modifier.fillMaxWidth().background(Color.White).softCardPress { dates = true }.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-            Text("Период", style = Design.detail, color = DealerDesign.secondary)
-            Spacer(Modifier.width(12.dp))
-            Text(statementPeriodLabel(from, to), style = Design.detail, maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
-            Box(Modifier.rotate(90f)) { DealerIcon(R.drawable.ic_chevron, size = 18.dp) }
-        }
         if (entries == null) Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
-            Text("Загружаем историю…", style = Design.detail, color = DealerDesign.secondary)
+            Text("Загружаем историю…", style = Design.body, color = Design.secondary)
         } else LazyColumn(Modifier.weight(1f), state = list, contentPadding = PaddingValues(vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            item(key = "context") { StoreStatementHeader(store, from, to, onDates = { dates = true }) }
             item(key = "count") {
-                Text(if (entries == null) "Загружаем историю…" else "Операции · ${visible.size}" +
-                    (if (type == StatementType.All) "" else " · ${type.label}") + (currency?.let { " · $it" } ?: ""),
-                    style = Design.detail, color = DealerDesign.secondary, modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp))
+                Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 6.dp), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text("Операции", style = Design.name, color = Design.text, modifier = Modifier.weight(1f))
+                        Text(visible.size.toString(), style = Design.label, color = Design.secondary)
+                    }
+                    if (type != StatementType.All || currency != null) Text(
+                        listOfNotNull(type.takeIf { it != StatementType.All }?.label, currency).joinToString(" · "),
+                        style = Design.caption, color = Design.secondary)
+                }
             }
             items(visible, key = { it.id }) { entry -> StoreStatementCard(entry, store.name, expanded == entry.id) {
                 expanded = if (expanded == entry.id) null else entry.id
             } }
-            if (entries != null && visible.isEmpty()) item {
+            if (visible.isEmpty()) item {
                 Column(Modifier.fillMaxWidth().padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text("За этот период операций нет", style = Design.name)
-                    SoftTextButton({ applyFilter(StatementFilter()) }) { Text("Сбросить фильтры", style = Design.detail, color = DealerDesign.accent) }
+                    Text("За этот период операций нет", style = Design.name, color = Design.text)
+                    SoftTextButton({ applyFilter(StatementFilter()) }) { Text("Сбросить фильтры", style = Design.body, color = DealerDesign.accent) }
                 }
             }
         }

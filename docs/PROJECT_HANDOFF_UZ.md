@@ -369,3 +369,12 @@ User removed the Information about dealer row from MenuScreen.menuItems. Profile
 - New sources: model/StoreStatement.kt; data/StoreStatementData.kt, StoreStatementSamples.kt; screens/StoreStatementScreen.kt; ui/components/StoreStatementEntry.kt, StoreStatementCard.kt, StoreStatementFilters.kt. StoreStatementTest covers money/signs/currency/date boundaries/physical links; StoreStatementReadTest isolates native JSON reads in UUID-prefixed prefs, verifies corrupted-record skipping and no writes. Actual UI checking remains with the user.
 
 2026-10-28 statement validation: assembleDebug/assembleDebugAndroidTest and 96 unit tests passed (0 failures/errors). Samsung SM_S916N app/test install-r Success; StoreStatementReadTest OK (2 tests). Native tests used only UUID-prefixed preferences; no prototype UI, real records, photos or maps were operated. UI checks remain with the user.
+
+
+## 22. Statement design refinement — 2026-10-28
+
+User asked for a softer, clearer design based on screenshots. StatementDesign is local charcoal/medium-secondary typography: names15 Semibold, amounts16 Semibold, body13 Medium, dates12 Medium, section labels12 Semibold. No global font/theme changes. Store + calendar period form one compact card INSIDE the keyed history list, so context scrolls away naturally. Count/filter summary is clear; expanded rows now show full document title if truncated in the list.
+
+Filter sheet: light handle, compact grouped choices, subtle animated selected fill/border, top Reset, fixed full-width Apply footer, independently scrollable body for small screens/large fonts. No duplicated “all period” field: explicit Указать даты opens existing date/range picker. Draft/apply/dismiss, IDs, date/currency/type logic, read-only data and underlying visit/store state stay unchanged. No new dependencies or redundant UI-mirroring tests. User performs visual checks.
+
+2026-10-28 statement design validation: assembleDebug and96 unit tests passed (0 failures/errors). Updated app installed with install-r on Samsung SM_S916N. No new data/schema or financial logic changes; no automatic UI navigation. Visual checking remains with the user.

@@ -18,7 +18,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.dealerappnative.R
 import com.example.dealerappnative.model.*
-import com.example.dealerappnative.ui.theme.AgentVisitDesign as Design
+import com.example.dealerappnative.ui.theme.StatementDesign as Design
 import com.example.dealerappnative.ui.theme.DealerDesign
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -30,55 +30,57 @@ internal fun statementDate(time: Long): String = SimpleDateFormat("dd.MM.yyyy ·
 
 @Composable
 internal fun StoreStatementCard(entry: StoreStatementEntry, clientName: String, expanded: Boolean, onToggle: () -> Unit) {
-    val rotation by animateFloatAsState(if (expanded) -90f else 90f, tween(220), label = "statement-chevron")
-    val amountColor = when (entry.kind.direction) { -1 -> Color(0xFFDC2626); 1 -> Color(0xFF15803D); else -> DealerDesign.text }
-    Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(Color.White).animateContentSize(tween(220))) {
+    val date = remember(entry.occurredAt) { statementDate(entry.occurredAt) }
+    val rotation by animateFloatAsState(if (expanded) -90f else 90f, tween(280), label = "statement-chevron")
+    val amountColor = when (entry.kind.direction) { -1 -> Color(0xFFDC2626); 1 -> Color(0xFF15803D); else -> Design.text }
+    Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(Color.White).animateContentSize(tween(280))) {
         Row(Modifier.fillMaxWidth().softCardPress(onClick = onToggle).padding(horizontal = 16.dp, vertical = 14.dp), verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                    Text(entry.title, style = Design.name, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
+                    Text(entry.title, style = Design.name, color = Design.text, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
                     Spacer(Modifier.width(12.dp))
-                    Text(statementAmount(entry), style = Design.emphasis, color = amountColor, maxLines = 1)
+                    Text(statementAmount(entry), style = Design.amount, color = amountColor, maxLines = 1)
                 }
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                    Text(entry.method, style = Design.detail, color = DealerDesign.secondary, maxLines = 1,
+                    Text(entry.method, style = Design.caption, color = Design.secondary, maxLines = 1,
                         overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
                     Spacer(Modifier.width(8.dp))
-                    Text((if (entry.dateLabel == "Дата визита") "Визит · " else "") + statementDate(entry.occurredAt),
-                        style = DealerDesign.type(11, 15), color = DealerDesign.secondary, maxLines = 1)
+                    Text((if (entry.dateLabel == "Дата визита") "Визит · " else "") + date,
+                        style = Design.caption, color = Design.secondary, maxLines = 1)
                 }
             }
             Spacer(Modifier.width(8.dp))
-            Box(Modifier.rotate(rotation)) { DealerIcon(R.drawable.ic_chevron, DealerDesign.tertiary, 16.dp) }
+            Box(Modifier.rotate(rotation)) { DealerIcon(R.drawable.ic_chevron, Design.secondary, 16.dp) }
         }
         if (expanded) Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp).padding(bottom = 16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             HorizontalDivider(color = DealerDesign.divider)
+            StatementInfo("Документ", entry.title)
             StatementInfo("Клиент", clientName)
             StatementInfo("Статус", entry.status, if (entry.kind == StatementKind.Request) DealerDesign.secondary else Color(0xFF15803D))
-            StatementInfo(entry.dateLabel, statementDate(entry.occurredAt))
-            if (entry.kind == StatementKind.Request) Text("Заявка ещё не является проведённой продажей", style = Design.detail, color = DealerDesign.secondary)
+            StatementInfo(entry.dateLabel, date)
+            if (entry.kind == StatementKind.Request) Text("Заявка ещё не является проведённой продажей", style = Design.body, color = Design.secondary)
             if (entry.lines.isNotEmpty()) {
                 HorizontalDivider(color = DealerDesign.divider)
                 entry.lines.forEach { line ->
                     Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
-                        Text(line.name, style = Design.detail, color = DealerDesign.text)
-                        Text("${line.quantity} шт × ${statementMoney(line.price, entry.currency)}", style = Design.detail, color = DealerDesign.secondary)
+                        Text(line.name, style = Design.body, color = Design.text)
+                        Text("${line.quantity} шт × ${statementMoney(line.price, entry.currency)}", style = Design.body, color = Design.secondary)
                     }
                 }
             }
             if (entry.comment.isNotBlank()) {
-                Text("Комментарий", style = Design.detail, color = DealerDesign.secondary)
-                Text(entry.comment, style = Design.detail)
+                Text("Комментарий", style = Design.label, color = Design.secondary)
+                Text(entry.comment, style = Design.body, color = Design.text)
             }
         }
     }
 }
 
 @Composable
-private fun StatementInfo(label: String, value: String, color: Color = DealerDesign.text) {
+private fun StatementInfo(label: String, value: String, color: Color = Design.text) {
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.Top) {
-        Text(label, style = Design.detail, color = DealerDesign.secondary, modifier = Modifier.weight(.8f))
+        Text(label, style = Design.body, color = Design.secondary, modifier = Modifier.weight(.8f))
         Spacer(Modifier.width(12.dp))
-        Text(value, style = Design.detail, color = color, modifier = Modifier.weight(1.2f))
+        Text(value, style = Design.body, color = color, modifier = Modifier.weight(1.2f))
     }
 }
