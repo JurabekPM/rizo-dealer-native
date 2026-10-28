@@ -41,7 +41,8 @@ import com.example.dealerappnative.screens.CollectionsScreen
 import com.example.dealerappnative.screens.DeliveriesScreen
 import com.example.dealerappnative.screens.AdminRevisionsScreen
 import com.example.dealerappnative.screens.AdminReturnsScreen
-import com.example.dealerappnative.screens.DealerProfileScreen
+import com.example.dealerappnative.screens.AdminProfileScreen
+import com.example.dealerappnative.data.DealerProfilePreferences
 import com.example.dealerappnative.screens.MenuScreen
 import com.example.dealerappnative.screens.RequestsScreen
 import com.example.dealerappnative.screens.AdminVisitsFlowScreen
@@ -65,6 +66,8 @@ internal fun DealerApp(initialTab: Int = 0) {
     var storesVisible by rememberSaveable { mutableStateOf(false) }
     var selectedMagazineId by rememberSaveable { mutableStateOf<String?>(null) }
     val context = LocalContext.current
+    val administratorPreferences = remember(context) { DealerProfilePreferences(context) }
+    var administrator by remember { mutableStateOf(administratorPreferences.readAdministrator()) }
     val locationPreferences = remember(context) { StoreLocationPreferences(context) }
     val storeLocations = remember {
         mutableStateMapOf<String, StoreLocation>().apply {
@@ -151,7 +154,7 @@ internal fun DealerApp(initialTab: Int = 0) {
         ) { contentPadding ->
             Box(Modifier.fillMaxSize().padding(contentPadding)) {
                 if (dealerProfileVisible) {
-                    DealerProfileScreen(onBack = closeChildScreen)
+                    AdminProfileScreen(onBack = closeChildScreen, onSaved = { administrator = it; closeChildScreen() })
                 } else if (revisionsVisible) {
                     AdminRevisionsScreen(onBack = closeChildScreen)
                 } else if (returnsVisible) {
@@ -194,7 +197,7 @@ internal fun DealerApp(initialTab: Int = 0) {
                             DealerDestination.Requests -> RequestsScreen()
                             DealerDestination.Deliveries -> DeliveriesScreen()
                             DealerDestination.Collections -> CollectionsScreen()
-                            DealerDestination.Menu -> MenuScreen(onStoresClick = { storesVisible = true }, onReturnsClick = { returnsVisible = true }, onRevisionsClick = { revisionsVisible = true }, onEditDealerClick = { dealerProfileVisible = true })
+                            DealerDestination.Menu -> MenuScreen(onStoresClick = { storesVisible = true }, onReturnsClick = { returnsVisible = true }, onRevisionsClick = { revisionsVisible = true }, onEditDealerClick = { dealerProfileVisible = true }, administrator = administrator)
                         }
                     }
                 }

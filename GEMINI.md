@@ -102,3 +102,8 @@ Foydalanuvchi global bitta-active cheklovini bekor qildi. Turli do‘konlardagi 
 ## 2026-10-28: Admin profil qalamchasi
 
 Admin Menu tepasidagi qalamcha DealerProfileScreenni ochadi (Chrome legal entity form mobile adaptation). Handoff §15. Yangi administrator_dealer_profile namespace; Savegacha draft, Back cancel. INN qo‘lda, backend lookup yo‘q. Company valyuta/tarif/price metadata hisob-kitobni o‘zgartirmaydi. Logo/photo/UzQR OpenDocument5MB; VISIT kamera-only qoidasi o‘zgarmagan. Map faqat profile drafti, OSRM/GPS/store prefsga tegmaydi. Haqiqiy UI sinovi foydalanuvchida.
+
+
+## 2026-10-28: Admin profil ikki tabli
+
+Menyu yuqori profil qatori va qalamchasi → AdminProfileScreen: Физические лица (admin self, default) / Юридические лица (mavjud diler formasi). Handoff §16 overrides §15 entry. Bitta Save ikkala draftni validate qilib bir SharedPreferences.Editor bilan saqlaydi: administrator_dealer_profile/profile unchanged + new administrator key. Back cancels both, switch/pager/map/rotation keeps drafts/list states. Name/phone Admin Menu’da yangilanadi; Agent o‘zgarmaydi. Role/company readonly, password/access flags yo‘q. Tabs oq indikator pagerdan, hover yo‘q.

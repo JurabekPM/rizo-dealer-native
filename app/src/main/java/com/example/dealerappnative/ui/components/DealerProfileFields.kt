@@ -34,12 +34,12 @@ internal fun DealerProfileSection(title: String, content: @Composable ColumnScop
 }
 
 @Composable
-internal fun DealerProfileField(label: String, value: String, onChange: (String) -> Unit, numeric: Boolean = false) {
+internal fun DealerProfileField(label: String, value: String, onChange: (String) -> Unit, numeric: Boolean = false, phone: Boolean = false) {
     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Text(label, style = AgentVisitDesign.detail, color = DealerDesign.secondary)
         BasicTextField(value, onChange, textStyle = AgentVisitDesign.name.copy(color = DealerDesign.text),
             singleLine = true, cursorBrush = SolidColor(DealerDesign.accent),
-            keyboardOptions = KeyboardOptions(keyboardType = if (numeric) KeyboardType.Number else KeyboardType.Text),
+            keyboardOptions = KeyboardOptions(keyboardType = when { phone -> KeyboardType.Phone; numeric -> KeyboardType.Number; else -> KeyboardType.Text }),
             modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).clip(RoundedCornerShape(12.dp))
                 .background(DealerDesign.background).semantics { contentDescription = label },
             decorationBox = { inner -> Box(Modifier.padding(horizontal = 12.dp, vertical = 14.dp), contentAlignment = Alignment.CenterStart) {

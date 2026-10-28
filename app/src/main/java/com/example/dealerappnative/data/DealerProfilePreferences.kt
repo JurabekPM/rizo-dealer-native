@@ -1,6 +1,8 @@
 package com.example.dealerappnative.data
 
 import android.content.Context
+import com.example.dealerappnative.model.AdminPersonalProfile
+import com.example.dealerappnative.model.normalizeAdminPhone
 import com.example.dealerappnative.model.DealerProfile
 import com.example.dealerappnative.model.DealerWorkingDay
 import com.example.dealerappnative.model.validationError
@@ -12,6 +14,14 @@ import org.json.JSONObject
 /** Separate namespace: never writes store locations, Agent profile or visit preferences. */
 internal class DealerProfilePreferences(context: Context) {
     private val preferences = context.applicationContext.getSharedPreferences("administrator_dealer_profile", Context.MODE_PRIVATE)
+    fun readAdministrator(): AdminPersonalProfile = decodeAdminPersonalProfile(preferences.getString("administrator", null))
+    suspend fun saveProfiles(dealer: DealerProfile, person: AdminPersonalProfile): Boolean = withContext(Dispatchers.IO) {
+        if (dealer.validationError() != null || person.validationError() != null) return@withContext false
+        preferences.edit().putString("profile", encodeDealerProfile(dealer.copy(name = dealer.name.trim(), address = dealer.address.trim(),
+            region = dealer.region.trim(), district = dealer.district.trim())))
+            .putString("administrator", encodeAdminPersonalProfile(person.copy(name = person.name.trim(), phone = normalizeAdminPhone(person.phone),
+                region = person.region.trim(), district = person.district.trim()))).commit()
+    }
     fun read(): DealerProfile = decodeDealerProfile(preferences.getString("profile", null))
     suspend fun save(profile: DealerProfile): Boolean = withContext(Dispatchers.IO) {
         if (profile.validationError() != null) return@withContext false

@@ -27,7 +27,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.dealerappnative.R
-import com.example.dealerappnative.ui.components.SoftIconButton
+import com.example.dealerappnative.model.AdminPersonalProfile
+import com.example.dealerappnative.model.displayAdminPhone
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.contentDescription
 import com.example.dealerappnative.ui.components.DealerIcon
@@ -35,17 +37,18 @@ import com.example.dealerappnative.ui.components.MenuRow
 import com.example.dealerappnative.ui.theme.DealerDesign
 
 @Composable
-internal fun MenuScreen(onStoresClick: () -> Unit = {}, onReturnsClick: () -> Unit = {}, onRevisionsClick: () -> Unit = {}, onEditDealerClick: () -> Unit = {}) {
+internal fun MenuScreen(onStoresClick: () -> Unit = {}, onReturnsClick: () -> Unit = {}, onRevisionsClick: () -> Unit = {}, onEditDealerClick: () -> Unit = {}, administrator: AdminPersonalProfile = AdminPersonalProfile()) {
     Column(Modifier.fillMaxSize().background(DealerDesign.background).verticalScroll(rememberScrollState())) {
-        Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp)).background(Color.White).padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp)).background(Color.White).softCardPress(onClick = onEditDealerClick)
+            .semantics { contentDescription = "Изменить профиль" }.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
             Image(painterResource(R.drawable.dealer_avatar), contentDescription = null,
                 modifier = Modifier.size(48.dp).clip(CircleShape), contentScale = ContentScale.Crop)
             Spacer(Modifier.width(12.dp))
             Column(Modifier.weight(1f)) {
-                Text("Хусанов Акбар", style = DealerDesign.body)
-                Text("+998 90 116 51 15", color = DealerDesign.secondary, style = DealerDesign.detail)
+                Text(administrator.name, style = DealerDesign.body, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                Text(displayAdminPhone(administrator.phone), color = DealerDesign.secondary, style = DealerDesign.detail, maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
-            SoftIconButton(onClick = onEditDealerClick, modifier = Modifier.size(44.dp).semantics { contentDescription = "Изменить данные дилера" }) {
+            Box(Modifier.size(44.dp), contentAlignment = Alignment.Center) {
                 DealerIcon(R.drawable.ic_edit, DealerDesign.secondary, 24.dp)
             }
         }

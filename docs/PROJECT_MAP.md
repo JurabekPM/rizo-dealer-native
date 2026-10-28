@@ -245,3 +245,8 @@ Umumiy picker UI: model/PickerProduct.kt — readonly ko‘rinish contracti; ui/
 ## Admin diler tahriri — 2026-10-28
 
 MenuScreen top pencil → DealerApp → screens/DealerProfileScreen.kt. model/DealerProfile.kt; data/DealerProfilePreferences.kt (administrator_dealer_profile/profile); DealerProfileImages.kt; ui/components/DealerProfileFields.kt, DealerProfileMedia.kt, DealerProfileWorkingHours.kt; screens/DealerProfileLocationScreen.kt. DealerProfileTest + androidTest/DealerProfilePersistenceTest. Separate local profile draft; no Agent/visit/store accounting changes. Handoff §15.
+
+
+## Admin profil tablari
+
+MenuScreen whole header/pencil → DealerApp → screens/AdminProfileScreen.kt (draft/Savers/pager/save/map) → AdminPersonalProfileScreen.kt / DealerProfileScreen.kt. ui/components/AdminProfileTabs.kt; model/AdminPersonalProfile.kt; data/AdminPersonalProfileJson.kt, DealerProfileOptions.kt; DealerProfilePreferences.saveProfiles one atomic editor. Tests: AdminPersonalProfileTest + DealerProfilePersistenceTest. Handoff §16.

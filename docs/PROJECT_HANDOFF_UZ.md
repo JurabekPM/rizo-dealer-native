@@ -296,3 +296,18 @@ User requested Admin → Menu top pencil. Source inspected read-only in Chrome: 
 - Tests: DealerProfileTest (4 validation/hours cases); DealerProfilePersistenceTest (2 isolated Android JSON/storage cases, no UI or user data). Check final validation result below; do not infer that UI was exercised from a successful build.
 
 2026-10-28 final validation: assembleDebug + assembleDebugAndroidTest + 86 unit tests passed (0 failures/errors); Samsung SM_S916N app/test install-r succeeded. DealerProfilePersistenceTest OK (2 isolated device tests), no prototype UI navigation or user data edits. Visual/UI checks remain with the user.
+
+
+## 16. Ikki tabli Admin profil — 2026-10-28
+
+Latest user override replaces the single legal editor entry in §15. Admin Menu entire top profile row (including pencil) → screens/AdminProfileScreen.kt. Header «Профиль»; «Физические лица» (personal, default) / «Юридические лица» (dealer). White segmented indicator follows live HorizontalPager offset, 280ms click animation, no ripple/hover. Tabs remain pinned above each independently scrolling form.
+
+- screens/AdminPersonalProfileScreen.kt: self name, phone, optional birth date (native date picker), gender, country/region/district. Role and associated company are read-only. No password, blocked/access/permission flags or other users. Chrome /clients Edit user was inspected read-only for labels; no web user record was changed or private source values copied into defaults.
+- screens/DealerProfileScreen.kt now renders the EXISTING legal form inside the host; fields, images, work hours and map remain. Shared option lists moved to data/DealerProfileOptions.kt. Original DealerProfile key/JSON are retained.
+- Both immutable drafts/Savers, pager and two LazyListStates are hoisted in AdminProfileScreen. Switching tabs/map and rotation keep drafts/scroll. Back before Save cancels both. One Save validates BOTH forms, moves to the invalid tab if needed, then commits both JSON values using ONE SharedPreferences.Editor commit. No half-saved tab on validation failure.
+- DealerProfilePreferences still uses administrator_dealer_profile/profile for legal; NEW administrator key in the same namespace for model/AdminPersonalProfile. saveProfiles commits both atomically. Legacy save(dealer) preserves the personal key. Older legal-only data gets existing Menu name/phone defaults; no reset or migration required. Agent/visit/store/accounting prefs remain separate.
+- Successful save refreshes name/phone in the Admin Menu immediately (displayAdminPhone preserves the familiar formatting) and closes the editor. Agent menu/profile is unchanged. Admin role/authorization remains the prototype role selection, not real authentication.
+- AdminPersonalProfile validates full name, international phone, optional ISO birthday (real calendar, 1900..today, Tashkent date), gender and region. Phone keyboard and normalized storage; no SMS or calls. DealerProfileField adds an optional phone keyboard mode without changing other callers.
+- DealerApp/MenuScreen callers, ui/components/AdminProfileTabs, model/AdminPersonalProfile, data/AdminPersonalProfileJson and new forms comprise this scoped change. Tests add 3 personal validation cases and 2 native atomic-save/backward-compatibility cases in DealerProfilePersistenceTest (now4). UI remains for user testing.
+
+2026-10-28 two-tab validation: debug/app-test builds and 89 unit tests passed (0 failures/errors). Samsung SM_S916N app/test install-r Success; DealerProfilePersistenceTest OK (4 tests, isolated preferences only). No real prototype UI/profile was edited during these tests; visual checks remain with the user.

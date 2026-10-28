@@ -180,3 +180,11 @@ Bu yangi camera UI sinovlari hali avtomatik bajarilmagan; real kamera shutterini
 - INN9/PINFL14 digits, blank optional; missing name/address and equal working hours rejected; overnight allowed. Apply-to-all keeps closed days closed.
 - Logo/photo/UzQR choose/replace ≤5MB, gallery cancellation leaves prior image. Visit Add photo stays camera-only.
 - Map select applies to draft; map Back cancels; final form Back cancels all. No store location, route, debt, visit or Agent state changes.
+
+
+## Admin personal/legal tabs
+
+- Menu avatar/name/phone/pencil each open same Profile screen; first personal, second dealer. Live white indicator on tap/swipe, no colored hover; both lists retain own scroll.
+- Edit both tabs, switch/map/rotate, Save persists both and Menu name/phone updates. Back without Save cancels both drafts.
+- Invalid personal phone/date/name or legal field prevents BOTH writes and brings its tab forward. Existing legal-only profiles load intact; old dealer-only save does not erase administrator data.
+- Role/company readonly, no self access/password editing; Agent/visits/debts/maps/store prefs unchanged.

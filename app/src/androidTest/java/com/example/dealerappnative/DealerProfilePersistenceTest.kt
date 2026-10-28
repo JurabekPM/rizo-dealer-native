@@ -50,6 +50,34 @@ class DealerProfilePersistenceTest {
         assertEquals("", older.photoUri)
     }
 
+    @Test fun jointSaveIsAtomicAndExistingLegalSavePreservesPersonalData() = runBlocking {
+        val store = DealerProfilePreferences(context)
+        val oldCompany = DealerProfile(name = "Existing company", currency = "USD", photoUri = "content://test/old-photo")
+        assertTrue(store.save(oldCompany))
+        assertEquals(AdminPersonalProfile(), store.readAdministrator())
+        val person = AdminPersonalProfile(name = "  Test Admin  ", phone = "+998 (90) 123-45-67", birthDate = "1997-04-12", gender = "Женский")
+        val company = oldCompany.copy(name = "New company")
+        assertTrue(store.saveProfiles(company, person))
+        val savedPerson = person.copy(name = "Test Admin", phone = "+998901234567")
+        assertEquals(company, DealerProfilePreferences(context).read())
+        assertEquals(savedPerson, DealerProfilePreferences(context).readAdministrator())
+        assertFalse(store.saveProfiles(company.copy(name = "Should not save"), person.copy(phone = "bad")))
+        assertEquals(company, store.read())
+        assertEquals(savedPerson, store.readAdministrator())
+        assertFalse(store.saveProfiles(company.copy(name = ""), person.copy(name = "Should not save")))
+        assertEquals(savedPerson, store.readAdministrator())
+        assertTrue(store.save(company.copy(tariff = "Premium")))
+        assertEquals(savedPerson, store.readAdministrator())
+    }
+
+    @Test fun personalJsonHasIndependentDefaultsAndRetainsAllSelfEditableFields() {
+        assertEquals(AdminPersonalProfile(), decodeAdminPersonalProfile(null))
+        assertEquals(AdminPersonalProfile(), decodeAdminPersonalProfile("broken-json"))
+        val person = AdminPersonalProfile(name = "Test Person", phone = "+79991234567", country = "Россия", region = "Test region",
+            district = "Test district", gender = "Мужской", birthDate = "1995-10-20")
+        assertEquals(person, decodeAdminPersonalProfile(encodeAdminPersonalProfile(person)))
+    }
+
     private class ProfileTestContext(base: Context) : ContextWrapper(base) {
         private val prefix = "dealer_profile_test_${UUID.randomUUID()}_"
         private val owned = mutableSetOf<String>()
