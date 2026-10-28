@@ -195,3 +195,10 @@ Bu yangi camera UI sinovlari hali avtomatik bajarilmagan; real kamera shutterini
 - Physical tab lists10 people/all source roles, current admin marked Вы; search by name/phone/role, lazy scroll retained after edit.
 - Add → independent UUID, Save persists; Back cancels. Edit one name/phone/role leaves all other records intact. Duplicate phone rejected. Current admin role readonly.
 - Only current-admin name/phone change Menu identity. Legal draft survives opening an employee; staff Save never saves it. Legal Save never replaces people. Legacy legal/self data migrate without reset; Agent untouched.
+
+
+## Profile view/edit gates
+
+- Open existing person: text details, top pencil, no editable fields/Save. Pencil enables form; Back cancels into saved details; Save updates details; next Back restores directory search/scroll. New creation directly editable, cancel creates nothing.
+- Legal tab opens text/hours/images readonly; top pencil enables form. No upload/time/map editing before pencil. Back cancels, Save returns to saved view; map select affects draft only.
+- Person/directory data isolation, role constraints, previous persisted profiles, all Agent/visit flows unchanged. Profile-local weights/neutral roles/inset cards do not alter other screens.

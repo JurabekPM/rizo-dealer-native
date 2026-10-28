@@ -22,7 +22,7 @@ import com.example.dealerappnative.data.dealerRegions
 import com.example.dealerappnative.data.dealerKokandDistricts
 import com.example.dealerappnative.model.AdminPersonalProfile
 import com.example.dealerappnative.ui.components.*
-import com.example.dealerappnative.ui.theme.AgentVisitDesign
+import com.example.dealerappnative.ui.theme.ProfileDesign as Design
 import com.example.dealerappnative.ui.theme.DealerDesign
 import java.time.LocalDate
 import java.time.ZoneId
@@ -34,15 +34,15 @@ internal fun AdminPersonalProfileScreen(profile: AdminPersonalProfile, dealerNam
     role: String = "Администратор", onRoleChange: ((String) -> Unit)? = null) {
     val context = LocalContext.current
     val today = LocalDate.now(ZoneId.of("Asia/Tashkent"))
-    LazyColumn(Modifier.fillMaxSize(), state = listState, contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    LazyColumn(Modifier.fillMaxSize(), state = listState, contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item(key = "personal") { DealerProfileSection("Личные данные") {
             DealerProfileField("ФИО", profile.name, { onChange(profile.copy(name = it.take(120))) })
             DealerProfileField("Номер телефона", profile.phone, {
                 onChange(profile.copy(phone = it.filter { c -> c in '0'..'9' || c in "+ ()-" }.take(32)))
             }, phone = true)
             Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                Text("Дата рождения", style = AgentVisitDesign.detail, color = DealerDesign.secondary)
+                Text("Дата рождения", style = Design.label, color = DealerDesign.secondary)
                 Row(Modifier.fillMaxWidth().heightIn(min = 48.dp).clip(RoundedCornerShape(12.dp)).background(DealerDesign.background)
                     .softCardPress {
                         val date = runCatching { LocalDate.parse(profile.birthDate) }.getOrDefault(today.minusYears(25))
@@ -54,7 +54,7 @@ internal fun AdminPersonalProfileScreen(profile: AdminPersonalProfile, dealerNam
                     }.padding(horizontal = 12.dp).semantics { contentDescription = "Выбрать дату рождения" },
                     verticalAlignment = Alignment.CenterVertically) {
                     Text(runCatching { LocalDate.parse(profile.birthDate).format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) }.getOrDefault("Не указана"),
-                        style = AgentVisitDesign.name, modifier = Modifier.weight(1f))
+                        style = Design.value, modifier = Modifier.weight(1f))
                     DealerIcon(R.drawable.ic_agent_schedule, size = 22.dp)
                 }
             }
@@ -81,7 +81,7 @@ internal fun AdminPersonalProfileScreen(profile: AdminPersonalProfile, dealerNam
 @Composable
 private fun AdminAccountInfo(label: String, value: String) {
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        Text(label, style = AgentVisitDesign.detail, color = DealerDesign.secondary)
-        Text(value, style = AgentVisitDesign.name, maxLines = 2, overflow = TextOverflow.Ellipsis)
+        Text(label, style = Design.label, color = DealerDesign.secondary)
+        Text(value, style = Design.value, maxLines = 2, overflow = TextOverflow.Ellipsis)
     }
 }

@@ -255,3 +255,8 @@ MenuScreen whole header/pencil → DealerApp → screens/AdminProfileScreen.kt (
 ## Multi-person directory
 
 AdminProfileScreen → AdminPeopleScreen → AdminPersonEditScreen → shared AdminPersonalProfileScreen. model/DealerPerson.kt; data/DealerPeopleData.kt; DealerProfilePreferences.readPeople/savePeople (people + self snapshot). DealerPeopleTest + DealerProfilePersistenceTest directory cases. Handoff §17 is current.
+
+
+## Profile readonly/details design
+
+AdminPersonEditScreen gates AdminPersonDetailsScreen vs AdminPersonalProfileScreen. AdminProfileScreen gates DealerProfileDetailsScreen vs DealerProfileScreen; savedDealer + edit draft separate. ProfileDetailsComponents.kt and ProfileDesign.kt are local style/header/avatar/read-only UI. Handoff §18.

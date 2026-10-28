@@ -20,7 +20,7 @@ import com.example.dealerappnative.R
 import com.example.dealerappnative.data.dealerProfileThumbnail
 import com.example.dealerappnative.data.retainDealerProfileImage
 import com.example.dealerappnative.model.DealerProfile
-import com.example.dealerappnative.ui.theme.AgentVisitDesign
+import com.example.dealerappnative.ui.theme.ProfileDesign as Design
 import com.example.dealerappnative.ui.theme.DealerDesign
 import kotlinx.coroutines.launch
 
@@ -66,11 +66,11 @@ internal fun DealerProfileMedia(profile: DealerProfile, onChange: (DealerProfile
             DealerProfileImage("Логотип", profile.logoUri, "48 × 48", Modifier.weight(1f), !busy) { select(0) }
             DealerProfileImage("Фото", profile.photoUri, "343 × 148", Modifier.weight(2f), !busy) { select(1) }
         }
-        Text("Изображения до 5 МБ", style = AgentVisitDesign.detail, color = DealerDesign.secondary)
+        Text("Изображения до 5 МБ", style = Design.label, color = DealerDesign.secondary)
         androidx.compose.material3.HorizontalDivider(color = DealerDesign.divider)
         DealerProfileImage("UzQR магазина", profile.qrUri, "Статический QR-код банка магазина", Modifier.fillMaxWidth(), !busy) { select(2) }
-        error?.let { Text(it, style = AgentVisitDesign.detail, color = androidx.compose.ui.graphics.Color(0xFFE45555)) }
-        if (busy) Text("Проверяем изображение…", style = AgentVisitDesign.detail, color = DealerDesign.secondary)
+        error?.let { Text(it, style = Design.label, color = androidx.compose.ui.graphics.Color(0xFFE45555)) }
+        if (busy) Text("Проверяем изображение…", style = Design.label, color = DealerDesign.secondary)
     }
 }
 
@@ -79,15 +79,15 @@ private fun DealerProfileImage(label: String, uri: String, hint: String, modifie
     val context = LocalContext.current
     val bitmap by produceState<android.graphics.Bitmap?>(null, uri) { value = dealerProfileThumbnail(context, uri) }
     Column(modifier, verticalArrangement = Arrangement.spacedBy(6.dp)) {
-        Text(label, style = AgentVisitDesign.detail, color = DealerDesign.secondary)
+        Text(label, style = Design.label, color = DealerDesign.secondary)
         Box(Modifier.fillMaxWidth().height(88.dp).clip(RoundedCornerShape(12.dp)).background(DealerDesign.background)
             .softCardPress(enabled = enabled, onClick = onClick), contentAlignment = Alignment.Center) {
             if (bitmap != null) Image(bitmap!!.asImageBitmap(), label, Modifier.fillMaxSize().padding(4.dp), contentScale = ContentScale.Fit)
             else Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 DealerIcon(R.drawable.ic_request_add, DealerDesign.accent, 24.dp)
-                Text(if (uri.isBlank()) "Загрузить" else "Выбрать заново", style = AgentVisitDesign.detail, color = DealerDesign.accent)
+                Text(if (uri.isBlank()) "Загрузить" else "Выбрать заново", style = Design.label, color = DealerDesign.accent)
             }
         }
-        Text(hint, style = AgentVisitDesign.detail, color = DealerDesign.secondary)
+        Text(hint, style = Design.label, color = DealerDesign.secondary)
     }
 }

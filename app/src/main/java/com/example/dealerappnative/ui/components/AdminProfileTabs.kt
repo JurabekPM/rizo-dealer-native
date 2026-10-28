@@ -22,6 +22,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.example.dealerappnative.ui.theme.DealerDesign
+import com.example.dealerappnative.ui.theme.ProfileDesign
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -29,7 +30,7 @@ import kotlin.math.roundToInt
 @Composable
 internal fun AdminProfileTabs(pagerState: PagerState, enabled: Boolean) {
     val scope = rememberCoroutineScope()
-    BoxWithConstraints(Modifier.fillMaxWidth().height(44.dp).clip(RoundedCornerShape(12.dp))
+    BoxWithConstraints(Modifier.fillMaxWidth().height(42.dp).clip(RoundedCornerShape(12.dp))
         .background(DealerDesign.background).padding(4.dp)) {
         val width = maxWidth / 2
         Box(Modifier.offset {
@@ -41,7 +42,7 @@ internal fun AdminProfileTabs(pagerState: PagerState, enabled: Boolean) {
                     enabled = enabled, role = Role.Tab, interactionSource = remember { MutableInteractionSource() }, indication = null,
                     onClick = { scope.launch { pagerState.animateScrollToPage(index, animationSpec = tween(280, easing = FastOutSlowInEasing)) } }),
                     contentAlignment = Alignment.Center) {
-                    Text(title, style = DealerDesign.tab, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                    Text(title, style = ProfileDesign.body, maxLines = 1, overflow = TextOverflow.Ellipsis,
                         color = if (pagerState.currentPage == index) DealerDesign.text else DealerDesign.secondary)
                 }
             }

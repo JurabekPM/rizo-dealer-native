@@ -112,3 +112,8 @@ Menyu yuqori profil qatori va qalamchasi → AdminProfileScreen: Физичес�
 ## Latest 2026-10-28: Fizicheskie litsa is a PEOPLE DIRECTORY
 
 Handoff §17 overrides §16 direct-self-tab/global Save. Personal tab:10 fictional staff/all10 source roles, search/add/card edit. Each person Save persists its own directory change and returns; legal has separate Save and unsaved draft remains. people JSON added in administrator_dealer_profile, legacy administrator snapshot kept in sync for current-administrator only. Editing others never changes Menu identity. No auth/permission/backend changes.
+
+
+## 2026-10-28 profile latest: view before edit
+
+Handoff §18. Both existing person and legal entity open readonly details. Pencil alone mounts fields; Save returns to updated details; Back while editing cancels into view; Back from view returns to directory. New-person creation directly opens form. Compact neutral ProfileDesign is profile-local; directory Add now top beside count, no big bottom button. Saved IDs/JSON/roles/Agent flows unchanged.

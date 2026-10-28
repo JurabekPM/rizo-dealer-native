@@ -14,7 +14,7 @@ import com.example.dealerappnative.R
 import com.example.dealerappnative.data.*
 import com.example.dealerappnative.model.DealerProfile
 import com.example.dealerappnative.ui.components.*
-import com.example.dealerappnative.ui.theme.AgentVisitDesign
+import com.example.dealerappnative.ui.theme.ProfileDesign as Design
 import com.example.dealerappnative.ui.theme.DealerDesign
 
 /** Legal-entity form inside AdminProfileScreen; state/save/navigation belong to the host. */
@@ -22,7 +22,7 @@ import com.example.dealerappnative.ui.theme.DealerDesign
 internal fun DealerProfileScreen(profile: DealerProfile, listState: LazyListState, onChange: (DealerProfile) -> Unit,
     onOpenMap: () -> Unit, onImageBusyChange: (Boolean) -> Unit) {
     fun update(value: DealerProfile) = onChange(value)
-    LazyColumn(Modifier.fillMaxSize(), state = listState, contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    LazyColumn(Modifier.fillMaxSize(), state = listState, contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item(key = "company") { DealerProfileSection("Юридическое лицо") {
             DealerProfileField("ИНН / ПИНФЛ", profile.taxId, { update(profile.copy(taxId = it.filter { c -> c in '0'..'9' }.take(14))) }, numeric = true)
             DealerProfileField("Наименование юридического лица", profile.name, { update(profile.copy(name = it.take(120))) })
@@ -46,7 +46,7 @@ internal fun DealerProfileScreen(profile: DealerProfile, listState: LazyListStat
             Row(Modifier.fillMaxWidth().heightIn(min = 48.dp).softCardPress { onOpenMap() }, verticalAlignment = Alignment.CenterVertically) {
                 DealerIcon(R.drawable.ic_pin, DealerDesign.accent)
                 Spacer(Modifier.width(8.dp))
-                Text("Выбрать на карте", style = AgentVisitDesign.name, color = DealerDesign.accent, modifier = Modifier.weight(1f))
+                Text("Выбрать на карте", style = Design.value, color = DealerDesign.accent, modifier = Modifier.weight(1f))
                 DealerIcon(R.drawable.ic_chevron, DealerDesign.secondary, 20.dp)
             }
         } }
@@ -54,7 +54,7 @@ internal fun DealerProfileScreen(profile: DealerProfile, listState: LazyListStat
         item(key = "hours") { DealerProfileWorkingHours(profile, ::update) }
         item(key = "price-visibility") { DealerProfileSection("Отображение цены") {
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                Text("Цена доступна", style = AgentVisitDesign.name, modifier = Modifier.weight(1f))
+                Text("Цена доступна", style = Design.value, modifier = Modifier.weight(1f))
                 Switch(profile.pricesVisible, { update(profile.copy(pricesVisible = it)) },
                     colors = SwitchDefaults.colors(checkedTrackColor = DealerDesign.accent))
             }
