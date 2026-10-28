@@ -171,3 +171,12 @@ Bu yangi camera UI sinovlari hali avtomatik bajarilmagan; real kamera shutterini
 - [ ] Boshlanmaganlar Новый, Не посещено yo‘q; boshlangani Активный, finished/attempt statuslari o‘z holida.
 - [ ] Unplanned picker barcha active physical storelarni bloklasin; boshqa do‘konlar ishlasin. Finished ID qayta boshlanmasin.
 - [ ] Добавить фото bevosita kamera, galereya/source sheet yo‘q; eski foto ko‘rinsin, cancel/6-limit saqlansin.
+
+
+## Admin diler tahriri
+
+- Admin → Menu top pencil opens profile; bottom bar hidden, Back restores Menu scroll. Agent unchanged.
+- Edit/save/reopen retains company/options/address/map point/images/weekdays/price toggle; Back without Save does not change stored profile. Rotation preserves draft.
+- INN9/PINFL14 digits, blank optional; missing name/address and equal working hours rejected; overnight allowed. Apply-to-all keeps closed days closed.
+- Logo/photo/UzQR choose/replace ≤5MB, gallery cancellation leaves prior image. Visit Add photo stays camera-only.
+- Map select applies to draft; map Back cancels; final form Back cancels all. No store location, route, debt, visit or Agent state changes.

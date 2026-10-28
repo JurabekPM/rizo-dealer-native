@@ -240,3 +240,8 @@ Umumiy picker UI: model/PickerProduct.kt — readonly ko‘rinish contracti; ui/
 - data/AgentVisitSessions.kt: activeVisitIds/activeStoreIds, per-store independent start/finish, same-store duplicate guard.
 - screens/AgentUnplannedVisitsScreen.kt: Set<String> physical active stores; singular business activeStoreIddan foydalanmang.
 - VisitStatusTest/UnplannedVisitTest va androidTest/AgentParallelVisitsTest: lifecycle labels, new parallel rule, actual isolated persistence.
+
+
+## Admin diler tahriri — 2026-10-28
+
+MenuScreen top pencil → DealerApp → screens/DealerProfileScreen.kt. model/DealerProfile.kt; data/DealerProfilePreferences.kt (administrator_dealer_profile/profile); DealerProfileImages.kt; ui/components/DealerProfileFields.kt, DealerProfileMedia.kt, DealerProfileWorkingHours.kt; screens/DealerProfileLocationScreen.kt. DealerProfileTest + androidTest/DealerProfilePersistenceTest. Separate local profile draft; no Agent/visit/store accounting changes. Handoff §15.

@@ -279,3 +279,20 @@ Validation: assembleDebug, assembleDebugAndroidTest,79 unit test (0 failures). S
 - VisitPhotoAdder gallery launcher/source sheetni olib tashladi. Добавить фото darhol TakePicture. Mavjud rasmlar/session JSON/FileProvider/capture-cancel qoidalari o‘zgarmagan. Real kamera shutteri test uchun ishlatilmadi.
 
 Validation: assembleDebug/assembleDebugAndroidTest,82 unit test PASS. Samsungda5 native test PASS (AgentParallelVisitsTest2 +VisitCameraPhotosTest3). Parallel testlar UUID prefixli o‘z SharedPreferencesi bilan actual AgentVisitSessionsni ishlatadi: A/B/unplanned-C birga start; B finish; A/C active; notes/photos/amount/start restore; same-store duplicate rad, boshqa store ruxsat. Test faqat o‘z pref namespaceini tozalaydi, user ma’lumotlariga tegmaydi. APK install-r bilan yangilangan. Oldindan dirty PendingAgentVisitSampleData.kt va VisitSampleConsistencyTest.kt tegilmagan.
+
+
+## 15. Admin diler ma’lumotlarini tahrirlash — 2026-10-28
+
+User requested Admin → Menu top pencil. Source inspected read-only in Chrome: https://rizopost-staging.up.railway.app/legal → Edit legal entity. New native mobile adaptation, not a claim of a mobile Figma export.
+
+- DealerApp opens screens/DealerProfileScreen.kt, hides bottom navigation and keeps Menu scroll on return. The person name/phone in Menu and Agent profile are unchanged.
+- Company/INN or PINFL, interaction, activity, currency, tariff → country/region/district/address and separate map picker → logo/photo/UzQR → seven-day working hours → price visibility. Typography follows DealerDesign/AgentVisitDesign, original icons and softCardPress only on actions.
+- model/DealerProfile.kt owns immutable draft/validation and working hours. Empty tax ID is allowed; a provided ID must be ASCII9/14 digits. Overnight hours are allowed, equal times rejected. Copy-to-all copies the first enabled day’s times, preserving closed days.
+- data/DealerProfilePreferences.kt stores one profile JSON in NEW administrator_dealer_profile/profile. Currency/tariff/price visibility here are profile metadata, not global accounting/subscription changes. Save alone persists; Back cancels. Saver restores the draft through rotation; list state is hoisted across map entry. Invalid data cannot replace the saved record.
+- INN is manual entry in this offline prototype: no tax-registry lookup or writes to the Chrome service. Non-Uzbekistan regions and districts without a local option list are editable text. Prototype defaults are fictional coordinates/address, not copied private account details.
+- DealerProfileMedia + DealerProfileImages use OpenDocument for THESE business images, validate image/5MB and retain read access, bounded thumbnail decode on IO. Nothing is uploaded. This does not restore the removed gallery option for VISIT photos, which remain camera-only.
+- DealerProfileLocationScreen reuses StoreMapView/marker, changes only this profile’s draft coordinates/address. No OSRM/GPS, route/account-store edits or store-location preference writes. Existing Android geocoder handles a moved point; address is also editable. Back cancels point selection; select applies only to draft, Save persists the profile.
+- New files: model/DealerProfile.kt; data/DealerProfilePreferences.kt, DealerProfileImages.kt; screens/DealerProfileScreen.kt, DealerProfileLocationScreen.kt; ui/components/DealerProfileFields.kt, DealerProfileMedia.kt, DealerProfileWorkingHours.kt. Small caller edits only in MenuScreen/DealerApp.
+- Tests: DealerProfileTest (4 validation/hours cases); DealerProfilePersistenceTest (2 isolated Android JSON/storage cases, no UI or user data). Check final validation result below; do not infer that UI was exercised from a successful build.
+
+2026-10-28 final validation: assembleDebug + assembleDebugAndroidTest + 86 unit tests passed (0 failures/errors); Samsung SM_S916N app/test install-r succeeded. DealerProfilePersistenceTest OK (2 isolated device tests), no prototype UI navigation or user data edits. Visual/UI checks remain with the user.

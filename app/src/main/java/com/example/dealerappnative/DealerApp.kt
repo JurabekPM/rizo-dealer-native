@@ -41,6 +41,7 @@ import com.example.dealerappnative.screens.CollectionsScreen
 import com.example.dealerappnative.screens.DeliveriesScreen
 import com.example.dealerappnative.screens.AdminRevisionsScreen
 import com.example.dealerappnative.screens.AdminReturnsScreen
+import com.example.dealerappnative.screens.DealerProfileScreen
 import com.example.dealerappnative.screens.MenuScreen
 import com.example.dealerappnative.screens.RequestsScreen
 import com.example.dealerappnative.screens.AdminVisitsFlowScreen
@@ -55,6 +56,7 @@ import com.example.dealerappnative.ui.theme.DealerPrototypeTheme
 internal fun DealerApp(initialTab: Int = 0) {
     var selectedIndex by rememberSaveable { mutableIntStateOf(initialTab) }
     val destination = DealerDestination.entries[selectedIndex]
+    var dealerProfileVisible by rememberSaveable { mutableStateOf(false) }
     var revisionsVisible by rememberSaveable { mutableStateOf(false) }
     var returnsVisible by rememberSaveable { mutableStateOf(false) }
     var routesVisible by rememberSaveable { mutableStateOf(false) }
@@ -109,11 +111,12 @@ internal fun DealerApp(initialTab: Int = 0) {
         val id = selectedMagazineId
         if (mapVisible && id != null && routes[id] == null && routeLoading[id] != true) refreshRoute(id)
     }
-    val childScreenVisible = revisionsVisible || returnsVisible || routesVisible || openedStore != null || storesVisible || openedMagazine != null
+    val childScreenVisible = dealerProfileVisible || revisionsVisible || returnsVisible || routesVisible || openedStore != null || storesVisible || openedMagazine != null
     val storesScreenState = rememberSaveableStateHolder()
     val mainScreenState = rememberSaveableStateHolder()
     val closeChildScreen: () -> Unit = {
         when {
+            dealerProfileVisible -> dealerProfileVisible = false
             returnsVisible -> returnsVisible = false
             revisionsVisible -> revisionsVisible = false
             mapVisible -> mapVisible = false
@@ -147,7 +150,9 @@ internal fun DealerApp(initialTab: Int = 0) {
             }
         ) { contentPadding ->
             Box(Modifier.fillMaxSize().padding(contentPadding)) {
-                if (revisionsVisible) {
+                if (dealerProfileVisible) {
+                    DealerProfileScreen(onBack = closeChildScreen)
+                } else if (revisionsVisible) {
                     AdminRevisionsScreen(onBack = closeChildScreen)
                 } else if (returnsVisible) {
                     AdminReturnsScreen(onBack = closeChildScreen)
@@ -189,7 +194,7 @@ internal fun DealerApp(initialTab: Int = 0) {
                             DealerDestination.Requests -> RequestsScreen()
                             DealerDestination.Deliveries -> DeliveriesScreen()
                             DealerDestination.Collections -> CollectionsScreen()
-                            DealerDestination.Menu -> MenuScreen(onStoresClick = { storesVisible = true }, onReturnsClick = { returnsVisible = true }, onRevisionsClick = { revisionsVisible = true })
+                            DealerDestination.Menu -> MenuScreen(onStoresClick = { storesVisible = true }, onReturnsClick = { returnsVisible = true }, onRevisionsClick = { revisionsVisible = true }, onEditDealerClick = { dealerProfileVisible = true })
                         }
                     }
                 }

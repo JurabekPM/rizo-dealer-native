@@ -97,3 +97,8 @@ Faol vizitdagi Добавить фото to‘g‘ridan-to‘g‘ri kamerani och
 ## 2026-10-27: parallel vizitlar va yangi statuslar
 
 Foydalanuvchi global bitta-active cheklovini bekor qildi. Turli do‘konlardagi bir nechta session active bo‘lishi va alohida yakunlanishi mumkin; vaqt/izoh/rasm/result shu visit IDda. Bir physical storega ikki active session yo‘q; finished ID qayta boshlanmaydi. activeVisitIds/activeStoreIds to‘plamlar, singular activeStoreId biznes qoidasi yo‘q. UI: Новый (gray), Активный (blue), Завершено/Попытка saqlangan. NotVisited enum nomi eski fixture/caller mosligi uchun saqlangan, UI Не посещено ko‘rsatmaydi. VisitPhotoAdderda galereya kodi yo‘q, Add to‘g‘ridan-to‘g‘ri kamera; eski photos o‘chirilmaydi.82 unit+5 native (2 isolated parallel-store/session +3 camera storage) o‘tdi. Handoff §14.
+
+
+## 2026-10-28: Admin profil qalamchasi
+
+Admin Menu tepasidagi qalamcha DealerProfileScreenni ochadi (Chrome legal entity form mobile adaptation). Handoff §15. Yangi administrator_dealer_profile namespace; Savegacha draft, Back cancel. INN qo‘lda, backend lookup yo‘q. Company valyuta/tarif/price metadata hisob-kitobni o‘zgartirmaydi. Logo/photo/UzQR OpenDocument5MB; VISIT kamera-only qoidasi o‘zgarmagan. Map faqat profile drafti, OSRM/GPS/store prefsga tegmaydi. Haqiqiy UI sinovi foydalanuvchida.
