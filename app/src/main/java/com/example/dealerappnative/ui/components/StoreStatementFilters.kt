@@ -31,12 +31,13 @@ internal fun statementPeriodLabel(from: Long?, to: Long?): String = if (from == 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun StoreStatementFilters(initial: StatementFilter, currencies: List<String>, onDismiss: () -> Unit, onApply: (StatementFilter) -> Unit) {
-    var type by rememberSaveable { mutableStateOf(initial.type) }
+    var typeNames by rememberSaveable { mutableStateOf(initial.types.map { it.name }) }
     var currency by rememberSaveable { mutableStateOf(initial.currency) }
     var from by rememberSaveable { mutableStateOf(initial.from) }
     var to by rememberSaveable { mutableStateOf(initial.to) }
     var dates by rememberSaveable { mutableStateOf(false) }
-    val draft = StatementFilter(type, currency, from, to)
+    val types = StatementType.entries.filter { it != StatementType.All && it.name in typeNames }.toSet()
+    val draft = StatementFilter(types, currency, from, to)
     val today = StatisticsDates.today()
     val monthStart = StatisticsDates.range(StatisticsPeriod.Month, today, StatisticsDateRange(today, today)).start
     val thisMonth = from == monthStart && to == today
@@ -49,7 +50,7 @@ internal fun StoreStatementFilters(initial: StatementFilter, currencies: List<St
         Column(Modifier.fillMaxWidth().heightIn(max = maxHeight)) {
             Row(Modifier.fillMaxWidth().padding(start = 16.dp, end = 8.dp), verticalAlignment = Alignment.CenterVertically) {
                 Text("Фильтры", style = Design.title, color = Design.text, modifier = Modifier.weight(1f))
-                SoftTextButton(enabled = draft.active, onClick = { type = StatementType.All; currency = null; from = null; to = null }) {
+                SoftTextButton(enabled = draft.active, onClick = { typeNames = emptyList(); currency = null; from = null; to = null }) {
                     Text("Сбросить", style = Design.choice, color = if (draft.active) DealerDesign.accent else Design.secondary)
                 }
             }
@@ -59,7 +60,7 @@ internal fun StoreStatementFilters(initial: StatementFilter, currencies: List<St
                     Text("Тип операции", style = Design.name, color = Design.text)
                     StatementType.entries.toList().chunked(2).forEach { pair ->
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            pair.forEach { item -> StatementChoice(item.label, type == item, Modifier.weight(1f)) { type = item } }
+                            pair.forEach { item -> StatementChoice(item.label, if (item == StatementType.All) types.isEmpty() else item in types, Modifier.weight(1f)) { typeNames = draft.toggleType(item).types.map { it.name } } }
                         }
                     }
                 }
@@ -67,14 +68,14 @@ internal fun StoreStatementFilters(initial: StatementFilter, currencies: List<St
                     Text("Валюта", style = Design.name, color = Design.text)
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         StatementChoice("Все", currency == null, Modifier.weight(1f)) { currency = null }
-                        currencies.forEach { item -> StatementChoice(item, currency == item, Modifier.weight(1f)) { currency = item } }
+                        currencies.forEach { item -> StatementChoice(item, currency == item, Modifier.weight(1f)) { currency = if (currency == item) null else item } }
                     }
                 }
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text("Период", style = Design.name, color = Design.text)
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         StatementChoice("Весь период", from == null, Modifier.weight(1f)) { from = null; to = null }
-                        StatementChoice("Этот месяц", thisMonth, Modifier.weight(1f)) { from = monthStart; to = today }
+                        StatementChoice("Этот месяц", thisMonth, Modifier.weight(1f)) { from = if (thisMonth) null else monthStart; to = if (thisMonth) null else today }
                     }
                     Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(Design.surface)
                         .softCardPress { dates = true }.heightIn(min = 48.dp).padding(12.dp), verticalAlignment = Alignment.CenterVertically) {

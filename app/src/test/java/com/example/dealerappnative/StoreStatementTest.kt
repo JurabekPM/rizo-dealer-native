@@ -57,4 +57,28 @@ class StoreStatementTest {
         assertEquals(setOf(StatementKind.Order, StatementKind.Return, StatementKind.Payment), entries.map { it.kind }.toSet())
         assertTrue(entries.map { it.id }.intersect(storeStatementSamples(store.copy(id = "b"), now).map { it.id }.toSet()).isEmpty())
     }
+    @Test fun independentTypeTogglesUseUnionAndPreserveDateCurrencyConstraints() {
+        val day = StatisticsDates.day(2026, 10, 27)
+        val base = StatementFilter(currency = "USD", from = day, to = day)
+        val selected = base.toggleType(StatementType.Payments).toggleType(StatementType.Returns)
+        assertTrue(selected.matches(entry("pay")))
+        assertTrue(selected.matches(entry("returned", kind = StatementKind.Return)))
+        assertFalse(selected.matches(entry("order", kind = StatementKind.Order)))
+        assertFalse(selected.matches(entry("other-currency", currency = "UZS")))
+        assertEquals(base, selected.toggleType(StatementType.Payments).toggleType(StatementType.Returns))
+        assertEquals(base, selected.toggleType(StatementType.All))
+        assertTrue(base.matches(entry("all-orders", kind = StatementKind.Order)))
+    }
+
+    @Test fun switchingTypesDoesNotChangePeriodAndDateCanBeClearedSeparately() {
+        val day = StatisticsDates.day(2026, 10, 28)
+        val selected = StatementFilter(StatementType.Payments, "USD", day, day).toggleType(StatementType.Orders)
+        assertEquals(setOf(StatementType.Payments, StatementType.Orders), selected.types)
+        val undated = selected.copy(from = null, to = null)
+        assertEquals(selected.types, undated.types)
+        assertEquals("USD", undated.currency)
+        assertTrue(undated.matches(entry("older")))
+        assertFalse(selected.matches(entry("older")))
+    }
+
 }

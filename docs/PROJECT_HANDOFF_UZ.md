@@ -389,3 +389,16 @@ StatementOverview model groups rows into local Tashkent months, including year b
 Monthly white sections have lazily composed individual transaction rows, stable document keys and inset dividers; no entire-month eager Column. Expanded document/client/status/date/lines/comment remain, with full timestamp. Compact row dates omit the repeated year shown in the month header. Reader, physical store links, persistence and other screens unchanged. New StatementOverviewTest covers totals/currency/request exclusion, Tashkent month/year boundaries and empty/filtered data. UI remains for user testing.
 
 2026-10-28 monthly statement validation: assembleDebug and99 unit tests passed (0 failures/errors), including3 new activity/month boundary cases. Installed with install-r on Samsung SM_S916N. No automatic prototype UI navigation or device FPS/gesture claims; visual interaction checking remains with the user.
+
+
+## 24. Statement pinned identity + exact Market chips — 2026-10-28 (overrides §23 collapse behavior)
+
+User explicitly changed the scroll requirement: StoreStatementAppBar now shows the store icon/name/address, and it AND quick filters remain pinned. Removed TopAppBarState/nestedScroll/enterAlways entirely from this screen. No duplicated identity or За весь период caption below. Only activity tiles/history are inside the lazy list, so tiles appear at the top. Separate large history-count bar removed; compact Всего N lives in the first month heading. Local name14/20 Semibold, amounts15/20 Semibold, captions12/16 Medium.
+
+Inspected supplied Rizo Market Figma directly: Client/Menu -> Debt/Frame/Tab Bar/Category. Fixed32px optical height,12px horizontal padding,radius50,#F5F5F5; Title13/18 Semibold600,SF Pro Text,tracking−.08. Android keeps native sans-serif, purple active fill and transparent >=44dp touch area; large fonts can grow. Record in figma-reference/store-statement/market-filters.md.
+
+Quick filters Оплаты/Заказы/Возвраты are independently toggled; none selected means all. Chosen types are OR'ed; currency/date constraints remain AND. Removed redundant Все quick chip. Date chip opens picker when inactive and clears dates when active. Sheet mirrors type toggles; currency and current-month preset also toggle off on repeat. Clear-all remains a sheet reset option. StatementFilter now stores a Set of types with an internal single-type compatibility constructor; UI saves type names as a simple string list. No SharedPreferences or persisted document schema changes. Filter sheet keeps draft until Apply. Existing exact totals/month grouping/physical identity logic preserved.
+
+Two added StoreStatementTest cases verify union/repeat-off/clear-all, currency/date independence and separate date clearing. Other UI, visit lifecycle, map and accounting stores untouched. Actual UI checks remain with the user.
+
+2026-10-28 pinned statement validation: assembleDebug/assembleDebugAndroidTest and101 unit tests passed (0 failures/errors), including two multi-type toggle/date/currency cases. App installed with install-r on Samsung SM_S916N. No prototype UI navigation or actual financial writes; visual checking remains with the user.

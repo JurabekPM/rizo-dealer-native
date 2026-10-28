@@ -137,3 +137,8 @@ Handoff §22. StatementDesign is LOCAL; context card now scrolls with history. F
 ## Latest statement / Market reference adaptation
 
 Handoff §23: fixed store AppBar; native enterAlways pill filters reappear on slight reverse scroll. Overview/address/count only in list top. History grouped by Tashkent month but each row remains lazy. Exact per-currency activity totals (Order/Payment/Return), no remaining-debt inference; Request unposted. model/StatementOverview.kt + StatementOverviewTest; ui/components/StoreStatementOverview.kt, StoreStatementHeader.kt. Existing filter sheet and reader unchanged.
+
+
+## Latest statement pinning/toggles correction
+
+Handoff §24 overrides §23: store icon/name/address +32dp optical filter chips pinned, NO enterAlways/nestedScroll on statement. Tiles only at top; no duplicate identity or За весь период/count bar. Small total count in first month heading. Independent operation Set filters (OR), date/currency AND; second tap removes a type, date chip repeat clears date. Figma metrics documented in figma-reference/store-statement/market-filters.md. No persisted financial schema changes.

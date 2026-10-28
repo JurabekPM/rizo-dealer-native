@@ -274,4 +274,4 @@ StoreDetailScreen / AgentStoreDetailScreen / VisitDetailScreen / AgentVisitDetai
 
 ## Statement monthly presentation
 
-model/StatementOverview.kt → statementTotals/statementMonths (exact per-currency activity, Tashkent month). StoreStatementHeader.kt now hosts fixed AppBar + enterAlways quick-filter pills; StoreStatementOverview.kt renders large context/totals. StoreStatementScreen keeps month rows lazy. StatementOverviewTest; handoff §23.
+model/StatementOverview.kt → statementTotals/statementMonths (exact per-currency activity, Tashkent month). StoreStatementHeader.kt now hosts pinned store identity + pinned32dp optical toggle chips; StoreStatementOverview.kt renders only activity totals at list top. StoreStatementScreen keeps month rows lazy. StatementOverviewTest; latest pinning/independent toggle correction in handoff §24.

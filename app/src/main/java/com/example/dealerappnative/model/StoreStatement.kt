@@ -30,13 +30,24 @@ internal enum class StatementType(val label: String) {
     }
 }
 
-internal data class StatementFilter(val type: StatementType = StatementType.All, val currency: String? = null,
+internal data class StatementFilter(val types: Set<StatementType> = emptySet(), val currency: String? = null,
     val from: Long? = null, val to: Long? = null) {
-    init { require((from == null && to == null) || (from != null && to != null && to >= from)) }
-    val active: Boolean get() = this != StatementFilter()
+    // Retain the internal single-type construction used by existing tests/callers.
+    constructor(type: StatementType, currency: String? = null, from: Long? = null, to: Long? = null) :
+        this(if (type == StatementType.All) emptySet() else setOf(type), currency, from, to)
+    init {
+        require(StatementType.All !in types)
+        require((from == null && to == null) || (from != null && to != null && to >= from))
+    }
+    val active: Boolean get() = types.isNotEmpty() || currency != null || from != null
+    fun toggleType(type: StatementType): StatementFilter = copy(types = when {
+        type == StatementType.All -> emptySet()
+        type in types -> types - type
+        else -> types + type
+    })
     fun matches(entry: StoreStatementEntry): Boolean {
         val day = StatisticsDates.today(entry.occurredAt)
-        return type.matches(entry.kind) && (currency == null || currency == entry.currency) &&
+        return (types.isEmpty() || types.any { it.matches(entry.kind) }) && (currency == null || currency == entry.currency) &&
             (from == null || day >= from) && (to == null || day <= to)
     }
 }
