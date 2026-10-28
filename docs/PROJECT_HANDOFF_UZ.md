@@ -420,3 +420,10 @@ User swapped order/return colors: Order now BLUE#1D4ED8, Return RED#B91C1C, Paym
 Operation type chips now narrow ONLY the history list/count, not summary cards. statementOverviewTotals clears type selection before applying the existing date/currency filter, then computes exact per-currency posted totals. Selecting Payments no longer makes Orders/Returns zero. Period/currency still scope all three cards; no invented totals for a genuinely empty period. Screen memoization uses entries/currency/from/to, so type taps do not recalculate cards. List filters, independent toggles, count labels and persistence unchanged. New StatementOverviewTest case covers every type/multiple types, date/currency boundaries, unposted Request exclusion and preservation of other totals.
 
 2026-10-28 summary-scope validation: assembleDebug and102 unit tests passed (0 failures/errors). New regression covers stable summary cards under type filters with date/currency scoping. Installed with install-r on Samsung SM_S916N; no automatic prototype UI navigation or real data changes. User checks visuals.
+
+
+## 27. Statement row plus sign removed — 2026-10-28
+
+User requested removal of + only in content amounts. statementAmount retains negative debit minus and shows payment/return/request amounts without positive prefix. Underlying direction/value, blue Order/red Return/green Payment palette, summary/filter rules and other app flows unchanged. Existing money-format regression expectations updated.
+
+2026-10-28 plus-prefix validation: assembleDebug and102 unit tests passed (0 failures/errors). Installed install-r on Samsung SM_S916N. No UI navigation or persisted data changes.

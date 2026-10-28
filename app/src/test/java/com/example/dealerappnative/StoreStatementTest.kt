@@ -14,8 +14,8 @@ class StoreStatementTest {
 
     @Test fun moneyDirectionAndUnpostedRequestsStayDistinct() {
         assertEquals("− 233,05 USD", statementAmount(entry("1", kind = StatementKind.Order)))
-        assertEquals("+ 233,05 USD", statementAmount(entry("2")))
-        assertEquals("+ 233,05 USD", statementAmount(entry("3", kind = StatementKind.Return)))
+        assertEquals("233,05 USD", statementAmount(entry("2")))
+        assertEquals("233,05 USD", statementAmount(entry("3", kind = StatementKind.Return)))
         assertEquals("233,05 USD", statementAmount(entry("4", kind = StatementKind.Request)))
         assertEquals("1 250 000 UZS", statementMoney(BigDecimal("1250000"), "UZS"))
         assertEquals("Оплата № 5046", entry("5").title)

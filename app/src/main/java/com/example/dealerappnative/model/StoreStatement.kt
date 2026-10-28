@@ -56,7 +56,7 @@ internal fun statementMoney(amount: BigDecimal, currency: String): String =
     DecimalFormat("#,##0.######", DecimalFormatSymbols(Locale.forLanguageTag("ru"))).format(amount).replace('\u00a0', ' ') + " $currency"
 
 internal fun statementAmount(entry: StoreStatementEntry): String {
-    val prefix = if (entry.amount.signum() == 0) "" else when (entry.kind.direction) { -1 -> "− "; 1 -> "+ "; else -> "" }
+    val prefix = if (entry.kind.direction < 0 && entry.amount.signum() != 0) "− " else ""
     return prefix + statementMoney(entry.amount, entry.currency)
 }
 

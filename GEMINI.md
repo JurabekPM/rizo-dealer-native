@@ -152,3 +152,6 @@ Handoff §25: Order red, Payment green, Return blue in summary + row titles/amou
 ## Latest statement summary correction
 
 Handoff §26: Order BLUE, Return RED, Payment GREEN. Type chips affect list/count only; summary ignores type selection but respects date/currency (statementOverviewTotals). Do not derive cards from the already type-filtered visible list; this incorrectly zeroes other cards. Existing financial records/signs unchanged.
+
+
+Latest statement row formatting: no + prefix on payment/return amounts; negative Order minus remains. Display-only, no amount/direction changes. Handoff §27.
