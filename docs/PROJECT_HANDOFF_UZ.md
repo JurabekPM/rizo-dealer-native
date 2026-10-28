@@ -352,3 +352,8 @@ User clarified that Физические лица contains MANY people and suppl
 - Storage regression adds one isolated device test for person-photo roundtrip, legacy no-photo defaults, other-person/self/legal isolation (DealerProfilePersistenceTest now7). No gallery or real user images are touched in tests. Existing92 unit tests retained; UI/animation inspection remains for the user.
 
 2026-10-28 photo/header validation: debug/app-test builds and92 unit tests passed (0 failures/errors). Samsung SM_S916N install-r Success; DealerProfilePersistenceTest OK (7 tests) including photo JSON/ID isolation and legacy compatibility. Tests use only UUID-prefixed preferences and fake photo URIs. Actual picker interaction, header animation/UI and user photos remain for user testing; no prototype UI was navigated automatically.
+
+
+## 20. Admin Menu cleanup - 2026-10-28
+
+User removed the Information about dealer row from MenuScreen.menuItems. Profile row/pencil still opens the existing personal/legal tabs. Other menu entries, Agent screens, data and drawable assets are unchanged.

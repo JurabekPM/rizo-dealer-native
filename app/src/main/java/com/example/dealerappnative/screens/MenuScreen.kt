@@ -80,7 +80,6 @@ internal fun MenuScreen(onStoresClick: () -> Unit = {}, onReturnsClick: () -> Un
 }
 
 private val menuItems = listOf(
-    "Информация о дилере" to R.drawable.ic_dealer_info,
     "Регионы доставки" to R.drawable.ic_pin,
     "Скидка" to R.drawable.ic_discount,
     "Акция и нагрузка" to R.drawable.ic_gift,
