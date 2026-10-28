@@ -260,3 +260,8 @@ AdminProfileScreen → AdminPeopleScreen → AdminPersonEditScreen → shared Ad
 ## Profile readonly/details design
 
 AdminPersonEditScreen gates AdminPersonDetailsScreen vs AdminPersonalProfileScreen. AdminProfileScreen gates DealerProfileDetailsScreen vs DealerProfileScreen; savedDealer + edit draft separate. ProfileDetailsComponents.kt and ProfileDesign.kt are local style/header/avatar/read-only UI. Handoff §18.
+
+
+## Person photo + people toolbar
+
+ui/components/PersonPhotoPicker.kt (editor-owned picker + photo field); AdminPersonalProfile.photoUri / AdminPersonalProfileJson; ProfileAvatar at list/details/Menu. AdminPeopleHeader.kt; AdminProfileScreen hoisted TopAppBarState/enterAlways connection/query; AdminPeopleScreen list only. Handoff §19. DealerProfilePersistenceTest7.

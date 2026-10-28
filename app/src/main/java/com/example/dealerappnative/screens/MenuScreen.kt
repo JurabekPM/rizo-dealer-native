@@ -41,8 +41,11 @@ internal fun MenuScreen(onStoresClick: () -> Unit = {}, onReturnsClick: () -> Un
     Column(Modifier.fillMaxSize().background(DealerDesign.background).verticalScroll(rememberScrollState())) {
         Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp)).background(Color.White).softCardPress(onClick = onEditDealerClick)
             .semantics { contentDescription = "Изменить профиль" }.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-            Image(painterResource(R.drawable.dealer_avatar), contentDescription = null,
-                modifier = Modifier.size(48.dp).clip(CircleShape), contentScale = ContentScale.Crop)
+            if (administrator.photoUri.isBlank()) {
+                Image(painterResource(R.drawable.dealer_avatar), contentDescription = null,
+                    modifier = Modifier.size(48.dp).clip(CircleShape), contentScale = ContentScale.Crop)
+            } else com.example.dealerappnative.ui.components.ProfileAvatar(R.drawable.ic_person_outline, 48.dp,
+                imageUri = administrator.photoUri, initials = com.example.dealerappnative.ui.components.profileInitials(administrator.name))
             Spacer(Modifier.width(12.dp))
             Column(Modifier.weight(1f)) {
                 Text(administrator.name, style = DealerDesign.body, maxLines = 2, overflow = TextOverflow.Ellipsis)

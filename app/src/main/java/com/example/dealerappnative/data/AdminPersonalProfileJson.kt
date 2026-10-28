@@ -5,7 +5,7 @@ import org.json.JSONObject
 
 internal fun encodeAdminPersonalProfile(profile: AdminPersonalProfile): String = with(profile) {
     JSONObject().put("name", name).put("phone", phone).put("birthDate", birthDate).put("gender", gender)
-        .put("country", country).put("region", region).put("district", district).toString()
+        .put("country", country).put("region", region).put("district", district).put("photoUri", photoUri).toString()
 }
 
 internal fun decodeAdminPersonalProfile(raw: String?): AdminPersonalProfile {
@@ -15,6 +15,6 @@ internal fun decodeAdminPersonalProfile(raw: String?): AdminPersonalProfile {
         defaults.copy(name = json.optString("name", defaults.name), phone = json.optString("phone", defaults.phone),
             birthDate = json.optString("birthDate"), gender = json.optString("gender", defaults.gender),
             country = json.optString("country", defaults.country), region = json.optString("region", defaults.region),
-            district = json.optString("district", defaults.district))
+            district = json.optString("district", defaults.district), photoUri = json.optString("photoUri"))
     }.getOrDefault(defaults)
 }

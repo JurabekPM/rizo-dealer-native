@@ -31,11 +31,13 @@ import java.time.format.DateTimeFormatter
 @Composable
 internal fun AdminPersonalProfileScreen(profile: AdminPersonalProfile, dealerName: String,
     listState: LazyListState, onChange: (AdminPersonalProfile) -> Unit,
-    role: String = "Администратор", onRoleChange: ((String) -> Unit)? = null) {
+    role: String = "Администратор", onRoleChange: ((String) -> Unit)? = null,
+    onPhotoClick: (() -> Unit)? = null, photoBusy: Boolean = false) {
     val context = LocalContext.current
     val today = LocalDate.now(ZoneId.of("Asia/Tashkent"))
     LazyColumn(Modifier.fillMaxSize(), state = listState, contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        if (onPhotoClick != null) item(key = "person-photo") { PersonPhotoField(profile, photoBusy, onPhotoClick) }
         item(key = "personal") { DealerProfileSection("Личные данные") {
             DealerProfileField("ФИО", profile.name, { onChange(profile.copy(name = it.take(120))) })
             DealerProfileField("Номер телефона", profile.phone, {

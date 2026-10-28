@@ -31,12 +31,16 @@ internal fun AdminPersonEditScreen(initial: DealerPerson, people: List<DealerPer
     var editing by rememberSaveable(initial.id) { mutableStateOf(isNew) }
     var error by rememberSaveable(initial.id) { mutableStateOf<String?>(null) }
     var saving by remember { mutableStateOf(false) }
+    var photoBusy by remember { mutableStateOf(false) }
+    val choosePhoto = if (editing) rememberPersonPhotoPicker(initial.id,
+        onSelected = { draft = draft.copy(profile = draft.profile.copy(photoUri = it)); error = null },
+        onBusyChange = { photoBusy = it }, onError = { error = it }) else null
     val scope = rememberCoroutineScope()
     val viewList = rememberLazyListState()
     val editList = rememberLazyListState()
     val focus = LocalFocusManager.current
     fun back() {
-        if (saving) return
+        if (saving || photoBusy) return
         focus.clearFocus()
         if (editing && !isNew) { draft = savedPerson; editing = false; error = null } else onBack()
     }
@@ -48,11 +52,12 @@ internal fun AdminPersonEditScreen(initial: DealerPerson, people: List<DealerPer
             if (!editing) AdminPersonDetailsScreen(savedPerson, dealerName, viewList)
             else AdminPersonalProfileScreen(draft.profile, dealerName, editList,
                 onChange = { draft = draft.copy(profile = it); error = null }, role = draft.role,
-                onRoleChange = if (draft.isCurrentAdministrator) null else ({ role -> draft = draft.copy(role = role); error = null }))
+                onRoleChange = if (draft.isCurrentAdministrator) null else ({ role -> draft = draft.copy(role = role); error = null }),
+                onPhotoClick = choosePhoto, photoBusy = photoBusy)
         }
         if (editing) Column(Modifier.fillMaxWidth().background(Color.White).padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             error?.let { Text(it, style = Design.body, color = Color(0xFFE45555)) }
-            DealerProfileButton(if (saving) "Сохраняем…" else "Сохранить", enabled = !saving) {
+            DealerProfileButton(if (saving) "Сохраняем…" else "Сохранить", enabled = !saving && !photoBusy) {
                 focus.clearFocus()
                 val candidate = upsertDealerPerson(people, draft)
                 error = dealerPeopleError(candidate)

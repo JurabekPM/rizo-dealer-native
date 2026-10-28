@@ -8,10 +8,18 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Text
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.animation.core.animate
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -31,6 +39,7 @@ private val dealerDraftSaver = Saver<DealerProfile, String>(save = { encodeDeale
 private val peopleSaver = Saver<List<DealerPerson>, String>(save = { encodeDealerPeople(it) }, restore = { decodeDealerPeople(it, AdminPersonalProfile()) })
 
 /** People save individually; the dealer form keeps its own unsaved draft. */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AdminProfileScreen(onBack: () -> Unit, onAdministratorChanged: (AdminPersonalProfile) -> Unit) {
     val context = LocalContext.current
@@ -47,11 +56,24 @@ internal fun AdminProfileScreen(onBack: () -> Unit, onAdministratorChanged: (Adm
     val dealerList = rememberLazyListState()
     val dealerViewList = rememberLazyListState()
     val focus = LocalFocusManager.current
+    val keyboard = LocalSoftwareKeyboardController.current
+    var toolbarSearching by rememberSaveable { mutableStateOf(false) }
+    val headerState = rememberTopAppBarState()
     val scope = rememberCoroutineScope()
     var mapOpen by rememberSaveable { mutableStateOf(false) }
     var saving by remember { mutableStateOf(false) }
     var imageBusy by remember { mutableStateOf(false) }
     var error by rememberSaveable { mutableStateOf<String?>(null) }
+    val visiblePeople = remember(people, query) {
+        people.filter { person -> listOf(person.profile.name, person.profile.phone,
+            com.example.dealerappnative.model.displayAdminPhone(person.profile.phone), person.role).any { it.contains(query.trim(), true) } }
+    }
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(headerState,
+        canScroll = { pager.currentPage == 0 && !toolbarSearching && selectedPersonId == null && newPersonId == null && !mapOpen &&
+            (headerState.heightOffset < 0f || personalList.canScrollForward || personalList.canScrollBackward) },
+        snapAnimationSpec = tween(260, easing = FastOutSlowInEasing))
+    fun closeSearch() { toolbarSearching = false; focus.clearFocus(); keyboard?.hide() }
+    LaunchedEffect(pager.currentPage) { if (pager.currentPage != 0) closeSearch() }
     val selected = people.firstOrNull { it.id == selectedPersonId }
         ?: newPersonId?.let { DealerPerson(it, AdminPersonalProfile(name = "", phone = "+998"), "Торговый агент") }
     if (selected != null) {
@@ -73,20 +95,28 @@ internal fun AdminProfileScreen(onBack: () -> Unit, onAdministratorChanged: (Adm
     }
     fun back() {
         if (saving) return
+        if (pager.currentPage == 0 && toolbarSearching) { closeSearch(); return }
         focus.clearFocus()
         if (pager.currentPage == 1 && editingDealer) { dealer = savedDealer; editingDealer = false; error = null }
         else onBack()
     }
     BackHandler(onBack = ::back)
-    Column(Modifier.fillMaxSize().background(DealerDesign.background).imePadding()) {
-        ProfilePageHeader(if (pager.currentPage == 1 && editingDealer) "Редактирование" else "Профиль", onBack = ::back,
+    Column(Modifier.fillMaxSize().background(DealerDesign.background).imePadding().nestedScroll(scrollBehavior.nestedScrollConnection)) {
+        if (pager.currentPage == 0) AdminPeopleAppBar(query, { query = it }, headerState, toolbarSearching,
+            onSearch = {
+                toolbarSearching = true
+                scope.launch { animate(headerState.heightOffset, headerState.heightOffsetLimit, animationSpec = tween(240)) { value, _ -> headerState.heightOffset = value } }
+            }, onCloseSearch = ::closeSearch, onBack = ::back)
+        else ProfilePageHeader(if (pager.currentPage == 1 && editingDealer) "Редактирование" else "Профиль", onBack = ::back,
             onEdit = if (pager.currentPage == 1 && !editingDealer) ({ dealer = savedDealer; error = null; editingDealer = true }) else null)
         Box(Modifier.fillMaxWidth().background(Color.White).padding(horizontal = 16.dp).padding(top = 4.dp, bottom = 10.dp)) {
             AdminProfileTabs(pager, enabled = !saving)
         }
+        if (pager.currentPage == 0) AdminPeopleControls(query, { query = it }, visiblePeople.size, headerState, toolbarSearching,
+            onAdd = { closeSearch(); newPersonId = "person-${UUID.randomUUID()}" })
         HorizontalPager(pager, modifier = Modifier.weight(1f), userScrollEnabled = !saving, beyondViewportPageCount = 1) { page ->
-            if (page == 0) AdminPeopleScreen(people, query, { query = it }, personalList,
-                onPersonClick = { selectedPersonId = it }, onAdd = { newPersonId = "person-${UUID.randomUUID()}" })
+            if (page == 0) AdminPeopleScreen(visiblePeople, personalList,
+                onPersonClick = { closeSearch(); selectedPersonId = it })
             else if (!editingDealer) DealerProfileDetailsScreen(savedDealer, dealerViewList)
             else DealerProfileScreen(dealer, dealerList, onChange = { dealer = it; error = null },
                 onOpenMap = { mapOpen = true }, onImageBusyChange = { imageBusy = it })

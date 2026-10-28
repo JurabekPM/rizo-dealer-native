@@ -11,7 +11,8 @@ internal data class AdminPersonalProfile(
     val gender: String = "Не указан",
     val country: String = "Узбекистан",
     val region: String = "Коканд",
-    val district: String = "Коканд"
+    val district: String = "Коканд",
+    val photoUri: String = ""
 )
 
 internal fun normalizeAdminPhone(value: String): String = value.filterNot { it.isWhitespace() || it in "()-" }

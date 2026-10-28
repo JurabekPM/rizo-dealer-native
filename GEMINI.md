@@ -117,3 +117,8 @@ Handoff §17 overrides §16 direct-self-tab/global Save. Personal tab:10 fiction
 ## 2026-10-28 profile latest: view before edit
 
 Handoff §18. Both existing person and legal entity open readonly details. Pencil alone mounts fields; Save returns to updated details; Back while editing cancels into view; Back from view returns to directory. New-person creation directly opens form. Compact neutral ProfileDesign is profile-local; directory Add now top beside count, no big bottom button. Saved IDs/JSON/roles/Agent flows unchanged.
+
+
+## 2026-10-28: people photo/collapsing header
+
+Handoff §19. Optional AdminPersonalProfile.photoUri backward compatible; editor-only OpenDocument5MB, draft until Save. Photo displayed in employee list/details and current-admin Menu only; Visit still camera-only. AdminPeopleHeader: enterAlways92dp collapse (search48/actions44), AppBar inline search/X, left title, tabs pinned outside collapse. Query/list/header hoisted; no per-card scroll observers. Other screens/persistence identities unchanged.

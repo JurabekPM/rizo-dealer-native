@@ -17,7 +17,7 @@ internal fun AdminPersonDetailsScreen(person: DealerPerson, dealerName: String, 
     val profile = person.profile
     LazyColumn(Modifier.fillMaxSize(), state = listState, contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item { ProfileIdentity(profile.name, person.role, R.drawable.ic_person_outline,
-            initials = profileInitials(profile.name), self = person.isCurrentAdministrator) }
+            imageUri = profile.photoUri, initials = profileInitials(profile.name), self = person.isCurrentAdministrator) }
         item { DealerProfileSection("Личные данные") {
             ProfileInfo("Телефон", displayAdminPhone(profile.phone))
             ProfileInfo("Дата рождения", runCatching { LocalDate.parse(profile.birthDate).format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) }.getOrDefault("Не указана"))

@@ -113,6 +113,24 @@ class DealerProfilePersistenceTest {
         assertEquals(saved, DealerProfilePreferences(context).readPeople())
     }
 
+    @Test fun employeePhotosRemainIndependentAndOldProfilesHaveNoPhoto() = runBlocking {
+        assertEquals("", decodeAdminPersonalProfile("{\"name\":\"Old employee\"}").photoUri)
+        val store = DealerProfilePreferences(context)
+        val before = store.readPeople()
+        val employee = before[1].copy(profile = before[1].profile.copy(photoUri = "content://test/employee-photo"))
+        assertEquals("", store.readPeople()[1].profile.photoUri) // Draft/cancel never persists.
+        assertTrue(store.savePeople(upsertDealerPerson(before, employee)))
+        val reloaded = DealerProfilePreferences(context).readPeople()
+        assertEquals(employee, reloaded.first { it.id == employee.id })
+        assertEquals(before.filter { it.id != employee.id }, reloaded.filter { it.id != employee.id })
+        assertEquals("", store.readAdministrator().photoUri)
+        val self = reloaded.first { it.isCurrentAdministrator }
+        assertTrue(store.savePeople(upsertDealerPerson(reloaded, self.copy(profile = self.profile.copy(photoUri = "content://test/self-photo")))))
+        assertEquals("content://test/self-photo", store.readAdministrator().photoUri)
+        assertEquals("content://test/employee-photo", store.readPeople().first { it.id == employee.id }.profile.photoUri)
+        assertEquals("", store.read().photoUri) // Legal entity photo is separate.
+    }
+
     private class ProfileTestContext(base: Context) : ContextWrapper(base) {
         private val prefix = "dealer_profile_test_${UUID.randomUUID()}_"
         private val owned = mutableSetOf<String>()

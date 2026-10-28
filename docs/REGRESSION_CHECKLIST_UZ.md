@@ -202,3 +202,11 @@ Bu yangi camera UI sinovlari hali avtomatik bajarilmagan; real kamera shutterini
 - Open existing person: text details, top pencil, no editable fields/Save. Pencil enables form; Back cancels into saved details; Save updates details; next Back restores directory search/scroll. New creation directly editable, cancel creates nothing.
 - Legal tab opens text/hours/images readonly; top pencil enables form. No upload/time/map editing before pencil. Back cancels, Save returns to saved view; map select affects draft only.
 - Person/directory data isolation, role constraints, previous persisted profiles, all Agent/visit flows unchanged. Profile-local weights/neutral roles/inset cards do not alter other screens.
+
+
+## Employee photo / collapsing controls
+
+- Existing person → view → pencil → Add/Change photo → system image selection → draft preview → Save. Cancel or Back leaves prior image. Save photo only changes selected person; current-admin photo also shown in Menu. Old profiles still display initials/original default avatar.
+- Photo limit5MB; invalid/cancel no overwrite; picker outside lazy row. Rotate while picking retains owner; no Visit gallery restoration.
+- Physical list: title left, scroll up hides search into right toolbar icon and actions row; reverse scroll reveals count/Add before search. Tabs always pinned. Toolbar tap opens inline input; X clears without closing; Back closes input, then navigates.
+- Return from details retains query/list/header. Legal scroll does not alter people header. No list-wide recomposition on header frames.

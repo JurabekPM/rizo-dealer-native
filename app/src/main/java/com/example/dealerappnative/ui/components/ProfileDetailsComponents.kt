@@ -30,7 +30,7 @@ import com.example.dealerappnative.ui.theme.ProfileDesign as Design
 @Composable
 internal fun ProfilePageHeader(title: String, onBack: () -> Unit, onEdit: (() -> Unit)? = null) {
     Box(Modifier.fillMaxWidth().height(56.dp).background(Color.White), contentAlignment = Alignment.Center) {
-        Text(title, style = DealerDesign.title, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.padding(horizontal = 56.dp))
+        Text(title, style = DealerDesign.title, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.align(Alignment.CenterStart).padding(horizontal = 56.dp))
         SoftIconButton(onBack, Modifier.align(Alignment.CenterStart).padding(start = 4.dp).size(48.dp).semantics { contentDescription = "Назад" }) {
             DealerIcon(R.drawable.ic_arrow_back, Design.text)
         }
