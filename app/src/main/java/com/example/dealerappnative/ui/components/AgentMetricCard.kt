@@ -24,13 +24,12 @@ import com.example.dealerappnative.model.StatisticsPlanProgress
 import com.example.dealerappnative.ui.theme.AgentDesign
 
 @Composable
-internal fun AgentMetricCard(metric: AgentHomeMetric, modifier: Modifier = Modifier, onPlanClick: (() -> Unit)? = null) {
-    Column(modifier.softCardPress(onClick = onPlanClick)
-        .clip(RoundedCornerShape(AgentDesign.radius)).background(Color.White).padding(12.dp)) {
+internal fun AgentMetricCard(metric: AgentHomeMetric, modifier: Modifier = Modifier) {
+    Column(modifier.clip(RoundedCornerShape(AgentDesign.radius)).background(Color.White).padding(12.dp)) {
         Row(Modifier.fillMaxWidth().height(22.dp), horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.Top) {
             DealerIcon(metric.icon, AgentDesign.secondary, AgentDesign.iconSize)
-            if (metric.planProgress?.isEmpty() != true) {
+            if (metric.monthlyPlan == null) {
                 DealerIcon(R.drawable.ic_agent_chevron, AgentDesign.secondary, 18.dp)
             }
         }
@@ -53,27 +52,23 @@ internal fun AgentMetricCard(metric: AgentHomeMetric, modifier: Modifier = Modif
             Text(detail, style = AgentDesign.detail, color = AgentDesign.secondary,
                 maxLines = 2, overflow = TextOverflow.Ellipsis)
         }
-        metric.planProgress?.let { MetricPlanSummary(it) }
+        metric.monthlyPlan?.let { MonthlyPlanSummary(it) }
     }
 }
 
 @Composable
-private fun MetricPlanSummary(plans: List<StatisticsPlanProgress>) {
+private fun MonthlyPlanSummary(progress: StatisticsPlanProgress) {
     Spacer(Modifier.height(8.dp))
-    when (plans.size) {
-        0 -> Text("План не задан", style = AgentDesign.detail, color = AgentDesign.secondary)
-        1 -> {
-            val progress = plans.single()
-            val label = StatisticsDates.compactPlanLabel(progress.plan.dates, progress.plan.period)
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                Text("План · $label", style = AgentDesign.detail, color = AgentDesign.secondary,
-                    modifier = Modifier.weight(1f), maxLines = 2, overflow = TextOverflow.Ellipsis)
-                Text("${progress.percent}%", style = AgentDesign.badge, color = AgentDesign.accent)
-            }
-            Spacer(Modifier.height(4.dp))
-            AgentProgress(progress.fraction, height = 4.dp)
-        }
-        else -> Text("Планы · ${plans.size}", style = AgentDesign.badge, color = AgentDesign.accent)
+    Row(
+        Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(6.dp)
+    ) {
+        Text("План · ${StatisticsDates.monthName(progress.monthStart)}",
+            style = AgentDesign.detail, color = AgentDesign.secondary,
+            modifier = Modifier.weight(1f), maxLines = 2, overflow = TextOverflow.Ellipsis)
+        Text("${progress.percent}%", style = AgentDesign.planPercent, color = AgentDesign.accent)
     }
+    Spacer(Modifier.height(4.dp))
+    AgentProgress(progress.fraction, height = 4.dp)
 }

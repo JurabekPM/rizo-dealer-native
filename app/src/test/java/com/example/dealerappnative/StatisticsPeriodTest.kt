@@ -56,51 +56,54 @@ class StatisticsPeriodTest {
         assertEquals(0f, summary.metrics.last().progress!!, 0f)
     }
 
-    @Test fun planProgressUsesConfirmedTotalsFromPlanStartEvenOnDayTab() {
+    @Test fun dayWeekAndMonthShowTheSameMonthlyPlanThroughToday() {
         val today = date(2026, 11, 6)
         val day = StatisticsDateRange(today, today)
+        val week = StatisticsDates.range(StatisticsPeriod.Week, today, day)
+        val month = StatisticsDates.range(StatisticsPeriod.Month, today, day)
         val dayMetrics = AgentStatisticsSampleData.forRange(day, today).metrics
-        val weekMetrics = AgentStatisticsSampleData.forRange(StatisticsDates.range(StatisticsPeriod.Week, today, day), today).metrics
+        val weekMetrics = AgentStatisticsSampleData.forRange(week, today).metrics
+        val monthMetrics = AgentStatisticsSampleData.forRange(month, today).metrics
 
-        val requests = dayMetrics[0].planProgress!!.single()
-        assertEquals(StatisticsPeriod.Week, requests.plan.period)
-        assertEquals(3_000, requests.confirmedUsd)
-        assertEquals(60L, requests.percent)
-        assertEquals(requests, weekMetrics[0].planProgress!!.single())
-        assertNotEquals(dayMetrics[0].value, weekMetrics[0].value)
+        val requests = dayMetrics[0].monthlyPlan!!
+        assertEquals(month.start, requests.monthStart)
+        assertEquals(3_600, requests.confirmedUsd)
+        assertEquals(20L, requests.percent)
+        assertEquals(requests, weekMetrics[0].monthlyPlan)
+        assertEquals(requests, monthMetrics[0].monthlyPlan)
+        assertNotEquals(dayMetrics[0].value, monthMetrics[0].value)
 
-        val collections = dayMetrics[2].planProgress!!.single()
-        assertEquals(StatisticsPeriod.Month, collections.plan.period)
+        val collections = dayMetrics[2].monthlyPlan!!
         assertEquals(8_000, collections.confirmedUsd)
         assertEquals(40L, collections.percent)
-        assertEquals(collections, weekMetrics[2].planProgress!!.single())
-        assertNull(dayMetrics[1].planProgress)
+        assertEquals(collections, weekMetrics[2].monthlyPlan)
+        assertEquals(collections, monthMetrics[2].monthlyPlan)
+        assertNull(dayMetrics[0].detail)
+        assertNull(dayMetrics[2].detail)
+        assertNull(dayMetrics[1].monthlyPlan)
     }
 
-    @Test fun historicalDayAndMonthShowTheirOwnPlanProgress() {
+    @Test fun pastDayAndCrossMonthSelectionUseTheMonthOfTheCutoff() {
         val today = date(2026, 11, 6)
-        val monday = date(2026, 11, 2)
-        val historical = AgentStatisticsSampleData.forRange(StatisticsDateRange(monday, monday), today)
-        assertEquals(12L, historical.metrics[0].planProgress!!.single().percent)
+        val end = date(2026, 11, 2)
+        val day = StatisticsDateRange(end, end)
+        val crossMonth = StatisticsDateRange(date(2026, 10, 25), end)
+        val daily = AgentStatisticsSampleData.forRange(day, today)
+        val combined = AgentStatisticsSampleData.forRange(crossMonth, today)
 
-        val month = StatisticsDates.range(StatisticsPeriod.Month, today, StatisticsDateRange(today, today))
-        val monthly = AgentStatisticsSampleData.forRange(month, today)
-        assertEquals(listOf(60L, 0L, 0L, 0L), monthly.metrics[0].planProgress!!.map { it.percent })
-        assertEquals(40L, monthly.metrics[2].planProgress!!.single().percent)
+        val requests = daily.metrics[0].monthlyPlan!!
+        assertEquals(date(2026, 11, 1), requests.monthStart)
+        assertEquals(1_200, requests.confirmedUsd)
+        assertEquals(requests, combined.metrics[0].monthlyPlan)
+        assertEquals(daily.metrics[2].monthlyPlan, combined.metrics[2].monthlyPlan)
+        assertNotEquals(daily.metrics[0].value, combined.metrics[0].value)
     }
 
-    @Test fun samplesIncludeDailyCustomOverTargetAndUnassignedPlans() {
-        val today = date(2026, 11, 6)
-        fun plansOn(day: Long) =
-            AgentStatisticsSampleData.forRange(StatisticsDateRange(day, day), today).metrics[0].planProgress!!
-
-        val daily = plansOn(anchor).single()
-        assertEquals(StatisticsPeriod.Day, daily.plan.period)
-        assertEquals(120L, daily.percent)
-        val custom = plansOn(date(2026, 10, 28)).single()
-        assertEquals(StatisticsPeriod.Range, custom.plan.period)
-        assertEquals(84L, custom.percent)
-        assertTrue(plansOn(date(2026, 10, 29)).isEmpty())
+    @Test fun monthlyProgressCanExceedTheTarget() {
+        val today = date(2026, 12, 1)
+        val november = StatisticsDateRange(date(2026, 11, 1), date(2026, 11, 30))
+        val progress = AgentStatisticsSampleData.forRange(november, today).metrics[2].monthlyPlan!!
+        assertTrue(progress.percent > 100L)
     }
 
     @Test(expected = IllegalArgumentException::class)

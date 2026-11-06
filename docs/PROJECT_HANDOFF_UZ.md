@@ -429,8 +429,8 @@ User requested removal of + only in content amounts. statementAmount retains neg
 2026-10-28 plus-prefix validation: assembleDebug and102 unit tests passed (0 failures/errors). Installed install-r on Samsung SM_S916N. No UI navigation or persisted data changes.
 
 
-## 28. Agent statistikasi: ariza va inkassatsiya rejalari — 2026-11-06
+## 28. Agent statistikasi: oylik ariza va inkassatsiya rejalari — 2026-11-06
 
-- Kartaning katta summasi tanlangan sanalarga tegishli. Reja foizi reja boshidan filtr oxiri, bugun yoki reja oxirining eng ertagacha tasdiqlangan USD summasini reja maqsadiga bo‘ladi. 100% dan yuqori qiymat matnda ko‘rinadi. Bir nechta reja bo‘lsa, har biri alohida hisoblanadi.
-- Ariza va inkassatsiya kartalaridagi reja muddati, foiz va progress «АКБ / ОКБ» uslubida. Bosilganda sheetda reja davri, «Выполнено» va «План» summalari ochiladi. Belgilanmagan reja uchun «План не задан», ko‘p rejalar uchun «Планы · N».
-- AgentStatisticsSampleData mahalliy demo: 2026-11-06 da 2–8 noyabr arizalari 3 000 / 5 000 USD (60%), noyabr inkassatsiyalari 8 000 / 20 000 USD (40%). Noyabrda 4 haftalik ariza rejasi. 21-oktabr kunlik (120%), 22–28 oktabr maxsus, 29-oktabr rejasiz. Admin reja kiritish interfeysi va real hujjatlarga ulanish bu bosqichdan keyingi ish.
+- «Заявки» va «Инкассации» kartalari har bir filtrda bittadan oylik reja foizini ko‘rsatadi. Oyni filtrning oxirgi kuni belgilaydi, joriy davrda hisob bugungacha. Foiz oy boshidan shu kungacha tasdiqlangan namuna USD summasi / oylik maqsad. Katta summa tanlangan filtr bo‘yicha hisoblanadi.
+- Har ikki karta statik. Foiz 14/20 Bold, ingichka progress chizig‘i va oy nomi bilan. Arizalar soni va «у меня / сдано» qatori chiqarilmaydi.
+- AgentStatisticsSampleData mahalliy oylik namunalari 18 000 USD ariza va 20 000 USD inkassatsiya. 2026-11-06 da 3 600 / 18 000 USD (20%) va 8 000 / 20 000 USD (40%).

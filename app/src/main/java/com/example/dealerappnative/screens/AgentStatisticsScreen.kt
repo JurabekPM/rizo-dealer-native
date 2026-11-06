@@ -50,7 +50,6 @@ import com.example.dealerappnative.ui.components.StatisticsPeriodFilter
 import com.example.dealerappnative.ui.components.StatisticsDatePicker
 import androidx.compose.runtime.mutableStateOf
 import com.example.dealerappnative.ui.components.AgentMetricCard
-import com.example.dealerappnative.ui.components.AgentStatisticsPlanSheet
 import com.example.dealerappnative.ui.components.AgentProgress
 import com.example.dealerappnative.ui.components.DealerIcon
 import com.example.dealerappnative.ui.theme.AgentDesign
@@ -68,7 +67,6 @@ internal fun AgentStatisticsScreen(onStoreDebtsClick: () -> Unit) {
     var customStart by rememberSaveable { mutableLongStateOf(today) }
     var customEnd by rememberSaveable { mutableLongStateOf(today) }
     var picking by rememberSaveable { mutableStateOf<StatisticsPeriod?>(null) }
-    var selectedPlanMetric by rememberSaveable { mutableStateOf<Int?>(null) }
     val range = remember(period, anchor, customStart, customEnd) {
         StatisticsDates.range(period, anchor, StatisticsDateRange(customStart, customEnd))
     }
@@ -91,19 +89,13 @@ internal fun AgentStatisticsScreen(onStoreDebtsClick: () -> Unit) {
                     Row(Modifier.fillMaxWidth().height(IntrinsicSize.Min),
                         horizontalArrangement = Arrangement.spacedBy(AgentDesign.gap)) {
                         pair.forEach { metric ->
-                            val onPlanClick: (() -> Unit)? = if (!metric.planProgress.isNullOrEmpty()) {
-                                { selectedPlanMetric = metric.icon }
-                            } else null
-                            AgentMetricCard(metric, Modifier.weight(1f).fillMaxHeight(), onPlanClick)
+                            AgentMetricCard(metric, Modifier.weight(1f).fillMaxHeight())
                         }
                     }
                 }
             }
             item(key = "store-debt") { AgentStoreDebt(onClick = onStoreDebtsClick) }
         }
-    }
-    data.metrics.firstOrNull { it.icon == selectedPlanMetric }?.let { metric ->
-        AgentStatisticsPlanSheet(metric, minOf(range.end, today), onDismiss = { selectedPlanMetric = null })
     }
     picking?.let { chosen ->
         StatisticsDatePicker(chosen, anchor,

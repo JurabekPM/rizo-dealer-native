@@ -39,6 +39,7 @@ internal object AgentDesign {
     val heroLabel = type(15f, 20f, FontWeight.Medium)
     val heroValue = type(36f, 43.2f, FontWeight.Bold, -.72f)
     val percent = type(16f, 22f, FontWeight.SemiBold)
+    val planPercent = type(14f, 20f, FontWeight.Bold)
     val label = type(13f, 20f, FontWeight.Medium)
     val value = type(20f, 28f, FontWeight.Bold)
     val detail = type(12f, 16f, FontWeight.Medium)

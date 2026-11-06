@@ -49,15 +49,7 @@ internal object StatisticsDates {
     private fun format(pattern: String, value: Long) =
         SimpleDateFormat(pattern, ru).apply { timeZone = utc }.format(value)
 
-    fun compactPlanLabel(range: StatisticsDateRange, period: StatisticsPeriod): String = when {
-        range.start == range.end -> format("d MMM", range.start)
-        period == StatisticsPeriod.Month -> format("LLLL", range.start).replaceFirstChar { it.titlecase(ru) }
-        format("yyyy-MM", range.start) == format("yyyy-MM", range.end) ->
-            "${format("d", range.start)}–${format("d MMM", range.end)}"
-        format("yyyy", range.start) == format("yyyy", range.end) ->
-            "${format("d MMM", range.start)} – ${format("d MMM", range.end)}"
-        else -> "${format("d MMM yy", range.start)} – ${format("d MMM yy", range.end)}"
-    }
+    fun monthName(day: Long): String = format("LLLL", day).replaceFirstChar { it.titlecase(ru) }
 
     fun label(range: StatisticsDateRange, period: StatisticsPeriod): String {
         if (period == StatisticsPeriod.Day || range.start == range.end) return format("d MMMM yyyy", range.start)
