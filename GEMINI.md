@@ -155,3 +155,8 @@ Handoff §26: Order BLUE, Return RED, Payment GREEN. Type chips affect list/coun
 
 
 Latest statement row formatting: no + prefix on payment/return amounts; negative Order minus remains. Display-only, no amount/direction changes. Handoff §27.
+
+
+## 2026-11-06: Agent statistikasi rejalari
+
+Handoff §28. Ariza va inkassatsiya kartalarida mustaqil muddat va foiz; kartadagi katta summa sana filtri bo‘yicha. Foiz tasdiqlangan USD namunalari asosida reja boshidan tanlangan davr oxiri yoki bugungacha hisoblanadi. Sheet reja summalarini alohida ko‘rsatadi. AgentStatisticsSampleData va model/StatisticsPlan.kt lokal demo, StatisticsPeriodTest reja sanalari va hisobini tekshiradi.

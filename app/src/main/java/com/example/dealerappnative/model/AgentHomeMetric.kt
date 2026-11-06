@@ -8,5 +8,6 @@ internal data class AgentHomeMetric(
     @param:DrawableRes val icon: Int,
     val detail: String? = null,
     val progress: Float? = null,
-    val negative: Boolean = false
+    val negative: Boolean = false,
+    val planProgress: List<StatisticsPlanProgress>? = null
 )
