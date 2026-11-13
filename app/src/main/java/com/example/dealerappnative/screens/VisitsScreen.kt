@@ -51,8 +51,6 @@ internal fun VisitsScreen(
             ActiveHistoryTabs(
                 pagerState = pagerState,
                 activeCount = activeVisits.size,
-                badgeBackground = Color(0xFFD5DADD),
-                badgeTextColor = DealerDesign.text,
                 inactiveTextColor = DealerDesign.text
             )
             Spacer(Modifier.height(8.dp))

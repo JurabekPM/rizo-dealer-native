@@ -443,3 +443,5 @@ User requested removal of + only in content amounts. statementAmount retains neg
 - Ko‘rilgan yozuv IDlari bo‘lim bo‘yicha administrator_unread_content SharedPreferences’da saqlanadi. Dastlabki yozuvlar prototip namunalari. Vizitning ish statusi va ko‘rilganlik holati alohida yuritiladi.
 
 - Admin’ning har bir bo‘limiga 5 tadan yangi namuna qo‘shilgan. Oldin ko‘rilgan yozuvlar IDlari saqlanadi.
+
+- Admin tablarida jami son «Активные · 20» shaklida, 11 sp kulrang matnda. Bottom Navigation’dagi ko‘rilmagan son 14 dp minimumli binafsha belgida, ikonkaning yuqori o‘ng chetida turadi.

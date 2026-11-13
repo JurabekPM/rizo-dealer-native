@@ -60,9 +60,7 @@ internal fun CollectionsScreen(unreadIds: Set<String>, onRead: (String) -> Unit)
         ) {
             ActiveHistoryTabs(
                 pagerState = pagerState,
-                activeCount = activeCollections.size,
-                badgeBackground = if (historySelected) Color(0xFFD5DADD) else Color(0xFFF5E5FF),
-                badgeTextColor = if (historySelected) DealerDesign.text else DealerDesign.accent
+                activeCount = activeCollections.size
             )
             Spacer(Modifier.height(16.dp))
             SearchField(value = query, onValueChange = { query = it })

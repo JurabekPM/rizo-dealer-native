@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.HorizontalDivider
@@ -52,7 +53,13 @@ internal fun DealerBottomNavigation(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     BadgedBox(badge = {
-                        if (unreadCount > 0) AdminUnreadBadge(unreadCount)
+                        if (unreadCount > 0) {
+                            AdminUnreadBadge(
+                                count = unreadCount,
+                                modifier = Modifier.offset(x = 6.dp, y = (-6).dp),
+                                compact = true
+                            )
+                        }
                     }) {
                         DealerIcon(
                             iconRes = destination.iconRes,
