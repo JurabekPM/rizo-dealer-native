@@ -29,8 +29,7 @@ internal fun OrderCard(order: OrderUiModel, onUnreadClick: (() -> Unit)?) {
             DealerIcon(R.drawable.ic_store, DealerDesign.secondary, 24.dp)
             Spacer(Modifier.width(12.dp))
             Column(Modifier.weight(1f)) {
-                Text(order.storeName, style = DealerDesign.cardTitle, color = DealerDesign.text,
-                    maxLines = 1, overflow = TextOverflow.Ellipsis)
+                UnreadCardTitle(order.storeName, unread = onUnreadClick != null)
                 Spacer(Modifier.height(4.dp))
                 Text(order.customerName, style = secondaryDetail, color = DealerDesign.secondary,
                     maxLines = 1, overflow = TextOverflow.Ellipsis)

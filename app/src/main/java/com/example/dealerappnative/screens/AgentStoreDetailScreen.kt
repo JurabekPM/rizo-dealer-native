@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -134,13 +135,13 @@ private fun AgentStoreSummary(store: StoreUiModel) {
 
 @Composable
 private fun AgentStoreAction(label: String, icon: Int, modifier: Modifier, onClick: () -> Unit) {
-    Row(modifier.softCardPress(onClick = onClick).height(48.dp).clip(RoundedCornerShape(AgentDesign.radius)).background(AgentDesign.background)
-        .padding(horizontal = 12.dp), verticalAlignment = Alignment.CenterVertically,
+    Row(modifier.softCardPress(onClick = onClick).heightIn(min = 48.dp).clip(RoundedCornerShape(AgentDesign.radius)).background(AgentDesign.background)
+        .padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center) {
-        DealerIcon(icon, AgentDesign.secondary)
-        Spacer(Modifier.width(8.dp))
+        DealerIcon(icon, AgentDesign.secondary, size = 20.dp)
+        Spacer(Modifier.width(6.dp))
         Text(label, style = AgentDesign.menuTitle, color = AgentDesign.text,
-            maxLines = 1, overflow = TextOverflow.Ellipsis)
+            maxLines = 2, overflow = TextOverflow.Ellipsis)
     }
 }
 

@@ -40,6 +40,7 @@ import com.example.dealerappnative.ui.components.PrototypeCreateButton
 import com.example.dealerappnative.ui.components.ScreenHeader
 import com.example.dealerappnative.ui.components.SearchField
 import com.example.dealerappnative.ui.components.ShortcutCard
+import com.example.dealerappnative.ui.components.UnreadCardTitle
 import com.example.dealerappnative.ui.components.unreadCardBackground
 import com.example.dealerappnative.ui.theme.DealerDesign
 
@@ -123,8 +124,7 @@ private fun CollectionCard(entry: CollectionEntry, onUnreadClick: (() -> Unit)?)
             DealerIcon(R.drawable.ic_store)
             Spacer(Modifier.width(12.dp))
             Column(Modifier.weight(1f)) {
-                Text(entry.storeName, style = DealerDesign.cardTitle,
-                    maxLines = 1, overflow = TextOverflow.Ellipsis)
+                UnreadCardTitle(entry.storeName, onUnreadClick != null)
                 Spacer(Modifier.height(4.dp))
                 Text(
                     text = entry.debtDirection.formatAmount(entry.debtUsd),

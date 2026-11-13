@@ -19,6 +19,7 @@ import com.example.dealerappnative.R
 import com.example.dealerappnative.data.DealerNotification
 import com.example.dealerappnative.ui.components.ChildScreenHeader
 import com.example.dealerappnative.ui.components.DealerIcon
+import com.example.dealerappnative.ui.components.UnreadCardTitle
 import com.example.dealerappnative.ui.components.unreadCardBackground
 import com.example.dealerappnative.ui.components.softCardPress
 import com.example.dealerappnative.ui.theme.DealerDesign
@@ -47,7 +48,7 @@ internal fun NotificationsScreen(
                 ) {
                     DealerIcon(R.drawable.ic_bell, if (unread) DealerDesign.accent else DealerDesign.secondary)
                     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                        Text(notification.title, style = DealerDesign.cardTitle)
+                        UnreadCardTitle(notification.title, unread)
                         Text(notification.message, style = DealerDesign.detail)
                         Text(notification.time, style = DealerDesign.detail, color = DealerDesign.secondary)
                     }

@@ -21,7 +21,7 @@ import com.example.dealerappnative.R
 import com.example.dealerappnative.model.VisitResult
 import com.example.dealerappnative.ui.theme.DealerDesign
 
-/** Overlapping 28 dp badges: 7 dp overlap is 25%, with original 20 dp result icons. */
+/** Overlapping 28 dp badges: 7 dp overlap is 25%, with 19 dp result icons. */
 @Composable
 internal fun VisitResultsRow(results: List<VisitResult>, storeId: String? = null) {
     Row(Modifier.height(28.dp).semantics(mergeDescendants = true) {},
@@ -37,9 +37,11 @@ internal fun VisitResultsRow(results: List<VisitResult>, storeId: String? = null
 internal fun VisitResultBadge(result: VisitResult, storeId: String?, layer: Int = result.ordinal, inDetails: Boolean = false, completed: Boolean = true) {
     val icon = resultIcon(result)
     val badgeSize = if (inDetails) 32.dp else 28.dp
-    val iconSize = if (inDetails) 24.dp else 20.dp
+    val iconSize = if (inDetails) 22.dp else 19.dp
+    val outline = if (inDetails) DealerDesign.resultBadgeOutline else DealerDesign.surface
     Box(Modifier.size(badgeSize).zIndex(layer.toFloat()).sharedVisitResult(storeId, result, layer)
-        .background(DealerDesign.background, CircleShape).border(1.5.dp, DealerDesign.surface, CircleShape)
+        .background(DealerDesign.resultBadgeSurface, CircleShape)
+        .border(if (inDetails) 1.dp else 1.5.dp, outline, CircleShape)
         .semantics { contentDescription = if (completed) icon.label else when (result) {
             VisitResult.Delivery -> "Доставка"
             VisitResult.Request -> "Заявка"
@@ -47,7 +49,7 @@ internal fun VisitResultBadge(result: VisitResult, storeId: String?, layer: Int 
             VisitResult.Collection -> "Инкассация"
             VisitResult.Return -> "Возврат"
         } }, contentAlignment = Alignment.Center) {
-        DealerIcon(icon.resource, if (result == VisitResult.Collection) Color.Unspecified else DealerDesign.secondary,
+        DealerIcon(icon.resource, if (result == VisitResult.Collection) Color.Unspecified else DealerDesign.resultBadgeIcon,
             size = iconSize)
     }
 }

@@ -63,10 +63,10 @@ internal fun HistoryStoreSummary(visit: VisitStore, showId: Boolean = false) {
 
 @Composable
 private fun HistoryStoreAction(title: String, icon: Int, modifier: Modifier, onClick: () -> Unit) {
-    Row(modifier.softCardPress(onClick = onClick).height(40.dp).clip(RoundedCornerShape(12.dp)).background(DealerDesign.background).padding(horizontal = 8.dp),
+    Row(modifier.softCardPress(onClick = onClick).heightIn(min = 40.dp).clip(RoundedCornerShape(12.dp)).background(DealerDesign.background).padding(horizontal = 8.dp),
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-        DealerIcon(icon); Spacer(Modifier.width(8.dp))
-        Text(title, style = AgentVisitDesign.button, color = DealerDesign.text, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        DealerIcon(icon, size = 20.dp); Spacer(Modifier.width(6.dp))
+        Text(title, style = AgentVisitDesign.button, color = DealerDesign.text, maxLines = 2, overflow = TextOverflow.Ellipsis)
     }
 }
 

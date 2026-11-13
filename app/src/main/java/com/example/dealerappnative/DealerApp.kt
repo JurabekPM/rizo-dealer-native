@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.dealerappnative.data.UnreadContent
+import com.example.dealerappnative.data.newStoreIds
 import com.example.dealerappnative.data.activeVisits
 import com.example.dealerappnative.data.adminNotifications
 import com.example.dealerappnative.data.findVisitStore
@@ -61,6 +62,8 @@ import com.example.dealerappnative.screens.StoreMapScreen
 import com.example.dealerappnative.ui.theme.DealerDesign
 import com.example.dealerappnative.ui.theme.DealerPrototypeTheme
 
+private enum class AdminMenuUnread { Stores }
+
 @Composable
 internal fun DealerApp(initialTab: Int = 0, onSettingsClick: () -> Unit = {}) {
     var selectedIndex by rememberSaveable { mutableIntStateOf(initialTab) }
@@ -75,9 +78,12 @@ internal fun DealerApp(initialTab: Int = 0, onSettingsClick: () -> Unit = {}) {
     var storesVisible by rememberSaveable { mutableStateOf(false) }
     var selectedMagazineId by rememberSaveable { mutableStateOf<String?>(null) }
     val context = LocalContext.current
-    val unreadContent = remember(context) {
+    val unreadPreferences = remember(context) {
+        context.applicationContext.getSharedPreferences("administrator_unread_content", Context.MODE_PRIVATE)
+    }
+    val unreadContent = remember(unreadPreferences) {
         UnreadContent(
-            context.applicationContext.getSharedPreferences("administrator_unread_content", Context.MODE_PRIVATE),
+            unreadPreferences,
             mapOf(
                 DealerDestination.Visits to activeVisits.filter { it.status == VisitStatus.NotVisited }.map { it.id }.toSet(),
                 DealerDestination.Requests to newRequestIds,
@@ -87,6 +93,10 @@ internal fun DealerApp(initialTab: Int = 0, onSettingsClick: () -> Unit = {}) {
             )
         )
     }
+    val storeUnreadContent = remember(unreadPreferences) {
+        UnreadContent(unreadPreferences, mapOf(AdminMenuUnread.Stores to newStoreIds))
+    }
+    val unreadStores = storeUnreadContent[AdminMenuUnread.Stores]
     val administratorPreferences = remember(context) { DealerProfilePreferences(context) }
     var administrator by remember { mutableStateOf(administratorPreferences.readAdministrator()) }
     val locationPreferences = remember(context) { StoreLocationPreferences(context) }
@@ -169,7 +179,9 @@ internal fun DealerApp(initialTab: Int = 0, onSettingsClick: () -> Unit = {}) {
                 if (!childScreenVisible) {
                     DealerBottomNavigation(
                         selected = destination,
-                        unreadCounts = DealerDestination.entries.associateWith { unreadContent[it].size },
+                        unreadCounts = DealerDestination.entries.associateWith {
+                            unreadContent[it].size + if (it == DealerDestination.Menu) unreadStores.size else 0
+                        },
                         onSelect = { selectedIndex = it.ordinal }
                     )
                 }
@@ -209,7 +221,11 @@ internal fun DealerApp(initialTab: Int = 0, onSettingsClick: () -> Unit = {}) {
                     }
                 } else if (storesVisible) {
                     storesScreenState.SaveableStateProvider("stores") {
-                        StoresScreen(locations = storeLocations, onBack = closeChildScreen, onStoreClick = { selectedMagazineId = it })
+                        StoresScreen(locations = storeLocations, onBack = closeChildScreen, unreadIds = unreadStores,
+                            onStoreClick = { id ->
+                                storeUnreadContent.markRead(AdminMenuUnread.Stores, id)
+                                selectedMagazineId = id
+                            })
                     }
                 } else if (routesVisible) {
                     RoutesScreen(onBack = closeChildScreen)
@@ -244,6 +260,7 @@ internal fun DealerApp(initialTab: Int = 0, onSettingsClick: () -> Unit = {}) {
                                 onNotificationsClick = { notificationsVisible = true },
                                 onSettingsClick = onSettingsClick,
                                 unreadNotificationCount = unreadContent[destination].size,
+                                unreadStoreCount = unreadStores.size,
                                 administrator = administrator
                             )
                         }

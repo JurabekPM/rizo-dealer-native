@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -130,12 +131,12 @@ private fun StoreSummary(store: VisitStore) {
 
 @Composable
 private fun SummaryAction(label: String, @DrawableRes iconRes: Int, modifier: Modifier, onClick: () -> Unit) {
-    Row(modifier.softCardPress(onClick = onClick).height(48.dp).clip(RoundedCornerShape(DealerDesign.radius))
-        .background(DealerDesign.background).padding(horizontal = 12.dp),
+    Row(modifier.softCardPress(onClick = onClick).heightIn(min = 48.dp).clip(RoundedCornerShape(DealerDesign.radius))
+        .background(DealerDesign.background).padding(horizontal = 8.dp),
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-        DealerIcon(iconRes)
-        Spacer(Modifier.width(8.dp))
-        Text(label, style = DealerDesign.body, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        DealerIcon(iconRes, size = 20.dp)
+        Spacer(Modifier.width(6.dp))
+        Text(label, style = DealerDesign.body, maxLines = 2, overflow = TextOverflow.Ellipsis)
     }
 }
 

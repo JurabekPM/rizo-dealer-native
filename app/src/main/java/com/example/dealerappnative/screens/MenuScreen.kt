@@ -45,6 +45,7 @@ internal fun MenuScreen(
     onNotificationsClick: () -> Unit,
     onSettingsClick: () -> Unit,
     unreadNotificationCount: Int,
+    unreadStoreCount: Int,
     administrator: AdminPersonalProfile
 ) {
     Column(Modifier.fillMaxSize().background(DealerDesign.background).verticalScroll(rememberScrollState())) {
@@ -68,7 +69,11 @@ internal fun MenuScreen(
         Column(Modifier.cardShadow().background(DealerDesign.surface).padding(vertical = 4.dp)) {
             menuItems.forEachIndexed { index, (label, iconRes) ->
                 MenuRow(label, iconRes, divider = index != menuItems.lastIndex,
-                    unreadCount = if (iconRes == R.drawable.ic_bell) unreadNotificationCount else 0,
+                    unreadCount = when (iconRes) {
+                        R.drawable.ic_bell -> unreadNotificationCount
+                        R.drawable.ic_store -> unreadStoreCount
+                        else -> 0
+                    },
                     onClick = when (iconRes) {
                         R.drawable.ic_store -> onStoresClick
                         R.drawable.ic_edit -> onRevisionsClick

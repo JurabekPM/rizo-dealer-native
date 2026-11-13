@@ -8,9 +8,6 @@ internal object AgentMenuSampleData {
     const val lastSync = "Последняя синхронизация: 19.10.2026 | 11:34"
 }
 
-// Sample assignments in the agent's store directory.
-internal val newAgentStoreIds = setOf("758", "760")
-
 internal val agentNotifications = listOf(
     DealerNotification("visit-901", "Назначен визит", "Atlas Market", "13.11.2026 | 09:20", isNew = true),
     DealerNotification("visit-902", "Назначен визит", "Sifat Savdo", "13.11.2026 | 09:15", isNew = true),

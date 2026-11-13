@@ -36,7 +36,7 @@ internal fun StoreStatementAppBar(store: StoreUiModel, filtered: Boolean, onBack
             DealerIcon(R.drawable.ic_store, Design.secondary, 22.dp)
         }
         Column(Modifier.weight(1f).padding(start = 10.dp, end = 8.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-            Text(store.name, style = Design.name, color = Design.text, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Text(store.name, style = Design.appBarName, color = Design.text, maxLines = 1, overflow = TextOverflow.Ellipsis)
             Text(store.address, style = Design.caption, color = Design.secondary, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
         SoftIconButton(onFilters, Modifier.size(44.dp).semantics { contentDescription = "Фильтры истории взаиморасчётов" }) {

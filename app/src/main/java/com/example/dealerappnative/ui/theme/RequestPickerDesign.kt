@@ -6,14 +6,14 @@ import androidx.compose.ui.text.font.FontWeight
 
 /** Figma base, with the user's product-name/price emphasis. Local to this picker. */
 internal object RequestPickerDesign {
-    val body = DealerDesign.type(15, 20, FontWeight.Normal, -.24f)
-    val detail = DealerDesign.type(13, 18, FontWeight.Normal, -.078f)
-    val productTitle = DealerDesign.type(15, 20, FontWeight.Medium, -.24f)
+    val body = DealerDesign.type(16, 21, FontWeight.Normal, -.24f)
+    val detail = DealerDesign.type(14, 19, FontWeight.Normal, -.078f)
+    val productTitle = DealerDesign.type(16, 21, FontWeight.Medium, -.24f)
     val price = DealerDesign.type(16, 22, FontWeight.SemiBold, -.24f).copy(fontFeatureSettings = "tnum")
-    val unit = DealerDesign.type(13, 18, FontWeight.Medium, -.078f)
+    val unit = DealerDesign.type(14, 19, FontWeight.Medium, -.078f)
     val quantity = productTitle.copy(fontFeatureSettings = "tnum")
-    val badge = DealerDesign.type(11, 13, FontWeight.SemiBold, .06f)
-    val button = DealerDesign.type(15, 20, FontWeight.Normal, -.5f)
+    val badge = DealerDesign.type(12, 15, FontWeight.SemiBold, .06f)
+    val button = DealerDesign.type(16, 21, FontWeight.Normal, -.5f)
     val sheetTitle = DealerDesign.type(17, 22, FontWeight.SemiBold)
     val thumbnail: Color @Composable get() = dealerColor(Color(0xFFF1F1F1), Color(0xFF2D2A35))
     val addBackground: Color @Composable get() = dealerColor(Color(0xFFF7EEFC), Color(0xFF372845))

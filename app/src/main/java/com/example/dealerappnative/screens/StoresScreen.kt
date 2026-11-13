@@ -35,6 +35,7 @@ import com.example.dealerappnative.model.StoreLocation
 import com.example.dealerappnative.ui.components.ChildScreenHeader
 import com.example.dealerappnative.ui.components.DealerIcon
 import com.example.dealerappnative.ui.components.PrototypeCreateButton
+import com.example.dealerappnative.ui.components.UnreadCardTitle
 import com.example.dealerappnative.ui.components.unreadCardBackground
 import com.example.dealerappnative.ui.components.SearchField
 import com.example.dealerappnative.ui.theme.DealerDesign
@@ -91,7 +92,7 @@ private fun StoreCard(store: StoreUiModel, unread: Boolean, onClick: () -> Unit)
             DealerIcon(R.drawable.ic_store)
             Spacer(Modifier.width(12.dp))
             Column(Modifier.weight(1f)) {
-                Text(store.name, style = DealerDesign.cardTitle, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                UnreadCardTitle(store.name, unread)
                 Spacer(Modifier.height(4.dp))
                 Text(store.debtDirection.formatAmount(store.debt), style = DealerDesign.detail,
                     color = store.debtDirection.displayColor, maxLines = 1, overflow = TextOverflow.Ellipsis)

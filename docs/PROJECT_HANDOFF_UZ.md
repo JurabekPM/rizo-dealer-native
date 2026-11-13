@@ -461,3 +461,9 @@ Admin va Agent kartalarining radiusi 2 dp oshirildi. Asosiy radius 14 dp, soya b
 
 - Admin va Agent menyusidagi «Настройки» orqali «Как на телефоне», «Светлая» yoki «Тёмная» tanlanadi. Standart tanlov telefon temasiga mos. Umumiy tanlov dealer_appearance SharedPreferences’da saqlanadi. Xarita fonining ranglari ham shu temaga moslanadi.
 - Agent vizitining ko‘rilmagan kartasida yengil binafsha fon va nom yonida 6 dp binafsha nuqta bor. Vizit tafsilotlari ochilganda hisoblagich kamayadi. Ro‘yxatga qaytganda karta odatiy fonni oladi va nuqta yo‘qoladi. «Новый» ish statusi vizit boshlanganda yangilanadi.
+
+
+## 33. Ko‘rilmagan kartalar va qora tema kontrasti
+
+- Admin va Agentdagi ko‘rilmagan yozuv kartalarida bitta «Yengil fon» va nom yonida 6 dp binafsha nuqta ishlatiladi. Admin do‘konlar soni «Меню» hisobiga qo‘shiladi. Agentning do‘kon katalogi va statistika ichidagi qarzdorlik ro‘yxati bitta ko‘rilgan holatni ishlatadi.
+- Vizit natijasi ikonkalari uchun oq va qora temaga mos alohida fon, kontur va ikonka rangi ishlatiladi. Qora tema kartalari ekrandan aniqroq ajraladi. Ixcham matnlar 1 sp kattalashtirildi.

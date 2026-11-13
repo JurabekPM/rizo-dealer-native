@@ -152,13 +152,13 @@ private fun VisitStoreSummary(store: StoreUiModel, actionStore: StoreUiModel) {
 
 @Composable
 private fun VisitSummaryAction(label: String, icon: Int, modifier: Modifier, onClick: () -> Unit) {
-    Row(modifier.softCardPress(onClick = onClick).height(40.dp).clip(RoundedCornerShape(12.dp)).background(DealerDesign.background)
+    Row(modifier.softCardPress(onClick = onClick).heightIn(min = 40.dp).clip(RoundedCornerShape(12.dp)).background(DealerDesign.background)
         .padding(horizontal = 8.dp), horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically) {
-        DealerIcon(icon)
-        Spacer(Modifier.width(8.dp))
+        DealerIcon(icon, size = 20.dp)
+        Spacer(Modifier.width(6.dp))
         Text(label, style = AgentVisitDesign.emphasis, color = DealerDesign.text,
-            maxLines = 1, overflow = TextOverflow.Ellipsis)
+            maxLines = 2, overflow = TextOverflow.Ellipsis)
     }
 }
 

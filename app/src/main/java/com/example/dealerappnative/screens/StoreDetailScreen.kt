@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -100,13 +101,13 @@ private fun StoreSummary(store: StoreUiModel, onOpenMap: () -> Unit) {
 
 @Composable
 private fun StoreAction(label: String, @DrawableRes icon: Int, modifier: Modifier, onClick: (() -> Unit)? = null) {
-    Row(modifier.height(48.dp).then(if (onClick != null) Modifier.softCardPress(onClick = onClick) else Modifier).clip(RoundedCornerShape(DealerDesign.radius))
+    Row(modifier.heightIn(min = 48.dp).then(if (onClick != null) Modifier.softCardPress(onClick = onClick) else Modifier).clip(RoundedCornerShape(DealerDesign.radius))
         .background(DealerDesign.background)
-        .padding(horizontal = 12.dp),
+        .padding(horizontal = 8.dp),
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-        DealerIcon(icon)
-        Spacer(Modifier.width(8.dp))
-        Text(label, style = DealerDesign.body, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        DealerIcon(icon, size = 20.dp)
+        Spacer(Modifier.width(6.dp))
+        Text(label, style = DealerDesign.body, maxLines = 2, overflow = TextOverflow.Ellipsis)
     }
 }
 

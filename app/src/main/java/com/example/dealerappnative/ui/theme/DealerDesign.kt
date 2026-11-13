@@ -23,10 +23,13 @@ internal object DealerDesign {
     val secondary: Color @Composable get() = dealerColor(Color(0xFF84919A), Color(0xFFABB0BE))
     val tertiary: Color @Composable get() = dealerColor(Color(0xFF9AA6AC), Color(0xFF989BAA))
     val background: Color @Composable get() = dealerColor(Color(0xFFF4F4F4), Color(0xFF141319))
-    val surface: Color @Composable get() = dealerColor(Color.White, Color(0xFF211F28))
-    val divider: Color @Composable get() = dealerColor(Color(0xFFEBEBEB), Color(0xFF393643))
+    val surface: Color @Composable get() = dealerColor(Color.White, Color(0xFF26242E))
+    val divider: Color @Composable get() = dealerColor(Color(0xFFEBEBEB), Color(0xFF403D4B))
     val text: Color @Composable get() = dealerColor(Color.Black, Color(0xFFF3EFF8))
-    val softAccent: Color @Composable get() = dealerColor(Color(0xFFFAF5FF), Color(0xFF2C2437))
+    val softAccent: Color @Composable get() = dealerColor(Color(0xFFFAF5FF), Color(0xFF33293F))
+    val resultBadgeSurface: Color @Composable get() = dealerColor(Color(0xFFF0EDF5), Color(0xFF3A3448))
+    val resultBadgeOutline: Color @Composable get() = dealerColor(Color(0xFFE5DFEC), Color(0xFF4A4259))
+    val resultBadgeIcon: Color @Composable get() = dealerColor(Color(0xFF5E566A), Color(0xFFDBD4E6))
     val pageInset = 16.dp
     val sectionGap = 8.dp
     val iconSize = 24.dp
@@ -45,13 +48,13 @@ internal object DealerDesign {
         platformStyle = PlatformTextStyle(includeFontPadding = false)
     )
     val title = type(17, 22, FontWeight.SemiBold)
-    val body = type(15, 20)
-    val cardTitle = type(15, 20, tracking = -0.24f)
-    val search = type(15, 20, tracking = -0.24f)
-    val detail = type(13, 18, tracking = -0.08f)
-    val tab = type(13, 18, tracking = -0.08f)
-    val navigation = type(11, 13, tracking = 0.06f)
-    val button = type(15, 20)
+    val body = type(16, 21)
+    val cardTitle = type(16, 21, tracking = -0.24f)
+    val search = type(16, 21, tracking = -0.24f)
+    val detail = type(14, 19, tracking = -0.08f)
+    val tab = type(14, 19, tracking = -0.08f)
+    val navigation = type(12, 15, tracking = 0.06f)
+    val button = type(16, 21)
 }
 
 /** This visual test app renders the specified weights even with Samsung bold text.

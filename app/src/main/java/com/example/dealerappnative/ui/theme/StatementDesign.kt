@@ -23,11 +23,12 @@ internal object StatementDesign {
         StatementKind.Request -> text
     }
     val title = DealerDesign.type(20, 26, FontWeight.SemiBold, -.25f)
-    val name = DealerDesign.type(14, 20, FontWeight.SemiBold, -.15f)
-    val amount = DealerDesign.type(15, 20, FontWeight.SemiBold, -.2f)
-    val body = DealerDesign.type(13, 18, FontWeight.Medium, -.05f)
-    val label = DealerDesign.type(12, 16, FontWeight.SemiBold, 0f)
-    val caption = DealerDesign.type(12, 16, FontWeight.Medium, 0f)
-    val choice = DealerDesign.type(13, 18, FontWeight.SemiBold, -.08f)
-    val button = DealerDesign.type(15, 20, FontWeight.SemiBold, -.15f)
+    val appBarName = DealerDesign.type(14, 20, FontWeight.SemiBold, -.15f)
+    val name = DealerDesign.type(15, 21, FontWeight.SemiBold, -.15f)
+    val amount = DealerDesign.type(16, 21, FontWeight.SemiBold, -.2f)
+    val body = DealerDesign.type(14, 19, FontWeight.Medium, -.05f)
+    val label = DealerDesign.type(13, 17, FontWeight.SemiBold, 0f)
+    val caption = DealerDesign.type(13, 17, FontWeight.Medium, 0f)
+    val choice = DealerDesign.type(14, 19, FontWeight.SemiBold, -.08f)
+    val button = DealerDesign.type(16, 21, FontWeight.SemiBold, -.15f)
 }

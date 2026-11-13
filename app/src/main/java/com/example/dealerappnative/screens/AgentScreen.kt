@@ -14,8 +14,7 @@ import androidx.compose.runtime.remember
 import com.example.dealerappnative.data.UnreadContent
 import com.example.dealerappnative.data.agentNotifications
 import com.example.dealerappnative.data.agentVisitCards
-import com.example.dealerappnative.data.newAgentStoreIds
-import com.example.dealerappnative.data.sampleStores
+import com.example.dealerappnative.data.newStoreIds
 import com.example.dealerappnative.data.AgentVisitSessions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -41,7 +40,7 @@ internal fun AgentScreen(onBack: () -> Unit, onSettingsClick: () -> Unit = {}) {
                 AgentDestination.Visits to agentVisitCards.filter {
                     it.status == VisitStatus.NotVisited && it.id !in visitSessions.sessions
                 }.map { it.id }.toSet(),
-                AgentDestination.Stores to sampleStores.filter { it.id in newAgentStoreIds }.map { it.id }.toSet(),
+                AgentDestination.Stores to newStoreIds,
                 AgentDestination.More to agentNotifications.filter { it.isNew }.map { it.id }.toSet()
             )
         )
@@ -72,7 +71,7 @@ internal fun AgentScreen(onBack: () -> Unit, onSettingsClick: () -> Unit = {}) {
                 onBack = { notificationsVisible = false }
             )
         } else if (storeDebtsVisible) {
-            AgentStoreDebtsScreen(onBack = { storeDebtsVisible = false })
+            AgentStoreDebtsScreen(onBack = { storeDebtsVisible = false }, unreadIds = unreadStores, onRead = onStoreRead)
         } else if (storesVisible) {
             AgentStoresScreen(
                 onBack = { storesVisible = false },

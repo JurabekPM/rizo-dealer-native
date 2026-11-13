@@ -1,7 +1,5 @@
 package com.example.dealerappnative.ui.components
 
-import com.example.dealerappnative.ui.theme.DealerDesign
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,19 +19,17 @@ import com.example.dealerappnative.model.AgentStoreDebt
 import com.example.dealerappnative.ui.theme.AgentDesign
 
 @Composable
-internal fun AgentStoreDebtCard(item: AgentStoreDebt, onClick: () -> Unit) {
-    Column(Modifier.fillMaxWidth().softCardPress(onClick = onClick).cardShadow().background(DealerDesign.surface)
+internal fun AgentStoreDebtCard(item: AgentStoreDebt, unread: Boolean, onClick: () -> Unit) {
+    Column(Modifier.fillMaxWidth().softCardPress(onClick = onClick).cardShadow().unreadCardBackground(unread)
         .padding(12.dp)) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.agentStoreSharedPart(item.store.id, AgentStorePart.Logo)) {
                 DealerIcon(R.drawable.ic_agent_store, AgentDesign.secondary, AgentDesign.iconSize)
             }
             Spacer(Modifier.width(10.dp))
-            Box(Modifier.weight(1f)) {
-                Text(item.store.name, style = AgentDesign.menuTitle, color = AgentDesign.text,
-                    modifier = Modifier.agentStoreSharedPart(item.store.id, AgentStorePart.Name),
-                    maxLines = 1, overflow = TextOverflow.Ellipsis)
-            }
+            UnreadCardTitle(item.store.name, unread, modifier = Modifier.weight(1f),
+                textModifier = Modifier.agentStoreSharedPart(item.store.id, AgentStorePart.Name),
+                style = AgentDesign.menuTitle, color = AgentDesign.text)
             Spacer(Modifier.width(8.dp))
             Text("ID ${item.store.id}", style = AgentDesign.detail, color = AgentDesign.secondary,
                 modifier = Modifier.agentStoreSharedPart(item.store.id, AgentStorePart.Id))

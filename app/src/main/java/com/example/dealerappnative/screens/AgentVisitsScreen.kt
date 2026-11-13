@@ -214,7 +214,7 @@ private fun AgentVisitsList(cards: List<VisitStore>, onStoreClick: (String) -> U
                 verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 item(key = "plans", contentType = "plans") { AgentVisitPlans() }
                 items(stores, key = { it.id }, contentType = { "visit" }) { store ->
-                    VisitStoreCard(store, unread = store.id in unreadIds, showUnreadDot = true,
+                    VisitStoreCard(store, unread = store.id in unreadIds,
                         onClick = { onStoreClick(store.id) })
                 }
                 if (stores.isEmpty()) item {

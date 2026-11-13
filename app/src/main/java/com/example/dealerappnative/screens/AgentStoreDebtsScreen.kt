@@ -67,7 +67,11 @@ private enum class DebtFilter(val label: String) { All("Все"), WithDebt("С �
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-internal fun AgentStoreDebtsScreen(onBack: () -> Unit) {
+internal fun AgentStoreDebtsScreen(
+    onBack: () -> Unit,
+    unreadIds: Set<String>,
+    onRead: (String) -> Unit
+) {
     val context = LocalContext.current
     val stores = remember(context) {
         val preferences = StoreLocationPreferences(context)
@@ -93,7 +97,10 @@ internal fun AgentStoreDebtsScreen(onBack: () -> Unit) {
                     AgentStoreDetailScreen(selected, onBack = { selectedId = null })
                 } else state.SaveableStateProvider("store-debts") {
                     AgentStoreDebtList(stores, onBack, isCurrentScreen = selectedId == null,
-                        onStoreClick = { selectedId = it })
+                        unreadIds = unreadIds, onStoreClick = { id ->
+                            onRead(id)
+                            selectedId = id
+                        })
                 }
             }
         }
@@ -106,6 +113,7 @@ private fun AgentStoreDebtList(
     stores: List<AgentStoreDebt>,
     onBack: () -> Unit,
     isCurrentScreen: Boolean,
+    unreadIds: Set<String>,
     onStoreClick: (String) -> Unit
 ) {
     var query by rememberSaveable { mutableStateOf("") }
@@ -166,7 +174,7 @@ private fun AgentStoreDebtList(
         LazyColumn(Modifier.fillMaxWidth().weight(1f), state = listState, contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)) {
             items(visible, key = { it.store.id }) { item ->
-                AgentStoreDebtCard(item, onClick = {
+                AgentStoreDebtCard(item, unread = item.store.id in unreadIds, onClick = {
                     focusManager.clearFocus()
                     keyboard?.hide()
                     onStoreClick(item.store.id)

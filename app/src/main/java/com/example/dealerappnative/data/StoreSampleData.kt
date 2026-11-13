@@ -40,4 +40,7 @@ internal val sampleStores = listOf(
     )
 )
 
+// Sample stores recently added to the directory.
+internal val newStoreIds = setOf("758", "760")
+
 internal fun findStore(id: String?): StoreUiModel? = sampleStores.firstOrNull { it.id == id }
