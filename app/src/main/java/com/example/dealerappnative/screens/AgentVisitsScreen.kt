@@ -1,5 +1,6 @@
 package com.example.dealerappnative.screens
 
+import com.example.dealerappnative.ui.components.cardShadow
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -18,7 +19,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -224,9 +224,9 @@ private fun AgentVisitsList(cards: List<VisitStore>, onStoreClick: (String) -> U
 
 @Composable
 private fun AgentVisitPlans() {
-    Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(Color.White).padding(16.dp),
+    Column(Modifier.fillMaxWidth().cardShadow().background(Color.White).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Row(Modifier.fillMaxWidth().height(62.dp).clip(RoundedCornerShape(12.dp)).background(DealerDesign.background)
+        Row(Modifier.fillMaxWidth().height(62.dp).cardShadow().background(DealerDesign.background)
             .padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
             DealerIcon(R.drawable.img_visit_collection_result, Color.Unspecified)
             Spacer(Modifier.width(12.dp))
@@ -244,7 +244,7 @@ private fun AgentVisitPlans() {
 
 @Composable
 private fun AgentPlanTile(title: String, value: String, icon: Int, modifier: Modifier) {
-    Column(modifier.height(98.dp).clip(RoundedCornerShape(12.dp)).background(DealerDesign.background).padding(12.dp)) {
+    Column(modifier.height(98.dp).cardShadow().background(DealerDesign.background).padding(12.dp)) {
         DealerIcon(icon, DealerDesign.secondary)
         Spacer(Modifier.height(12.dp))
         Text(title, style = AgentVisitDesign.name, color = Color.Black, maxLines = 1, overflow = TextOverflow.Ellipsis)

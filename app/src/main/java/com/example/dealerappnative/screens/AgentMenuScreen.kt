@@ -1,6 +1,7 @@
 package com.example.dealerappnative.screens
 
 import com.example.dealerappnative.ui.components.softCardPress
+import com.example.dealerappnative.ui.components.cardShadow
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,7 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -45,7 +45,7 @@ internal fun AgentMenuScreen(onExit: () -> Unit, onStoresClick: () -> Unit) {
             item(key = "profile") { AgentProfile() }
             item(key = "main-menu") {
                 Spacer(Modifier.height(AgentDesign.gap))
-                Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(AgentDesign.radius)).background(Color.White)) {
+                Column(Modifier.fillMaxWidth().cardShadow().background(Color.White)) {
                     AgentMenuRow("Синхронизация", R.drawable.ic_agent_refresh, subtitle = data.lastSync)
                     AgentMenuRow("Расписание", R.drawable.ic_agent_schedule)
                     AgentMenuRow("Магазины", R.drawable.ic_store, onClick = onStoresClick)
@@ -55,7 +55,7 @@ internal fun AgentMenuScreen(onExit: () -> Unit, onStoresClick: () -> Unit) {
             }
             item(key = "account-menu") {
                 Spacer(Modifier.height(AgentDesign.gap))
-                Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(AgentDesign.radius)).background(Color.White)) {
+                Column(Modifier.fillMaxWidth().cardShadow().background(Color.White)) {
                     AgentMenuRow("О Приложении", R.drawable.ic_info)
                     AgentMenuRow("Выйти", R.drawable.ic_exit, divider = false, onClick = onExit)
                 }

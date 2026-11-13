@@ -3,6 +3,7 @@ package com.example.dealerappnative.screens
 import com.example.dealerappnative.ui.components.softCardPress
 import com.example.dealerappnative.ui.components.LocalStoreActions
 import com.example.dealerappnative.ui.components.StoreStatementEntry
+import com.example.dealerappnative.ui.components.cardShadow
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -46,7 +47,7 @@ internal fun StoreDetailScreen(store: StoreUiModel, onBack: () -> Unit, onOpenMa
             item { StoreSummary(store, onOpenMap) }
             item { StoreSettings(store) }
             item {
-                Row(Modifier.fillMaxWidth().height(56.dp).clip(RoundedCornerShape(DealerDesign.radius))
+                Row(Modifier.fillMaxWidth().height(56.dp).cardShadow()
                     .background(Color.White).padding(horizontal = DealerDesign.pageInset),
                     verticalAlignment = Alignment.CenterVertically) {
                     Text("Конечное сальдо", style = DealerDesign.body, color = DealerDesign.secondary,
@@ -60,7 +61,7 @@ internal fun StoreDetailScreen(store: StoreUiModel, onBack: () -> Unit, onOpenMa
             }
             item { StoreStatementEntry(store) }
             item {
-                Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(DealerDesign.radius)).background(Color.White)) {
+                Column(Modifier.fillMaxWidth().cardShadow().background(Color.White)) {
                     Text("Отчёты", style = DealerDesign.type(22, 28),
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp))
                     storeReports.forEachIndexed { index, (title, icon) ->
@@ -76,7 +77,7 @@ internal fun StoreDetailScreen(store: StoreUiModel, onBack: () -> Unit, onOpenMa
 @Composable
 private fun StoreSummary(store: StoreUiModel, onOpenMap: () -> Unit) {
     val actions = LocalStoreActions.current
-    Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(DealerDesign.radius))
+    Column(Modifier.fillMaxWidth().cardShadow()
         .background(Color.White).padding(horizontal = DealerDesign.pageInset, vertical = 12.dp)) {
         Row(Modifier.fillMaxWidth().height(44.dp), verticalAlignment = Alignment.CenterVertically) {
             DealerIcon(R.drawable.ic_store)
@@ -109,7 +110,7 @@ private fun StoreAction(label: String, @DrawableRes icon: Int, modifier: Modifie
 
 @Composable
 private fun StoreSettings(store: StoreUiModel) {
-    Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(DealerDesign.radius))
+    Column(Modifier.fillMaxWidth().cardShadow()
         .background(Color.White).padding(horizontal = DealerDesign.pageInset, vertical = 4.dp)) {
         Row(Modifier.fillMaxWidth().height(48.dp), verticalAlignment = Alignment.CenterVertically) {
             DealerIcon(R.drawable.ic_info)

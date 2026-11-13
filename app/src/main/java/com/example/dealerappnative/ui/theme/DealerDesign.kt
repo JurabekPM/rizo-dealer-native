@@ -33,6 +33,7 @@ internal object DealerDesign {
     val cardHeight = 113.dp
     val buttonHeight = 48.dp
     val radius = 12.dp
+    val cardRadius = 14.dp
 
     // Figma uses SF Pro; Android uses its native sans-serif with the same metrics.
     fun type(size: Int, line: Int, weight: FontWeight = FontWeight.SemiBold, tracking: Float = -0.5f) = TextStyle(

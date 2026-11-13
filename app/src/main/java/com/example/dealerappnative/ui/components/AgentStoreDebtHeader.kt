@@ -144,7 +144,7 @@ internal fun AgentStoreDebtHeader(
 @Composable
 private fun DebtOverview() {
     val data = AgentStoreDebtData
-    Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(AgentDesign.radius)).background(Color.White).padding(16.dp)) {
+    Column(Modifier.fillMaxWidth().cardShadow().background(Color.White).padding(16.dp)) {
         Text("Общая задолженность", style = AgentDesign.label, color = AgentDesign.secondary)
         Spacer(Modifier.height(4.dp))
         Text(data.totalText, style = AgentDesign.reportTitle, color = AgentDesign.negative)

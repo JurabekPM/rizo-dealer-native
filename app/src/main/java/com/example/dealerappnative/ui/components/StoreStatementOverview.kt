@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -32,7 +31,7 @@ internal fun StoreStatementOverview(totals: List<StatementCurrencyTotals>, count
 
 @Composable
 private fun StatementTotalTile(label: String, values: List<Pair<String, BigDecimal>>, color: Color) {
-    Column(Modifier.widthIn(min = 120.dp).background(Design.surface, RoundedCornerShape(12.dp)).padding(12.dp),
+    Column(Modifier.widthIn(min = 120.dp).cardShadow().background(Design.surface).padding(12.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp)) {
         Text(label, style = Design.label, color = color)
         values.forEach { (currency, amount) -> Text(statementMoney(amount, currency), style = Design.amount, color = color, maxLines = 1) }

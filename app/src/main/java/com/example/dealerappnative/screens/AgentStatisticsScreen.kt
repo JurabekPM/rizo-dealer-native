@@ -2,6 +2,7 @@ package com.example.dealerappnative.screens
 
 import com.example.dealerappnative.ui.components.SoftIconButton
 import com.example.dealerappnative.ui.components.softCardPress
+import com.example.dealerappnative.ui.components.cardShadow
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import com.example.dealerappnative.data.AgentStoreDebtData
@@ -133,7 +134,7 @@ private fun AgentStatisticsHeader(updatedAt: Long, onRefresh: () -> Unit) {
 @Composable
 private fun AgentVisitsSummary(data: AgentStatisticsSnapshot) {
     val progress = if (data.plannedVisits > 0) data.completedVisits.toFloat() / data.plannedVisits else 0f
-    Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(AgentDesign.radius))
+    Column(Modifier.fillMaxWidth().cardShadow()
         .background(Color.White).padding(16.dp)) {
         Row(Modifier.fillMaxWidth().height(40.dp), verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.size(40.dp).clip(CircleShape).background(AgentDesign.tint), contentAlignment = Alignment.Center) {
@@ -161,7 +162,7 @@ private fun AgentVisitsSummary(data: AgentStatisticsSnapshot) {
 
 @Composable
 private fun AgentStoreDebt(onClick: () -> Unit) {
-    Row(Modifier.fillMaxWidth().softCardPress(onClick = onClick).clip(RoundedCornerShape(AgentDesign.radius)).background(Color.White).padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+    Row(Modifier.fillMaxWidth().softCardPress(onClick = onClick).cardShadow().background(Color.White).padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
         DealerIcon(R.drawable.ic_agent_debt, AgentDesign.secondary, AgentDesign.iconSize)
         Spacer(Modifier.width(12.dp))
         Column(Modifier.weight(1f)) {

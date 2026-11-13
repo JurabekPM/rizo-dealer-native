@@ -59,7 +59,7 @@ internal fun StoreStatementScreen(store: StoreUiModel, onBack: () -> Unit) {
             months.forEach { month ->
                 item(key = "month-${month.key}") {
                     Row(Modifier.fillMaxWidth().padding(top = 8.dp)
-                        .background(Color.White, RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
+                        .background(Color.White, RoundedCornerShape(topStart = DealerDesign.cardRadius, topEnd = DealerDesign.cardRadius))
                         .padding(horizontal = 16.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
                         Text(month.title, style = Design.name, color = Design.text, modifier = Modifier.weight(1f))
                     }

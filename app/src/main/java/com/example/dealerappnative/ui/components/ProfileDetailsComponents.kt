@@ -66,7 +66,7 @@ internal fun ProfileSelfBadge() {
 
 @Composable
 internal fun ProfileIdentity(name: String, subtitle: String, @DrawableRes icon: Int, imageUri: String = "", initials: String? = null, self: Boolean = false) {
-    Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).background(Color.White).padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+    Row(Modifier.fillMaxWidth().cardShadow(RoundedCornerShape(18.dp)).background(Color.White).padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
         ProfileAvatar(icon, 56.dp, imageUri, initials)
         Spacer(Modifier.width(14.dp))
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {

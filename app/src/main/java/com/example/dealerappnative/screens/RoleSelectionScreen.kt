@@ -1,6 +1,7 @@
 package com.example.dealerappnative.screens
 
 import com.example.dealerappnative.ui.components.softCardPress
+import com.example.dealerappnative.ui.components.cardShadow
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -56,7 +57,7 @@ internal fun RoleSelectionScreen(onSelect: (AppRole) -> Unit) {
 
 @Composable
 private fun RoleCard(title: String, subtitle: String, @DrawableRes icon: Int, onClick: () -> Unit) {
-    Row(Modifier.fillMaxWidth().softCardPress(onClick = onClick).clip(RoundedCornerShape(DealerDesign.radius))
+    Row(Modifier.fillMaxWidth().softCardPress(onClick = onClick).cardShadow()
         .background(Color.White).padding(16.dp),
         verticalAlignment = Alignment.CenterVertically) {
         Box(Modifier.size(48.dp).clip(RoundedCornerShape(DealerDesign.radius))

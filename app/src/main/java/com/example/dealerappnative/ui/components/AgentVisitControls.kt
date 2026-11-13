@@ -50,7 +50,7 @@ internal fun AgentVisitTiming(session: AgentVisitSession) {
     val elapsed = formatVisitElapsed(session.elapsedMillis(now))
     val date = remember { SimpleDateFormat("dd.MM.yyyy | HH:mm", Locale.getDefault()) }
     val finished = !session.isActive
-    Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(Color.White).padding(16.dp)) {
+    Column(Modifier.fillMaxWidth().cardShadow().background(Color.White).padding(16.dp)) {
         Row(Modifier.fillMaxWidth()) {
             Box(Modifier.width(8.dp).height(if (finished) 92.dp else 40.dp)) {
                 Box(Modifier.align(Alignment.TopCenter).padding(top = 4.dp).size(8.dp)
@@ -112,7 +112,7 @@ internal fun VisitCommentField(value: String, onChange: (String) -> Unit, readOn
 internal fun AgentVisitNotes(session: AgentVisitSession, onComment: (String) -> Unit,
     onAddPhotos: (List<String>) -> Unit, onRemovePhoto: (String) -> Unit) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(Color.White).padding(16.dp),
+        Column(Modifier.fillMaxWidth().cardShadow().background(Color.White).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)) {
             LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 if (session.isActive && session.photoUris.size < 6) item(key = "add") {
@@ -126,7 +126,7 @@ internal fun AgentVisitNotes(session: AgentVisitSession, onComment: (String) -> 
                 }
             }
         }
-        Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(Color.White).padding(16.dp),
+        Column(Modifier.fillMaxWidth().cardShadow().background(Color.White).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Text("Комментарии", style = AgentVisitDesign.detail, color = DealerDesign.text)
             if (session.isActive) VisitCommentField(session.comment, onComment)

@@ -4,6 +4,7 @@ import com.example.dealerappnative.ui.components.SoftIconButton
 import com.example.dealerappnative.ui.components.softCardPress
 import com.example.dealerappnative.ui.components.LocalStoreActions
 import com.example.dealerappnative.ui.components.StoreStatementEntry
+import com.example.dealerappnative.ui.components.cardShadow
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -60,7 +61,7 @@ internal fun AgentStoreDetailScreen(store: StoreUiModel, onBack: () -> Unit, vis
             verticalArrangement = Arrangement.spacedBy(8.dp)) {
             item(key = "store") { AgentStoreSummary(store) }
             item(key = "balance") {
-                Row(Modifier.fillMaxWidth().height(56.dp).clip(RoundedCornerShape(AgentDesign.radius))
+                Row(Modifier.fillMaxWidth().height(56.dp).cardShadow()
                     .background(Color.White).padding(horizontal = AgentDesign.inset),
                     verticalAlignment = Alignment.CenterVertically) {
                     Text("Конечное сальдо", style = AgentDesign.menuTitle, color = AgentDesign.secondary,
@@ -76,7 +77,7 @@ internal fun AgentStoreDetailScreen(store: StoreUiModel, onBack: () -> Unit, vis
             }
             item(key = "statement") { StoreStatementEntry(store) }
             item(key = "reports") {
-                Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(AgentDesign.radius)).background(Color.White)) {
+                Column(Modifier.fillMaxWidth().cardShadow().background(Color.White)) {
                     Text("Отчёты", style = AgentDesign.reportTitle, color = AgentDesign.text,
                         modifier = Modifier.padding(16.dp))
                     if (visitResults != null) {
@@ -102,7 +103,7 @@ internal fun AgentStoreDetailScreen(store: StoreUiModel, onBack: () -> Unit, vis
 @Composable
 private fun AgentStoreSummary(store: StoreUiModel) {
     val actions = LocalStoreActions.current
-    Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(AgentDesign.radius)).background(Color.White)
+    Column(Modifier.fillMaxWidth().cardShadow().background(Color.White)
         .padding(horizontal = 16.dp, vertical = 12.dp)) {
         Row(Modifier.fillMaxWidth().height(44.dp), verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.agentStoreSharedPart(store.id, AgentStorePart.Logo)

@@ -1,12 +1,11 @@
 package com.example.dealerappnative.screens
 
+import com.example.dealerappnative.ui.components.cardShadow
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.dealerappnative.R
@@ -25,7 +24,7 @@ internal fun RequestsScreen(unreadIds: Set<String>, onRead: (String) -> Unit) {
         historyOrders = requestHistory,
         emptyMessage = "Заявки не найдены"
     ) {
-        Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(DealerDesign.radius)).background(Color.White)) {
+        Column(Modifier.fillMaxWidth().cardShadow().background(Color.White)) {
             MenuRow("Ревизия", R.drawable.ic_edit, rowHeight = 48.dp)
             MenuRow("Ежемесячный план", R.drawable.ic_visit, divider = false, rowHeight = 48.dp)
         }

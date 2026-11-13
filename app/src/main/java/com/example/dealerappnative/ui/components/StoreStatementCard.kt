@@ -34,11 +34,12 @@ internal fun StoreStatementCard(entry: StoreStatementEntry, clientName: String, 
     val date = remember(entry.occurredAt) { statementDate(entry.occurredAt) }
     val shortDate = remember(entry.occurredAt) { SimpleDateFormat("d MMM, HH:mm", Locale.forLanguageTag("ru"))
         .apply { timeZone = TimeZone.getTimeZone("Asia/Tashkent") }.format(Date(entry.occurredAt)) }
-    val shape = if (grouped) RoundedCornerShape(bottomStart = if (lastInGroup) 12.dp else 0.dp,
-        bottomEnd = if (lastInGroup) 12.dp else 0.dp) else RoundedCornerShape(12.dp)
+    val bottomRadius = if (lastInGroup) DealerDesign.cardRadius else 0.dp
+    val outline = if (grouped) Modifier.clip(RoundedCornerShape(bottomStart = bottomRadius, bottomEnd = bottomRadius))
+        else Modifier.cardShadow()
     val rotation by animateFloatAsState(if (expanded) -90f else 90f, tween(280), label = "statement-chevron")
     val amountColor = Design.operationColor(entry.kind)
-    Column(Modifier.fillMaxWidth().clip(shape).background(Color.White).animateContentSize(tween(280))) {
+    Column(Modifier.fillMaxWidth().then(outline).background(Color.White).animateContentSize(tween(280))) {
         Row(Modifier.fillMaxWidth().softCardPress(onClick = onToggle).padding(horizontal = 16.dp, vertical = 14.dp), verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {

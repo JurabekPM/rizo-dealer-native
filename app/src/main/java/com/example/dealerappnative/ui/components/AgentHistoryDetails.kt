@@ -36,7 +36,7 @@ internal fun HistoryHeader(title: String, onBack: () -> Unit, action: (@Composab
 @Composable
 internal fun HistorySurface(modifier: Modifier = Modifier, verticalPadding: Dp = 16.dp, onClick: (() -> Unit)? = null, content: @Composable ColumnScope.() -> Unit) {
     Column(modifier.fillMaxWidth().softCardPress(onClick = onClick)
-        .clip(RoundedCornerShape(12.dp)).background(Color.White)
+        .cardShadow().background(Color.White)
         .padding(horizontal = 16.dp, vertical = verticalPadding), content = content)
 }
 

@@ -70,7 +70,7 @@ internal fun AgentVisitDetailScreen(store: StoreUiModel, visit: VisitStore,
             item(key = "store") { VisitStoreSummary(store, visit.sourceStore ?: store) }
             if (session != null) item(key = "time") { AgentVisitTiming(session) }
             item(key = "balance") {
-                Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(Color.White)
+                Row(Modifier.fillMaxWidth().cardShadow().background(Color.White)
                     .heightIn(min = 56.dp).padding(horizontal = 16.dp, vertical = 12.dp),
                     verticalAlignment = Alignment.CenterVertically) {
                     Text("Конечное сальдо", style = AgentVisitDesign.name, color = DealerDesign.secondary,
@@ -83,7 +83,7 @@ internal fun AgentVisitDetailScreen(store: StoreUiModel, visit: VisitStore,
             }
             item(key = "statement") { StoreStatementEntry(visit.sourceStore ?: store) }
             item(key = "operations") {
-                Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(Color.White)
+                Column(Modifier.fillMaxWidth().cardShadow().background(Color.White)
                     .padding(horizontal = 16.dp)) {
                     VisitResult.entries.forEachIndexed { index, result ->
                         VisitOperationRow(visit, result, result in (session?.results ?: visit.results),
@@ -128,7 +128,7 @@ internal fun AgentVisitDetailScreen(store: StoreUiModel, visit: VisitStore,
 @Composable
 private fun VisitStoreSummary(store: StoreUiModel, actionStore: StoreUiModel) {
     val actions = LocalStoreActions.current
-    Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(Color.White).padding(16.dp)) {
+    Column(Modifier.fillMaxWidth().cardShadow().background(Color.White).padding(16.dp)) {
         Row(Modifier.fillMaxWidth().heightIn(min = 44.dp), verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.sharedVisitStorePart(store.id, VisitStorePart.Logo)) { DealerIcon(R.drawable.ic_store) }
             Spacer(Modifier.width(12.dp))

@@ -7,13 +7,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -105,7 +103,7 @@ internal fun AgentHistoryScreen(sessions: AgentVisitSessions, onDetailVisible: (
 
 @Composable
 private fun HistoryPlans(onSelect: (HistorySection) -> Unit) {
-    Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(Color.White)
+    Column(Modifier.fillMaxWidth().cardShadow().background(Color.White)
         .padding(horizontal = 16.dp)) {
         val sections = listOf(HistorySection.Revisions, HistorySection.Visits, HistorySection.CollectionPlan,
             HistorySection.Returns, HistorySection.Sales)

@@ -8,13 +8,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.dealerappnative.R
@@ -26,7 +24,7 @@ import com.example.dealerappnative.ui.theme.DealerDesign
 @Composable
 internal fun VisitStoreCard(store: VisitStore, unread: Boolean = false, onClick: () -> Unit) {
     val debtLabel = store.debtDirection.formatAmount(store.debt)
-    Column(Modifier.fillMaxWidth().height(DealerDesign.cardHeight).softCardPress(onClick = onClick).clip(RoundedCornerShape(12.dp))
+    Column(Modifier.fillMaxWidth().height(DealerDesign.cardHeight).softCardPress(onClick = onClick).cardShadow()
         .adminCardBackground(unread).padding(horizontal = 16.dp)) {
         Row(Modifier.fillMaxWidth().height(72.dp), verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.sharedVisitStorePart(store.id, VisitStorePart.Logo)) {

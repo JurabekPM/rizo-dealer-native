@@ -7,13 +7,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -25,7 +23,7 @@ import com.example.dealerappnative.ui.theme.DealerDesign
 internal fun OrderCard(order: OrderUiModel, onUnreadClick: (() -> Unit)?) {
     val secondaryDetail = DealerDesign.detail.copy(fontWeight = FontWeight.Normal)
     Column(Modifier.fillMaxWidth().height(DealerDesign.cardHeight).softCardPress(onClick = onUnreadClick)
-        .clip(RoundedCornerShape(DealerDesign.radius)).adminCardBackground(onUnreadClick != null)
+        .cardShadow().adminCardBackground(onUnreadClick != null)
         .padding(horizontal = DealerDesign.pageInset)) {
         Row(Modifier.fillMaxWidth().height(72.dp), verticalAlignment = Alignment.CenterVertically) {
             DealerIcon(R.drawable.ic_store, DealerDesign.secondary, 24.dp)

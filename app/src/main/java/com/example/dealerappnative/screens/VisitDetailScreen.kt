@@ -5,6 +5,7 @@ import com.example.dealerappnative.ui.components.softCardPress
 import com.example.dealerappnative.ui.components.LocalStoreActions
 import com.example.dealerappnative.ui.components.StoreStatementEntry
 import com.example.dealerappnative.data.storeForVisit
+import com.example.dealerappnative.ui.components.cardShadow
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -78,7 +79,7 @@ internal fun VisitDetailScreen(store: VisitStore, onBack: () -> Unit) {
             item { VisitValueRow("Дата визита", store.details.date, DealerDesign.text) }
             item { EmployeeCard(store.details.employee, store.details.employeePhone) }
             item {
-                Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(DealerDesign.radius))
+                Column(Modifier.fillMaxWidth().cardShadow()
                     .background(Color.White).padding(horizontal = DealerDesign.pageInset)) {
                     val operations = visitOperations(store.details)
                     operations.forEachIndexed { index, operation ->
@@ -104,7 +105,7 @@ internal fun VisitDetailScreen(store: VisitStore, onBack: () -> Unit) {
 private fun StoreSummary(store: VisitStore) {
     val actions = LocalStoreActions.current
     val mapStore = storeForVisit(store)
-    Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(DealerDesign.radius))
+    Column(Modifier.fillMaxWidth().cardShadow()
         .background(Color.White).padding(horizontal = DealerDesign.pageInset, vertical = 12.dp)) {
         Row(Modifier.fillMaxWidth().height(44.dp), verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.sharedVisitStorePart(store.id, VisitStorePart.Logo)) {
@@ -139,7 +140,7 @@ private fun SummaryAction(label: String, @DrawableRes iconRes: Int, modifier: Mo
 
 @Composable
 private fun VisitValueRow(label: String, value: String, valueColor: Color, showChevron: Boolean = false, valueModifier: Modifier = Modifier) {
-    Row(Modifier.fillMaxWidth().height(56.dp).clip(RoundedCornerShape(DealerDesign.radius))
+    Row(Modifier.fillMaxWidth().height(56.dp).cardShadow()
         .background(Color.White).padding(horizontal = DealerDesign.pageInset),
         verticalAlignment = Alignment.CenterVertically) {
         Text(label, style = DealerDesign.body, color = DealerDesign.secondary, modifier = Modifier.weight(1f))
@@ -155,7 +156,7 @@ private fun VisitValueRow(label: String, value: String, valueColor: Color, showC
 @Composable
 private fun EmployeeCard(employeeName: String, phoneNumber: String) {
     val actions = LocalStoreActions.current
-    Row(Modifier.fillMaxWidth().height(72.dp).clip(RoundedCornerShape(DealerDesign.radius))
+    Row(Modifier.fillMaxWidth().height(72.dp).cardShadow()
         .background(Color.White).padding(horizontal = DealerDesign.pageInset),
         verticalAlignment = Alignment.CenterVertically) {
         DealerIcon(R.drawable.ic_person_outline)

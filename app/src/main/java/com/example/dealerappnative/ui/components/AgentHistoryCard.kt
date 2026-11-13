@@ -2,13 +2,11 @@ package com.example.dealerappnative.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -27,7 +25,7 @@ internal fun AgentHistoryCard(entry: AgentHistoryEntry, showAddress: Boolean = f
     val date = SimpleDateFormat("dd.MM.yyyy | HH:mm", Locale.forLanguageTag("ru")).apply {
         timeZone = TimeZone.getTimeZone("Asia/Tashkent")
     }.format(entry.session.startedAt)
-    Column(Modifier.fillMaxWidth().softCardPress(onClick = onClick).clip(RoundedCornerShape(12.dp)).background(Color.White)
+    Column(Modifier.fillMaxWidth().softCardPress(onClick = onClick).cardShadow().background(Color.White)
         .padding(horizontal = 16.dp)) {
         Row(Modifier.fillMaxWidth().heightIn(min = 72.dp).padding(vertical = 16.dp),
             verticalAlignment = Alignment.CenterVertically) {

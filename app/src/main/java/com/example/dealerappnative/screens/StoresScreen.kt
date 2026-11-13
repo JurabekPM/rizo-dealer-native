@@ -1,6 +1,7 @@
 package com.example.dealerappnative.screens
 
 import com.example.dealerappnative.ui.components.softCardPress
+import com.example.dealerappnative.ui.components.cardShadow
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,7 +24,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -82,7 +81,7 @@ internal fun StoresScreen(
 @Composable
 private fun StoreCard(store: StoreUiModel, onClick: () -> Unit) {
     Column(Modifier.fillMaxWidth().height(DealerDesign.cardHeight)
-        .softCardPress(onClick = onClick).clip(RoundedCornerShape(DealerDesign.radius)).background(Color.White)
+        .softCardPress(onClick = onClick).cardShadow().background(Color.White)
         .padding(horizontal = DealerDesign.pageInset)) {
         Row(Modifier.fillMaxWidth().height(72.dp), verticalAlignment = Alignment.CenterVertically) {
             DealerIcon(R.drawable.ic_store)

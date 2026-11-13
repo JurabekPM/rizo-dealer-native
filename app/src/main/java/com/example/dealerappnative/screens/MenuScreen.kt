@@ -1,6 +1,7 @@
 package com.example.dealerappnative.screens
 
 import com.example.dealerappnative.ui.components.softCardPress
+import com.example.dealerappnative.ui.components.cardShadow
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -47,7 +48,7 @@ internal fun MenuScreen(
     administrator: AdminPersonalProfile
 ) {
     Column(Modifier.fillMaxSize().background(DealerDesign.background).verticalScroll(rememberScrollState())) {
-        Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp)).background(Color.White).softCardPress(onClick = onEditDealerClick)
+        Row(Modifier.fillMaxWidth().cardShadow(RoundedCornerShape(bottomStart = 14.dp, bottomEnd = 14.dp)).background(Color.White).softCardPress(onClick = onEditDealerClick)
             .semantics { contentDescription = "Изменить профиль" }.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
             if (administrator.photoUri.isBlank()) {
                 Image(painterResource(R.drawable.dealer_avatar), contentDescription = null,
@@ -64,7 +65,7 @@ internal fun MenuScreen(
             }
         }
         Spacer(Modifier.height(8.dp))
-        Column(Modifier.clip(RoundedCornerShape(12.dp)).background(Color.White).padding(vertical = 4.dp)) {
+        Column(Modifier.cardShadow().background(Color.White).padding(vertical = 4.dp)) {
             menuItems.forEachIndexed { index, (label, iconRes) ->
                 MenuRow(label, iconRes, divider = index != menuItems.lastIndex,
                     unreadCount = if (iconRes == R.drawable.ic_bell) unreadNotificationCount else 0,
@@ -78,11 +79,11 @@ internal fun MenuScreen(
             }
         }
         Spacer(Modifier.height(8.dp))
-        Column(Modifier.clip(RoundedCornerShape(12.dp)).background(Color.White).padding(vertical = 4.dp)) {
+        Column(Modifier.cardShadow().background(Color.White).padding(vertical = 4.dp)) {
             MenuRow("Настройки", R.drawable.ic_settings, divider = false)
         }
         Spacer(Modifier.height(8.dp))
-        Column(Modifier.clip(RoundedCornerShape(12.dp)).background(Color.White).padding(vertical = 4.dp)) {
+        Column(Modifier.cardShadow().background(Color.White).padding(vertical = 4.dp)) {
             MenuRow("О приложении", R.drawable.ic_info)
             MenuRow("Выйти", R.drawable.ic_exit, divider = false)
         }

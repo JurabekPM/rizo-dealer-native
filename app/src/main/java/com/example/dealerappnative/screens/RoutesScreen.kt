@@ -2,6 +2,7 @@ package com.example.dealerappnative.screens
 
 import com.example.dealerappnative.ui.components.SoftIconButton
 import com.example.dealerappnative.ui.components.softCardPress
+import com.example.dealerappnative.ui.components.cardShadow
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,13 +15,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -50,7 +49,7 @@ internal fun RoutesScreen(onBack: () -> Unit) {
         LazyColumn(Modifier.fillMaxSize()) {
             item {
                 Column(
-                    Modifier.fillMaxWidth().clip(RoundedCornerShape(DealerDesign.radius))
+                    Modifier.fillMaxWidth().cardShadow()
                         .background(Color.White).padding(horizontal = DealerDesign.pageInset)
                 ) {
                     Text(

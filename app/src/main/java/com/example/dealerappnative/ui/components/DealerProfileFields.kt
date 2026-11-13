@@ -26,7 +26,7 @@ import com.example.dealerappnative.ui.theme.DealerDesign
 
 @Composable
 internal fun DealerProfileSection(title: String, content: @Composable ColumnScope.() -> Unit) {
-    Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).background(Color.White).padding(16.dp),
+    Column(Modifier.fillMaxWidth().cardShadow(RoundedCornerShape(18.dp)).background(Color.White).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(title, style = Design.section)
         content()

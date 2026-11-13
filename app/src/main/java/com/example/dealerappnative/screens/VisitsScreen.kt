@@ -1,6 +1,7 @@
 package com.example.dealerappnative.screens
 
 import com.example.dealerappnative.ui.components.softCardPress
+import com.example.dealerappnative.ui.components.cardShadow
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,12 +18,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -64,7 +63,7 @@ internal fun VisitsScreen(
         Spacer(Modifier.height(8.dp))
         // Routes are common to both tabs and stay outside the pager.
         Row(
-            Modifier.fillMaxWidth().height(64.dp).softCardPress(onClick = onRoutesClick).clip(RoundedCornerShape(DealerDesign.radius))
+            Modifier.fillMaxWidth().height(64.dp).softCardPress(onClick = onRoutesClick).cardShadow()
                 .background(Color.White)
                 .padding(horizontal = DealerDesign.pageInset),
             verticalAlignment = Alignment.CenterVertically
