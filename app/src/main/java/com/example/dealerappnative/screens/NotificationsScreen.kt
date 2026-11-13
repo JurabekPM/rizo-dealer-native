@@ -16,15 +16,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.dealerappnative.R
-import com.example.dealerappnative.data.adminNotifications
+import com.example.dealerappnative.data.DealerNotification
 import com.example.dealerappnative.ui.components.ChildScreenHeader
 import com.example.dealerappnative.ui.components.DealerIcon
-import com.example.dealerappnative.ui.components.adminCardBackground
+import com.example.dealerappnative.ui.components.unreadCardBackground
 import com.example.dealerappnative.ui.components.softCardPress
 import com.example.dealerappnative.ui.theme.DealerDesign
 
 @Composable
-internal fun AdminNotificationsScreen(
+internal fun NotificationsScreen(
+    notifications: List<DealerNotification>,
     unreadIds: Set<String>,
     onRead: (String) -> Unit,
     onBack: () -> Unit
@@ -35,12 +36,12 @@ internal fun AdminNotificationsScreen(
             contentPadding = PaddingValues(vertical = DealerDesign.sectionGap),
             verticalArrangement = Arrangement.spacedBy(DealerDesign.sectionGap)
         ) {
-            items(adminNotifications, key = { it.id }) { notification ->
+            items(notifications, key = { it.id }) { notification ->
                 val unread = notification.id in unreadIds
                 val markRead: (() -> Unit)? = if (unread) ({ onRead(notification.id) }) else null
                 Row(
                     Modifier.fillMaxWidth().softCardPress(onClick = markRead)
-                        .cardShadow().adminCardBackground(unread)
+                        .cardShadow().unreadCardBackground(unread)
                         .padding(DealerDesign.pageInset),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {

@@ -38,7 +38,7 @@ internal fun MenuRow(
             Spacer(Modifier.width(12.dp))
             Text(label, Modifier.weight(1f), style = DealerDesign.body)
             if (unreadCount > 0) {
-                AdminUnreadBadge(unreadCount)
+                UnreadBadge(unreadCount)
                 Spacer(Modifier.width(8.dp))
             }
             DealerIcon(R.drawable.ic_chevron, DealerDesign.tertiary, 24.dp)

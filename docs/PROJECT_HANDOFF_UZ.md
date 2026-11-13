@@ -449,3 +449,9 @@ User requested removal of + only in content amounts. statementAmount retains neg
 ## 30. Kartalar — yumaloq burchak va yengil soya
 
 Admin va Agent kartalarining radiusi 2 dp oshirildi. Asosiy radius 14 dp, soya balandligi 2 dp. Kartalardagi rang va kontent tartibi avvalgi dizayndan olinadi.
+
+
+## 31. Agent navigatsiyasida ko‘rilmagan yozuvlar
+
+- «Визиты» yangi tayinlangan va hali boshlanmagan namuna vizitlarni, «Магазины» yangi biriktirilgan namuna do‘konlarni, «Меню» esa ko‘rilmagan bildirishnomalarni sanaydi. Kartani ochish yoki bildirishnomani bosish tegishli sonni kamaytiradi.
+- Agent va Admin bir xil och binafsha fon va kichik binafsha hisoblagichdan foydalanadi. Agent uchun ko‘rilgan IDlar agent_unread_content nomida saqlanadi. Vizit ish statusi AgentVisitSessions orqali yuritiladi.

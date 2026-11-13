@@ -23,7 +23,7 @@ import com.example.dealerappnative.ui.theme.DealerDesign
 internal fun OrderCard(order: OrderUiModel, onUnreadClick: (() -> Unit)?) {
     val secondaryDetail = DealerDesign.detail.copy(fontWeight = FontWeight.Normal)
     Column(Modifier.fillMaxWidth().height(DealerDesign.cardHeight).softCardPress(onClick = onUnreadClick)
-        .cardShadow().adminCardBackground(onUnreadClick != null)
+        .cardShadow().unreadCardBackground(onUnreadClick != null)
         .padding(horizontal = DealerDesign.pageInset)) {
         Row(Modifier.fillMaxWidth().height(72.dp), verticalAlignment = Alignment.CenterVertically) {
             DealerIcon(R.drawable.ic_store, DealerDesign.secondary, 24.dp)

@@ -69,7 +69,13 @@ import java.util.UUID
 
 /** Agent Visits: Figma frame 1370:61589, without its simulated iOS system bars. */
 @Composable
-internal fun AgentVisitsScreen(visitSessions: AgentVisitSessions, listState: LazyListState, onDetailVisible: (Boolean) -> Unit) {
+internal fun AgentVisitsScreen(
+    visitSessions: AgentVisitSessions,
+    listState: LazyListState,
+    unreadIds: Set<String>,
+    onRead: (String) -> Unit,
+    onDetailVisible: (Boolean) -> Unit
+) {
     // Keep fixture ordering stable when a visit starts/finishes or a shared transition runs.
     val orderedIds = rememberSaveable {
         val active = agentVisitCards.firstOrNull { it.id in visitSessions.activeVisitIds }
@@ -152,6 +158,7 @@ internal fun AgentVisitsScreen(visitSessions: AgentVisitSessions, listState: Laz
     VisitResultsTransition(selectedId, onSelect = {
         savedIndex = listState.firstVisibleItemIndex
         savedOffset = listState.firstVisibleItemScrollOffset
+        onRead(it)
         onDetailVisible(true)
         selectedId = it
     }) { targetId, openVisit ->
@@ -169,7 +176,7 @@ internal fun AgentVisitsScreen(visitSessions: AgentVisitSessions, listState: Laz
         } else state.SaveableStateProvider("visits") {
             VisitListViewport(active = selectedId == null) {
                 AgentVisitsList(cards, onStoreClick = openVisit, query = query, onQueryChange = { query = it },
-                    listState = listState, onUnplanned = { choiceVisible = true })
+                    listState = listState, unreadIds = unreadIds, onUnplanned = { choiceVisible = true })
             }
         }
     }
@@ -183,7 +190,7 @@ internal fun AgentVisitsScreen(visitSessions: AgentVisitSessions, listState: Laz
 
 @Composable
 private fun AgentVisitsList(cards: List<VisitStore>, onStoreClick: (String) -> Unit, query: String,
-    onQueryChange: (String) -> Unit, listState: LazyListState, onUnplanned: () -> Unit) {
+    onQueryChange: (String) -> Unit, listState: LazyListState, unreadIds: Set<String>, onUnplanned: () -> Unit) {
     val search = query.trim()
     val stores = remember(search, cards) {
         cards.filter { it.name.contains(search, true) || it.id.contains(search) || it.address.contains(search, true) }
@@ -206,7 +213,9 @@ private fun AgentVisitsList(cards: List<VisitStore>, onStoreClick: (String) -> U
             LazyColumn(Modifier.fillMaxSize(), state = listState, contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 item(key = "plans", contentType = "plans") { AgentVisitPlans() }
-                items(stores, key = { it.id }, contentType = { "visit" }) { store -> VisitStoreCard(store, onClick = { onStoreClick(store.id) }) }
+                items(stores, key = { it.id }, contentType = { "visit" }) { store ->
+                    VisitStoreCard(store, unread = store.id in unreadIds, onClick = { onStoreClick(store.id) })
+                }
                 if (stores.isEmpty()) item {
                     Text("Магазины не найдены", style = AgentVisitDesign.name, color = DealerDesign.secondary,
                         modifier = Modifier.fillMaxWidth().padding(24.dp))

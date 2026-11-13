@@ -33,7 +33,12 @@ import com.example.dealerappnative.ui.components.DealerIcon
 import com.example.dealerappnative.ui.theme.AgentDesign
 
 @Composable
-internal fun AgentMenuScreen(onExit: () -> Unit, onStoresClick: () -> Unit) {
+internal fun AgentMenuScreen(
+    onExit: () -> Unit,
+    onStoresClick: () -> Unit,
+    unreadNotifications: Int,
+    onNotificationsClick: () -> Unit
+) {
     val data = AgentMenuSampleData
     val context = LocalContext.current
     val version = remember(context) {
@@ -50,7 +55,11 @@ internal fun AgentMenuScreen(onExit: () -> Unit, onStoresClick: () -> Unit) {
                     AgentMenuRow("Расписание", R.drawable.ic_agent_schedule)
                     AgentMenuRow("Магазины", R.drawable.ic_store, onClick = onStoresClick)
                     AgentMenuRow("Настройки", R.drawable.ic_settings)
-                    AgentMenuRow("Уведомления", R.drawable.ic_bell, badge = data.notifications, divider = false)
+                    AgentMenuRow(
+                        "Уведомления", R.drawable.ic_bell,
+                        badge = unreadNotifications.takeIf { it > 0 },
+                        divider = false, onClick = onNotificationsClick
+                    )
                 }
             }
             item(key = "account-menu") {

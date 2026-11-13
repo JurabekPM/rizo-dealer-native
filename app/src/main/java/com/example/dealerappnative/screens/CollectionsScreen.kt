@@ -38,7 +38,7 @@ import com.example.dealerappnative.ui.components.PrototypeCreateButton
 import com.example.dealerappnative.ui.components.ScreenHeader
 import com.example.dealerappnative.ui.components.SearchField
 import com.example.dealerappnative.ui.components.ShortcutCard
-import com.example.dealerappnative.ui.components.adminCardBackground
+import com.example.dealerappnative.ui.components.unreadCardBackground
 import com.example.dealerappnative.ui.theme.DealerDesign
 
 @Composable
@@ -114,7 +114,7 @@ internal fun CollectionsScreen(unreadIds: Set<String>, onRead: (String) -> Unit)
 private fun CollectionCard(entry: CollectionEntry, onUnreadClick: (() -> Unit)?) {
     Column(
         Modifier.fillMaxWidth().height(DealerDesign.cardHeight).softCardPress(onClick = onUnreadClick)
-            .cardShadow().adminCardBackground(onUnreadClick != null)
+            .cardShadow().unreadCardBackground(onUnreadClick != null)
             .padding(horizontal = DealerDesign.pageInset)
     ) {
         Row(Modifier.fillMaxWidth().height(72.dp), verticalAlignment = Alignment.CenterVertically) {

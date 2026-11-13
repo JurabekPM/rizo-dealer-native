@@ -17,7 +17,12 @@ import com.example.dealerappnative.data.sampleStores
 
 /** Agent reads saved store locations; map access and location editing are not available. */
 @Composable
-internal fun AgentStoresScreen(onBack: () -> Unit, onDetailVisible: (Boolean) -> Unit = {}) {
+internal fun AgentStoresScreen(
+    onBack: () -> Unit,
+    unreadIds: Set<String>,
+    onRead: (String) -> Unit,
+    onDetailVisible: (Boolean) -> Unit = {}
+) {
     var selectedStoreId by rememberSaveable { mutableStateOf<String?>(null) }
     val screenState = rememberSaveableStateHolder()
     val context = LocalContext.current
@@ -36,7 +41,10 @@ internal fun AgentStoresScreen(onBack: () -> Unit, onDetailVisible: (Boolean) ->
         }
     } else {
         screenState.SaveableStateProvider("stores") {
-            StoresScreen(locations, onBack = onBack, onStoreClick = { selectedStoreId = it })
+            StoresScreen(locations, onBack = onBack, unreadIds = unreadIds, onStoreClick = { id ->
+                onRead(id)
+                selectedStoreId = id
+            })
         }
     }
 }

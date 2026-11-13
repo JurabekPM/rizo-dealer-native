@@ -18,24 +18,32 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.example.dealerappnative.ui.components.DealerIcon
+import com.example.dealerappnative.ui.components.UnreadNavigationIcon
 import com.example.dealerappnative.ui.theme.AgentDesign
 import com.example.dealerappnative.ui.theme.AgentVisitDesign
 
 /** Native safe-area padding is supplied by the Agent root, outside this bar. */
 @Composable
-internal fun AgentBottomBar(selected: AgentDestination, onSelect: (AgentDestination) -> Unit) {
+internal fun AgentBottomBar(
+    selected: AgentDestination,
+    unreadCounts: Map<AgentDestination, Int>,
+    onSelect: (AgentDestination) -> Unit
+) {
     Column(Modifier.fillMaxWidth().background(Color.White)) {
         HorizontalDivider(thickness = 1.dp, color = AgentDesign.divider)
         Row(Modifier.fillMaxWidth().height(53.dp)) {
             AgentDestination.entries.forEach { destination ->
                 val color = if (destination == selected) AgentDesign.accent else AgentVisitDesign.tertiary
+                val unreadCount = unreadCounts[destination] ?: 0
                 Column(Modifier.weight(1f).fillMaxHeight()
+                    .semantics { if (unreadCount > 0) stateDescription = "Новых: $unreadCount" }
                     .selectable(selected = selected == destination, enabled = destination.available,
                         role = Role.Tab, interactionSource = remember { MutableInteractionSource() }, indication = null, onClick = { onSelect(destination) }).padding(top = 8.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                    DealerIcon(destination.iconRes, color, 24.dp)
+                    UnreadNavigationIcon(destination.iconRes, color, unreadCount)
                     Spacer(Modifier.height(4.dp))
                     Text(destination.title, style = AgentVisitDesign.navigation, color = color, maxLines = 1,
                         overflow = TextOverflow.Ellipsis)

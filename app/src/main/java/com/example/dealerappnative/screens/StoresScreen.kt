@@ -35,12 +35,16 @@ import com.example.dealerappnative.model.StoreLocation
 import com.example.dealerappnative.ui.components.ChildScreenHeader
 import com.example.dealerappnative.ui.components.DealerIcon
 import com.example.dealerappnative.ui.components.PrototypeCreateButton
+import com.example.dealerappnative.ui.components.unreadCardBackground
 import com.example.dealerappnative.ui.components.SearchField
 import com.example.dealerappnative.ui.theme.DealerDesign
 
 @Composable
 internal fun StoresScreen(
-    locations: Map<String, StoreLocation>, onBack: () -> Unit, onStoreClick: (String) -> Unit
+    locations: Map<String, StoreLocation>,
+    onBack: () -> Unit,
+    onStoreClick: (String) -> Unit,
+    unreadIds: Set<String> = emptySet()
 ) {
     var query by rememberSaveable { mutableStateOf("") }
     val search = query.trim()
@@ -64,7 +68,7 @@ internal fun StoresScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(stores, key = { it.id }) { store ->
-                StoreCard(store, onClick = { onStoreClick(store.id) })
+                StoreCard(store, unread = store.id in unreadIds, onClick = { onStoreClick(store.id) })
             }
             if (stores.isEmpty()) {
                 item {
@@ -79,9 +83,9 @@ internal fun StoresScreen(
 }
 
 @Composable
-private fun StoreCard(store: StoreUiModel, onClick: () -> Unit) {
+private fun StoreCard(store: StoreUiModel, unread: Boolean, onClick: () -> Unit) {
     Column(Modifier.fillMaxWidth().height(DealerDesign.cardHeight)
-        .softCardPress(onClick = onClick).cardShadow().background(Color.White)
+        .softCardPress(onClick = onClick).cardShadow().unreadCardBackground(unread)
         .padding(horizontal = DealerDesign.pageInset)) {
         Row(Modifier.fillMaxWidth().height(72.dp), verticalAlignment = Alignment.CenterVertically) {
             DealerIcon(R.drawable.ic_store)

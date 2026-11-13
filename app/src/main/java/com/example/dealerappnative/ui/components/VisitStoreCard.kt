@@ -25,7 +25,7 @@ import com.example.dealerappnative.ui.theme.DealerDesign
 internal fun VisitStoreCard(store: VisitStore, unread: Boolean = false, onClick: () -> Unit) {
     val debtLabel = store.debtDirection.formatAmount(store.debt)
     Column(Modifier.fillMaxWidth().height(DealerDesign.cardHeight).softCardPress(onClick = onClick).cardShadow()
-        .adminCardBackground(unread).padding(horizontal = 16.dp)) {
+        .unreadCardBackground(unread).padding(horizontal = 16.dp)) {
         Row(Modifier.fillMaxWidth().height(72.dp), verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.sharedVisitStorePart(store.id, VisitStorePart.Logo)) {
                 DealerIcon(R.drawable.ic_store, DealerDesign.secondary, 24.dp)

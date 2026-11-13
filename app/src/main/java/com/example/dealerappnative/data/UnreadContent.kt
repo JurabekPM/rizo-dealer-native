@@ -2,22 +2,21 @@ package com.example.dealerappnative.data
 
 import android.content.SharedPreferences
 import androidx.compose.runtime.mutableStateMapOf
-import com.example.dealerappnative.navigation.DealerDestination
 
-internal class AdminUnreadContent(
+internal class UnreadContent<T : Enum<T>>(
     private val preferences: SharedPreferences,
-    newIds: Map<DealerDestination, Set<String>>
+    newIds: Map<T, Set<String>>
 ) {
-    private val readIds = DealerDestination.entries.associateWith {
+    private val readIds = newIds.keys.associateWith {
         preferences.getStringSet(it.name, emptySet()).orEmpty().toSet()
     }.toMutableMap()
-    private val unreadIds = mutableStateMapOf<DealerDestination, Set<String>>().apply {
+    private val unreadIds = mutableStateMapOf<T, Set<String>>().apply {
         newIds.forEach { (destination, ids) -> put(destination, ids - readIds.getValue(destination)) }
     }
 
-    operator fun get(destination: DealerDestination): Set<String> = unreadIds[destination].orEmpty()
+    operator fun get(destination: T): Set<String> = unreadIds[destination].orEmpty()
 
-    fun markRead(destination: DealerDestination, id: String) {
+    fun markRead(destination: T, id: String) {
         val unread = get(destination)
         if (id !in unread) return
         val updated = readIds.getValue(destination) + id

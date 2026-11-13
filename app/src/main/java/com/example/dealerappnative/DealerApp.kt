@@ -31,12 +31,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.dealerappnative.data.AdminUnreadContent
+import com.example.dealerappnative.data.UnreadContent
 import com.example.dealerappnative.data.activeVisits
 import com.example.dealerappnative.data.adminNotifications
 import com.example.dealerappnative.data.findVisitStore
 import com.example.dealerappnative.model.VisitStatus
-import com.example.dealerappnative.screens.AdminNotificationsScreen
+import com.example.dealerappnative.screens.NotificationsScreen
 import com.example.dealerappnative.screens.newCollectionIds
 import com.example.dealerappnative.screens.newDeliveryIds
 import com.example.dealerappnative.screens.newRequestIds
@@ -77,7 +77,7 @@ internal fun DealerApp(initialTab: Int = 0) {
     var selectedMagazineId by rememberSaveable { mutableStateOf<String?>(null) }
     val context = LocalContext.current
     val unreadContent = remember(context) {
-        AdminUnreadContent(
+        UnreadContent(
             context.applicationContext.getSharedPreferences("administrator_unread_content", Context.MODE_PRIVATE),
             mapOf(
                 DealerDestination.Visits to activeVisits.filter { it.status == VisitStatus.NotVisited }.map { it.id }.toSet(),
@@ -180,7 +180,8 @@ internal fun DealerApp(initialTab: Int = 0) {
                 if (dealerProfileVisible) {
                     AdminProfileScreen(onBack = closeChildScreen, onAdministratorChanged = { administrator = it })
                 } else if (notificationsVisible) {
-                    AdminNotificationsScreen(
+                    NotificationsScreen(
+                        notifications = adminNotifications,
                         unreadIds = unreadContent[DealerDestination.Menu],
                         onRead = { unreadContent.markRead(DealerDestination.Menu, it) },
                         onBack = closeChildScreen
