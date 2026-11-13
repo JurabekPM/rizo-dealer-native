@@ -22,7 +22,7 @@ import com.example.dealerappnative.ui.theme.RequestPickerDesign
 @Composable
 internal fun ProductPickerHeader(query: String, onQuery: (String) -> Unit, focus: FocusRequester, onBack: () -> Unit) {
     Row(Modifier.fillMaxWidth().shadow(4.dp, ambientColor = Color.Black.copy(alpha = .06f),
-        spotColor = Color.Black.copy(alpha = .06f)).background(Color.White)
+        spotColor = Color.Black.copy(alpha = .06f)).background(DealerDesign.surface)
         .height(72.dp).padding(horizontal = 16.dp, vertical = 16.dp), verticalAlignment = Alignment.CenterVertically) {
         Box(Modifier.width(24.dp).fillMaxHeight().softCardPress(onClick = onBack)
             .semantics { contentDescription = "Назад" }, contentAlignment = Alignment.Center) {
@@ -35,7 +35,7 @@ internal fun ProductPickerHeader(query: String, onQuery: (String) -> Unit, focus
 
 @Composable
 internal fun ProductPickerFooter(count: Int, total: Long, label: String, enabled: Boolean, onConfirm: () -> Unit) {
-    Column(Modifier.fillMaxWidth().background(Color.White).padding(16.dp)) {
+    Column(Modifier.fillMaxWidth().background(DealerDesign.surface).padding(16.dp)) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Text("$count ${productWord(count)}", style = RequestPickerDesign.unit,
                 color = DealerDesign.secondary, modifier = Modifier.weight(1f))

@@ -1,5 +1,6 @@
 package com.example.dealerappnative.ui.components
 
+import com.example.dealerappnative.ui.theme.dealerColor
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -50,24 +51,24 @@ internal fun RequestQuantitySheet(product: PickerProduct, quantity: Int,
     val scope = rememberCoroutineScope()
     ModalBottomSheet(onDismissRequest = onDismiss,
         sheetState = sheetState,
-        containerColor = Color.White, scrimColor = Color.Black.copy(alpha = .5f),
+        containerColor = DealerDesign.surface, scrimColor = Color.Black.copy(alpha = .5f),
         shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
         dragHandle = {
             Box(Modifier.fillMaxWidth().height(28.dp)) {
                 Box(Modifier.align(Alignment.TopCenter).padding(top = 8.dp).size(40.dp, 4.dp)
-                    .background(Color(0xFFF1F1F1), RoundedCornerShape(2.dp)))
+                    .background(DealerDesign.divider, RoundedCornerShape(2.dp)))
             }
         }) {
         Column(Modifier.fillMaxWidth().imePadding().padding(horizontal = 16.dp)) {
             Text("Количество", style = Design.sheetTitle, color = DealerDesign.text)
             Spacer(Modifier.height(16.dp))
             Row(Modifier.fillMaxWidth().height(48.dp).clip(RoundedCornerShape(12.dp))
-                .border(2.dp, if (error) Color(0xFFF76659) else DealerDesign.accent, RoundedCornerShape(12.dp)),
+                .border(2.dp, if (error) dealerColor(Color(0xFFF76659), Color(0xFFFF939D)) else DealerDesign.accent, RoundedCornerShape(12.dp)),
                 verticalAlignment = Alignment.CenterVertically) {
                 BasicTextField(field, { if (it.text.length <= maxDigits && it.text.all(Char::isDigit)) field = it },
                     modifier = Modifier.weight(1f).padding(horizontal = 12.dp).focusRequester(focus)
                         .semantics { contentDescription = "Количество: ${product.name}" },
-                    textStyle = Design.body, cursorBrush = SolidColor(DealerDesign.accent),
+                    textStyle = Design.body.copy(color = DealerDesign.text), cursorBrush = SolidColor(DealerDesign.accent),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number), singleLine = true,
                     decorationBox = { input -> Box {
                         if (field.text.isEmpty()) Text("Введите", style = Design.body, color = DealerDesign.tertiary)
@@ -77,7 +78,7 @@ internal fun RequestQuantitySheet(product: PickerProduct, quantity: Int,
                     Text("Штука", style = Design.detail, color = DealerDesign.text)
                 }
             }
-            if (error) Text("$stockLabel: ${product.stock} шт", style = Design.detail, color = Color(0xFFF76659),
+            if (error) Text("$stockLabel: ${product.stock} шт", style = Design.detail, color = dealerColor(Color(0xFFF76659), Color(0xFFFF939D)),
                 modifier = Modifier.padding(top = 4.dp))
             Spacer(Modifier.height(16.dp))
             RequestPickerButton("Подтвердить", valid) {

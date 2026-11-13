@@ -1,5 +1,6 @@
 package com.example.dealerappnative.screens
 
+import com.example.dealerappnative.ui.theme.dealerColor
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -57,7 +58,7 @@ internal fun AgentHistoryVisitDetailScreen(entry: AgentHistoryEntry, onBack: () 
                             }
                             if (operation != null) {
                                 Spacer(Modifier.width(8.dp))
-                                Text("Завершено", style = AgentVisitDesign.detail, color = Color(0xFF22A447))
+                                Text("Завершено", style = AgentVisitDesign.detail, color = dealerColor(Color(0xFF22A447), Color(0xFF83D7A3)))
                             }
                         }
                         if (index < VisitResult.entries.lastIndex) HorizontalDivider(color = DealerDesign.divider,
@@ -79,7 +80,7 @@ private fun HistoryVisitTimeline(session: AgentVisitSession) {
             Box(Modifier.width(8.dp).height(92.dp)) {
                 Box(Modifier.align(Alignment.TopCenter).padding(top = 4.dp).size(8.dp).background(DealerDesign.accent, CircleShape))
                 Box(Modifier.align(Alignment.TopCenter).padding(top = 14.dp).width(2.dp).height(40.dp).background(DealerDesign.accent))
-                Box(Modifier.align(Alignment.TopCenter).padding(top = 56.dp).size(8.dp).background(Color(0xFF22C348), CircleShape))
+                Box(Modifier.align(Alignment.TopCenter).padding(top = 56.dp).size(8.dp).background(dealerColor(Color(0xFF22C348), Color(0xFF83D7A3)), CircleShape))
             }
             Spacer(Modifier.width(12.dp))
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {

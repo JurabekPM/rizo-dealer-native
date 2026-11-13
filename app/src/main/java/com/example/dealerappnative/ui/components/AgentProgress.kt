@@ -1,5 +1,6 @@
 package com.example.dealerappnative.ui.components
 
+import com.example.dealerappnative.ui.theme.dealerColor
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,6 +26,6 @@ internal fun AgentProgress(progress: Float, modifier: Modifier = Modifier, heigh
         .semantics { progressBarRangeInfo = ProgressBarRangeInfo(value, 0f..1f) }) {
         if (value > 0f) Box(Modifier.fillMaxWidth(value).fillMaxSize()
             .clip(RoundedCornerShape(height / 2))
-            .background(if (value >= 1f) Color(0xFF55A980) else AgentDesign.accent))
+            .background(if (value >= 1f) dealerColor(Color(0xFF55A980), Color(0xFF83D7A3)) else AgentDesign.accent))
     }
 }

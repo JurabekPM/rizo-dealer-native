@@ -63,7 +63,7 @@ internal fun AgentHistoryScreen(sessions: AgentVisitSessions, onDetailVisible: (
     } else if (selected != null) {
         AgentHistoryVisitDetailScreen(selected, onBack = close)
     } else Column(Modifier.fillMaxSize().background(DealerDesign.background)) {
-        Box(Modifier.fillMaxWidth().height(56.dp).background(Color.White), contentAlignment = Alignment.Center) {
+        Box(Modifier.fillMaxWidth().height(56.dp).background(DealerDesign.surface), contentAlignment = Alignment.Center) {
             Text("История", style = AgentVisitDesign.screenTitle, color = DealerDesign.text)
             SoftIconButton(onClick = { showFilter = true }, modifier = Modifier.align(Alignment.CenterEnd)
                 .padding(end = 4.dp).size(48.dp).semantics { contentDescription = "Фильтр истории" }) {
@@ -103,7 +103,7 @@ internal fun AgentHistoryScreen(sessions: AgentVisitSessions, onDetailVisible: (
 
 @Composable
 private fun HistoryPlans(onSelect: (HistorySection) -> Unit) {
-    Column(Modifier.fillMaxWidth().cardShadow().background(Color.White)
+    Column(Modifier.fillMaxWidth().cardShadow().background(DealerDesign.surface)
         .padding(horizontal = 16.dp)) {
         val sections = listOf(HistorySection.Revisions, HistorySection.Visits, HistorySection.CollectionPlan,
             HistorySection.Returns, HistorySection.Sales)

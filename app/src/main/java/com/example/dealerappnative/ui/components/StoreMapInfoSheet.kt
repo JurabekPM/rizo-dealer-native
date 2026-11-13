@@ -1,5 +1,6 @@
 package com.example.dealerappnative.ui.components
 
+import com.example.dealerappnative.ui.theme.dealerColor
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -73,7 +74,7 @@ internal fun StoreMapInfoSheet(store: StoreUiModel, location: StoreLocation,
         }
         if (saved) {
             Spacer(Modifier.height(8.dp))
-            Text("Локация сохранена", style = AgentVisitDesign.detail, color = Color(0xFF15803D))
+            Text("Локация сохранена", style = AgentVisitDesign.detail, color = dealerColor(Color(0xFF15803D), Color(0xFF83D7A3)))
         }
     }
 }

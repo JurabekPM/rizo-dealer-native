@@ -1,5 +1,6 @@
 package com.example.dealerappnative.screens
 
+import com.example.dealerappnative.ui.theme.displayColor
 import com.example.dealerappnative.ui.components.SoftIconButton
 import com.example.dealerappnative.ui.components.softCardPress
 import com.example.dealerappnative.ui.components.LocalStoreActions
@@ -58,7 +59,7 @@ internal fun VisitDetailScreen(store: VisitStore, onBack: () -> Unit) {
         return
     }
     Column(Modifier.fillMaxSize().background(DealerDesign.background)) {
-        Box(Modifier.fillMaxWidth().height(68.dp).background(Color.White), contentAlignment = Alignment.Center) {
+        Box(Modifier.fillMaxWidth().height(68.dp).background(DealerDesign.surface), contentAlignment = Alignment.Center) {
             Text(store.name, style = DealerDesign.title, maxLines = 1, overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.padding(horizontal = 56.dp))
             SoftIconButton(onClick = onBack,
@@ -73,14 +74,14 @@ internal fun VisitDetailScreen(store: VisitStore, onBack: () -> Unit) {
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             item { StoreSummary(store) }
-            item { VisitValueRow("Конечное сальдо", store.debtDirection.formatAmount(store.debt), store.debtDirection.color,
+            item { VisitValueRow("Конечное сальдо", store.debtDirection.formatAmount(store.debt), store.debtDirection.displayColor,
                 showChevron = true, valueModifier = Modifier.sharedVisitStorePart(store.id, VisitStorePart.Debt)) }
             item { StoreStatementEntry(storeForVisit(store)) }
             item { VisitValueRow("Дата визита", store.details.date, DealerDesign.text) }
             item { EmployeeCard(store.details.employee, store.details.employeePhone) }
             item {
                 Column(Modifier.fillMaxWidth().cardShadow()
-                    .background(Color.White).padding(horizontal = DealerDesign.pageInset)) {
+                    .background(DealerDesign.surface).padding(horizontal = DealerDesign.pageInset)) {
                     val operations = visitOperations(store.details)
                     operations.forEachIndexed { index, operation ->
                         OperationRow(operation, store.id, operation.result in store.results,
@@ -91,7 +92,7 @@ internal fun VisitDetailScreen(store: VisitStore, onBack: () -> Unit) {
             }
         }
         // The action is visual-only until visit completion/cancellation is designed.
-        Box(Modifier.fillMaxWidth().background(Color.White).padding(16.dp)) {
+        Box(Modifier.fillMaxWidth().background(DealerDesign.surface).padding(16.dp)) {
             Box(Modifier.fillMaxWidth().height(DealerDesign.buttonHeight)
                 .clip(RoundedCornerShape(DealerDesign.radius)).background(visitActionColor),
                 contentAlignment = Alignment.Center) {
@@ -106,7 +107,7 @@ private fun StoreSummary(store: VisitStore) {
     val actions = LocalStoreActions.current
     val mapStore = storeForVisit(store)
     Column(Modifier.fillMaxWidth().cardShadow()
-        .background(Color.White).padding(horizontal = DealerDesign.pageInset, vertical = 12.dp)) {
+        .background(DealerDesign.surface).padding(horizontal = DealerDesign.pageInset, vertical = 12.dp)) {
         Row(Modifier.fillMaxWidth().height(44.dp), verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.sharedVisitStorePart(store.id, VisitStorePart.Logo)) {
                 DealerIcon(R.drawable.ic_store)
@@ -141,7 +142,7 @@ private fun SummaryAction(label: String, @DrawableRes iconRes: Int, modifier: Mo
 @Composable
 private fun VisitValueRow(label: String, value: String, valueColor: Color, showChevron: Boolean = false, valueModifier: Modifier = Modifier) {
     Row(Modifier.fillMaxWidth().height(56.dp).cardShadow()
-        .background(Color.White).padding(horizontal = DealerDesign.pageInset),
+        .background(DealerDesign.surface).padding(horizontal = DealerDesign.pageInset),
         verticalAlignment = Alignment.CenterVertically) {
         Text(label, style = DealerDesign.body, color = DealerDesign.secondary, modifier = Modifier.weight(1f))
         Spacer(Modifier.width(8.dp))
@@ -157,7 +158,7 @@ private fun VisitValueRow(label: String, value: String, valueColor: Color, showC
 private fun EmployeeCard(employeeName: String, phoneNumber: String) {
     val actions = LocalStoreActions.current
     Row(Modifier.fillMaxWidth().height(72.dp).cardShadow()
-        .background(Color.White).padding(horizontal = DealerDesign.pageInset),
+        .background(DealerDesign.surface).padding(horizontal = DealerDesign.pageInset),
         verticalAlignment = Alignment.CenterVertically) {
         DealerIcon(R.drawable.ic_person_outline)
         Spacer(Modifier.width(12.dp))
@@ -190,15 +191,13 @@ private fun OperationRow(operation: VisitOperation, storeId: String, completed: 
 private data class VisitOperation(
     val title: String,
     val description: String,
-    @param:DrawableRes @get:DrawableRes val iconRes: Int,
-    val iconColor: Color = DealerDesign.secondary,
     val result: VisitResult
 )
 
 private fun visitOperations(details: VisitDetails) = listOf(
-    VisitOperation("Доставки", details.deliveries, R.drawable.ic_box, result = VisitResult.Delivery),
-    VisitOperation("Заявка", details.request, R.drawable.ic_visit, result = VisitResult.Request),
-    VisitOperation("Ревизии", details.revisions, R.drawable.ic_edit, result = VisitResult.Revision),
-    VisitOperation("Инкассация", details.collection, R.drawable.img_visit_collection_result, Color.Unspecified, result = VisitResult.Collection),
-    VisitOperation("Возврат", details.returns, R.drawable.ic_return, result = VisitResult.Return)
+    VisitOperation("Доставки", details.deliveries, VisitResult.Delivery),
+    VisitOperation("Заявка", details.request, VisitResult.Request),
+    VisitOperation("Ревизии", details.revisions, VisitResult.Revision),
+    VisitOperation("Инкассация", details.collection, VisitResult.Collection),
+    VisitOperation("Возврат", details.returns, VisitResult.Return)
 )

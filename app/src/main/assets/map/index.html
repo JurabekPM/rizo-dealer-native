@@ -11,6 +11,9 @@ html,body { margin:0; background:#faf9f5; } #map { height:100vh; width:100%; }
 .maplibregl-ctrl-icon { opacity:.6; }
 .maplibregl-ctrl-group { border:0; border-radius:12px; overflow:hidden; box-shadow:0 2px 8px #0001; }
 .maplibregl-ctrl-group button { width:36px; height:36px; }
+html.dark,html.dark body { background:#171820; }
+.dark .maplibregl-ctrl-attrib, .dark .dealer-marker span { background:#252834; color:#f3eff8; }
+.dark .maplibregl-ctrl-attrib a { color:#bbc5d7; }
 .store-map-marker { position:relative; width:56px; height:68px; }
 .store-map-marker img { display:block; width:56px; height:56px; filter:drop-shadow(0 3px 3px #0002); }
 .store-map-marker .ground-dot { position:absolute; left:22px; bottom:0; width:12px; height:12px;
@@ -26,6 +29,33 @@ html,body { margin:0; background:#faf9f5; } #map { height:100vh; width:100%; }
 <script src="maplibre-gl.js"></script>
 <script>
 const basemapStyle = __BASEMAP_STYLE__;
+const dark = __DARK_MODE__;
+if (dark) {
+  document.documentElement.classList.add('dark');
+  const darkMapColors = {
+    '#FAF9F5':'#171820', '#F5F4EF':'#1f222b', '#EEEDE7':'#292d38', '#E4E3DC':'#333846',
+    '#E1EED5':'#24382f', '#D5E8C9':'#2a4135', '#C4E1EF':'#243e56',
+    '#f8f4f0':'#343846', '#cfcdca':'#292d38', '#cba':'#636070',
+    '#FFE6A0':'#655138', '#fff4c6':'#504636', '#fea':'#5e4f3b', '#e9ac77':'#392e28',
+    'rgba(200, 147, 102, 1)':'#392e28', 'hsl(28,76%,67%)':'#392e28',
+    'rgba(245, 238, 188, 1)':'#3e392e', 'rgba(255, 255, 255, 1)':'#434955',
+    'hsla(0,0%,89%,0.56)':'rgba(65,70,83,.55)', '#bbb':'#6c7180',
+    'hsla(0,0%,73%,0.77)':'rgba(133,140,154,.64)', 'hsla(0,0%,73%,0.68)':'rgba(133,140,154,.54)',
+    'hsl(0,0%,70%)':'#7b8191', 'hsl(248,7%,66%)':'#8b8397'
+  };
+  const darkLabelColors = {
+    '#666':'#b3bacb', '#333':'#d9deea', '#000':'#f1edf6',
+    '#2e5a80':'#96c7f2', '#495e91':'#96c7f2', '#74aee9':'#96c7f2', 'hsl(30,23%,62%)':'#b8aec2'
+  };
+  for (const layer of basemapStyle.layers) {
+    for (const [property, color] of Object.entries(layer.paint || {})) {
+      if (property === 'text-color' && darkLabelColors[color]) layer.paint[property] = darkLabelColors[color];
+      else if (property === 'text-halo-color') layer.paint[property] = '#171820';
+      else if (color === '#fff') layer.paint[property] = '#424856';
+      else if (darkMapColors[color]) layer.paint[property] = darkMapColors[color];
+    }
+  }
+}
 const dealerPosition = __DEALER_POSITION__;
 const map = new maplibregl.Map({container:'map',style:basemapStyle,center:dealerPosition,zoom:15,
   attributionControl:false,pitchWithRotate:false,dragRotate:false});
@@ -84,8 +114,8 @@ window.focusStorePoint=function(lat,lng) {
 map.on('load',()=>{
   map.addSource('dealer-route',{type:'geojson',data:emptyRoute});
   const label=(map.getStyle().layers.find(layer=>layer.type==='symbol')||{}).id;
-  map.addLayer({id:'dealer-route-border',type:'line',source:'dealer-route',layout:{'line-join':'round','line-cap':'round'},paint:{'line-color':'#ffffff','line-width':11,'line-opacity':.9}},label);
-  map.addLayer({id:'dealer-route-line',type:'line',source:'dealer-route',layout:{'line-join':'round','line-cap':'round'},paint:{'line-color':'#9103e4','line-width':7}},label);
+  map.addLayer({id:'dealer-route-border',type:'line',source:'dealer-route',layout:{'line-join':'round','line-cap':'round'},paint:{'line-color':dark?'#221b2b':'#ffffff','line-width':11,'line-opacity':.9}},label);
+  map.addLayer({id:'dealer-route-line',type:'line',source:'dealer-route',layout:{'line-join':'round','line-cap':'round'},paint:{'line-color':dark?'#c78aff':'#9103e4','line-width':7}},label);
   drawRoute();
 });
 map.on('movestart',()=>{if(editing)StoreMap.mapMoving(true);});

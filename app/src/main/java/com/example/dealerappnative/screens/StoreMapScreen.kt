@@ -47,7 +47,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -154,7 +153,7 @@ internal fun StoreMapScreen(
             StoreMapInfoSheet(store, location, route?.summary ?: location.route, routeLoading,
                 onEdit = if (allowEditing) ({ startEdit() }) else null, saved = saved, showHandle = false)
         } else Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
-            .background(Color.White).padding(horizontal = 16.dp).padding(top = 8.dp, bottom = 16.dp)) {
+            .background(DealerDesign.surface).padding(horizontal = 16.dp).padding(top = 8.dp, bottom = 16.dp)) {
             Text(store.name, style = DealerDesign.cardTitle, modifier = Modifier.fillMaxWidth(),
                 maxLines = 2, overflow = TextOverflow.Ellipsis)
             Spacer(Modifier.height(4.dp))
@@ -213,7 +212,7 @@ internal fun StoreMapScreen(
                         saved = true
                     }.clip(RoundedCornerShape(DealerDesign.radius))
                     .background(if (enabled) DealerDesign.accent else DealerDesign.tertiary), contentAlignment = Alignment.Center) {
-                    Text("Сохранить локацию", style = DealerDesign.button, color = Color.White)
+                    Text("Сохранить локацию", style = DealerDesign.button, color = if (enabled) DealerDesign.onAccent else DealerDesign.surface)
                 }
             }
         }
@@ -244,7 +243,7 @@ internal fun StoreMapScreen(
                 Text("Карта недоступна. Проверьте интернет", style = DealerDesign.detail,
                     modifier = Modifier.align(Alignment.TopCenter).padding(top = 16.dp,
                         start = 16.dp, end = 56.dp).clip(RoundedCornerShape(12.dp))
-                        .background(Color.White).padding(12.dp))
+                        .background(DealerDesign.surface).padding(12.dp))
             }
             MapIconButton("Назад", R.drawable.ic_arrow_back,
                 onClick = { if (editing) cancelEdit() else onBack() },
@@ -266,7 +265,7 @@ internal fun StoreMapScreen(
                 Text(if (locating) "Определяем местоположение…" else gpsMessage.orEmpty(),
                     style = DealerDesign.detail,
                     modifier = Modifier.align(Alignment.TopCenter).padding(16.dp)
-                        .clip(RoundedCornerShape(12.dp)).background(Color.White).padding(12.dp))
+                        .clip(RoundedCornerShape(12.dp)).background(DealerDesign.surface).padding(12.dp))
             }
         }
 
@@ -275,7 +274,7 @@ internal fun StoreMapScreen(
 
 @Composable
 private fun MapIconButton(label: String, icon: Int, onClick: () -> Unit, modifier: Modifier, enabled: Boolean = true) {
-    SoftIconButton(onClick, enabled = enabled, modifier = modifier.size(44.dp).clip(RoundedCornerShape(12.dp)).background(Color.White)
+    SoftIconButton(onClick, enabled = enabled, modifier = modifier.size(44.dp).clip(RoundedCornerShape(12.dp)).background(DealerDesign.surface)
         .semantics { contentDescription = label }) {
         DealerIcon(icon, DealerDesign.text)
     }

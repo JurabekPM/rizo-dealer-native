@@ -455,3 +455,9 @@ Admin va Agent kartalarining radiusi 2 dp oshirildi. Asosiy radius 14 dp, soya b
 
 - «Визиты» yangi tayinlangan va hali boshlanmagan namuna vizitlarni, «Магазины» yangi biriktirilgan namuna do‘konlarni, «Меню» esa ko‘rilmagan bildirishnomalarni sanaydi. Kartani ochish yoki bildirishnomani bosish tegishli sonni kamaytiradi.
 - Agent va Admin bir xil och binafsha fon va kichik binafsha hisoblagichdan foydalanadi. Agent uchun ko‘rilgan IDlar agent_unread_content nomida saqlanadi. Vizit ish statusi AgentVisitSessions orqali yuritiladi.
+
+
+## 32. Ilova temasi va Agent vizit kartalari
+
+- Admin va Agent menyusidagi «Настройки» orqali «Как на телефоне», «Светлая» yoki «Тёмная» tanlanadi. Standart tanlov telefon temasiga mos. Umumiy tanlov dealer_appearance SharedPreferences’da saqlanadi. Xarita fonining ranglari ham shu temaga moslanadi.
+- Agent vizitining ko‘rilmagan kartasida yengil binafsha fon va nom yonida 6 dp binafsha nuqta bor. Vizit tafsilotlari ochilganda hisoblagich kamayadi. Ro‘yxatga qaytganda karta odatiy fonni oladi va nuqta yo‘qoladi. «Новый» ish statusi vizit boshlanganda yangilanadi.

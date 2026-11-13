@@ -1,5 +1,6 @@
 package com.example.dealerappnative.screens
 
+import com.example.dealerappnative.ui.theme.dealerColor
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -109,7 +110,7 @@ internal fun AdminProfileScreen(onBack: () -> Unit, onAdministratorChanged: (Adm
             }, onCloseSearch = ::closeSearch, onBack = ::back)
         else ProfilePageHeader(if (pager.currentPage == 1 && editingDealer) "Редактирование" else "Профиль", onBack = ::back,
             onEdit = if (pager.currentPage == 1 && !editingDealer) ({ dealer = savedDealer; error = null; editingDealer = true }) else null)
-        Box(Modifier.fillMaxWidth().background(Color.White).padding(horizontal = 16.dp).padding(top = 4.dp, bottom = 10.dp)) {
+        Box(Modifier.fillMaxWidth().background(DealerDesign.surface).padding(horizontal = 16.dp).padding(top = 4.dp, bottom = 10.dp)) {
             AdminProfileTabs(pager, enabled = !saving)
         }
         if (pager.currentPage == 0) AdminPeopleControls(query, { query = it }, visiblePeople.size, headerState, toolbarSearching,
@@ -121,8 +122,8 @@ internal fun AdminProfileScreen(onBack: () -> Unit, onAdministratorChanged: (Adm
             else DealerProfileScreen(dealer, dealerList, onChange = { dealer = it; error = null },
                 onOpenMap = { mapOpen = true }, onImageBusyChange = { imageBusy = it })
         }
-        if (pager.currentPage == 1 && editingDealer) Column(Modifier.fillMaxWidth().background(Color.White).padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            error?.let { Text(it, style = Design.body, color = Color(0xFFE45555)) }
+        if (pager.currentPage == 1 && editingDealer) Column(Modifier.fillMaxWidth().background(DealerDesign.surface).padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            error?.let { Text(it, style = Design.body, color = dealerColor(Color(0xFFE45555), Color(0xFFFF939D))) }
             DealerProfileButton(if (saving) "Сохраняем…" else "Сохранить", !saving && !imageBusy) {
                 error = dealer.validationError()
                 if (error == null) {

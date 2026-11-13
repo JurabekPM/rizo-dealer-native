@@ -18,7 +18,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
@@ -31,7 +30,7 @@ internal fun DealerBottomNavigation(
     unreadCounts: Map<DealerDestination, Int>,
     onSelect: (DealerDestination) -> Unit
 ) {
-    Column(Modifier.background(Color.White).navigationBarsPadding()) {
+    Column(Modifier.background(DealerDesign.surface).navigationBarsPadding()) {
         HorizontalDivider(color = DealerDesign.divider)
         Row(
             modifier = Modifier.fillMaxWidth().height(DealerDesign.navigationHeight)

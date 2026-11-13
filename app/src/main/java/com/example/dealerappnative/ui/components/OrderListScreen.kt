@@ -20,7 +20,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.dealerappnative.model.OrderUiModel
@@ -44,7 +43,7 @@ internal fun OrderListScreen(
     Column(Modifier.fillMaxSize().background(DealerDesign.background)) {
         ScreenHeader(title, showSortIcon = true)
         Column(
-            Modifier.background(Color.White).padding(horizontal = DealerDesign.pageInset)
+            Modifier.background(DealerDesign.surface).padding(horizontal = DealerDesign.pageInset)
                 .padding(bottom = 16.dp)
         ) {
             ActiveHistoryTabs(pagerState = pagerState, activeCount = activeOrders.size)

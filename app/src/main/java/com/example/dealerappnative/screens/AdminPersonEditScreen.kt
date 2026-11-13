@@ -1,5 +1,6 @@
 package com.example.dealerappnative.screens
 
+import com.example.dealerappnative.ui.theme.dealerColor
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -55,8 +56,8 @@ internal fun AdminPersonEditScreen(initial: DealerPerson, people: List<DealerPer
                 onRoleChange = if (draft.isCurrentAdministrator) null else ({ role -> draft = draft.copy(role = role); error = null }),
                 onPhotoClick = choosePhoto, photoBusy = photoBusy)
         }
-        if (editing) Column(Modifier.fillMaxWidth().background(Color.White).padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            error?.let { Text(it, style = Design.body, color = Color(0xFFE45555)) }
+        if (editing) Column(Modifier.fillMaxWidth().background(DealerDesign.surface).padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            error?.let { Text(it, style = Design.body, color = dealerColor(Color(0xFFE45555), Color(0xFFFF939D))) }
             DealerProfileButton(if (saving) "Сохраняем…" else "Сохранить", enabled = !saving && !photoBusy) {
                 focus.clearFocus()
                 val candidate = upsertDealerPerson(people, draft)

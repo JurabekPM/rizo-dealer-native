@@ -35,7 +35,7 @@ internal fun VisitFinishSheet(session: AgentVisitSession, onComment: (String) ->
     val focus = LocalFocusManager.current
     val keyboard = LocalSoftwareKeyboardController.current
     ModalBottomSheet(onDismissRequest = onDismiss, sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-        shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp), containerColor = Color.White,
+        shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp), containerColor = DealerDesign.surface,
         dragHandle = { Box(Modifier.padding(top = 12.dp, bottom = 8.dp).size(36.dp, 4.dp)
             .background(DealerDesign.divider, RoundedCornerShape(2.dp))) }) {
         Column(Modifier.fillMaxWidth().heightIn(max = 680.dp).imePadding()) {
@@ -68,7 +68,7 @@ internal fun VisitFinishSheet(session: AgentVisitSession, onComment: (String) ->
                 Spacer(Modifier.height(12.dp))
                 val other = selected == VisitFinishReason.Other
                 Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp))
-                    .background(if (other) Color(0xFFFAF5FF) else DealerDesign.background)
+                    .background(if (other) DealerDesign.softAccent else DealerDesign.background)
                     .border(1.dp, if (other) DealerDesign.accent.copy(alpha = .24f) else Color.Transparent,
                         RoundedCornerShape(12.dp))) {
                     Row(Modifier.fillMaxWidth().height(44.dp).padding(start = 12.dp, end = 8.dp)

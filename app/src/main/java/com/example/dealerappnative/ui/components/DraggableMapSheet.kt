@@ -1,5 +1,6 @@
 package com.example.dealerappnative.ui.components
 
+import com.example.dealerappnative.ui.theme.DealerDesign
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -8,7 +9,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
@@ -29,12 +29,12 @@ internal fun DraggableMapSheet(editing: Boolean, sheetContent: @Composable Colum
         modifier = Modifier.fillMaxSize().imePadding(), scaffoldState = state,
         sheetPeekHeight = 112.dp, sheetMaxWidth = androidx.compose.ui.unit.Dp.Unspecified,
         sheetShape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
-        sheetContainerColor = Color.White, sheetShadowElevation = 8.dp,
+        sheetContainerColor = DealerDesign.surface, sheetShadowElevation = 8.dp,
         sheetSwipeEnabled = !editing,
         sheetDragHandle = {
             Box(Modifier.fillMaxWidth().height(24.dp), contentAlignment = Alignment.TopCenter) {
                 Box(Modifier.padding(top = 8.dp).size(32.dp, 4.dp).clip(RoundedCornerShape(2.dp))
-                    .background(Color(0xFFEBEBEB)))
+                    .background(DealerDesign.divider))
             }
         },
         sheetContent = { Column(Modifier.onSizeChanged { sheetHeight = it.height }, content = sheetContent) }

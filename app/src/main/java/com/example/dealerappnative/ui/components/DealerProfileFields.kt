@@ -13,7 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -26,7 +25,7 @@ import com.example.dealerappnative.ui.theme.DealerDesign
 
 @Composable
 internal fun DealerProfileSection(title: String, content: @Composable ColumnScope.() -> Unit) {
-    Column(Modifier.fillMaxWidth().cardShadow(RoundedCornerShape(18.dp)).background(Color.White).padding(16.dp),
+    Column(Modifier.fillMaxWidth().cardShadow(RoundedCornerShape(18.dp)).background(DealerDesign.surface).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(title, style = Design.section)
         content()
@@ -64,7 +63,7 @@ internal fun DealerProfileChoice(label: String, value: String, options: List<Str
             Box(Modifier.rotate(90f)) { DealerIcon(R.drawable.ic_chevron, size = 20.dp) }
         }
     }
-    if (open) ModalBottomSheet(onDismissRequest = { open = false }, containerColor = Color.White) {
+    if (open) ModalBottomSheet(onDismissRequest = { open = false }, containerColor = DealerDesign.surface) {
         Text(label, style = Design.title, modifier = Modifier.padding(horizontal = 16.dp))
         Spacer(Modifier.height(12.dp))
         if (options.size > 8) Box(Modifier.padding(horizontal = 16.dp)) { SearchField(query, { query = it }, "Поиск", 40.dp) }
@@ -85,6 +84,6 @@ internal fun DealerProfileButton(label: String, enabled: Boolean = true, onClick
     Box(Modifier.fillMaxWidth().height(48.dp).clip(RoundedCornerShape(12.dp))
         .background(if (enabled) DealerDesign.accent else DealerDesign.tertiary)
         .softCardPress(enabled = enabled, onClick = onClick), contentAlignment = Alignment.Center) {
-        Text(label, style = Design.button, color = Color.White)
+        Text(label, style = Design.button, color = if (enabled) DealerDesign.onAccent else DealerDesign.surface)
     }
 }

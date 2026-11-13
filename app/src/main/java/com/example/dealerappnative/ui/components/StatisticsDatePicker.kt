@@ -1,5 +1,6 @@
 package com.example.dealerappnative.ui.components
 
+import com.example.dealerappnative.ui.theme.DealerDesign
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -8,7 +9,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.dealerappnative.model.StatisticsDateRange
 import com.example.dealerappnative.model.StatisticsPeriod
@@ -23,14 +23,14 @@ internal fun StatisticsDatePicker(period: StatisticsPeriod, anchor: Long,
     } }
     // Scope the Agent's Onest fonts and purple palette to the native calendar only.
     MaterialTheme(colorScheme = MaterialTheme.colorScheme.copy(primary = AgentDesign.accent,
-        onPrimary = Color.White, primaryContainer = AgentDesign.tint, onPrimaryContainer = AgentDesign.text,
-        surface = Color.White, onSurface = AgentDesign.text),
+        onPrimary = DealerDesign.onAccent, primaryContainer = AgentDesign.tint, onPrimaryContainer = AgentDesign.text,
+        surface = DealerDesign.surface, onSurface = AgentDesign.text),
         typography = MaterialTheme.typography.copy(titleLarge = AgentDesign.value, titleMedium = AgentDesign.screenTitle,
             headlineLarge = AgentDesign.value, headlineMedium = AgentDesign.value, headlineSmall = AgentDesign.value, titleSmall = AgentDesign.menuDetail,
             bodyLarge = AgentDesign.heroLabel, bodyMedium = AgentDesign.label,
             labelLarge = AgentDesign.menuDetail, labelMedium = AgentDesign.detail, labelSmall = AgentDesign.detail, bodySmall = AgentDesign.detail)) {
-        val colors = DatePickerDefaults.colors(containerColor = Color.White,
-            selectedDayContainerColor = AgentDesign.accent, selectedDayContentColor = Color.White,
+        val colors = DatePickerDefaults.colors(containerColor = DealerDesign.surface,
+            selectedDayContainerColor = AgentDesign.accent, selectedDayContentColor = DealerDesign.onAccent,
             todayContentColor = AgentDesign.accent, todayDateBorderColor = AgentDesign.accent,
             dayInSelectionRangeContainerColor = AgentDesign.tint, dayInSelectionRangeContentColor = AgentDesign.accent)
         if (period == StatisticsPeriod.Range) {

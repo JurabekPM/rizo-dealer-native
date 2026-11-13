@@ -42,7 +42,7 @@ internal fun StoreStatementFilters(initial: StatementFilter, currencies: List<St
     val monthStart = StatisticsDates.range(StatisticsPeriod.Month, today, StatisticsDateRange(today, today)).start
     val thisMonth = from == monthStart && to == today
     val maxHeight = LocalConfiguration.current.screenHeightDp.dp * .88f
-    ModalBottomSheet(onDismissRequest = onDismiss, containerColor = Color.White,
+    ModalBottomSheet(onDismissRequest = onDismiss, containerColor = DealerDesign.surface,
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
         dragHandle = { Box(Modifier.padding(top = 12.dp, bottom = 8.dp).size(32.dp, 4.dp)
@@ -92,7 +92,7 @@ internal fun StoreStatementFilters(initial: StatementFilter, currencies: List<St
             HorizontalDivider(color = Design.border)
             Box(Modifier.padding(16.dp).fillMaxWidth().height(48.dp).clip(RoundedCornerShape(12.dp))
                 .background(DealerDesign.accent).softCardPress { onApply(draft) }, contentAlignment = Alignment.Center) {
-                Text("Применить", style = Design.button, color = Color.White)
+                Text("Применить", style = Design.button, color = DealerDesign.onAccent)
             }
         }
     }

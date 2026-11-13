@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -102,7 +101,7 @@ internal fun ReturnQuantitySheet(product: ReturnCatalogProduct, quantity: Int, o
     val focus = remember { FocusRequester() }
     val keyboard = LocalSoftwareKeyboardController.current
     ModalBottomSheet(onDismissRequest = onDismiss, sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-        containerColor = Color.White, shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)) {
+        containerColor = DealerDesign.surface, shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)) {
         Column(Modifier.fillMaxWidth().imePadding().padding(horizontal = 16.dp)) {
             Text("Количество", style = AgentVisitDesign.sheetTitle, color = DealerDesign.text)
             Text(product.name, style = AgentVisitDesign.detail, color = DealerDesign.secondary,
@@ -127,6 +126,6 @@ internal fun ReturnPrimaryButton(label: String, enabled: Boolean = true, onClick
     Box(Modifier.fillMaxWidth().height(48.dp).softCardPress(enabled = enabled, onClick = onClick)
         .clip(RoundedCornerShape(12.dp)).background(if (enabled) DealerDesign.accent else DealerDesign.background),
         contentAlignment = Alignment.Center) {
-        Text(label, style = AgentVisitDesign.button, color = if (enabled) Color.White else DealerDesign.secondary)
+        Text(label, style = AgentVisitDesign.button, color = if (enabled) DealerDesign.onAccent else DealerDesign.secondary)
     }
 }

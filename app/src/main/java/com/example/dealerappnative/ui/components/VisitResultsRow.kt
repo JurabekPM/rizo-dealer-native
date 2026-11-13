@@ -39,7 +39,7 @@ internal fun VisitResultBadge(result: VisitResult, storeId: String?, layer: Int 
     val badgeSize = if (inDetails) 32.dp else 28.dp
     val iconSize = if (inDetails) 24.dp else 20.dp
     Box(Modifier.size(badgeSize).zIndex(layer.toFloat()).sharedVisitResult(storeId, result, layer)
-        .background(DealerDesign.background, CircleShape).border(1.5.dp, Color.White, CircleShape)
+        .background(DealerDesign.background, CircleShape).border(1.5.dp, DealerDesign.surface, CircleShape)
         .semantics { contentDescription = if (completed) icon.label else when (result) {
             VisitResult.Delivery -> "Доставка"
             VisitResult.Request -> "Заявка"

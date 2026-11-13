@@ -1,5 +1,6 @@
 package com.example.dealerappnative.ui.components
 
+import com.example.dealerappnative.ui.theme.DealerDesign
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -36,7 +37,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onSizeChanged
@@ -86,7 +86,7 @@ internal fun AgentStoreDebtHeader(
     val overviewRemoved = (removedHeight - 48.dp).coerceIn(0.dp, overviewHeight)
     val overviewProgress = (overviewRemoved / overviewHeight).coerceIn(0f, 1f)
     Column(Modifier.fillMaxWidth()) {
-        Row(Modifier.fillMaxWidth().height(56.dp).background(Color.White).padding(start = 4.dp, end = 8.dp),
+        Row(Modifier.fillMaxWidth().height(56.dp).background(DealerDesign.surface).padding(start = 4.dp, end = 8.dp),
             verticalAlignment = Alignment.CenterVertically) {
             SoftIconButton(onClick = if (toolbarSearchActive) onSearchClose else onBack, modifier = Modifier.size(48.dp)
                 .semantics { contentDescription = if (toolbarSearchActive) "Закрыть поиск" else "Назад" }) {
@@ -134,7 +134,7 @@ internal fun AgentStoreDebtHeader(
             Box(Modifier.fillMaxWidth().wrapContentHeight(Alignment.Top, unbounded = true)
                 .height(40.dp).padding(horizontal = 16.dp).offset(y = -40.dp * searchProgress)
                 .graphicsLayer { alpha = 1f - searchProgress }
-                .clip(RoundedCornerShape(AgentDesign.radius)).background(Color.White)) {
+                .clip(RoundedCornerShape(AgentDesign.radius)).background(DealerDesign.surface)) {
                 if (!toolbarSearchActive) DebtSearch(query, onQueryChange, expandedSearchFocus)
             }
         }
@@ -144,7 +144,7 @@ internal fun AgentStoreDebtHeader(
 @Composable
 private fun DebtOverview() {
     val data = AgentStoreDebtData
-    Column(Modifier.fillMaxWidth().cardShadow().background(Color.White).padding(16.dp)) {
+    Column(Modifier.fillMaxWidth().cardShadow().background(DealerDesign.surface).padding(16.dp)) {
         Text("Общая задолженность", style = AgentDesign.label, color = AgentDesign.secondary)
         Spacer(Modifier.height(4.dp))
         Text(data.totalText, style = AgentDesign.reportTitle, color = AgentDesign.negative)

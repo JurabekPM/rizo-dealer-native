@@ -11,20 +11,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.dealerappnative.ui.theme.DealerDesign
 
 /** Visual-only button until the create flow is added to the prototype. */
 @Composable
 internal fun PrototypeCreateButton(label: String = "Создать") {
-    Box(Modifier.fillMaxWidth().background(Color.White).padding(16.dp)) {
+    Box(Modifier.fillMaxWidth().background(DealerDesign.surface).padding(16.dp)) {
         Box(
             Modifier.fillMaxWidth().height(DealerDesign.buttonHeight)
                 .clip(RoundedCornerShape(DealerDesign.radius)).background(DealerDesign.accent),
             contentAlignment = Alignment.Center
         ) {
-            Text(label, style = DealerDesign.button, color = Color.White)
+            Text(label, style = DealerDesign.button, color = DealerDesign.onAccent)
         }
     }
 }

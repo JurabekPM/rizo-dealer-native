@@ -20,7 +20,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
@@ -33,7 +32,7 @@ import com.example.dealerappnative.ui.theme.DealerDesign
 internal fun RoutesScreen(onBack: () -> Unit) {
     Column(Modifier.fillMaxSize().background(DealerDesign.background)) {
         Box(
-            Modifier.fillMaxWidth().height(68.dp).background(Color.White),
+            Modifier.fillMaxWidth().height(68.dp).background(DealerDesign.surface),
             contentAlignment = Alignment.Center
         ) {
             Text("Маршруты", style = DealerDesign.title)
@@ -50,7 +49,7 @@ internal fun RoutesScreen(onBack: () -> Unit) {
             item {
                 Column(
                     Modifier.fillMaxWidth().cardShadow()
-                        .background(Color.White).padding(horizontal = DealerDesign.pageInset)
+                        .background(DealerDesign.surface).padding(horizontal = DealerDesign.pageInset)
                 ) {
                     Text(
                         text = "Агенты",

@@ -1,5 +1,6 @@
 package com.example.dealerappnative.ui.theme
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
@@ -12,13 +13,13 @@ import com.example.dealerappnative.R
 
 /** Agent Figma: Onest and its own text color; administrator typography stays unchanged. */
 internal object AgentDesign {
-    val text = Color(0xFF211F26)
-    val secondary = DealerDesign.secondary
-    val accent = DealerDesign.accent
-    val background = DealerDesign.background
-    val divider = DealerDesign.divider
-    val tint = Color(0xFFF4E6FC)
-    val negative = Color(0xFFF76659)
+    val text: Color @Composable get() = dealerColor(Color(0xFF211F26), DealerDesign.text)
+    val secondary: Color @Composable get() = DealerDesign.secondary
+    val accent: Color @Composable get() = DealerDesign.accent
+    val background: Color @Composable get() = DealerDesign.background
+    val divider: Color @Composable get() = DealerDesign.divider
+    val tint: Color @Composable get() = dealerColor(Color(0xFFF4E6FC), Color(0xFF372845))
+    val negative: Color @Composable get() = dealerColor(Color(0xFFF76659), Color(0xFFFF939D))
     val radius = DealerDesign.radius
     val inset = DealerDesign.pageInset
     val gap = DealerDesign.sectionGap

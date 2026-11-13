@@ -14,7 +14,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -50,7 +49,7 @@ internal fun AgentHistoryFilterSheet(applied: AgentHistoryFilter, stores: List<V
     var dates by rememberSaveable { mutableStateOf(false) }
     ModalBottomSheet(onDismissRequest = onDismiss,
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-        containerColor = Color.White, shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
+        containerColor = DealerDesign.surface, shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
         dragHandle = { Box(Modifier.padding(top = 8.dp, bottom = 12.dp).size(36.dp, 4.dp)
             .background(DealerDesign.divider, RoundedCornerShape(2.dp))) }) {
         BackHandler(enabled = page != HistoryFilterPage.Main) { page = HistoryFilterPage.Main }

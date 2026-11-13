@@ -1,5 +1,6 @@
 package com.example.dealerappnative.navigation
 
+import com.example.dealerappnative.ui.theme.DealerDesign
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -16,7 +17,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
@@ -33,7 +33,7 @@ internal fun AgentBottomBar(
     unreadCounts: Map<AgentDestination, Int>,
     onSelect: (AgentDestination) -> Unit
 ) {
-    Column(Modifier.fillMaxWidth().background(Color.White)) {
+    Column(Modifier.fillMaxWidth().background(DealerDesign.surface)) {
         HorizontalDivider(thickness = 1.dp, color = AgentDesign.divider)
         Row(Modifier.fillMaxWidth().height(53.dp)) {
             AgentDestination.entries.forEach { destination ->

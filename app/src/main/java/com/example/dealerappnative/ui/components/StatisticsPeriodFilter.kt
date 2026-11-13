@@ -1,5 +1,6 @@
 package com.example.dealerappnative.ui.components
 
+import com.example.dealerappnative.ui.theme.DealerDesign
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -18,7 +19,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -37,7 +37,7 @@ internal fun StatisticsPeriodFilter(period: StatisticsPeriod, dateLabel: String,
     // Keep animation state outside the constraints subcomposition, like the other tabs.
     val position by animateFloatAsState(period.ordinal.toFloat(),
         tween(280, easing = FastOutSlowInEasing), label = "Statistics tab indicator")
-    Column(Modifier.fillMaxWidth().background(Color.White)) {
+    Column(Modifier.fillMaxWidth().background(DealerDesign.surface)) {
         Column(Modifier.padding(horizontal = 16.dp).padding(top = 8.dp, bottom = 4.dp)) {
             BoxWithConstraints(Modifier.fillMaxWidth().height(44.dp).clip(RoundedCornerShape(12.dp))
                 .background(AgentDesign.background).padding(4.dp)) {
@@ -45,7 +45,7 @@ internal fun StatisticsPeriodFilter(period: StatisticsPeriod, dateLabel: String,
                 Box(Modifier.offset {
                     IntOffset((width.toPx() * position).roundToInt(), 0)
                 }.width(width).fillMaxHeight().clip(RoundedCornerShape(9.dp))
-                    .background(Color.White))
+                    .background(DealerDesign.surface))
                 Row(Modifier.fillMaxSize().selectableGroup()) {
                     StatisticsPeriod.entries.forEach { item ->
                         Box(Modifier.weight(1f).fillMaxHeight().clip(RoundedCornerShape(9.dp))

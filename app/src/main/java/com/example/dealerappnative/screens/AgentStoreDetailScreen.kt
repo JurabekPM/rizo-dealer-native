@@ -1,5 +1,7 @@
 package com.example.dealerappnative.screens
 
+import com.example.dealerappnative.ui.theme.displayColor
+import com.example.dealerappnative.ui.theme.DealerDesign
 import com.example.dealerappnative.ui.components.SoftIconButton
 import com.example.dealerappnative.ui.components.softCardPress
 import com.example.dealerappnative.ui.components.LocalStoreActions
@@ -26,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
@@ -49,7 +50,7 @@ import com.example.dealerappnative.ui.theme.AgentDesign
 @Composable
 internal fun AgentStoreDetailScreen(store: StoreUiModel, onBack: () -> Unit, visitResults: List<VisitResult>? = null) {
     Column(Modifier.fillMaxSize().background(AgentDesign.background)) {
-        Box(Modifier.fillMaxWidth().height(68.dp).background(Color.White), contentAlignment = Alignment.Center) {
+        Box(Modifier.fillMaxWidth().height(68.dp).background(DealerDesign.surface), contentAlignment = Alignment.Center) {
             Text(store.name, style = AgentDesign.screenTitle, color = AgentDesign.text,
                 maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.padding(horizontal = 56.dp))
             SoftIconButton(onClick = onBack, modifier = Modifier.align(Alignment.CenterStart).padding(start = 4.dp)
@@ -62,13 +63,13 @@ internal fun AgentStoreDetailScreen(store: StoreUiModel, onBack: () -> Unit, vis
             item(key = "store") { AgentStoreSummary(store) }
             item(key = "balance") {
                 Row(Modifier.fillMaxWidth().height(56.dp).cardShadow()
-                    .background(Color.White).padding(horizontal = AgentDesign.inset),
+                    .background(DealerDesign.surface).padding(horizontal = AgentDesign.inset),
                     verticalAlignment = Alignment.CenterVertically) {
                     Text("Конечное сальдо", style = AgentDesign.menuTitle, color = AgentDesign.secondary,
                         modifier = Modifier.weight(1f))
                     Spacer(Modifier.width(8.dp))
                     Text(store.debtDirection.formatAmount(store.debt), style = AgentDesign.menuTitle,
-                        color = store.debtDirection.color, maxLines = 1,
+                        color = store.debtDirection.displayColor, maxLines = 1,
                         modifier = Modifier.agentStoreSharedPart(store.id, AgentStorePart.Debt)
                             .sharedVisitStorePart(store.id, VisitStorePart.Debt))
                     Spacer(Modifier.width(4.dp))
@@ -77,7 +78,7 @@ internal fun AgentStoreDetailScreen(store: StoreUiModel, onBack: () -> Unit, vis
             }
             item(key = "statement") { StoreStatementEntry(store) }
             item(key = "reports") {
-                Column(Modifier.fillMaxWidth().cardShadow().background(Color.White)) {
+                Column(Modifier.fillMaxWidth().cardShadow().background(DealerDesign.surface)) {
                     Text("Отчёты", style = AgentDesign.reportTitle, color = AgentDesign.text,
                         modifier = Modifier.padding(16.dp))
                     if (visitResults != null) {
@@ -103,7 +104,7 @@ internal fun AgentStoreDetailScreen(store: StoreUiModel, onBack: () -> Unit, vis
 @Composable
 private fun AgentStoreSummary(store: StoreUiModel) {
     val actions = LocalStoreActions.current
-    Column(Modifier.fillMaxWidth().cardShadow().background(Color.White)
+    Column(Modifier.fillMaxWidth().cardShadow().background(DealerDesign.surface)
         .padding(horizontal = 16.dp, vertical = 12.dp)) {
         Row(Modifier.fillMaxWidth().height(44.dp), verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.agentStoreSharedPart(store.id, AgentStorePart.Logo)

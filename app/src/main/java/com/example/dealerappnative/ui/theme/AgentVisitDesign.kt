@@ -1,10 +1,12 @@
 package com.example.dealerappnative.ui.theme
 
+import androidx.compose.ui.graphics.Color
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.FontWeight
 
 /** SF Pro measurements from the new Figma; native sans-serif is the Android adaptation. */
 internal object AgentVisitDesign {
-    val tertiary = DealerDesign.tertiary
+    val tertiary: Color @Composable get() = DealerDesign.tertiary
     val title = DealerDesign.type(20, 24, FontWeight.SemiBold, .38f)
     val name = DealerDesign.type(15, 20, FontWeight.SemiBold, -.24f)
     val detail = DealerDesign.type(13, 18, FontWeight.Medium, -.078f)

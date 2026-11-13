@@ -12,7 +12,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.dealerappnative.R
@@ -36,7 +35,7 @@ internal fun AgentUnplannedVisitsScreen(activeStoreIds: Set<String>, onBack: () 
     BackHandler(onBack = onBack)
     Column(Modifier.fillMaxSize().background(DealerDesign.background)) {
         HistoryHeader("Внеплановый", onBack)
-        Box(Modifier.fillMaxWidth().background(Color.White).padding(horizontal = 16.dp).padding(bottom = 16.dp)) {
+        Box(Modifier.fillMaxWidth().background(DealerDesign.surface).padding(horizontal = 16.dp).padding(bottom = 16.dp)) {
             SearchField(query, { query = it }, placeholder = "Поиск по имени и ид",
                 height = 40.dp, textStyle = AgentVisitDesign.name)
         }

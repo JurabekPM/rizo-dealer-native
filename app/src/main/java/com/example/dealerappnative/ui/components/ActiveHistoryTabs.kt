@@ -1,5 +1,6 @@
 package com.example.dealerappnative.ui.components
 
+import com.example.dealerappnative.ui.theme.dealerColor
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -38,7 +39,7 @@ import kotlin.math.roundToInt
 internal fun ActiveHistoryTabs(
     pagerState: PagerState,
     activeCount: Int,
-    inactiveTextColor: Color = Color(0xFF4D4D4D)
+    inactiveTextColor: Color = dealerColor(Color(0xFF4D4D4D), Color(0xFFC4BECD))
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -55,7 +56,7 @@ internal fun ActiveHistoryTabs(
                     .coerceIn(0f, 1f)
                 IntOffset((tabWidth.toPx() * pagePosition).roundToInt(), 0)
             }.width(tabWidth).fillMaxHeight()
-                .clip(RoundedCornerShape(DealerDesign.radius)).background(Color.White)
+                .clip(RoundedCornerShape(DealerDesign.radius)).background(DealerDesign.surface)
         )
         Row(Modifier.fillMaxSize()) {
             listOf("Активные", "История").forEachIndexed { index, label ->
@@ -81,7 +82,7 @@ internal fun ActiveHistoryTabs(
                         Text(
                             text = "· $activeCount",
                             style = DealerDesign.type(11, 14, FontWeight.Medium, tracking = 0f),
-                            color = Color(0xFF656E76),
+                            color = dealerColor(Color(0xFF656E76), Color(0xFFABB0BE)),
                             maxLines = 1,
                             softWrap = false
                         )

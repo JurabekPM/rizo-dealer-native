@@ -1,5 +1,6 @@
 package com.example.dealerappnative.screens
 
+import com.example.dealerappnative.ui.theme.DealerDesign
 import android.content.Context
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -23,14 +24,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import com.example.dealerappnative.model.VisitStatus
 import com.example.dealerappnative.navigation.AgentDestination
 import com.example.dealerappnative.navigation.AgentBottomBar
 
 /** The agent owns its navigation; administrator destinations are not reused. */
 @Composable
-internal fun AgentScreen(onBack: () -> Unit) {
+internal fun AgentScreen(onBack: () -> Unit, onSettingsClick: () -> Unit = {}) {
     var destination by rememberSaveable { mutableStateOf(AgentDestination.Visits) }
     val context = LocalContext.current.applicationContext
     val visitSessions = remember(context) { AgentVisitSessions(context) }
@@ -63,7 +63,7 @@ internal fun AgentScreen(onBack: () -> Unit) {
             else -> onBack()
         }
     }
-    Column(Modifier.fillMaxSize().background(Color.White).safeDrawingPadding()) {
+    Column(Modifier.fillMaxSize().background(DealerDesign.surface).safeDrawingPadding()) {
         if (notificationsVisible) {
             NotificationsScreen(
                 notifications = agentNotifications,
@@ -101,7 +101,8 @@ internal fun AgentScreen(onBack: () -> Unit) {
                             onExit = onBack,
                             onStoresClick = { storesVisible = true },
                             unreadNotifications = unreadContent[AgentDestination.More].size,
-                            onNotificationsClick = { notificationsVisible = true }
+                            onNotificationsClick = { notificationsVisible = true },
+                            onSettingsClick = onSettingsClick
                         )
                     }
                 }

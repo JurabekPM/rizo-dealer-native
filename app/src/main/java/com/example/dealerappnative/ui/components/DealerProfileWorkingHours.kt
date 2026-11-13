@@ -1,5 +1,6 @@
 package com.example.dealerappnative.ui.components
 
+import com.example.dealerappnative.ui.theme.platformPickerTheme
 import android.app.TimePickerDialog
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -55,8 +56,9 @@ private fun Modifier.semanticsForDay(day: String) = this.then(Modifier.semantics
 @Composable
 private fun DealerProfileTime(value: Int, label: String, onChange: (Int) -> Unit) {
     val context = LocalContext.current
+    val pickerTheme = platformPickerTheme
     Box(Modifier.width(52.dp).height(48.dp).clip(RoundedCornerShape(8.dp)).background(DealerDesign.background)
-        .softCardPress { TimePickerDialog(context, { _, hour, minute -> onChange(hour * 60 + minute) }, value / 60, value % 60, true).show() }
+        .softCardPress { TimePickerDialog(context, pickerTheme, { _, hour, minute -> onChange(hour * 60 + minute) }, value / 60, value % 60, true).show() }
         .semantics { contentDescription = "$label: ${dealerClock(value)}" }, contentAlignment = Alignment.Center) {
         Text(dealerClock(value), style = Design.label)
     }

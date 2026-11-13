@@ -28,7 +28,7 @@ internal fun ShortcutCard(
 ) {
     Row(
         Modifier.fillMaxWidth().height(if (detail == null) 48.dp else 68.dp)
-            .cardShadow().background(Color.White)
+            .cardShadow().background(DealerDesign.surface)
             .padding(horizontal = DealerDesign.pageInset),
         verticalAlignment = Alignment.CenterVertically
     ) {

@@ -1,5 +1,7 @@
 package com.example.dealerappnative.screens
 
+import com.example.dealerappnative.ui.theme.displayColor
+import com.example.dealerappnative.ui.theme.dealerColor
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -63,7 +65,7 @@ internal fun AgentSalesHistoryScreen(entries: List<AgentHistoryEntry>, onBack: (
                                 HistoryValue(if (report.result == VisitResult.Return) "Номер возврата" else "Номер заявки", report.documentId)
                                 HistoryValue(if (report.result == VisitResult.Return) "Возвращено" else "Общая сумма",
                                     (if (report.result == VisitResult.Return) "−" else "") + historyMoney(report.amount),
-                                    if (report.result == VisitResult.Return) DebtDirection.StoreOwesDealer.color else DealerDesign.text)
+                                    if (report.result == VisitResult.Return) DebtDirection.StoreOwesDealer.displayColor else DealerDesign.text)
                                 HistoryValue(if (report.result == VisitResult.Return) "Дата возврата" else "Дата подтверждения",
                                     historyDate(when (report.result) {
                                         VisitResult.Request -> entry.requestRecord?.createdAt
@@ -124,12 +126,12 @@ private fun SalesMonthSummary(month: HistoryMonth, stores: List<HistorySalesStor
         Text(historyMoney(target), style = AgentVisitDesign.emphasis, color = DealerDesign.text)
         Spacer(Modifier.height(8.dp))
         Text(if (net >= target && target > 0) "Завершено" else if (received > 0 || returned > 0) "Частично завершено" else "Не начато",
-            style = AgentVisitDesign.status, color = if (net >= target && target > 0) Color(0xFF22A447) else Color(0xFFE69B20))
+            style = AgentVisitDesign.status, color = if (net >= target && target > 0) dealerColor(Color(0xFF22A447), Color(0xFF83D7A3)) else dealerColor(Color(0xFFE69B20), Color(0xFFFFCF81)))
         Spacer(Modifier.height(8.dp))
         SalesValues(received, returned, "Остаток", (target - net).coerceAtLeast(0))
         Row(Modifier.padding(top = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-            LinearProgressIndicator(progress = { progress }, color = Color(0xFFBCEBCB),
-                trackColor = Color(0xFFE8F4EC), modifier = Modifier.weight(1f).height(6.dp))
+            LinearProgressIndicator(progress = { progress }, color = dealerColor(Color(0xFFBCEBCB), Color(0xFF83D7A3)),
+                trackColor = dealerColor(Color(0xFFE8F4EC), Color(0xFF2D4039)), modifier = Modifier.weight(1f).height(6.dp))
             Spacer(Modifier.width(8.dp))
             Text("${(progress * 100).toInt()}%", style = AgentVisitDesign.detail, color = DealerDesign.text)
         }
@@ -140,7 +142,7 @@ private fun SalesMonthSummary(month: HistoryMonth, stores: List<HistorySalesStor
 
 @Composable
 private fun SalesValues(received: Long, returned: Long, lastLabel: String, lastAmount: Long) {
-    HistoryValue("Получено", historyMoney(received), Color(0xFF22A447))
-    HistoryValue("Возвращено", (if (returned > 0) "−" else "") + historyMoney(returned), DebtDirection.StoreOwesDealer.color)
-    HistoryValue(lastLabel, historyMoney(lastAmount), if (lastLabel == "Остаток" && lastAmount > 0) DebtDirection.StoreOwesDealer.color else DealerDesign.text)
+    HistoryValue("Получено", historyMoney(received), dealerColor(Color(0xFF22A447), Color(0xFF83D7A3)))
+    HistoryValue("Возвращено", (if (returned > 0) "−" else "") + historyMoney(returned), DebtDirection.StoreOwesDealer.displayColor)
+    HistoryValue(lastLabel, historyMoney(lastAmount), if (lastLabel == "Остаток" && lastAmount > 0) DebtDirection.StoreOwesDealer.displayColor else DealerDesign.text)
 }

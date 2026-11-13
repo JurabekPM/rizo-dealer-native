@@ -1,5 +1,6 @@
 package com.example.dealerappnative.ui.theme
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 
@@ -14,7 +15,7 @@ internal object RequestPickerDesign {
     val badge = DealerDesign.type(11, 13, FontWeight.SemiBold, .06f)
     val button = DealerDesign.type(15, 20, FontWeight.Normal, -.5f)
     val sheetTitle = DealerDesign.type(17, 22, FontWeight.SemiBold)
-    val thumbnail = Color(0xFFF1F1F1)
-    val addBackground = Color(0xFFF7EEFC)
-    val clear = Color(0xFFB0BABF)
+    val thumbnail: Color @Composable get() = dealerColor(Color(0xFFF1F1F1), Color(0xFF2D2A35))
+    val addBackground: Color @Composable get() = dealerColor(Color(0xFFF7EEFC), Color(0xFF372845))
+    val clear: Color @Composable get() = dealerColor(Color(0xFFB0BABF), DealerDesign.tertiary)
 }

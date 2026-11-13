@@ -1,5 +1,6 @@
 package com.example.dealerappnative.screens
 
+import com.example.dealerappnative.ui.theme.platformPickerTheme
 import android.app.DatePickerDialog
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -34,6 +35,7 @@ internal fun AdminPersonalProfileScreen(profile: AdminPersonalProfile, dealerNam
     role: String = "Администратор", onRoleChange: ((String) -> Unit)? = null,
     onPhotoClick: (() -> Unit)? = null, photoBusy: Boolean = false) {
     val context = LocalContext.current
+    val pickerTheme = platformPickerTheme
     val today = LocalDate.now(ZoneId.of("Asia/Tashkent"))
     LazyColumn(Modifier.fillMaxSize(), state = listState, contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -48,7 +50,7 @@ internal fun AdminPersonalProfileScreen(profile: AdminPersonalProfile, dealerNam
                 Row(Modifier.fillMaxWidth().heightIn(min = 48.dp).clip(RoundedCornerShape(12.dp)).background(DealerDesign.background)
                     .softCardPress {
                         val date = runCatching { LocalDate.parse(profile.birthDate) }.getOrDefault(today.minusYears(25))
-                        DatePickerDialog(context, { _, y, m, d -> onChange(profile.copy(birthDate = LocalDate.of(y, m + 1, d).toString())) },
+                        DatePickerDialog(context, pickerTheme, { _, y, m, d -> onChange(profile.copy(birthDate = LocalDate.of(y, m + 1, d).toString())) },
                             date.year, date.monthValue - 1, date.dayOfMonth).apply {
                             datePicker.maxDate = today.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli() - 1
                             datePicker.minDate = LocalDate.of(1900, 1, 1).atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()

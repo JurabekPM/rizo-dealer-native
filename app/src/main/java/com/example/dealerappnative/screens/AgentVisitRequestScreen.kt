@@ -15,7 +15,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
@@ -129,7 +128,7 @@ internal fun AgentVisitRequestScreen(visit: VisitStore, sessions: AgentVisitSess
                     }
                 }
             }
-            Box(Modifier.fillMaxWidth().background(Color.White).padding(16.dp)) {
+            Box(Modifier.fillMaxWidth().background(DealerDesign.surface).padding(16.dp)) {
                 ReturnPrimaryButton("Завершить", lines.isNotEmpty()) { confirmVisible = true }
             }
         }
@@ -138,7 +137,7 @@ internal fun AgentVisitRequestScreen(visit: VisitStore, sessions: AgentVisitSess
         onDismiss = { quantityIndex = null }, onConfirm = {
             quantities = current.toMutableList().apply { this[index] = it }; quantityIndex = null
         }) }
-    if (confirmVisible) AlertDialog(onDismissRequest = { confirmVisible = false }, containerColor = Color.White,
+    if (confirmVisible) AlertDialog(onDismissRequest = { confirmVisible = false }, containerColor = DealerDesign.surface,
         title = { Text("Внимание", style = AgentVisitDesign.screenTitle) },
         text = { Text("Вы хотите завершить заявку?", style = AgentVisitDesign.name) },
         dismissButton = { SoftTextButton(onClick = { confirmVisible = false }) {

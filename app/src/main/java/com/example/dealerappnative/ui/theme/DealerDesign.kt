@@ -18,12 +18,15 @@ import androidx.compose.ui.unit.sp
 
 /** Shared colors, dimensions and typography for every prototype screen. Keep line height explicit. */
 internal object DealerDesign {
-    val accent = Color(0xFF9103E4)
-    val secondary = Color(0xFF84919A)
-    val tertiary = Color(0xFF9AA6AC)
-    val background = Color(0xFFF4F4F4)
-    val divider = Color(0xFFEBEBEB)
-    val text = Color.Black
+    val accent: Color @Composable get() = dealerColor(Color(0xFF9103E4), Color(0xFFC78AFF))
+    val onAccent: Color @Composable get() = dealerColor(Color.White, Color(0xFF250B3B))
+    val secondary: Color @Composable get() = dealerColor(Color(0xFF84919A), Color(0xFFABB0BE))
+    val tertiary: Color @Composable get() = dealerColor(Color(0xFF9AA6AC), Color(0xFF989BAA))
+    val background: Color @Composable get() = dealerColor(Color(0xFFF4F4F4), Color(0xFF141319))
+    val surface: Color @Composable get() = dealerColor(Color.White, Color(0xFF211F28))
+    val divider: Color @Composable get() = dealerColor(Color(0xFFEBEBEB), Color(0xFF393643))
+    val text: Color @Composable get() = dealerColor(Color.Black, Color(0xFFF3EFF8))
+    val softAccent: Color @Composable get() = dealerColor(Color(0xFFFAF5FF), Color(0xFF2C2437))
     val pageInset = 16.dp
     val sectionGap = 8.dp
     val iconSize = 24.dp

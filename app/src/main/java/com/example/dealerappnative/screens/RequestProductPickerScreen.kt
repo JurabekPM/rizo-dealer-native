@@ -11,7 +11,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
@@ -35,7 +34,7 @@ internal fun RequestProductPickerScreen(initial: List<Int>, onBack: () -> Unit, 
     val indexes = remember(query, quantities) { requestPickerIndexes(quantities, query) }
     val back: () -> Unit = { keyboard?.hide(); onBack() }
     BackHandler(onBack = back)
-    Column(Modifier.fillMaxSize().background(Color.White).imePadding()) {
+    Column(Modifier.fillMaxSize().background(DealerDesign.surface).imePadding()) {
         ProductPickerHeader(query, { query = it }, focus, back)
         LazyColumn(Modifier.weight(1f), state = listState) {
             items(indexes, key = { requestCatalog[it].id }, contentType = { "request-product" }) { index ->

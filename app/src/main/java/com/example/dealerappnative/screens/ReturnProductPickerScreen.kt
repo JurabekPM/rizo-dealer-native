@@ -12,7 +12,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.style.TextOverflow
@@ -42,7 +41,7 @@ internal fun ReturnProductPickerScreen(initial: List<Int>, orderDate: String, on
     }
     val back: () -> Unit = { keyboard?.hide(); onBack() }
     BackHandler(onBack = back)
-    Column(Modifier.fillMaxSize().background(Color.White).imePadding()) {
+    Column(Modifier.fillMaxSize().background(DealerDesign.surface).imePadding()) {
         ProductPickerHeader(query, { query = it }, focus, back)
         LazyColumn(Modifier.weight(1f), state = listState) {
             items(indexes, key = { returnCatalog[it].barcode }, contentType = { "return-product" }) { index ->

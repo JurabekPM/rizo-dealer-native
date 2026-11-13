@@ -14,12 +14,15 @@ import android.webkit.WebViewClient
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.dealerappnative.model.StoreLocation
 import com.example.dealerappnative.model.StoreRoute
 import com.example.dealerappnative.data.DealerMapDefaults
+import com.example.dealerappnative.ui.theme.DealerDesign
+import com.example.dealerappnative.ui.theme.LocalDealerDarkTheme
 
 private const val assetHost = "appassets.androidplatform.net"
 
@@ -39,6 +42,8 @@ internal fun StoreMapView(
     modifier: Modifier = Modifier,
     bottomContentInset: Dp = 0.dp
 ) {
+    val dark = LocalDealerDarkTheme.current
+    val background = DealerDesign.background.toArgb()
     val currentBottomInset = rememberUpdatedState(bottomContentInset)
     val currentLocation = rememberUpdatedState(location)
     val currentEditing = rememberUpdatedState(editing)
@@ -90,6 +95,7 @@ internal fun StoreMapView(
         modifier = modifier,
         factory = { context ->
             WebView(context).apply {
+                setBackgroundColor(background)
                 WebView.setWebContentsDebuggingEnabled((context.applicationInfo.flags and android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE) != 0)
                 settings.javaScriptEnabled = true
                 settings.useWideViewPort = true
@@ -140,6 +146,7 @@ internal fun StoreMapView(
                         "<script>" + context.assets.open("map/maplibre-gl.js").bufferedReader().use { it.readText() } + "</script>")
                 val styledHtml = html.replace("__BASEMAP_STYLE__",
                     context.assets.open("map/bright-style.json").bufferedReader().use { it.readText() })
+                    .replace("__DARK_MODE__", dark.toString())
                     .replace("__DEALER_POSITION__", "[${DealerMapDefaults.longitude},${DealerMapDefaults.latitude}]")
                 loadDataWithBaseURL("https://$assetHost/map/", styledHtml, "text/html", "UTF-8", null)
             }

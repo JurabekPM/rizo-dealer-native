@@ -1,5 +1,6 @@
 package com.example.dealerappnative.ui.components
 
+import com.example.dealerappnative.ui.theme.dealerColor
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.offset
@@ -16,11 +17,16 @@ import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.dp
 import com.example.dealerappnative.ui.theme.DealerDesign
 
-private val unreadCardColor = Color(0xFFF5EAFF)
-
-internal fun Modifier.unreadCardBackground(unread: Boolean): Modifier =
-    if (unread) background(unreadCardColor).semantics { stateDescription = "Новое" }
-    else background(Color.White)
+@Composable
+internal fun Modifier.unreadCardBackground(unread: Boolean, soft: Boolean = false): Modifier {
+    val color = when {
+        !unread -> DealerDesign.surface
+        soft -> DealerDesign.softAccent
+        else -> dealerColor(Color(0xFFF5EAFF), Color(0xFF372845))
+    }
+    val surface = background(color)
+    return if (unread) surface.semantics { stateDescription = "Не просмотрено" } else surface
+}
 
 @Composable
 internal fun UnreadBadge(count: Int, modifier: Modifier = Modifier, compact: Boolean = false) {
@@ -28,7 +34,7 @@ internal fun UnreadBadge(count: Int, modifier: Modifier = Modifier, compact: Boo
     Badge(
         modifier = modifier.then(size).clearAndSetSemantics {},
         containerColor = DealerDesign.accent,
-        contentColor = Color.White
+        contentColor = DealerDesign.onAccent
     ) {
         Text(
             text = if (count > 99) "99+" else count.toString(),

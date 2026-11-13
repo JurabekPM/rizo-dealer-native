@@ -1,5 +1,6 @@
 package com.example.dealerappnative.screens
 
+import com.example.dealerappnative.ui.theme.DealerDesign
 import com.example.dealerappnative.ui.components.softCardPress
 import com.example.dealerappnative.ui.components.cardShadow
 import androidx.compose.foundation.background
@@ -21,7 +22,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -37,7 +37,8 @@ internal fun AgentMenuScreen(
     onExit: () -> Unit,
     onStoresClick: () -> Unit,
     unreadNotifications: Int,
-    onNotificationsClick: () -> Unit
+    onNotificationsClick: () -> Unit,
+    onSettingsClick: () -> Unit
 ) {
     val data = AgentMenuSampleData
     val context = LocalContext.current
@@ -50,11 +51,11 @@ internal fun AgentMenuScreen(
             item(key = "profile") { AgentProfile() }
             item(key = "main-menu") {
                 Spacer(Modifier.height(AgentDesign.gap))
-                Column(Modifier.fillMaxWidth().cardShadow().background(Color.White)) {
+                Column(Modifier.fillMaxWidth().cardShadow().background(DealerDesign.surface)) {
                     AgentMenuRow("Синхронизация", R.drawable.ic_agent_refresh, subtitle = data.lastSync)
                     AgentMenuRow("Расписание", R.drawable.ic_agent_schedule)
                     AgentMenuRow("Магазины", R.drawable.ic_store, onClick = onStoresClick)
-                    AgentMenuRow("Настройки", R.drawable.ic_settings)
+                    AgentMenuRow("Настройки", R.drawable.ic_settings, onClick = onSettingsClick)
                     AgentMenuRow(
                         "Уведомления", R.drawable.ic_bell,
                         badge = unreadNotifications.takeIf { it > 0 },
@@ -64,7 +65,7 @@ internal fun AgentMenuScreen(
             }
             item(key = "account-menu") {
                 Spacer(Modifier.height(AgentDesign.gap))
-                Column(Modifier.fillMaxWidth().cardShadow().background(Color.White)) {
+                Column(Modifier.fillMaxWidth().cardShadow().background(DealerDesign.surface)) {
                     AgentMenuRow("О Приложении", R.drawable.ic_info)
                     AgentMenuRow("Выйти", R.drawable.ic_exit, divider = false, onClick = onExit)
                 }
@@ -79,7 +80,7 @@ internal fun AgentMenuScreen(
 @Composable
 private fun AgentProfile() {
     val data = AgentMenuSampleData
-    Row(Modifier.fillMaxWidth().background(Color.White).padding(16.dp),
+    Row(Modifier.fillMaxWidth().background(DealerDesign.surface).padding(16.dp),
         verticalAlignment = Alignment.CenterVertically) {
         Box(Modifier.size(48.dp).clip(CircleShape).background(AgentDesign.tint), contentAlignment = Alignment.Center) {
             Text(data.initials, style = AgentDesign.date, color = AgentDesign.accent)

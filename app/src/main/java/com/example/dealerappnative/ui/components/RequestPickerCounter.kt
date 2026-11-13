@@ -43,9 +43,10 @@ internal fun RequestPickerCounter(product: PickerProduct, quantity: Int,
     val reveal = animateFloatAsState(if (expanded) 1f else 0f,
         animationSpec = tween(300, easing = FastOutSlowInEasing), label = "picker-counter-reveal")
     val showingPrefix by remember { derivedStateOf { reveal.value > 0f } }
+    val counterBackground = Design.addBackground
     Box(Modifier.size(120.dp, 40.dp).clip(RoundedCornerShape(12.dp)).drawBehind {
         val visibleWidth = 40.dp.toPx() + 80.dp.toPx() * reveal.value
-        drawRoundRect(Design.addBackground, topLeft = Offset(size.width - visibleWidth, 0f),
+        drawRoundRect(counterBackground, topLeft = Offset(size.width - visibleWidth, 0f),
             size = Size(visibleWidth, size.height), cornerRadius = CornerRadius(12.dp.toPx()))
     }) {
         if (expanded || showingPrefix) {

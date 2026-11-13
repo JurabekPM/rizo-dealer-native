@@ -1,5 +1,7 @@
 package com.example.dealerappnative.ui.components
 
+import androidx.compose.ui.graphics.Color
+import com.example.dealerappnative.ui.theme.dealerColor
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -69,7 +71,7 @@ internal fun DealerProfileMedia(profile: DealerProfile, onChange: (DealerProfile
         Text("Изображения до 5 МБ", style = Design.label, color = DealerDesign.secondary)
         androidx.compose.material3.HorizontalDivider(color = DealerDesign.divider)
         DealerProfileImage("UzQR магазина", profile.qrUri, "Статический QR-код банка магазина", Modifier.fillMaxWidth(), !busy) { select(2) }
-        error?.let { Text(it, style = Design.label, color = androidx.compose.ui.graphics.Color(0xFFE45555)) }
+        error?.let { Text(it, style = Design.label, color = dealerColor(Color(0xFFE45555), Color(0xFFFF939D))) }
         if (busy) Text("Проверяем изображение…", style = Design.label, color = DealerDesign.secondary)
     }
 }

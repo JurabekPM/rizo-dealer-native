@@ -39,7 +39,7 @@ internal fun StoreStatementCard(entry: StoreStatementEntry, clientName: String, 
         else Modifier.cardShadow()
     val rotation by animateFloatAsState(if (expanded) -90f else 90f, tween(280), label = "statement-chevron")
     val amountColor = Design.operationColor(entry.kind)
-    Column(Modifier.fillMaxWidth().then(outline).background(Color.White).animateContentSize(tween(280))) {
+    Column(Modifier.fillMaxWidth().then(outline).background(DealerDesign.surface).animateContentSize(tween(280))) {
         Row(Modifier.fillMaxWidth().softCardPress(onClick = onToggle).padding(horizontal = 16.dp, vertical = 14.dp), verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {

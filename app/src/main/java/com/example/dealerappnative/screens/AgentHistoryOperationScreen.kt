@@ -1,5 +1,7 @@
 package com.example.dealerappnative.screens
 
+import com.example.dealerappnative.ui.theme.displayColor
+import com.example.dealerappnative.ui.theme.dealerColor
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -33,7 +35,7 @@ internal fun AgentHistoryOperationScreen(entry: AgentHistoryEntry, operation: Hi
             item(key = "store") { HistoryStoreSummary(entry.visit) }
             item(key = "date") { HistorySurface {
                 Row(verticalAlignment = Alignment.Top) {
-                    Box(Modifier.padding(top = 5.dp).size(8.dp).background(Color(0xFF22C348), CircleShape))
+                    Box(Modifier.padding(top = 5.dp).size(8.dp).background(dealerColor(Color(0xFF22C348), Color(0xFF83D7A3)), CircleShape))
                     Spacer(Modifier.width(12.dp))
                     HistoryDateLine("Дата завершения", if (operation.result == VisitResult.Return) entry.returnRecord?.createdAt ?: requireNotNull(entry.session.finishedAt) else requireNotNull(entry.session.finishedAt))
                 }
@@ -46,13 +48,13 @@ internal fun AgentHistoryOperationScreen(entry: AgentHistoryEntry, operation: Hi
                     val excess = operation.products.sumOf { it.price * (it.quantity - it.expected).coerceAtLeast(0) }
                     HistoryValue("Текущая сумма товаров", historyMoney(expected))
                     HistoryValue("Ревизия факт", historyMoney(operation.amount))
-                    HistoryValue("Недостача", (if (shortage > 0) "−" else "") + historyMoney(shortage), Color(0xFFE96666))
-                    HistoryValue("Излишки", (if (excess > 0) "+" else "") + historyMoney(excess), Color(0xFF22A447))
+                    HistoryValue("Недостача", (if (shortage > 0) "−" else "") + historyMoney(shortage), dealerColor(Color(0xFFE96666), Color(0xFFFF939D)))
+                    HistoryValue("Излишки", (if (excess > 0) "+" else "") + historyMoney(excess), dealerColor(Color(0xFF22A447), Color(0xFF83D7A3)))
                     Spacer(Modifier.height(8.dp))
-                    HistoryValue("Сальдо магазина", entry.visit.debtDirection.formatAmount(entry.visit.debt), entry.visit.debtDirection.color)
+                    HistoryValue("Сальдо магазина", entry.visit.debtDirection.formatAmount(entry.visit.debt), entry.visit.debtDirection.displayColor)
                 } else {
                     HistoryValue(if (operation.result == VisitResult.Collection) "Получено" else "Общая сумма",
-                        historyMoney(operation.amount), Color(0xFF22A447))
+                        historyMoney(operation.amount), dealerColor(Color(0xFF22A447), Color(0xFF83D7A3)))
                     if (operation.result == VisitResult.Collection) {
                         HistoryValue("Способ оплаты", "Наличные")
                         HistoryValue("Принял", entry.visit.details.employee)
@@ -90,7 +92,7 @@ internal fun AgentHistoryOperationScreen(entry: AgentHistoryEntry, operation: Hi
                                     difference > 0 -> "Излишки $difference шт"
                                     else -> "Количество совпадает"
                                 }, style = AgentVisitDesign.detail,
-                                    color = if (difference < 0) Color(0xFFE69B20) else Color(0xFF22A447))
+                                    color = if (difference < 0) dealerColor(Color(0xFFE69B20), Color(0xFFFFCF81)) else dealerColor(Color(0xFF22A447), Color(0xFF83D7A3)))
                             } else Text("${product.quantity} шт · ${historyMoney(product.total)}",
                                 style = AgentVisitDesign.detail, color = DealerDesign.secondary)
                         }

@@ -14,7 +14,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -108,7 +107,7 @@ internal fun VisitReturnScreen(visit: VisitStore, session: AgentVisitSession? = 
 
             }
         }
-        if (allowCreate) Column(Modifier.fillMaxWidth().background(Color.White).padding(16.dp)) {
+        if (allowCreate) Column(Modifier.fillMaxWidth().background(DealerDesign.surface).padding(16.dp)) {
             ReturnPrimaryButton("Возвратить", items.isNotEmpty()) { reasonVisible = true }
         } else if (onStart != null && session == null) AgentVisitAction("Начать визит", onClick = {
             if (!onStart()) Toast.makeText(context, "Для этого магазина визит уже начат или завершён", Toast.LENGTH_SHORT).show()

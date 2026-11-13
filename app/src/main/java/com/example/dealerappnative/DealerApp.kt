@@ -29,7 +29,6 @@ import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.dealerappnative.data.UnreadContent
 import com.example.dealerappnative.data.activeVisits
@@ -63,7 +62,7 @@ import com.example.dealerappnative.ui.theme.DealerDesign
 import com.example.dealerappnative.ui.theme.DealerPrototypeTheme
 
 @Composable
-internal fun DealerApp(initialTab: Int = 0) {
+internal fun DealerApp(initialTab: Int = 0, onSettingsClick: () -> Unit = {}) {
     var selectedIndex by rememberSaveable { mutableIntStateOf(initialTab) }
     val destination = DealerDestination.entries[selectedIndex]
     var dealerProfileVisible by rememberSaveable { mutableStateOf(false) }
@@ -159,11 +158,11 @@ internal fun DealerApp(initialTab: Int = 0) {
 
     DealerPrototypeTheme {
         Scaffold(
-            containerColor = if (childScreenVisible) DealerDesign.background else Color.White,
+            containerColor = if (childScreenVisible) DealerDesign.background else DealerDesign.surface,
             topBar = {
                 if (childScreenVisible) {
                     Spacer(Modifier.fillMaxWidth().windowInsetsTopHeight(WindowInsets.statusBars)
-                        .background(Color.White))
+                        .background(DealerDesign.surface))
                 }
             },
             bottomBar = {
@@ -243,6 +242,7 @@ internal fun DealerApp(initialTab: Int = 0) {
                                 onRevisionsClick = { revisionsVisible = true },
                                 onEditDealerClick = { dealerProfileVisible = true },
                                 onNotificationsClick = { notificationsVisible = true },
+                                onSettingsClick = onSettingsClick,
                                 unreadNotificationCount = unreadContent[destination].size,
                                 administrator = administrator
                             )

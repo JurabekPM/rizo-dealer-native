@@ -1,5 +1,6 @@
 package com.example.dealerappnative.screens
 
+import com.example.dealerappnative.ui.theme.displayColor
 import com.example.dealerappnative.ui.components.softCardPress
 import com.example.dealerappnative.ui.components.cardShadow
 import androidx.compose.foundation.background
@@ -24,7 +25,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -58,7 +58,7 @@ internal fun StoresScreen(
     }
     Column(Modifier.fillMaxSize().background(DealerDesign.background)) {
         ChildScreenHeader("Магазины", onBack, showFilter = true)
-        Column(Modifier.fillMaxWidth().background(Color.White).padding(horizontal = 16.dp)
+        Column(Modifier.fillMaxWidth().background(DealerDesign.surface).padding(horizontal = 16.dp)
             .padding(bottom = 16.dp)) {
             SearchField(query, { query = it }, placeholder = "Поиск")
         }
@@ -94,7 +94,7 @@ private fun StoreCard(store: StoreUiModel, unread: Boolean, onClick: () -> Unit)
                 Text(store.name, style = DealerDesign.cardTitle, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 Spacer(Modifier.height(4.dp))
                 Text(store.debtDirection.formatAmount(store.debt), style = DealerDesign.detail,
-                    color = store.debtDirection.color, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    color = store.debtDirection.displayColor, maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
         }
         HorizontalDivider(color = DealerDesign.divider)

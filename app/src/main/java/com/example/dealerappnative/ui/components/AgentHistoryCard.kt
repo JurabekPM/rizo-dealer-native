@@ -1,5 +1,6 @@
 package com.example.dealerappnative.ui.components
 
+import com.example.dealerappnative.ui.theme.dealerColor
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.HorizontalDivider
@@ -25,7 +26,7 @@ internal fun AgentHistoryCard(entry: AgentHistoryEntry, showAddress: Boolean = f
     val date = SimpleDateFormat("dd.MM.yyyy | HH:mm", Locale.forLanguageTag("ru")).apply {
         timeZone = TimeZone.getTimeZone("Asia/Tashkent")
     }.format(entry.session.startedAt)
-    Column(Modifier.fillMaxWidth().softCardPress(onClick = onClick).cardShadow().background(Color.White)
+    Column(Modifier.fillMaxWidth().softCardPress(onClick = onClick).cardShadow().background(DealerDesign.surface)
         .padding(horizontal = 16.dp)) {
         Row(Modifier.fillMaxWidth().heightIn(min = 72.dp).padding(vertical = 16.dp),
             verticalAlignment = Alignment.CenterVertically) {
@@ -40,9 +41,9 @@ internal fun AgentHistoryCard(entry: AgentHistoryEntry, showAddress: Boolean = f
             Spacer(Modifier.width(12.dp))
             Text(entry.status.label, style = AgentVisitDesign.status,
                 color = when (entry.status) {
-                    HistoryStatus.Completed -> Color(0xFF22A447)
-                    HistoryStatus.Partial -> Color(0xFFE69B20)
-                    HistoryStatus.Cancelled -> Color(0xFFE96666)
+                    HistoryStatus.Completed -> dealerColor(Color(0xFF22A447), Color(0xFF83D7A3))
+                    HistoryStatus.Partial -> dealerColor(Color(0xFFE69B20), Color(0xFFFFCF81))
+                    HistoryStatus.Cancelled -> dealerColor(Color(0xFFE96666), Color(0xFFFF939D))
                 }, maxLines = 2, modifier = Modifier.widthIn(max = 132.dp))
         }
         HorizontalDivider(color = DealerDesign.divider)

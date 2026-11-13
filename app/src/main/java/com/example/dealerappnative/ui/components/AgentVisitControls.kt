@@ -1,5 +1,6 @@
 package com.example.dealerappnative.ui.components
 
+import com.example.dealerappnative.ui.theme.dealerColor
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -50,7 +51,7 @@ internal fun AgentVisitTiming(session: AgentVisitSession) {
     val elapsed = formatVisitElapsed(session.elapsedMillis(now))
     val date = remember { SimpleDateFormat("dd.MM.yyyy | HH:mm", Locale.getDefault()) }
     val finished = !session.isActive
-    Column(Modifier.fillMaxWidth().cardShadow().background(Color.White).padding(16.dp)) {
+    Column(Modifier.fillMaxWidth().cardShadow().background(DealerDesign.surface).padding(16.dp)) {
         Row(Modifier.fillMaxWidth()) {
             Box(Modifier.width(8.dp).height(if (finished) 92.dp else 40.dp)) {
                 Box(Modifier.align(Alignment.TopCenter).padding(top = 4.dp).size(8.dp)
@@ -59,14 +60,14 @@ internal fun AgentVisitTiming(session: AgentVisitSession) {
                     Box(Modifier.align(Alignment.TopCenter).padding(top = 14.dp).width(2.dp).height(40.dp)
                         .background(DealerDesign.accent, RoundedCornerShape(1.dp)))
                     Box(Modifier.align(Alignment.TopCenter).padding(top = 56.dp).size(8.dp)
-                        .background(Color(0xFF22C348), CircleShape))
+                        .background(dealerColor(Color(0xFF22C348), Color(0xFF83D7A3)), CircleShape))
                 }
             }
             Spacer(Modifier.width(12.dp))
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 VisitDateLine("Дата визита", date.format(Date(session.startedAt)),
                     if (finished) (if (session.isAttempt) "Попытка" else "Завершено") else elapsed,
-                    if (finished) Color(0xFF22A447) else Color(0xFF2563EB))
+                    if (finished) dealerColor(Color(0xFF22A447), Color(0xFF83D7A3)) else dealerColor(Color(0xFF2563EB), Color(0xFF91B8FF)))
                 session.finishedAt?.let {
                     VisitDateLine("Дата завершения", date.format(Date(it)),
                         if (seconds >= 60) "${seconds / 60} мин" else "$seconds сек", DealerDesign.secondary)
@@ -112,7 +113,7 @@ internal fun VisitCommentField(value: String, onChange: (String) -> Unit, readOn
 internal fun AgentVisitNotes(session: AgentVisitSession, onComment: (String) -> Unit,
     onAddPhotos: (List<String>) -> Unit, onRemovePhoto: (String) -> Unit) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Column(Modifier.fillMaxWidth().cardShadow().background(Color.White).padding(16.dp),
+        Column(Modifier.fillMaxWidth().cardShadow().background(DealerDesign.surface).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)) {
             LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 if (session.isActive && session.photoUris.size < 6) item(key = "add") {
@@ -126,7 +127,7 @@ internal fun AgentVisitNotes(session: AgentVisitSession, onComment: (String) -> 
                 }
             }
         }
-        Column(Modifier.fillMaxWidth().cardShadow().background(Color.White).padding(16.dp),
+        Column(Modifier.fillMaxWidth().cardShadow().background(DealerDesign.surface).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Text("Комментарии", style = AgentVisitDesign.detail, color = DealerDesign.text)
             if (session.isActive) VisitCommentField(session.comment, onComment)
@@ -163,7 +164,7 @@ private fun VisitPhoto(uri: String, removable: Boolean, onRemove: () -> Unit) {
             ?: Text("Фото недоступно", style = AgentVisitDesign.detail, color = DealerDesign.secondary,
                 modifier = Modifier.align(Alignment.Center).padding(8.dp))
         if (removable) SoftIconButton(onClick = onRemove, modifier = Modifier.align(Alignment.TopEnd)
-            .size(40.dp).background(Color.White.copy(alpha = .9f), RoundedCornerShape(bottomStart = 12.dp))
+            .size(40.dp).background(DealerDesign.surface.copy(alpha = .9f), RoundedCornerShape(bottomStart = 12.dp))
             .semantics { contentDescription = "Убрать фото" }) {
             DealerIcon(R.drawable.ic_agent_clear, DealerDesign.text, 20.dp)
         }
@@ -172,11 +173,11 @@ private fun VisitPhoto(uri: String, removable: Boolean, onRemove: () -> Unit) {
 
 @Composable
 internal fun AgentVisitAction(label: String, enabled: Boolean = true, onClick: () -> Unit) {
-    Box(Modifier.fillMaxWidth().background(Color.White).padding(16.dp)) {
+    Box(Modifier.fillMaxWidth().background(DealerDesign.surface).padding(16.dp)) {
         Box(Modifier.fillMaxWidth().height(48.dp).softCardPress(enabled = enabled, onClick = onClick)
             .clip(RoundedCornerShape(12.dp))
             .background(if (enabled) DealerDesign.accent else DealerDesign.accent.copy(alpha = .35f)), contentAlignment = Alignment.Center) {
-            Text(label, style = AgentVisitDesign.button, color = Color.White)
+            Text(label, style = AgentVisitDesign.button, color = DealerDesign.onAccent)
         }
     }
 }

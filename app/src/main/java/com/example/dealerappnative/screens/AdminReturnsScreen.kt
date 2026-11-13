@@ -12,7 +12,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.dealerappnative.R
@@ -81,7 +80,7 @@ internal fun AdminReturnsScreen(onBack: () -> Unit) {
                     if (entries.isEmpty()) item { HistoryEmpty("За этот месяц возвратов нет") }
                 }
             }
-            Box(Modifier.fillMaxWidth().background(Color.White).padding(16.dp)) {
+            Box(Modifier.fillMaxWidth().background(DealerDesign.surface).padding(16.dp)) {
                 ReturnPrimaryButton("Создать") { createVisible = true }
             }
         }

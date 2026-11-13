@@ -1,5 +1,6 @@
 package com.example.dealerappnative.screens
 
+import com.example.dealerappnative.ui.theme.DealerDesign
 import com.example.dealerappnative.ui.components.SoftIconButton
 import com.example.dealerappnative.ui.components.softCardPress
 import com.example.dealerappnative.ui.components.cardShadow
@@ -35,7 +36,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
@@ -72,7 +72,7 @@ internal fun AgentStatisticsScreen(onStoreDebtsClick: () -> Unit) {
         StatisticsDates.range(period, anchor, StatisticsDateRange(customStart, customEnd))
     }
     val data = remember(range, today) { AgentStatisticsSampleData.forRange(range, today) }
-    Column(Modifier.fillMaxSize().background(Color.White)) {
+    Column(Modifier.fillMaxSize().background(DealerDesign.surface)) {
         AgentStatisticsHeader(updatedAt, onRefresh = { updatedAt = System.currentTimeMillis() })
         StatisticsPeriodFilter(picking ?: period, StatisticsDates.label(range, period), onPeriodChange = {
             if (it == StatisticsPeriod.Range) picking = it else period = it
@@ -115,7 +115,7 @@ private fun AgentStatisticsHeader(updatedAt: Long, onRefresh: () -> Unit) {
     var refreshCount by rememberSaveable { mutableIntStateOf(0) }
     val rotation by animateFloatAsState(refreshCount * 360f, tween(500), label = "Refresh agent summary")
     val time = remember(updatedAt) { SimpleDateFormat("HH:mm", locale).format(Date(updatedAt)) }
-    Box(Modifier.fillMaxWidth().height(56.dp).background(Color.White), contentAlignment = Alignment.Center) {
+    Box(Modifier.fillMaxWidth().height(56.dp).background(DealerDesign.surface), contentAlignment = Alignment.Center) {
         Column(Modifier.align(Alignment.CenterStart).padding(start = 16.dp, end = 56.dp)) {
             Text("Статистика", style = AgentDesign.screenTitle, color = AgentDesign.text,
                 maxLines = 1, overflow = TextOverflow.Ellipsis)
@@ -135,7 +135,7 @@ private fun AgentStatisticsHeader(updatedAt: Long, onRefresh: () -> Unit) {
 private fun AgentVisitsSummary(data: AgentStatisticsSnapshot) {
     val progress = if (data.plannedVisits > 0) data.completedVisits.toFloat() / data.plannedVisits else 0f
     Column(Modifier.fillMaxWidth().cardShadow()
-        .background(Color.White).padding(16.dp)) {
+        .background(DealerDesign.surface).padding(16.dp)) {
         Row(Modifier.fillMaxWidth().height(40.dp), verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.size(40.dp).clip(CircleShape).background(AgentDesign.tint), contentAlignment = Alignment.Center) {
                 DealerIcon(R.drawable.ic_agent_visit, AgentDesign.accent, AgentDesign.iconSize)
@@ -162,7 +162,7 @@ private fun AgentVisitsSummary(data: AgentStatisticsSnapshot) {
 
 @Composable
 private fun AgentStoreDebt(onClick: () -> Unit) {
-    Row(Modifier.fillMaxWidth().softCardPress(onClick = onClick).cardShadow().background(Color.White).padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+    Row(Modifier.fillMaxWidth().softCardPress(onClick = onClick).cardShadow().background(DealerDesign.surface).padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
         DealerIcon(R.drawable.ic_agent_debt, AgentDesign.secondary, AgentDesign.iconSize)
         Spacer(Modifier.width(12.dp))
         Column(Modifier.weight(1f)) {

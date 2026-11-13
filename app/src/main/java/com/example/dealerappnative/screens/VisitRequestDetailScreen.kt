@@ -9,7 +9,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.dealerappnative.data.*
 import com.example.dealerappnative.model.*
@@ -46,7 +45,7 @@ internal fun VisitRequestDetailScreen(visit: VisitStore, record: VisitRequestRec
                 }
             }
         }
-        if (onEdit != null) Box(Modifier.fillMaxWidth().background(Color.White).padding(16.dp)) {
+        if (onEdit != null) Box(Modifier.fillMaxWidth().background(DealerDesign.surface).padding(16.dp)) {
             ReturnPrimaryButton("Редактировать", onClick = onEdit)
         }
     }

@@ -16,7 +16,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
@@ -35,7 +34,7 @@ internal fun AdminProfileTabs(pagerState: PagerState, enabled: Boolean) {
         val width = maxWidth / 2
         Box(Modifier.offset {
             IntOffset((width.toPx() * (pagerState.currentPage + pagerState.currentPageOffsetFraction).coerceIn(0f, 1f)).roundToInt(), 0)
-        }.width(width).fillMaxHeight().clip(RoundedCornerShape(9.dp)).background(Color.White))
+        }.width(width).fillMaxHeight().clip(RoundedCornerShape(9.dp)).background(DealerDesign.surface))
         Row(Modifier.fillMaxSize().selectableGroup()) {
             listOf("Физические лица", "Юридические лица").forEachIndexed { index, title ->
                 Box(Modifier.weight(1f).fillMaxHeight().selectable(selected = pagerState.currentPage == index,

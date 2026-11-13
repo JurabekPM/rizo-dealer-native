@@ -24,7 +24,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -58,7 +57,7 @@ internal fun RoleSelectionScreen(onSelect: (AppRole) -> Unit) {
 @Composable
 private fun RoleCard(title: String, subtitle: String, @DrawableRes icon: Int, onClick: () -> Unit) {
     Row(Modifier.fillMaxWidth().softCardPress(onClick = onClick).cardShadow()
-        .background(Color.White).padding(16.dp),
+        .background(DealerDesign.surface).padding(16.dp),
         verticalAlignment = Alignment.CenterVertically) {
         Box(Modifier.size(48.dp).clip(RoundedCornerShape(DealerDesign.radius))
             .background(DealerDesign.background), contentAlignment = Alignment.Center) {

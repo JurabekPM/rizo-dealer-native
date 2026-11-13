@@ -1,5 +1,7 @@
 package com.example.dealerappnative.screens
 
+import com.example.dealerappnative.ui.theme.displayColor
+import com.example.dealerappnative.ui.theme.dealerColor
 import com.example.dealerappnative.ui.components.LocalStoreActions
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -57,7 +59,7 @@ internal fun AgentVisitDetailScreen(store: StoreUiModel, visit: VisitStore,
     var warning by rememberSaveable(store.id) { mutableStateOf(false) }
     val keyboard = LocalSoftwareKeyboardController.current
     Column(Modifier.fillMaxSize().background(DealerDesign.background).imePadding()) {
-        Box(Modifier.fillMaxWidth().height(56.dp).background(Color.White), contentAlignment = Alignment.Center) {
+        Box(Modifier.fillMaxWidth().height(56.dp).background(DealerDesign.surface), contentAlignment = Alignment.Center) {
             Text(store.name, style = AgentVisitDesign.screenTitle, color = DealerDesign.text,
                 maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.padding(horizontal = 56.dp))
             SoftIconButton(onClick = onBack, modifier = Modifier.align(Alignment.CenterStart).padding(start = 4.dp)
@@ -70,20 +72,20 @@ internal fun AgentVisitDetailScreen(store: StoreUiModel, visit: VisitStore,
             item(key = "store") { VisitStoreSummary(store, visit.sourceStore ?: store) }
             if (session != null) item(key = "time") { AgentVisitTiming(session) }
             item(key = "balance") {
-                Row(Modifier.fillMaxWidth().cardShadow().background(Color.White)
+                Row(Modifier.fillMaxWidth().cardShadow().background(DealerDesign.surface)
                     .heightIn(min = 56.dp).padding(horizontal = 16.dp, vertical = 12.dp),
                     verticalAlignment = Alignment.CenterVertically) {
                     Text("Конечное сальдо", style = AgentVisitDesign.name, color = DealerDesign.secondary,
                         modifier = Modifier.weight(1f))
                     Spacer(Modifier.width(12.dp))
                     Text(store.debtDirection.formatAmount(store.debt), style = AgentVisitDesign.emphasis,
-                        color = store.debtDirection.color, maxLines = 1,
+                        color = store.debtDirection.displayColor, maxLines = 1,
                         modifier = Modifier.sharedVisitStorePart(store.id, VisitStorePart.Debt))
                 }
             }
             item(key = "statement") { StoreStatementEntry(visit.sourceStore ?: store) }
             item(key = "operations") {
-                Column(Modifier.fillMaxWidth().cardShadow().background(Color.White)
+                Column(Modifier.fillMaxWidth().cardShadow().background(DealerDesign.surface)
                     .padding(horizontal = 16.dp)) {
                     VisitResult.entries.forEachIndexed { index, result ->
                         VisitOperationRow(visit, result, result in (session?.results ?: visit.results),
@@ -117,7 +119,7 @@ internal fun AgentVisitDetailScreen(store: StoreUiModel, visit: VisitStore,
         onComment = { sessions.comment(store.id, it) }, onDismiss = { finishSheet = false }, onFinish = {
             if (sessions.finish(store.id, it)) { keyboard?.hide(); finishSheet = false }
         })
-    if (warning) AlertDialog(onDismissRequest = { warning = false }, containerColor = Color.White,
+    if (warning) AlertDialog(onDismissRequest = { warning = false }, containerColor = DealerDesign.surface,
         title = { Text("Не удалось начать визит", style = AgentVisitDesign.screenTitle) },
         text = { Text("Для этого магазина визит уже начат или завершён.", style = AgentVisitDesign.name) },
         confirmButton = { SoftTextButton(onClick = { warning = false }) {
@@ -128,7 +130,7 @@ internal fun AgentVisitDetailScreen(store: StoreUiModel, visit: VisitStore,
 @Composable
 private fun VisitStoreSummary(store: StoreUiModel, actionStore: StoreUiModel) {
     val actions = LocalStoreActions.current
-    Column(Modifier.fillMaxWidth().cardShadow().background(Color.White).padding(16.dp)) {
+    Column(Modifier.fillMaxWidth().cardShadow().background(DealerDesign.surface).padding(16.dp)) {
         Row(Modifier.fillMaxWidth().heightIn(min = 44.dp), verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.sharedVisitStorePart(store.id, VisitStorePart.Logo)) { DealerIcon(R.drawable.ic_store) }
             Spacer(Modifier.width(12.dp))
@@ -180,7 +182,7 @@ private fun VisitOperationRow(visit: VisitStore, result: VisitResult, completed:
         }
         if (completed) {
             Spacer(Modifier.width(8.dp))
-            Text("Завершено", style = AgentVisitDesign.status, color = Color(0xFF22A447))
+            Text("Завершено", style = AgentVisitDesign.status, color = dealerColor(Color(0xFF22A447), Color(0xFF83D7A3)))
         }
     }
 }

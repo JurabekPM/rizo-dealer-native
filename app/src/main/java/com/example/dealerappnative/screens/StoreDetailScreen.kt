@@ -1,5 +1,7 @@
 package com.example.dealerappnative.screens
 
+import com.example.dealerappnative.ui.theme.displayColor
+import com.example.dealerappnative.ui.theme.dealerColor
 import com.example.dealerappnative.ui.components.softCardPress
 import com.example.dealerappnative.ui.components.LocalStoreActions
 import com.example.dealerappnative.ui.components.StoreStatementEntry
@@ -48,20 +50,20 @@ internal fun StoreDetailScreen(store: StoreUiModel, onBack: () -> Unit, onOpenMa
             item { StoreSettings(store) }
             item {
                 Row(Modifier.fillMaxWidth().height(56.dp).cardShadow()
-                    .background(Color.White).padding(horizontal = DealerDesign.pageInset),
+                    .background(DealerDesign.surface).padding(horizontal = DealerDesign.pageInset),
                     verticalAlignment = Alignment.CenterVertically) {
                     Text("Конечное сальдо", style = DealerDesign.body, color = DealerDesign.secondary,
                         modifier = Modifier.weight(1f))
                     Spacer(Modifier.width(8.dp))
                     Text(store.debtDirection.formatAmount(store.debt), style = DealerDesign.body,
-                        color = store.debtDirection.color)
+                        color = store.debtDirection.displayColor)
                     Spacer(Modifier.width(4.dp))
                     Box(Modifier.rotate(90f)) { DealerIcon(R.drawable.ic_chevron) }
                 }
             }
             item { StoreStatementEntry(store) }
             item {
-                Column(Modifier.fillMaxWidth().cardShadow().background(Color.White)) {
+                Column(Modifier.fillMaxWidth().cardShadow().background(DealerDesign.surface)) {
                     Text("Отчёты", style = DealerDesign.type(22, 28),
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp))
                     storeReports.forEachIndexed { index, (title, icon) ->
@@ -78,7 +80,7 @@ internal fun StoreDetailScreen(store: StoreUiModel, onBack: () -> Unit, onOpenMa
 private fun StoreSummary(store: StoreUiModel, onOpenMap: () -> Unit) {
     val actions = LocalStoreActions.current
     Column(Modifier.fillMaxWidth().cardShadow()
-        .background(Color.White).padding(horizontal = DealerDesign.pageInset, vertical = 12.dp)) {
+        .background(DealerDesign.surface).padding(horizontal = DealerDesign.pageInset, vertical = 12.dp)) {
         Row(Modifier.fillMaxWidth().height(44.dp), verticalAlignment = Alignment.CenterVertically) {
             DealerIcon(R.drawable.ic_store)
             Spacer(Modifier.width(12.dp))
@@ -111,7 +113,7 @@ private fun StoreAction(label: String, @DrawableRes icon: Int, modifier: Modifie
 @Composable
 private fun StoreSettings(store: StoreUiModel) {
     Column(Modifier.fillMaxWidth().cardShadow()
-        .background(Color.White).padding(horizontal = DealerDesign.pageInset, vertical = 4.dp)) {
+        .background(DealerDesign.surface).padding(horizontal = DealerDesign.pageInset, vertical = 4.dp)) {
         Row(Modifier.fillMaxWidth().height(48.dp), verticalAlignment = Alignment.CenterVertically) {
             DealerIcon(R.drawable.ic_info)
             Spacer(Modifier.width(12.dp))
@@ -119,9 +121,9 @@ private fun StoreSettings(store: StoreUiModel) {
             Spacer(Modifier.width(8.dp))
             // Display the store's sample setting; editing is outside this screen prototype.
             Box(Modifier.width(36.dp).height(22.dp).clip(CircleShape)
-                .background(if (store.showPrices) DealerDesign.accent else Color(0xFFD5DADD)).padding(3.dp)) {
+                .background(if (store.showPrices) DealerDesign.accent else dealerColor(Color(0xFFD5DADD), Color(0xFF514A5B))).padding(3.dp)) {
                 Box(Modifier.size(16.dp).align(if (store.showPrices) Alignment.CenterEnd else Alignment.CenterStart)
-                    .clip(CircleShape).background(Color.White))
+                    .clip(CircleShape).background(DealerDesign.surface))
             }
         }
         Row(Modifier.fillMaxWidth().height(48.dp), verticalAlignment = Alignment.CenterVertically) {

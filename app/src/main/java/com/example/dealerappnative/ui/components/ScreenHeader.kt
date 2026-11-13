@@ -11,7 +11,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.dealerappnative.R
 import com.example.dealerappnative.ui.theme.DealerDesign
@@ -23,7 +22,7 @@ internal fun ScreenHeader(
     @DrawableRes actionIconRes: Int = R.drawable.ic_sort
 ) {
     Box(
-        Modifier.fillMaxWidth().height(56.dp).background(Color.White),
+        Modifier.fillMaxWidth().height(56.dp).background(DealerDesign.surface),
         contentAlignment = Alignment.Center
     ) {
         Text(title, style = DealerDesign.title)

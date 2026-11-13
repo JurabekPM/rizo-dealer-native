@@ -47,7 +47,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -61,6 +60,7 @@ import com.example.dealerappnative.data.StoreLocationPreferences
 import com.example.dealerappnative.ui.components.AgentStoreDebtCard
 import com.example.dealerappnative.ui.components.AgentStoreDebtHeader
 import com.example.dealerappnative.ui.components.DealerIcon
+import com.example.dealerappnative.ui.theme.DealerDesign
 import com.example.dealerappnative.ui.theme.AgentDesign
 
 private enum class DebtFilter(val label: String) { All("Все"), WithDebt("С долгом"), WithoutDebt("Без долга") }
@@ -147,11 +147,11 @@ private fun AgentStoreDebtList(
                     }
                     val active = option == filter
                     Box(Modifier.weight(1f).height(36.dp).clip(RoundedCornerShape(AgentDesign.radius))
-                        .background(if (active) AgentDesign.accent else Color.White)
+                        .background(if (active) AgentDesign.accent else DealerDesign.surface)
                         .selectable(selected = active, role = Role.RadioButton, interactionSource = remember { MutableInteractionSource() }, indication = null, onClick = { filter = option }),
                         contentAlignment = Alignment.Center) {
                         Text("${option.label} $count", style = AgentDesign.menuDetail,
-                            color = if (active) Color.White else AgentDesign.secondary,
+                            color = if (active) DealerDesign.onAccent else AgentDesign.secondary,
                             maxLines = 1, overflow = TextOverflow.Ellipsis)
                     }
                 }

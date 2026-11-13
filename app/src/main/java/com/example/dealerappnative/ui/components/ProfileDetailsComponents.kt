@@ -13,7 +13,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -29,7 +28,7 @@ import com.example.dealerappnative.ui.theme.ProfileDesign as Design
 
 @Composable
 internal fun ProfilePageHeader(title: String, onBack: () -> Unit, onEdit: (() -> Unit)? = null) {
-    Box(Modifier.fillMaxWidth().height(56.dp).background(Color.White), contentAlignment = Alignment.Center) {
+    Box(Modifier.fillMaxWidth().height(56.dp).background(DealerDesign.surface), contentAlignment = Alignment.Center) {
         Text(title, style = DealerDesign.title, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.align(Alignment.CenterStart).padding(horizontal = 56.dp))
         SoftIconButton(onBack, Modifier.align(Alignment.CenterStart).padding(start = 4.dp).size(48.dp).semantics { contentDescription = "Назад" }) {
             DealerIcon(R.drawable.ic_arrow_back, Design.text)
@@ -66,7 +65,7 @@ internal fun ProfileSelfBadge() {
 
 @Composable
 internal fun ProfileIdentity(name: String, subtitle: String, @DrawableRes icon: Int, imageUri: String = "", initials: String? = null, self: Boolean = false) {
-    Row(Modifier.fillMaxWidth().cardShadow(RoundedCornerShape(18.dp)).background(Color.White).padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+    Row(Modifier.fillMaxWidth().cardShadow(RoundedCornerShape(18.dp)).background(DealerDesign.surface).padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
         ProfileAvatar(icon, 56.dp, imageUri, initials)
         Spacer(Modifier.width(14.dp))
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {

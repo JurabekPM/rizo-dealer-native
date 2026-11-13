@@ -1,5 +1,6 @@
 package com.example.dealerappnative.screens
 
+import com.example.dealerappnative.ui.theme.dealerColor
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
@@ -21,8 +22,8 @@ internal fun DeliveriesScreen(unreadIds: Set<String>, onRead: (String) -> Unit) 
         emptyMessage = "Доставки не найдены"
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            ShortcutCard("Запросы на сотрудничество", R.drawable.ic_visit, "1 магазин", Color(0xFF529FDB))
-            ShortcutCard("Возвраты", R.drawable.ic_store, "1 доставщик", Color(0xFFD66F6F))
+            ShortcutCard("Запросы на сотрудничество", R.drawable.ic_visit, "1 магазин", dealerColor(Color(0xFF529FDB), Color(0xFF91B8FF)))
+            ShortcutCard("Возвраты", R.drawable.ic_store, "1 доставщик", dealerColor(Color(0xFFD66F6F), Color(0xFFFF939D)))
         }
     }
 }

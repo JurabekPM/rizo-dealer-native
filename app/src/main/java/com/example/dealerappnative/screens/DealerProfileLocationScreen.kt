@@ -8,7 +8,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.dealerappnative.location.findAddress
@@ -40,7 +39,7 @@ internal fun DealerProfileLocationScreen(profile: DealerProfile, onBack: () -> U
         loading = false
     }
     BackHandler(onBack = onBack)
-    Column(Modifier.fillMaxSize().background(Color.White).imePadding()) {
+    Column(Modifier.fillMaxSize().background(DealerDesign.surface).imePadding()) {
         ChildScreenHeader("Адрес на карте", onBack)
         Box(Modifier.weight(1f).fillMaxWidth()) {
             StoreMapView(initialLocation, editing = true,

@@ -1,5 +1,6 @@
 package com.example.dealerappnative.ui.components
 
+import com.example.dealerappnative.ui.theme.DealerDesign
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,7 +14,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.dealerappnative.R
@@ -22,7 +22,7 @@ import com.example.dealerappnative.ui.theme.AgentDesign
 
 @Composable
 internal fun AgentStoreDebtCard(item: AgentStoreDebt, onClick: () -> Unit) {
-    Column(Modifier.fillMaxWidth().softCardPress(onClick = onClick).cardShadow().background(Color.White)
+    Column(Modifier.fillMaxWidth().softCardPress(onClick = onClick).cardShadow().background(DealerDesign.surface)
         .padding(12.dp)) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.agentStoreSharedPart(item.store.id, AgentStorePart.Logo)) {

@@ -23,7 +23,7 @@ import com.example.dealerappnative.ui.theme.DealerDesign
 @Composable
 internal fun AgentUnplannedSheet(onDismiss: () -> Unit, onContinue: (UnplannedVisitKind) -> Unit) {
     var selected by rememberSaveable { mutableStateOf<UnplannedVisitKind?>(null) }
-    ModalBottomSheet(onDismissRequest = onDismiss, containerColor = Color.White,
+    ModalBottomSheet(onDismissRequest = onDismiss, containerColor = DealerDesign.surface,
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
         dragHandle = { Box(Modifier.padding(top = 10.dp, bottom = 16.dp).size(36.dp, 4.dp)
@@ -66,7 +66,7 @@ private fun ChoiceAction(label: String, modifier: Modifier, enabled: Boolean, pr
         contentAlignment = Alignment.Center) {
         Text(label, style = AgentVisitDesign.button, color = when {
             !enabled -> DealerDesign.secondary
-            primary -> Color.White
+            primary -> DealerDesign.onAccent
             else -> DealerDesign.text
         })
     }

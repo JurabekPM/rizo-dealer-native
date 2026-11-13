@@ -11,7 +11,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.paneTitle
 import androidx.compose.ui.semantics.semantics
@@ -59,7 +58,7 @@ internal fun StoreStatementScreen(store: StoreUiModel, onBack: () -> Unit) {
             months.forEach { month ->
                 item(key = "month-${month.key}") {
                     Row(Modifier.fillMaxWidth().padding(top = 8.dp)
-                        .background(Color.White, RoundedCornerShape(topStart = DealerDesign.cardRadius, topEnd = DealerDesign.cardRadius))
+                        .background(DealerDesign.surface, RoundedCornerShape(topStart = DealerDesign.cardRadius, topEnd = DealerDesign.cardRadius))
                         .padding(horizontal = 16.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
                         Text(month.title, style = Design.name, color = Design.text, modifier = Modifier.weight(1f))
                     }

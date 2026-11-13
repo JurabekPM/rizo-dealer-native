@@ -76,8 +76,9 @@ internal fun AdminReturnDetailScreen(document: AdminReturnDocument, onBack: () -
 @Composable
 private fun ReturnTimelineRow(time: Long, label: String, last: Boolean) {
     Row(Modifier.height(IntrinsicSize.Min)) {
+        val accent = DealerDesign.accent
         Box(Modifier.width(8.dp).fillMaxHeight().drawBehind {
-            if (!last) drawLine(DealerDesign.accent, Offset(size.width / 2, 8.dp.toPx()),
+            if (!last) drawLine(accent, Offset(size.width / 2, 8.dp.toPx()),
                 Offset(size.width / 2, size.height + 4.dp.toPx()), strokeWidth = 2.dp.toPx())
         }) {
             Box(Modifier.padding(top = 4.dp).size(8.dp).background(DealerDesign.accent, CircleShape))

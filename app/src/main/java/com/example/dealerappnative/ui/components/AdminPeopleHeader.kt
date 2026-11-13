@@ -18,7 +18,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
@@ -44,7 +43,7 @@ internal fun AdminPeopleAppBar(query: String, onQueryChange: (String) -> Unit, s
     }
     val density = LocalDensity.current
     val progress = (-state.heightOffset / with(density) { 48.dp.toPx() }).coerceIn(0f, 1f)
-    Row(Modifier.fillMaxWidth().height(56.dp).background(Color.White).padding(start = 4.dp, end = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+    Row(Modifier.fillMaxWidth().height(56.dp).background(DealerDesign.surface).padding(start = 4.dp, end = 8.dp), verticalAlignment = Alignment.CenterVertically) {
         SoftIconButton(if (searching) onCloseSearch else onBack, Modifier.size(48.dp)
             .semantics { contentDescription = if (searching) "Закрыть поиск" else "Назад" }) { DealerIcon(R.drawable.ic_arrow_back, Design.text) }
         Crossfade(searching, animationSpec = tween(180), label = "People toolbar search", modifier = Modifier.weight(1f)) { active ->
@@ -89,7 +88,7 @@ internal fun AdminPeopleControls(query: String, onQueryChange: (String) -> Unit,
     val actionsRemoved = (removed - 48.dp).coerceIn(0.dp, 44.dp)
     val searchProgress = searchRemoved / 48.dp
     val actionsProgress = actionsRemoved / 44.dp
-    Column(Modifier.fillMaxWidth().background(Color.White)) {
+    Column(Modifier.fillMaxWidth().background(DealerDesign.surface)) {
         Box(Modifier.fillMaxWidth().height(48.dp - searchRemoved).clipToBounds()) {
             Box(Modifier.fillMaxWidth().wrapContentHeight(Alignment.Top, unbounded = true).height(48.dp)
                 .graphicsLayer { alpha = 1f - searchProgress; translationY = -12.dp.toPx() * searchProgress }

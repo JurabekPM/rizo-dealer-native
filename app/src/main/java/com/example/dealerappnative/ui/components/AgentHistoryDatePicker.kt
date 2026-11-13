@@ -1,5 +1,6 @@
 package com.example.dealerappnative.ui.components
 
+import com.example.dealerappnative.ui.theme.AgentDesign
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -14,7 +15,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -35,12 +35,12 @@ internal fun AgentHistoryDatePicker(from: Long?, to: Long?, onDismiss: () -> Uni
     val day = rememberDatePickerState(initialSelectedDateMillis = from ?: today, selectableDates = dates)
     val period = rememberDateRangePickerState(initialSelectedStartDateMillis = from,
         initialSelectedEndDateMillis = to, selectableDates = dates)
-    val colors = DatePickerDefaults.colors(containerColor = Color.White,
-        selectedDayContainerColor = DealerDesign.accent, selectedDayContentColor = Color.White,
-        dayInSelectionRangeContainerColor = Color(0xFFF4E6FC), dayInSelectionRangeContentColor = DealerDesign.accent,
+    val colors = DatePickerDefaults.colors(containerColor = DealerDesign.surface,
+        selectedDayContainerColor = DealerDesign.accent, selectedDayContentColor = DealerDesign.onAccent,
+        dayInSelectionRangeContainerColor = AgentDesign.tint, dayInSelectionRangeContentColor = DealerDesign.accent,
         todayContentColor = DealerDesign.accent, todayDateBorderColor = DealerDesign.accent)
     MaterialTheme(colorScheme = MaterialTheme.colorScheme.copy(primary = DealerDesign.accent,
-        surface = Color.White, onSurface = DealerDesign.text), typography = MaterialTheme.typography.copy(
+        surface = DealerDesign.surface, onSurface = DealerDesign.text), typography = MaterialTheme.typography.copy(
         titleLarge = AgentVisitDesign.sheetTitle, titleMedium = AgentVisitDesign.screenTitle,
         bodyLarge = AgentVisitDesign.name, bodyMedium = AgentVisitDesign.detail, labelLarge = AgentVisitDesign.button)) {
         DatePickerDialog(onDismissRequest = onDismiss, colors = colors, shape = RoundedCornerShape(20.dp),
@@ -56,7 +56,7 @@ internal fun AgentHistoryDatePicker(from: Long?, to: Long?, onDismiss: () -> Uni
                 .background(DealerDesign.background).padding(4.dp)) {
                 val width = maxWidth / 2
                 Box(Modifier.offset { IntOffset((width.toPx() * position).roundToInt(), 0) }
-                    .width(width).fillMaxHeight().background(Color.White, RoundedCornerShape(9.dp)))
+                    .width(width).fillMaxHeight().background(DealerDesign.surface, RoundedCornerShape(9.dp)))
                 Row(Modifier.fillMaxSize().selectableGroup()) {
                     listOf("Дата", "Период").forEachIndexed { index, label ->
                         Box(Modifier.weight(1f).fillMaxHeight().selectable(range == (index == 1), role = Role.Tab,

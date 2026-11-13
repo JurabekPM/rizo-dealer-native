@@ -1,5 +1,7 @@
 package com.example.dealerappnative.screens
 
+import com.example.dealerappnative.ui.theme.displayColor
+import com.example.dealerappnative.ui.theme.dealerColor
 import com.example.dealerappnative.ui.components.softCardPress
 import com.example.dealerappnative.ui.components.cardShadow
 import androidx.compose.foundation.background
@@ -54,7 +56,7 @@ internal fun CollectionsScreen(unreadIds: Set<String>, onRead: (String) -> Unit)
             actionIconRes = if (historySelected) R.drawable.ic_collection_filter else R.drawable.ic_sort
         )
         Column(
-            Modifier.background(Color.White).padding(horizontal = DealerDesign.pageInset)
+            Modifier.background(DealerDesign.surface).padding(horizontal = DealerDesign.pageInset)
                 .padding(bottom = 16.dp)
         ) {
             ActiveHistoryTabs(
@@ -71,7 +73,7 @@ internal fun CollectionsScreen(unreadIds: Set<String>, onRead: (String) -> Unit)
             title = "Запросы на сотрудничество",
             iconRes = R.drawable.ic_pending_actions,
             detail = "1 магазин",
-            detailColor = Color(0xFF4094F7)
+            detailColor = dealerColor(Color(0xFF4094F7), Color(0xFF91B8FF))
         )
         Spacer(Modifier.height(8.dp))
         ShortcutCard(title = "План инкассации", iconRes = R.drawable.ic_money)
@@ -127,14 +129,14 @@ private fun CollectionCard(entry: CollectionEntry, onUnreadClick: (() -> Unit)?)
                 Text(
                     text = entry.debtDirection.formatAmount(entry.debtUsd),
                     style = DealerDesign.detail,
-                    color = entry.debtDirection.color,
+                    color = entry.debtDirection.displayColor,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
             }
             Spacer(Modifier.width(12.dp))
             Column(horizontalAlignment = Alignment.End) {
-                Text(entry.status.label, style = DealerDesign.cardTitle, color = entry.status.color,
+                Text(entry.status.label, style = DealerDesign.cardTitle, color = dealerColor(entry.status.color, Color(0xFF83D7A3)),
                     maxLines = 1, softWrap = false)
                 Spacer(Modifier.height(4.dp))
                 Text(entry.kind, style = DealerDesign.detail, color = DealerDesign.secondary)

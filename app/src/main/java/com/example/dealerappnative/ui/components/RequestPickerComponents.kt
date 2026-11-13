@@ -1,5 +1,6 @@
 package com.example.dealerappnative.ui.components
 
+import com.example.dealerappnative.ui.theme.dealerColor
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -29,7 +30,7 @@ import com.example.dealerappnative.ui.theme.RequestPickerDesign as Design
 /** Clear stays inside the input, so typing never changes its width. */
 @Composable
 internal fun RequestPickerSearch(query: String, onQuery: (String) -> Unit, focus: FocusRequester) {
-    BasicTextField(query, onQuery, singleLine = true, textStyle = Design.body,
+    BasicTextField(query, onQuery, singleLine = true, textStyle = Design.body.copy(color = DealerDesign.text),
         cursorBrush = SolidColor(DealerDesign.accent),
         keyboardOptions = KeyboardOptions(autoCorrectEnabled = false),
         modifier = Modifier.fillMaxWidth().height(40.dp).focusRequester(focus)
@@ -79,7 +80,7 @@ internal fun RequestPickerProduct(product: PickerProduct, quantity: Int,
                         Box {
                             Text(historyMoney(previous) + "/шт", style = Design.detail, color = DealerDesign.text)
                             Box(Modifier.matchParentSize(), contentAlignment = Alignment.Center) {
-                                Box(Modifier.fillMaxWidth().height(1.dp).background(Color(0xFFF76659)))
+                                Box(Modifier.fillMaxWidth().height(1.dp).background(dealerColor(Color(0xFFF76659), Color(0xFFFF939D))))
                             }
                         }
                     }
@@ -106,6 +107,6 @@ internal fun RequestPickerButton(label: String, enabled: Boolean = true, onClick
     Box(Modifier.fillMaxWidth().height(48.dp).clip(RoundedCornerShape(12.dp))
         .background(if (enabled) DealerDesign.accent else DealerDesign.background)
         .softCardPress(enabled = enabled, onClick = onClick), contentAlignment = Alignment.Center) {
-        Text(label, style = Design.button, color = if (enabled) Color.White else DealerDesign.secondary)
+        Text(label, style = Design.button, color = if (enabled) DealerDesign.onAccent else DealerDesign.secondary)
     }
 }

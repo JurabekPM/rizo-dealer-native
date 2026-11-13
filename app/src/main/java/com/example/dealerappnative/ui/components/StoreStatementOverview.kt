@@ -1,5 +1,6 @@
 package com.example.dealerappnative.ui.components
 
+import com.example.dealerappnative.ui.theme.DealerDesign
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
@@ -16,7 +17,7 @@ import java.math.BigDecimal
 /** Activity tiles appear only at the history's top; the store identity stays in the AppBar. */
 @Composable
 internal fun StoreStatementOverview(totals: List<StatementCurrencyTotals>, count: Int, filtered: Boolean) {
-    Column(Modifier.fillMaxWidth().background(Color.White).padding(vertical = 8.dp),
+    Column(Modifier.fillMaxWidth().background(DealerDesign.surface).padding(vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(6.dp)) {
         if (totals.isNotEmpty()) Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState())
             .padding(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {

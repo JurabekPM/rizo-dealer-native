@@ -1,15 +1,16 @@
 package com.example.dealerappnative.ui.theme
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 
 /** Profile-local refinement; other Admin/Agent screens keep their approved typography. */
 internal object ProfileDesign {
-    val text = Color(0xFF20262C)
-    val secondary = Color(0xFF6C7780)
-    val field = Color(0xFFF6F7F9)
-    val tint = Color(0xFFF2EDF8)
-    val mutedAccent = Color(0xFF76618B)
+    val text: Color @Composable get() = dealerColor(Color(0xFF20262C), DealerDesign.text)
+    val secondary: Color @Composable get() = dealerColor(Color(0xFF6C7780), DealerDesign.secondary)
+    val field: Color @Composable get() = dealerColor(Color(0xFFF6F7F9), Color(0xFF292733))
+    val tint: Color @Composable get() = dealerColor(Color(0xFFF2EDF8), Color(0xFF352A45))
+    val mutedAccent: Color @Composable get() = dealerColor(Color(0xFF76618B), Color(0xFFD5B1F5))
     val title = DealerDesign.type(20, 26, FontWeight.SemiBold, -.3f)
     val name = DealerDesign.type(15, 20, FontWeight.SemiBold, -.15f)
     val value = DealerDesign.type(14, 20, FontWeight.Medium, -.1f)

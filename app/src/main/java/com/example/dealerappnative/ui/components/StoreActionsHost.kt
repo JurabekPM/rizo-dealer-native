@@ -1,5 +1,10 @@
 package com.example.dealerappnative.ui.components
 
+import com.example.dealerappnative.ui.theme.LocalDealerDarkTheme
+import androidx.core.view.WindowCompat
+import androidx.compose.ui.window.DialogWindowProvider
+import androidx.compose.ui.platform.LocalView
+import com.example.dealerappnative.ui.theme.DealerDesign
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
@@ -13,7 +18,6 @@ import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -79,8 +83,9 @@ internal fun StoreActionsHost(content: @Composable () -> Unit) {
         Dialog(onDismissRequest = { statementStore = null }, properties = DialogProperties(
             usePlatformDefaultWidth = false, decorFitsSystemWindows = false
         )) {
+            StoreDialogSystemBars()
             DealerPrototypeTheme {
-                Box(Modifier.fillMaxSize().background(Color.White).safeDrawingPadding()) {
+                Box(Modifier.fillMaxSize().background(DealerDesign.surface).safeDrawingPadding()) {
                     statementStates.SaveableStateProvider("statement-${store.id}") {
                         StoreStatementScreen(store, onBack = { statementStore = null })
                     }
@@ -103,12 +108,26 @@ internal fun StoreActionsHost(content: @Composable () -> Unit) {
         Dialog(onDismissRequest = { mapStore = null }, properties = DialogProperties(
             usePlatformDefaultWidth = false, decorFitsSystemWindows = false
         )) {
+            StoreDialogSystemBars()
             DealerPrototypeTheme {
-                Box(Modifier.fillMaxSize().background(Color.White).safeDrawingPadding()) {
+                Box(Modifier.fillMaxSize().background(DealerDesign.surface).safeDrawingPadding()) {
                     StoreMapScreen(store, location, route, loading,
                         onBack = { mapStore = null }, onSave = {}, allowEditing = false)
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun StoreDialogSystemBars() {
+    val view = LocalView.current
+    val window = (view.parent as? DialogWindowProvider)?.window ?: return
+    val dark = LocalDealerDarkTheme.current
+    SideEffect {
+        WindowCompat.getInsetsController(window, view).apply {
+            isAppearanceLightStatusBars = !dark
+            isAppearanceLightNavigationBars = !dark
         }
     }
 }

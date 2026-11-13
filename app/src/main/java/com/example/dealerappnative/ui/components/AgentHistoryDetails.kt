@@ -22,7 +22,7 @@ import com.example.dealerappnative.ui.theme.DealerDesign
 
 @Composable
 internal fun HistoryHeader(title: String, onBack: () -> Unit, action: (@Composable () -> Unit)? = null) {
-    Box(Modifier.fillMaxWidth().height(56.dp).background(Color.White), contentAlignment = Alignment.Center) {
+    Box(Modifier.fillMaxWidth().height(56.dp).background(DealerDesign.surface), contentAlignment = Alignment.Center) {
         Text(title, style = AgentVisitDesign.screenTitle, color = DealerDesign.text,
             maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.padding(horizontal = 56.dp))
         SoftIconButton(onClick = onBack, modifier = Modifier.align(Alignment.CenterStart).padding(start = 4.dp)
@@ -36,7 +36,7 @@ internal fun HistoryHeader(title: String, onBack: () -> Unit, action: (@Composab
 @Composable
 internal fun HistorySurface(modifier: Modifier = Modifier, verticalPadding: Dp = 16.dp, onClick: (() -> Unit)? = null, content: @Composable ColumnScope.() -> Unit) {
     Column(modifier.fillMaxWidth().softCardPress(onClick = onClick)
-        .cardShadow().background(Color.White)
+        .cardShadow().background(DealerDesign.surface)
         .padding(horizontal = 16.dp, vertical = verticalPadding), content = content)
 }
 

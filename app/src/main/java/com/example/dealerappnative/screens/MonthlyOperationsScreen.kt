@@ -1,5 +1,6 @@
 package com.example.dealerappnative.screens
 
+import com.example.dealerappnative.ui.theme.displayColor
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -109,7 +110,7 @@ private fun MonthlyOperationCard(entry: AgentHistoryEntry, revision: Boolean, sh
             Spacer(Modifier.width(12.dp))
             Text(if (revision) entry.visit.debtDirection.formatAmount(entry.visit.debt) else historyMoney(
                 historyOperations(entry).first { it.result == VisitResult.Collection }.amount),
-                style = AgentVisitDesign.emphasis, color = if (revision) entry.visit.debtDirection.color else DealerDesign.text,
+                style = AgentVisitDesign.emphasis, color = if (revision) entry.visit.debtDirection.displayColor else DealerDesign.text,
                 maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.widthIn(max = 200.dp))
         }
         Text(historyDate(requireNotNull(entry.session.finishedAt)), style = AgentVisitDesign.detail,

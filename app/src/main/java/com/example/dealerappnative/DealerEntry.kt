@@ -7,29 +7,35 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.runtime.setValue
-import com.example.dealerappnative.ui.components.StoreActionsHost
 import com.example.dealerappnative.data.VisitReturnsProvider
 import com.example.dealerappnative.model.AppRole
 import com.example.dealerappnative.screens.AgentScreen
 import com.example.dealerappnative.screens.RoleSelectionScreen
-import com.example.dealerappnative.ui.theme.DealerPrototypeTheme
+import com.example.dealerappnative.ui.components.StoreActionsHost
+import com.example.dealerappnative.ui.components.ThemeSettingsSheet
+import com.example.dealerappnative.ui.theme.DealerThemeMode
 
 /** A fresh launch asks for a role; configuration changes keep the current choice. */
 @Composable
-internal fun DealerEntry(initialAdminTab: Int = 0) {
+internal fun DealerEntry(initialAdminTab: Int, themeMode: DealerThemeMode, onThemeChange: (DealerThemeMode) -> Unit) {
     var role by rememberSaveable { mutableStateOf<AppRole?>(null) }
     val screenState = rememberSaveableStateHolder()
+    var themeSettingsVisible by rememberSaveable { mutableStateOf(false) }
+    val openSettings: () -> Unit = { themeSettingsVisible = true }
     val chooseRole: () -> Unit = { role = null }
 
     // Administrator child screens handle Back first, then the role chooser is shown.
     BackHandler(enabled = role != null, onBack = chooseRole)
     VisitReturnsProvider {
-    when (role) {
-        AppRole.Administrator -> screenState.SaveableStateProvider("administrator") {
-            StoreActionsHost { DealerApp(initialAdminTab) }
+        when (role) {
+            AppRole.Administrator -> screenState.SaveableStateProvider("administrator") {
+                StoreActionsHost { DealerApp(initialAdminTab, onSettingsClick = openSettings) }
+            }
+            AppRole.Agent -> StoreActionsHost { AgentScreen(onBack = chooseRole, onSettingsClick = openSettings) }
+            null -> RoleSelectionScreen(onSelect = { role = it })
         }
-        AppRole.Agent -> DealerPrototypeTheme { StoreActionsHost { AgentScreen(onBack = chooseRole) } }
-        null -> DealerPrototypeTheme { RoleSelectionScreen(onSelect = { role = it }) }
     }
+    if (themeSettingsVisible) {
+        ThemeSettingsSheet(themeMode, onThemeChange, onDismiss = { themeSettingsVisible = false })
     }
 }

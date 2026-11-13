@@ -196,11 +196,11 @@ private fun AgentVisitsList(cards: List<VisitStore>, onStoreClick: (String) -> U
         cards.filter { it.name.contains(search, true) || it.id.contains(search) || it.address.contains(search, true) }
     }
     Column(Modifier.fillMaxSize().background(DealerDesign.background)) {
-        Column(Modifier.fillMaxWidth().background(Color.White)) {
+        Column(Modifier.fillMaxWidth().background(DealerDesign.surface)) {
             Box(Modifier.fillMaxWidth().height(56.dp), contentAlignment = Alignment.Center) {
-                Text("Визиты", style = AgentVisitDesign.title, color = Color.Black)
+                Text("Визиты", style = AgentVisitDesign.title, color = DealerDesign.text)
                 Row(Modifier.align(Alignment.CenterEnd).padding(end = 16.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Text("Сегодня", style = AgentVisitDesign.detail, color = Color.Black)
+                    Text("Сегодня", style = AgentVisitDesign.detail, color = DealerDesign.text)
                     Box(Modifier.rotate(90f)) { DealerIcon(R.drawable.ic_chevron, DealerDesign.secondary, 16.dp) }
                 }
             }
@@ -214,7 +214,8 @@ private fun AgentVisitsList(cards: List<VisitStore>, onStoreClick: (String) -> U
                 verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 item(key = "plans", contentType = "plans") { AgentVisitPlans() }
                 items(stores, key = { it.id }, contentType = { "visit" }) { store ->
-                    VisitStoreCard(store, unread = store.id in unreadIds, onClick = { onStoreClick(store.id) })
+                    VisitStoreCard(store, unread = store.id in unreadIds, showUnreadDot = true,
+                        onClick = { onStoreClick(store.id) })
                 }
                 if (stores.isEmpty()) item {
                     Text("Магазины не найдены", style = AgentVisitDesign.name, color = DealerDesign.secondary,
@@ -222,9 +223,9 @@ private fun AgentVisitsList(cards: List<VisitStore>, onStoreClick: (String) -> U
                 }
             }
             IconButton(onClick = {}, modifier = Modifier.align(Alignment.BottomEnd).padding(end = 16.dp, bottom = 16.dp)
-                .shadow(4.dp, CircleShape).clip(CircleShape).background(Color.White).size(48.dp)
+                .shadow(4.dp, CircleShape).clip(CircleShape).background(DealerDesign.surface).size(48.dp)
                 .semantics { contentDescription = "Карта визитов" }) {
-                DealerIcon(R.drawable.ic_route, Color.Black)
+                DealerIcon(R.drawable.ic_route, DealerDesign.text)
             }
         }
         AgentVisitAction("Внеплановые", onClick = onUnplanned)
@@ -233,14 +234,14 @@ private fun AgentVisitsList(cards: List<VisitStore>, onStoreClick: (String) -> U
 
 @Composable
 private fun AgentVisitPlans() {
-    Column(Modifier.fillMaxWidth().cardShadow().background(Color.White).padding(16.dp),
+    Column(Modifier.fillMaxWidth().cardShadow().background(DealerDesign.surface).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Row(Modifier.fillMaxWidth().height(62.dp).cardShadow().background(DealerDesign.background)
             .padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
             DealerIcon(R.drawable.img_visit_collection_result, Color.Unspecified)
             Spacer(Modifier.width(12.dp))
             Column {
-                Text("План инкассации", style = AgentVisitDesign.name, color = Color.Black)
+                Text("План инкассации", style = AgentVisitDesign.name, color = DealerDesign.text)
                 Text("50 000 000 UZS", style = AgentVisitDesign.detail, color = DealerDesign.secondary)
             }
         }
@@ -256,7 +257,7 @@ private fun AgentPlanTile(title: String, value: String, icon: Int, modifier: Mod
     Column(modifier.height(98.dp).cardShadow().background(DealerDesign.background).padding(12.dp)) {
         DealerIcon(icon, DealerDesign.secondary)
         Spacer(Modifier.height(12.dp))
-        Text(title, style = AgentVisitDesign.name, color = Color.Black, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        Text(title, style = AgentVisitDesign.name, color = DealerDesign.text, maxLines = 1, overflow = TextOverflow.Ellipsis)
         Text(value, style = AgentVisitDesign.detail, color = DealerDesign.secondary, maxLines = 1, overflow = TextOverflow.Ellipsis)
     }
 }

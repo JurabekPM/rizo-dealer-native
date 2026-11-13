@@ -1,5 +1,6 @@
 package com.example.dealerappnative.screens
 
+import com.example.dealerappnative.ui.theme.dealerColor
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -61,19 +62,19 @@ internal fun ReturnReasonSettingsScreen(onBack: () -> Unit) {
                 Text("Новая причина", style = AgentVisitDesign.emphasis, color = DealerDesign.text)
                 Spacer(Modifier.height(12.dp))
                 ReturnReasonTextField(label, { label = it; error = null })
-                error?.let { Text(it, style = AgentVisitDesign.detail, color = Color(0xFFE96666), modifier = Modifier.padding(top = 8.dp)) }
+                error?.let { Text(it, style = AgentVisitDesign.detail, color = dealerColor(Color(0xFFE96666), Color(0xFFFF939D)), modifier = Modifier.padding(top = 8.dp)) }
                 Spacer(Modifier.height(8.dp))
                 Box(Modifier.fillMaxWidth().height(48.dp).softCardPress(enabled = label.isNotBlank()) {
                     error = store.add(label); if (error == null) label = ""
                 }.clip(RoundedCornerShape(12.dp)).background(if (label.isBlank()) DealerDesign.tertiary else DealerDesign.accent),
-                    contentAlignment = Alignment.Center) { Text("Добавить причину", style = AgentVisitDesign.button, color = Color.White) }
+                    contentAlignment = Alignment.Center) { Text("Добавить причину", style = AgentVisitDesign.button, color = if (label.isBlank()) DealerDesign.surface else DealerDesign.onAccent) }
             } }
         }
     }
-    if (editingId != null) AlertDialog(onDismissRequest = { editingId = null }, containerColor = Color.White,
+    if (editingId != null) AlertDialog(onDismissRequest = { editingId = null }, containerColor = DealerDesign.surface,
         title = { Text("Изменить причину", style = AgentVisitDesign.sheetTitle) },
         text = { Column { ReturnReasonTextField(editLabel, { editLabel = it; editError = null })
-            editError?.let { Text(it, style = AgentVisitDesign.detail, color = Color(0xFFE96666)) } } },
+            editError?.let { Text(it, style = AgentVisitDesign.detail, color = dealerColor(Color(0xFFE96666), Color(0xFFFF939D))) } } },
         confirmButton = { SoftTextButton(onClick = { editError = store.rename(editingId!!, editLabel); if (editError == null) editingId = null }) {
             Text("Сохранить", style = AgentVisitDesign.button, color = DealerDesign.accent) } },
         dismissButton = { SoftTextButton(onClick = { editingId = null }) { Text("Отмена", style = AgentVisitDesign.button, color = DealerDesign.secondary) } })
@@ -81,7 +82,7 @@ internal fun ReturnReasonSettingsScreen(onBack: () -> Unit) {
 
 @Composable
 private fun ReturnReasonTextField(value: String, onChange: (String) -> Unit) {
-    BasicTextField(value, onChange, singleLine = true, textStyle = AgentVisitDesign.name,
+    BasicTextField(value, onChange, singleLine = true, textStyle = AgentVisitDesign.name.copy(color = DealerDesign.text),
         cursorBrush = SolidColor(DealerDesign.accent), modifier = Modifier.fillMaxWidth().height(48.dp)
             .clip(RoundedCornerShape(12.dp)).background(DealerDesign.background).padding(horizontal = 12.dp)
             .semantics { contentDescription = "Название причины возврата" }, decorationBox = { inner ->

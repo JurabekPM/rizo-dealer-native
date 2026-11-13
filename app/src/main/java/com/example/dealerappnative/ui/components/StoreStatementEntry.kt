@@ -6,7 +6,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
@@ -20,7 +19,7 @@ import com.example.dealerappnative.ui.theme.DealerDesign
 @Composable
 internal fun StoreStatementEntry(store: StoreUiModel) {
     val actions = LocalStoreActions.current
-    Row(Modifier.fillMaxWidth().cardShadow().background(Color.White)
+    Row(Modifier.fillMaxWidth().cardShadow().background(DealerDesign.surface)
         .softCardPress { actions.openStatement(store) }.heightIn(min = 52.dp).padding(horizontal = 16.dp, vertical = 12.dp)
         .semantics { contentDescription = "История взаиморасчётов: ${store.name}" }, verticalAlignment = Alignment.CenterVertically) {
         DealerIcon(R.drawable.ic_agent_history, DealerDesign.secondary, 22.dp)

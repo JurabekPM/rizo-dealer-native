@@ -22,7 +22,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.dealerappnative.R
@@ -46,7 +45,7 @@ internal fun VisitsScreen(
     val returns = LocalVisitReturns.current
     Column(Modifier.fillMaxSize().background(DealerDesign.background)) {
         ScreenHeader("Визиты")
-        Column(Modifier.background(Color.White).padding(horizontal = 16.dp).padding(bottom = 16.dp)) {
+        Column(Modifier.background(DealerDesign.surface).padding(horizontal = 16.dp).padding(bottom = 16.dp)) {
             ActiveHistoryTabs(
                 pagerState = pagerState,
                 activeCount = activeVisits.size,
@@ -64,7 +63,7 @@ internal fun VisitsScreen(
         // Routes are common to both tabs and stay outside the pager.
         Row(
             Modifier.fillMaxWidth().height(64.dp).softCardPress(onClick = onRoutesClick).cardShadow()
-                .background(Color.White)
+                .background(DealerDesign.surface)
                 .padding(horizontal = DealerDesign.pageInset),
             verticalAlignment = Alignment.CenterVertically
         ) {
