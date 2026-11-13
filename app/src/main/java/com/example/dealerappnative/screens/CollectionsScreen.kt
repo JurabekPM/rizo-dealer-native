@@ -180,6 +180,16 @@ private data class CollectionEntry(
 
 // Screen structure follows the real app; balances are local samples for the prototype.
 private val activeCollections = listOf(
+    CollectionEntry("collection-84001", "84001", "Epa Chorsu", "310 USD", CollectionStatus.Confirmed,
+        "Ташкент, площадь Чорсу", "120 USD", isNew = true),
+    CollectionEntry("collection-84002", "84002", "Navbahor Savdo", "185 USD", CollectionStatus.Confirmed,
+        "Ташкент, улица Фароби, 16", "75 USD", isNew = true),
+    CollectionEntry("collection-84003", "84003", "Epa Uchtepa", "640 USD", CollectionStatus.Confirmed,
+        "Ташкент, Учтепинский район, квартал 12", "250 USD", isNew = true),
+    CollectionEntry("collection-84004", "84004", "Asil Market", "270 USD", CollectionStatus.Confirmed,
+        "Ташкент, улица Бунёдкор, 24", "95 USD", isNew = true),
+    CollectionEntry("collection-84005", "84005", "Epa Qibray", "430 USD", CollectionStatus.Confirmed,
+        "Ташкентская область, Кибрай, улица Мустакиллик, 8", "180 USD", isNew = true),
     CollectionEntry("collection-754", "754", "Epa Qo‘qon", "250 USD", CollectionStatus.Confirmed,
         "Узбекистан, Ферганская область, Коканд, улица Истиклол", "100 USD", isNew = true),
     CollectionEntry("collection-760", "760", "Epa Rishton", "300 USD", CollectionStatus.Confirmed,

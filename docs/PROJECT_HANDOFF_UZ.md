@@ -441,3 +441,5 @@ User requested removal of + only in content amounts. statementAmount retains neg
 - Admin Bottom Navigation har bo‘limdagi ko‘rilmagan yozuvlar sonini ko‘rsatadi. Menyu soni «Уведомления» ro‘yxatiga tegishli. Nol bo‘lsa, badge yashirinadi.
 - Ochiq binafsha kartalar ko‘rilmagan yozuvlar. Vizit ochilganda, ariza, dostavka, inkassatsiya yoki bildirishnoma kartasi bosilganda yozuv ko‘rilgan deb belgilanadi va karta oq rangga o‘tadi. Qidiruv va tarix tabi yangi yozuvlar soniga ta’sir qilmaydi.
 - Ko‘rilgan yozuv IDlari bo‘lim bo‘yicha administrator_unread_content SharedPreferences’da saqlanadi. Dastlabki yozuvlar prototip namunalari. Vizitning ish statusi va ko‘rilganlik holati alohida yuritiladi.
+
+- Admin’ning har bir bo‘limiga 5 tadan yangi namuna qo‘shilgan. Oldin ko‘rilgan yozuvlar IDlari saqlanadi.

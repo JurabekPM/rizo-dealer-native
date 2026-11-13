@@ -29,6 +29,16 @@ internal fun DeliveriesScreen(unreadIds: Set<String>, onRead: (String) -> Unit) 
 
 // Local sample data for visual testing.
 private val activeDeliveries = listOf(
+    OrderUiModel("33446105", "Asil Market", "Valiev Muhiddin", "940 000 UZS",
+        3, "13.11.2026 | 11:10", "Магазин", isNew = true),
+    OrderUiModel("33446104", "Epa Uchtepa", "Умаров Хасан", "1 650 000 UZS",
+        4, "13.11.2026 | 10:35", "Магазин", isNew = true),
+    OrderUiModel("33446103", "Epa Chorsu", "Azizbek Karimov", "720 000 UZS",
+        2, "13.11.2026 | 10:10", "Заявщик", isNew = true),
+    OrderUiModel("33446102", "Epa Qibray", "Khamidov Alisher", "2 380 000 UZS",
+        5, "13.11.2026 | 09:40", "Магазин", isNew = true),
+    OrderUiModel("33446101", "Navbahor Savdo", "Dilshod Rasulov", "290 000 UZS",
+        1, "13.11.2026 | 09:15", "Заявщик", isNew = true),
     OrderUiModel("33446087", "Epa Qo‘qon", "Azizbek Karimov", "1 250 000 UZS",
         3, "10.10.2026 | 16:57", "Заявщик", isNew = true),
     OrderUiModel("33042772", "Epa Qo‘qon", "Dilshod Rasulov", "840 000 UZS",

@@ -34,6 +34,16 @@ internal fun RequestsScreen(unreadIds: Set<String>, onRead: (String) -> Unit) {
 
 // Local sample data for visual testing.
 private val activeRequests = listOf(
+    OrderUiModel("18012105", "Epa Chorsu", "Azizbek Karimov", "1 860 000 UZS",
+        4, "13.11.2026 | 10:20", "Магазин", isNew = true),
+    OrderUiModel("18012104", "Navbahor Savdo", "Dilshod Rasulov", "560 000 UZS",
+        2, "13.11.2026 | 10:05", "Заявщик", isNew = true),
+    OrderUiModel("18012103", "Epa Uchtepa", "Умаров Хасан", "2 470 000 UZS",
+        5, "13.11.2026 | 09:45", "Магазин", isNew = true),
+    OrderUiModel("18012102", "Asil Market", "Valiev Muhiddin", "340 000 UZS",
+        1, "13.11.2026 | 09:20", "Магазин", isNew = true),
+    OrderUiModel("18012101", "Epa Qibray", "Khamidov Alisher", "1 125 000 UZS",
+        3, "13.11.2026 | 08:55", "Заявщик", isNew = true),
     OrderUiModel("18012076", "Eng zur magazin", "Azizbek Karimov", "1 250 000 UZS",
         3, "08.10.2026 | 15:41", "Магазин", isNew = true),
     OrderUiModel("18011587", "SUPPER DUKON FILYAL 2", "Dilshod Rasulov", "840 000 UZS",
