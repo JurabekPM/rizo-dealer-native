@@ -434,3 +434,10 @@ User requested removal of + only in content amounts. statementAmount retains neg
 - «Заявки» va «Инкассации» kartalari har bir filtrda bittadan oylik reja foizini ko‘rsatadi. Oyni filtrning oxirgi kuni belgilaydi, joriy davrda hisob bugungacha. Foiz oy boshidan shu kungacha tasdiqlangan namuna USD summasi / oylik maqsad. Katta summa tanlangan filtr bo‘yicha hisoblanadi.
 - Har ikki karta statik. Foiz 14/20 Bold, ingichka progress chizig‘i va oy nomi bilan. Arizalar soni va «у меня / сдано» qatori chiqarilmaydi.
 - AgentStatisticsSampleData mahalliy oylik namunalari 18 000 USD ariza va 20 000 USD inkassatsiya. 2026-11-06 da 3 600 / 18 000 USD (20%) va 8 000 / 20 000 USD (40%).
+
+
+## 29. Admin navigatsiyasida yangi yozuvlar — 2026-11-13
+
+- Admin Bottom Navigation har bo‘limdagi ko‘rilmagan yozuvlar sonini ko‘rsatadi. Menyu soni «Уведомления» ro‘yxatiga tegishli. Nol bo‘lsa, badge yashirinadi.
+- Ochiq binafsha kartalar ko‘rilmagan yozuvlar. Vizit ochilganda, ariza, dostavka, inkassatsiya yoki bildirishnoma kartasi bosilganda yozuv ko‘rilgan deb belgilanadi va karta oq rangga o‘tadi. Qidiruv va tarix tabi yangi yozuvlar soniga ta’sir qilmaydi.
+- Ko‘rilgan yozuv IDlari bo‘lim bo‘yicha administrator_unread_content SharedPreferences’da saqlanadi. Dastlabki yozuvlar prototip namunalari. Vizitning ish statusi va ko‘rilganlik holati alohida yuritiladi.

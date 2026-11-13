@@ -13,6 +13,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.dealerappnative.R
@@ -25,13 +27,20 @@ internal fun MenuRow(
     divider: Boolean = true,
     rowHeight: Dp = 64.dp,
     modifier: Modifier = Modifier,
+    unreadCount: Int = 0,
     onClick: (() -> Unit)? = null
 ) {
-    Column(modifier.softCardPress(onClick = onClick).padding(horizontal = 16.dp)) {
+    Column(modifier.softCardPress(onClick = onClick)
+        .semantics { if (unreadCount > 0) stateDescription = "Новых: $unreadCount" }
+        .padding(horizontal = 16.dp)) {
         Row(Modifier.fillMaxWidth().height(rowHeight), verticalAlignment = Alignment.CenterVertically) {
             DealerIcon(iconRes)
             Spacer(Modifier.width(12.dp))
             Text(label, Modifier.weight(1f), style = DealerDesign.body)
+            if (unreadCount > 0) {
+                AdminUnreadBadge(unreadCount)
+                Spacer(Modifier.width(8.dp))
+            }
             DealerIcon(R.drawable.ic_chevron, DealerDesign.tertiary, 24.dp)
         }
         if (divider) {

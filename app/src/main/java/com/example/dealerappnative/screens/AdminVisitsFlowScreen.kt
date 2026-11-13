@@ -17,7 +17,8 @@ import com.example.dealerappnative.ui.components.VisitResultsTransition
 
 @Composable
 internal fun AdminVisitsFlowScreen(
-    selectedStoreId: String?, onRoutesClick: () -> Unit, onStoreClick: (String) -> Unit, onBack: () -> Unit
+    selectedStoreId: String?, unreadIds: Set<String>, onRoutesClick: () -> Unit,
+    onStoreClick: (String) -> Unit, onBack: () -> Unit
 ) {
     val returns = LocalVisitReturns.current
     val state = rememberSaveableStateHolder()
@@ -50,7 +51,7 @@ internal fun AdminVisitsFlowScreen(
             VisitDetailScreen(store, closeVisit)
         } else state.SaveableStateProvider("list") {
             VisitListViewport(active = selectedStoreId == null) {
-                VisitsScreen(onRoutesClick, openVisit, pager, activeList, historyList, query, { query = it })
+                VisitsScreen(onRoutesClick, openVisit, pager, activeList, historyList, query, { query = it }, unreadIds)
             }
         }
     }

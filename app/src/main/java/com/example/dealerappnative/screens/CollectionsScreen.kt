@@ -39,10 +39,11 @@ import com.example.dealerappnative.ui.components.PrototypeCreateButton
 import com.example.dealerappnative.ui.components.ScreenHeader
 import com.example.dealerappnative.ui.components.SearchField
 import com.example.dealerappnative.ui.components.ShortcutCard
+import com.example.dealerappnative.ui.components.adminCardBackground
 import com.example.dealerappnative.ui.theme.DealerDesign
 
 @Composable
-internal fun CollectionsScreen() {
+internal fun CollectionsScreen(unreadIds: Set<String>, onRead: (String) -> Unit) {
     val pagerState = rememberPagerState(pageCount = { 2 })
     var query by rememberSaveable { mutableStateOf("") }
     val historySelected = pagerState.currentPage == 1
@@ -90,7 +91,11 @@ internal fun CollectionsScreen() {
                 contentPadding = PaddingValues(top = 8.dp, bottom = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(visibleEntries, key = { it.collectionId }) { entry -> CollectionCard(entry) }
+                items(visibleEntries, key = { it.collectionId }) { entry ->
+                    val onUnreadClick: (() -> Unit)? =
+                        if (entry.collectionId in unreadIds) ({ onRead(entry.collectionId) }) else null
+                    CollectionCard(entry, onUnreadClick)
+                }
                 if (visibleEntries.isEmpty()) {
                     item {
                         Text(
@@ -109,10 +114,10 @@ internal fun CollectionsScreen() {
 }
 
 @Composable
-private fun CollectionCard(entry: CollectionEntry) {
+private fun CollectionCard(entry: CollectionEntry, onUnreadClick: (() -> Unit)?) {
     Column(
-        Modifier.fillMaxWidth().height(DealerDesign.cardHeight)
-            .clip(RoundedCornerShape(DealerDesign.radius)).background(Color.White)
+        Modifier.fillMaxWidth().height(DealerDesign.cardHeight).softCardPress(onClick = onUnreadClick)
+            .clip(RoundedCornerShape(DealerDesign.radius)).adminCardBackground(onUnreadClick != null)
             .padding(horizontal = DealerDesign.pageInset)
     ) {
         Row(Modifier.fillMaxWidth().height(72.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -169,15 +174,16 @@ private data class CollectionEntry(
     val address: String,
     val amount: String,
     val debtDirection: DebtDirection = DebtDirection.StoreOwesDealer,
-    val kind: String = "Внеплановые"
+    val kind: String = "Внеплановые",
+    val isNew: Boolean = false
 )
 
 // Screen structure follows the real app; balances are local samples for the prototype.
 private val activeCollections = listOf(
     CollectionEntry("collection-754", "754", "Epa Qo‘qon", "250 USD", CollectionStatus.Confirmed,
-        "Узбекистан, Ферганская область, Коканд, улица Истиклол", "100 USD"),
+        "Узбекистан, Ферганская область, Коканд, улица Истиклол", "100 USD", isNew = true),
     CollectionEntry("collection-760", "760", "Epa Rishton", "300 USD", CollectionStatus.Confirmed,
-        "Узбекистан, Ферганская область, Риштан, махалля Навбахор", "50 USD"),
+        "Узбекистан, Ферганская область, Риштан, махалля Навбахор", "50 USD", isNew = true),
     CollectionEntry("collection-761", "761", "Epa Marg‘ilon", "120 USD", CollectionStatus.Confirmed,
         "Узбекистан, Ферганская область, Маргилан, улица Мустакиллик", "120 USD",
         DebtDirection.DealerOwesStore),
@@ -189,6 +195,8 @@ private val activeCollections = listOf(
     CollectionEntry("collection-764", "764", "Epa Dang‘ara", "550 USD", CollectionStatus.Confirmed,
         "Узбекистан, Ферганская область, Дангаринский район", "150 USD")
 )
+
+internal val newCollectionIds = activeCollections.filter { it.isNew }.map { it.collectionId }.toSet()
 
 private val collectionHistory = listOf(
     CollectionEntry("collection-759-200", "759", "Epa Sulton", "50 USD", CollectionStatus.Completed,

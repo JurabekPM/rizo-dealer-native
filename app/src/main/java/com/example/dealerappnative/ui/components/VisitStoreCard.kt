@@ -1,6 +1,5 @@
 package com.example.dealerappnative.ui.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.dealerappnative.R
@@ -26,10 +24,10 @@ import com.example.dealerappnative.ui.theme.DealerDesign
 /** A single card implementation keeps Agent and Administrator visit styling identical. */
 
 @Composable
-internal fun VisitStoreCard(store: VisitStore, onClick: () -> Unit) {
+internal fun VisitStoreCard(store: VisitStore, unread: Boolean = false, onClick: () -> Unit) {
     val debtLabel = store.debtDirection.formatAmount(store.debt)
     Column(Modifier.fillMaxWidth().height(DealerDesign.cardHeight).softCardPress(onClick = onClick).clip(RoundedCornerShape(12.dp))
-        .background(Color.White).padding(horizontal = 16.dp)) {
+        .adminCardBackground(unread).padding(horizontal = 16.dp)) {
         Row(Modifier.fillMaxWidth().height(72.dp), verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.sharedVisitStorePart(store.id, VisitStorePart.Logo)) {
                 DealerIcon(R.drawable.ic_store, DealerDesign.secondary, 24.dp)

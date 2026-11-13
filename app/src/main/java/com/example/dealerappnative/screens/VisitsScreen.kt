@@ -41,7 +41,7 @@ import com.example.dealerappnative.ui.theme.DealerDesign
 internal fun VisitsScreen(
     onRoutesClick: () -> Unit, onStoreClick: (String) -> Unit, pagerState: PagerState,
     activeListState: LazyListState, historyListState: LazyListState,
-    query: String, onQueryChange: (String) -> Unit
+    query: String, onQueryChange: (String) -> Unit, unreadIds: Set<String>
 ) {
 
     val returns = LocalVisitReturns.current
@@ -89,7 +89,9 @@ internal fun VisitsScreen(
                 contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(visibleStores, key = { it.id }) { store -> VisitStoreCard(store, onClick = { onStoreClick(store.id) }) }
+                items(visibleStores, key = { it.id }) { store ->
+                    VisitStoreCard(store, unread = store.id in unreadIds, onClick = { onStoreClick(store.id) })
+                }
                 if (visibleStores.isEmpty()) {
                     item {
                         Text(

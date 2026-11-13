@@ -37,7 +37,15 @@ import com.example.dealerappnative.ui.components.MenuRow
 import com.example.dealerappnative.ui.theme.DealerDesign
 
 @Composable
-internal fun MenuScreen(onStoresClick: () -> Unit = {}, onReturnsClick: () -> Unit = {}, onRevisionsClick: () -> Unit = {}, onEditDealerClick: () -> Unit = {}, administrator: AdminPersonalProfile = AdminPersonalProfile()) {
+internal fun MenuScreen(
+    onStoresClick: () -> Unit,
+    onReturnsClick: () -> Unit,
+    onRevisionsClick: () -> Unit,
+    onEditDealerClick: () -> Unit,
+    onNotificationsClick: () -> Unit,
+    unreadNotificationCount: Int,
+    administrator: AdminPersonalProfile
+) {
     Column(Modifier.fillMaxSize().background(DealerDesign.background).verticalScroll(rememberScrollState())) {
         Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp)).background(Color.White).softCardPress(onClick = onEditDealerClick)
             .semantics { contentDescription = "Изменить профиль" }.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -59,10 +67,12 @@ internal fun MenuScreen(onStoresClick: () -> Unit = {}, onReturnsClick: () -> Un
         Column(Modifier.clip(RoundedCornerShape(12.dp)).background(Color.White).padding(vertical = 4.dp)) {
             menuItems.forEachIndexed { index, (label, iconRes) ->
                 MenuRow(label, iconRes, divider = index != menuItems.lastIndex,
+                    unreadCount = if (iconRes == R.drawable.ic_bell) unreadNotificationCount else 0,
                     onClick = when (iconRes) {
                         R.drawable.ic_store -> onStoresClick
                         R.drawable.ic_edit -> onRevisionsClick
                         R.drawable.ic_return -> onReturnsClick
+                        R.drawable.ic_bell -> onNotificationsClick
                         else -> null
                     })
             }
@@ -88,5 +98,5 @@ private val menuItems = listOf(
     "Возвраты" to R.drawable.ic_return,
     "Роли и доступы" to R.drawable.ic_people,
     "Магазин" to R.drawable.ic_store,
-    "Уведомление" to R.drawable.ic_bell
+    "Уведомления" to R.drawable.ic_bell
 )

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.remember
@@ -20,12 +21,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
+import com.example.dealerappnative.ui.components.AdminUnreadBadge
 import com.example.dealerappnative.ui.components.DealerIcon
 import com.example.dealerappnative.ui.theme.DealerDesign
 
 @Composable
 internal fun DealerBottomNavigation(
     selected: DealerDestination,
+    unreadCounts: Map<DealerDestination, Int>,
     onSelect: (DealerDestination) -> Unit
 ) {
     Column(Modifier.background(Color.White).navigationBarsPadding()) {
@@ -37,15 +42,23 @@ internal fun DealerBottomNavigation(
         ) {
             DealerDestination.entries.forEach { destination ->
                 val isSelected = destination == selected
+                val unreadCount = unreadCounts[destination] ?: 0
                 Column(
                     modifier = Modifier.weight(1f).fillMaxHeight()
+                        .semantics {
+                            if (unreadCount > 0) stateDescription = "Новых: $unreadCount"
+                        }
                         .clickable(interactionSource = remember { MutableInteractionSource() }, indication = null) { onSelect(destination) }.padding(top = 12.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    DealerIcon(
-                        iconRes = destination.iconRes,
-                        tint = if (isSelected) DealerDesign.accent else DealerDesign.secondary
-                    )
+                    BadgedBox(badge = {
+                        if (unreadCount > 0) AdminUnreadBadge(unreadCount)
+                    }) {
+                        DealerIcon(
+                            iconRes = destination.iconRes,
+                            tint = if (isSelected) DealerDesign.accent else DealerDesign.secondary
+                        )
+                    }
                     Spacer(Modifier.height(4.dp))
                     Text(
                         text = destination.title,

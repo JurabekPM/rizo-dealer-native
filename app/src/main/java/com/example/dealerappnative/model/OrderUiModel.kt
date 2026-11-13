@@ -8,5 +8,6 @@ internal data class OrderUiModel(
     val amount: String,
     val productCount: Int,
     val date: String,
-    val source: String
+    val source: String,
+    val isNew: Boolean = false
 )

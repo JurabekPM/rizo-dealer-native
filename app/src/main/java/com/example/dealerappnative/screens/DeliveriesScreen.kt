@@ -11,10 +11,12 @@ import com.example.dealerappnative.ui.components.OrderListScreen
 import com.example.dealerappnative.ui.components.ShortcutCard
 
 @Composable
-internal fun DeliveriesScreen() {
+internal fun DeliveriesScreen(unreadIds: Set<String>, onRead: (String) -> Unit) {
     OrderListScreen(
         title = "Доставки",
         activeOrders = activeDeliveries,
+        unreadIds = unreadIds,
+        onRead = onRead,
         historyOrders = deliveryHistory,
         emptyMessage = "Доставки не найдены"
     ) {
@@ -28,12 +30,14 @@ internal fun DeliveriesScreen() {
 // Local sample data for visual testing.
 private val activeDeliveries = listOf(
     OrderUiModel("33446087", "Epa Qo‘qon", "Azizbek Karimov", "1 250 000 UZS",
-        3, "10.10.2026 | 16:57", "Заявщик"),
+        3, "10.10.2026 | 16:57", "Заявщик", isNew = true),
     OrderUiModel("33042772", "Epa Qo‘qon", "Dilshod Rasulov", "840 000 UZS",
-        1, "10.10.2026 | 16:50", "Магазин"),
+        1, "10.10.2026 | 16:50", "Магазин", isNew = true),
     OrderUiModel("76493974", "Epa Sulton", "Умаров Хасан", "640 000 UZS",
         4, "06.10.2026 | 13:48", "Заявщик")
 )
+internal val newDeliveryIds = activeDeliveries.filter { it.isNew }.map { it.id }.toSet()
+
 private val deliveryHistory = listOf(
     OrderUiModel("33446080", "Epa Rishton", "Azizbek Karimov", "320 000 UZS",
         2, "05.10.2026 | 09:15", "Магазин"),

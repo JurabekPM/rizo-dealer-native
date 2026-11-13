@@ -16,10 +16,12 @@ import com.example.dealerappnative.ui.components.OrderListScreen
 import com.example.dealerappnative.ui.theme.DealerDesign
 
 @Composable
-internal fun RequestsScreen() {
+internal fun RequestsScreen(unreadIds: Set<String>, onRead: (String) -> Unit) {
     OrderListScreen(
         title = "Заявки",
         activeOrders = activeRequests,
+        unreadIds = unreadIds,
+        onRead = onRead,
         historyOrders = requestHistory,
         emptyMessage = "Заявки не найдены"
     ) {
@@ -33,10 +35,12 @@ internal fun RequestsScreen() {
 // Local sample data for visual testing.
 private val activeRequests = listOf(
     OrderUiModel("18012076", "Eng zur magazin", "Azizbek Karimov", "1 250 000 UZS",
-        3, "08.10.2026 | 15:41", "Магазин"),
+        3, "08.10.2026 | 15:41", "Магазин", isNew = true),
     OrderUiModel("18011587", "SUPPER DUKON FILYAL 2", "Dilshod Rasulov", "840 000 UZS",
         1, "07.10.2026 | 10:35", "Заявщик")
 )
+internal val newRequestIds = activeRequests.filter { it.isNew }.map { it.id }.toSet()
+
 private val requestHistory = listOf(
     OrderUiModel("18011109", "Epa Qo‘qon", "Умаров Хасан", "640 000 UZS",
         4, "06.10.2026 | 14:20", "Магазин"),

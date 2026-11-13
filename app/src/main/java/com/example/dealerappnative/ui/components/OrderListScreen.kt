@@ -32,6 +32,8 @@ internal fun OrderListScreen(
     title: String,
     activeOrders: List<OrderUiModel>,
     historyOrders: List<OrderUiModel>,
+    unreadIds: Set<String>,
+    onRead: (String) -> Unit,
     emptyMessage: String,
     headerContent: @Composable () -> Unit
 ) {
@@ -63,7 +65,10 @@ internal fun OrderListScreen(
                 contentPadding = PaddingValues(top = 8.dp, bottom = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(visibleOrders, key = { it.id }) { order -> OrderCard(order) }
+                items(visibleOrders, key = { it.id }) { order ->
+                    val onUnreadClick: (() -> Unit)? = if (order.id in unreadIds) ({ onRead(order.id) }) else null
+                    OrderCard(order, onUnreadClick = onUnreadClick)
+                }
                 if (visibleOrders.isEmpty()) {
                     item {
                         Text(

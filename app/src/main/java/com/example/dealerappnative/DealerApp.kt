@@ -1,5 +1,6 @@
 package com.example.dealerappnative
 
+import android.content.Context
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -30,7 +31,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.dealerappnative.data.AdminUnreadContent
+import com.example.dealerappnative.data.activeVisits
+import com.example.dealerappnative.data.adminNotifications
 import com.example.dealerappnative.data.findVisitStore
+import com.example.dealerappnative.model.VisitStatus
+import com.example.dealerappnative.screens.AdminNotificationsScreen
+import com.example.dealerappnative.screens.newCollectionIds
+import com.example.dealerappnative.screens.newDeliveryIds
+import com.example.dealerappnative.screens.newRequestIds
 import com.example.dealerappnative.data.findStore
 import com.example.dealerappnative.data.sampleStores
 import com.example.dealerappnative.data.StoreLocationPreferences
@@ -61,11 +70,24 @@ internal fun DealerApp(initialTab: Int = 0) {
     var revisionsVisible by rememberSaveable { mutableStateOf(false) }
     var returnsVisible by rememberSaveable { mutableStateOf(false) }
     var routesVisible by rememberSaveable { mutableStateOf(false) }
+    var notificationsVisible by rememberSaveable { mutableStateOf(false) }
     var selectedStoreId by rememberSaveable { mutableStateOf<String?>(null) }
     val openedStore = findVisitStore(selectedStoreId)
     var storesVisible by rememberSaveable { mutableStateOf(false) }
     var selectedMagazineId by rememberSaveable { mutableStateOf<String?>(null) }
     val context = LocalContext.current
+    val unreadContent = remember(context) {
+        AdminUnreadContent(
+            context.applicationContext.getSharedPreferences("administrator_unread_content", Context.MODE_PRIVATE),
+            mapOf(
+                DealerDestination.Visits to activeVisits.filter { it.status == VisitStatus.NotVisited }.map { it.id }.toSet(),
+                DealerDestination.Requests to newRequestIds,
+                DealerDestination.Deliveries to newDeliveryIds,
+                DealerDestination.Collections to newCollectionIds,
+                DealerDestination.Menu to adminNotifications.filter { it.isNew }.map { it.id }.toSet()
+            )
+        )
+    }
     val administratorPreferences = remember(context) { DealerProfilePreferences(context) }
     var administrator by remember { mutableStateOf(administratorPreferences.readAdministrator()) }
     val locationPreferences = remember(context) { StoreLocationPreferences(context) }
@@ -114,12 +136,13 @@ internal fun DealerApp(initialTab: Int = 0) {
         val id = selectedMagazineId
         if (mapVisible && id != null && routes[id] == null && routeLoading[id] != true) refreshRoute(id)
     }
-    val childScreenVisible = dealerProfileVisible || revisionsVisible || returnsVisible || routesVisible || openedStore != null || storesVisible || openedMagazine != null
+    val childScreenVisible = dealerProfileVisible || notificationsVisible || revisionsVisible || returnsVisible || routesVisible || openedStore != null || storesVisible || openedMagazine != null
     val storesScreenState = rememberSaveableStateHolder()
     val mainScreenState = rememberSaveableStateHolder()
     val closeChildScreen: () -> Unit = {
         when {
             dealerProfileVisible -> dealerProfileVisible = false
+            notificationsVisible -> notificationsVisible = false
             returnsVisible -> returnsVisible = false
             revisionsVisible -> revisionsVisible = false
             mapVisible -> mapVisible = false
@@ -147,6 +170,7 @@ internal fun DealerApp(initialTab: Int = 0) {
                 if (!childScreenVisible) {
                     DealerBottomNavigation(
                         selected = destination,
+                        unreadCounts = DealerDestination.entries.associateWith { unreadContent[it].size },
                         onSelect = { selectedIndex = it.ordinal }
                     )
                 }
@@ -155,6 +179,12 @@ internal fun DealerApp(initialTab: Int = 0) {
             Box(Modifier.fillMaxSize().padding(contentPadding)) {
                 if (dealerProfileVisible) {
                     AdminProfileScreen(onBack = closeChildScreen, onAdministratorChanged = { administrator = it })
+                } else if (notificationsVisible) {
+                    AdminNotificationsScreen(
+                        unreadIds = unreadContent[DealerDestination.Menu],
+                        onRead = { unreadContent.markRead(DealerDestination.Menu, it) },
+                        onBack = closeChildScreen
+                    )
                 } else if (revisionsVisible) {
                     AdminRevisionsScreen(onBack = closeChildScreen)
                 } else if (returnsVisible) {
@@ -185,19 +215,36 @@ internal fun DealerApp(initialTab: Int = 0) {
                     RoutesScreen(onBack = closeChildScreen)
                 } else if (destination == DealerDestination.Visits) {
                     mainScreenState.SaveableStateProvider("visits-flow") {
-                        AdminVisitsFlowScreen(selectedStoreId,
+                        AdminVisitsFlowScreen(selectedStoreId, unreadContent[DealerDestination.Visits],
                             onRoutesClick = { routesVisible = true },
-                            onStoreClick = { selectedStoreId = it }, onBack = closeChildScreen)
+                            onStoreClick = { id ->
+                                unreadContent.markRead(DealerDestination.Visits, id)
+                                selectedStoreId = id
+                            }, onBack = closeChildScreen)
                     }
                 } else {
                     // Restore the visit tab, query and scroll position after closing a child screen.
                     mainScreenState.SaveableStateProvider("main") {
                         when (destination) {
                             DealerDestination.Visits -> Unit // Handled by the shared visit flow above.
-                            DealerDestination.Requests -> RequestsScreen()
-                            DealerDestination.Deliveries -> DeliveriesScreen()
-                            DealerDestination.Collections -> CollectionsScreen()
-                            DealerDestination.Menu -> MenuScreen(onStoresClick = { storesVisible = true }, onReturnsClick = { returnsVisible = true }, onRevisionsClick = { revisionsVisible = true }, onEditDealerClick = { dealerProfileVisible = true }, administrator = administrator)
+                            DealerDestination.Requests -> RequestsScreen(unreadContent[destination]) {
+                                unreadContent.markRead(destination, it)
+                            }
+                            DealerDestination.Deliveries -> DeliveriesScreen(unreadContent[destination]) {
+                                unreadContent.markRead(destination, it)
+                            }
+                            DealerDestination.Collections -> CollectionsScreen(unreadContent[destination]) {
+                                unreadContent.markRead(destination, it)
+                            }
+                            DealerDestination.Menu -> MenuScreen(
+                                onStoresClick = { storesVisible = true },
+                                onReturnsClick = { returnsVisible = true },
+                                onRevisionsClick = { revisionsVisible = true },
+                                onEditDealerClick = { dealerProfileVisible = true },
+                                onNotificationsClick = { notificationsVisible = true },
+                                unreadNotificationCount = unreadContent[destination].size,
+                                administrator = administrator
+                            )
                         }
                     }
                 }
