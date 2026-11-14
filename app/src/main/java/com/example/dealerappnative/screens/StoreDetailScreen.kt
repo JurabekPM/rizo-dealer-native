@@ -88,7 +88,7 @@ private fun StoreSummary(store: StoreUiModel, onOpenMap: () -> Unit) {
             Column(Modifier.weight(1f)) {
                 Text(store.name, style = DealerDesign.cardTitle, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 Spacer(Modifier.height(4.dp))
-                Text(store.id, style = DealerDesign.detail, color = DealerDesign.secondary)
+                Text("ID ${store.id}", style = DealerDesign.detail, color = DealerDesign.secondary)
             }
         }
         Spacer(Modifier.height(8.dp))

@@ -39,19 +39,22 @@ import com.example.dealerappnative.ui.theme.dealerColor
 private val cartShape = RoundedCornerShape(12.dp)
 private val controlShape = RoundedCornerShape(8.dp)
 private val cartText = DealerDesign.type(16, 22, FontWeight.Normal, -.2f)
+private val cartTotalLabel = DealerDesign.type(16, 22, FontWeight.Medium, -.2f)
+private val cartTotalAmount = DealerDesign.type(18, 24, FontWeight.SemiBold, -.2f)
 private val cartProductName = DealerDesign.type(17, 23, FontWeight.Medium, -.2f)
 private val cartDetail = DealerDesign.type(14, 19, FontWeight.Normal, -.08f)
 private val cartButton = DealerDesign.type(16, 22, FontWeight.Medium)
 
 @Composable
 internal fun CartTotal(total: Long) {
-    Column(Modifier.fillMaxWidth().background(DealerDesign.surface, cartShape)
-        .padding(horizontal = 16.dp, vertical = 16.dp)) {
-        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            Text("Общая сумма", style = cartText, color = DealerDesign.secondary, modifier = Modifier.weight(1f))
-            SlidingNumber(total, cartText, DealerDesign.text, groupThousands = true, suffix = " UZS")
-        }
+    Row(
+        Modifier.fillMaxWidth().background(DealerDesign.surface, cartShape)
+            .padding(horizontal = 16.dp, vertical = 16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Text("Общая сумма", style = cartTotalLabel, color = DealerDesign.secondary, modifier = Modifier.weight(1f))
+        SlidingNumber(total, cartTotalAmount, DealerDesign.text, groupThousands = true, suffix = " UZS")
     }
 }
 
@@ -65,7 +68,7 @@ internal fun CartStoreCard(visit: VisitStore) {
             DealerIcon(R.drawable.ic_store)
             Column(Modifier.weight(1f)) {
                 Text(visit.name, style = cartButton, color = DealerDesign.text, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                Text(visit.address.ifBlank { store.id }, style = cartDetail, color = DealerDesign.secondary,
+                Text(visit.address.ifBlank { "ID ${store.id}" }, style = cartDetail, color = DealerDesign.secondary,
                     maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
         }

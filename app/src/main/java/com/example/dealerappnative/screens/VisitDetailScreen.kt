@@ -118,7 +118,7 @@ private fun StoreSummary(store: VisitStore) {
                 Text(store.name, style = DealerDesign.cardTitle, maxLines = 1, overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.sharedVisitStorePart(store.id, VisitStorePart.Name))
                 Spacer(Modifier.height(4.dp))
-                Text(store.id, style = DealerDesign.detail, color = DealerDesign.secondary)
+                Text("ID ${mapStore.id}", style = DealerDesign.detail, color = DealerDesign.secondary)
             }
         }
         Spacer(Modifier.height(8.dp))

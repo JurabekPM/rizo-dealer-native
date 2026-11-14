@@ -7,7 +7,7 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.border
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.*
@@ -15,9 +15,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.dealerappnative.R
 import com.example.dealerappnative.data.VisitCameraPhotos
@@ -75,12 +75,21 @@ internal fun VisitPhotoAdder(session: AgentVisitSession, onAddPhotos: (List<Stri
             }
         }
     }
-    Column(Modifier.size(96.dp).softCardPress(enabled = !preparing && pendingCamera == null, onClick = takePhoto)
-        .clip(RoundedCornerShape(12.dp)).border(1.dp, DealerDesign.divider, RoundedCornerShape(12.dp)),
-        horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+    Column(
+        Modifier.width(96.dp).heightIn(min = 96.dp)
+            .softCardPress(enabled = !preparing && pendingCamera == null, onClick = takePhoto)
+            .background(DealerDesign.softAccent, RoundedCornerShape(12.dp))
+            .padding(horizontal = 8.dp, vertical = 10.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically)
+    ) {
         DealerIcon(R.drawable.ic_visit_camera, DealerDesign.accent, 24.dp)
-        Spacer(Modifier.height(6.dp))
-        Text("Добавить фото", style = AgentVisitDesign.detail, color = DealerDesign.accent)
+        Text(
+            "Сделать фото",
+            style = AgentVisitDesign.detail,
+            color = DealerDesign.accent,
+            textAlign = TextAlign.Center
+        )
     }
 }
 

@@ -121,7 +121,7 @@ private fun AgentStoreSummary(store: StoreUiModel) {
                         .sharedVisitStorePart(store.id, VisitStorePart.Name),
                     maxLines = 1, overflow = TextOverflow.Ellipsis)
                 Spacer(Modifier.height(4.dp))
-                Text(store.id, style = AgentDesign.menuDetail, color = AgentDesign.secondary,
+                Text("ID ${store.id}", style = AgentDesign.menuDetail, color = AgentDesign.secondary,
                     modifier = Modifier.agentStoreSharedPart(store.id, AgentStorePart.Id))
             }
         }

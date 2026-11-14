@@ -31,6 +31,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.example.dealerappnative.R
 import com.example.dealerappnative.model.AgentVisitSession
+import com.example.dealerappnative.model.formatFinishedVisitDuration
 import com.example.dealerappnative.model.formatVisitElapsed
 import com.example.dealerappnative.ui.theme.AgentVisitDesign
 import com.example.dealerappnative.ui.theme.DealerDesign
@@ -47,8 +48,7 @@ internal fun AgentVisitTiming(session: AgentVisitSession) {
     val now by produceState(System.currentTimeMillis(), session.startedAt, session.finishedAt) {
         while (session.isActive) { value = System.currentTimeMillis(); delay(1000) }
     }
-    val seconds = session.elapsedMillis(now) / 1000
-    val elapsed = formatVisitElapsed(session.elapsedMillis(now))
+    val elapsedMillis = session.elapsedMillis(now)
     val date = remember { SimpleDateFormat("dd.MM.yyyy | HH:mm", Locale.getDefault()) }
     val finished = !session.isActive
     Column(Modifier.fillMaxWidth().cardShadow().background(DealerDesign.surface).padding(16.dp)) {
@@ -66,11 +66,11 @@ internal fun AgentVisitTiming(session: AgentVisitSession) {
             Spacer(Modifier.width(12.dp))
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 VisitDateLine("Дата визита", date.format(Date(session.startedAt)),
-                    if (finished) (if (session.isAttempt) "Попытка" else "Завершено") else elapsed,
+                    if (finished) (if (session.isAttempt) "Попытка" else "Завершено") else formatVisitElapsed(elapsedMillis),
                     if (finished) dealerColor(Color(0xFF22A447), Color(0xFF83D7A3)) else dealerColor(Color(0xFF2563EB), Color(0xFF91B8FF)))
                 session.finishedAt?.let {
                     VisitDateLine("Дата завершения", date.format(Date(it)),
-                        if (seconds >= 60) "${seconds / 60} мин" else "$seconds сек", DealerDesign.secondary)
+                        formatFinishedVisitDuration(elapsedMillis), DealerDesign.secondary)
                 }
             }
         }
@@ -88,7 +88,7 @@ private fun VisitDateLine(label: String, value: String, trailing: String, tint: 
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Text(label, style = AgentVisitDesign.name, color = DealerDesign.text, modifier = Modifier.weight(1f))
             Spacer(Modifier.width(8.dp))
-            Text(trailing, style = AgentVisitDesign.detail, color = tint)
+            Text(trailing, style = AgentVisitDesign.detail.copy(fontFeatureSettings = "tnum"), color = tint)
         }
         Text(value, style = AgentVisitDesign.detail, color = DealerDesign.secondary)
     }

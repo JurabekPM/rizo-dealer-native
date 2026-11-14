@@ -478,3 +478,10 @@ Admin va Agent kartalarining radiusi 2 dp oshirildi. Asosiy radius 14 dp, soya b
 - Savat tugmasi ustida yengil gradient soya, savatda 17/23 Medium nom va 16/22 matnlar. Mahsulot va vizit fotosi ro‘yxatdan chiqayotganda fade ishlaydi, qolgan elementlar bo‘shagan joyga siljiydi. Draft miqdori darhol yangilanadi.
 - Savat va ikkala picker miqdori hamda jami sonlari har o‘nlik xonasiga alohida animatsiya beradi. Mahsulot rasmi mavjud bo‘lsa kattalashtirilgan dialogda ochiladi. Picker qidiruvi kirishda fokus so‘ramaydi.
 - Do‘kon va profil xaritasidagi orqaga tugmasi chap tepada, yumaloq fon bilan. Xarita tahriri ichida u avval tahrirni bekor qiladi.
+
+## 36. Do‘kon ID, savat jami va vizit tafsilotlari
+
+- Do‘kon tafsilotlaridagi mavjud identifikator «ID» prefiksi bilan chiqadi. Manzil ko‘rsatiladigan qatorlar manzilni ko‘rsatishda davom etadi.
+- Zayavka va qaytarish savatida «Общая сумма» 16/22 Medium, summa 18/24 Semibold. Summadagi raqamlar animatsiyasi saqlanadi.
+- Faol vizitda «Сделать фото» tugmasi kamera ikonkasini va matnni markazda, temaga mos yengil binafsha fonda ko‘rsatadi.
+- Vizit taymeri 24 soatgacha HH:mm:ss, keyin kunlar va qolgan HH:mm:ss formatida (masalan, «15 дн. 19:20:09»). Vizit tafsilotida yakunlangan vaqt uchun qisqa vizitlar sekund yoki daqiqada, uzoq vizitlar soat yoki kun bilan ko‘rsatiladi.
