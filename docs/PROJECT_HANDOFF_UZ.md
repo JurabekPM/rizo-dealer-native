@@ -497,3 +497,8 @@ Admin va Agent kartalarining radiusi 2 dp oshirildi. Asosiy radius 14 dp, soya b
 
 - «Заказы», «Оплачено» va «Возвраты» oldingi kabi yonma-yon turadi va gorizontal scroll qilinadi. Har bir karta matniga mos kengayadi, summa va valyuta bitta qatorda chiqadi.
 - Har bir mavjud valyutaning summasi, jumladan nol qatori, oldingi tartibda ko‘rsatiladi. Jami hisobiga sana va valyuta filtrlari ta’sir qiladi.
+
+
+## 39. Rasmlarni kattalashtirib ko‘rish
+
+- Zayavka, qaytarish, savat va mahsulot tanlash rasmlari, vizit fotosuratlari va yuklangan profil rasmlari bitta animatsiyali dialog orqali ochiladi. Dialog asl manbadan kattaroq nusxani fon oqimida yuklaydi. Vizitdagi suratni olib tashlash va profil tahriridagi rasmni almashtirish amallari alohida tugmalarda.

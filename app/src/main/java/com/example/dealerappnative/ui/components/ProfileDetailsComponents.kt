@@ -1,6 +1,7 @@
 package com.example.dealerappnative.ui.components
 
 import android.graphics.Bitmap
+import android.net.Uri
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -48,11 +49,14 @@ internal fun ProfileAvatar(@DrawableRes icon: Int, size: Dp = 48.dp, imageUri: S
         val bitmap by produceState<Bitmap?>(null, imageUri) { value = dealerProfileThumbnail(context, imageUri) }
         bitmap
     }
-    Box(Modifier.size(size).clip(CircleShape).background(Design.tint), contentAlignment = Alignment.Center) {
-        when {
-            image != null -> Image(image.asImageBitmap(), null, Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
-            !initials.isNullOrBlank() -> Text(initials, style = if (size > 48.dp) Design.title else Design.name, color = Design.mutedAccent)
-            else -> DealerIcon(icon, Design.mutedAccent, if (size > 48.dp) 28.dp else 22.dp)
+    val uri = remember(imageUri) { imageUri.takeIf { it.isNotBlank() }?.let(Uri::parse) }
+    PreviewableImage(uri.takeIf { image != null }, "Фотография профиля") { preview ->
+        Box(Modifier.size(size).then(preview).clip(CircleShape).background(Design.tint), contentAlignment = Alignment.Center) {
+            when {
+                image != null -> Image(image.asImageBitmap(), null, Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
+                !initials.isNullOrBlank() -> Text(initials, style = if (size > 48.dp) Design.title else Design.name, color = Design.mutedAccent)
+                else -> DealerIcon(icon, Design.mutedAccent, if (size > 48.dp) 28.dp else 22.dp)
+            }
         }
     }
 }
@@ -91,9 +95,14 @@ internal fun ProfileImagePreview(label: String, uri: String, modifier: Modifier 
     val bitmap by produceState<Bitmap?>(null, uri) { if (uri.isNotBlank()) value = dealerProfileThumbnail(context, uri) }
     Column(modifier, verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Text(label, style = Design.label, color = Design.secondary)
-        Box(Modifier.fillMaxWidth().height(88.dp).clip(RoundedCornerShape(10.dp)).background(Design.field), contentAlignment = Alignment.Center) {
-            if (bitmap != null) Image(bitmap!!.asImageBitmap(), label, Modifier.fillMaxSize().padding(4.dp), contentScale = ContentScale.Fit)
-            else Text("Не добавлено", style = Design.label, color = Design.secondary)
+        val image = bitmap
+        val source = remember(uri) { Uri.parse(uri) }
+        PreviewableImage(source.takeIf { image != null }, label) { preview ->
+            Box(Modifier.fillMaxWidth().height(88.dp).then(preview).clip(RoundedCornerShape(10.dp))
+                .background(Design.field), contentAlignment = Alignment.Center) {
+                if (image != null) Image(image.asImageBitmap(), null, Modifier.fillMaxSize().padding(4.dp), contentScale = ContentScale.Fit)
+                else Text("Не добавлено", style = Design.label, color = Design.secondary)
+            }
         }
     }
 }

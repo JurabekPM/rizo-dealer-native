@@ -1,8 +1,6 @@
 package com.example.dealerappnative.ui.components
 
 import com.example.dealerappnative.ui.theme.dealerColor
-import android.content.Context
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.util.Size
@@ -30,6 +28,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.example.dealerappnative.R
+import com.example.dealerappnative.data.loadLocalPhoto
 import com.example.dealerappnative.model.AgentVisitSession
 import com.example.dealerappnative.model.formatFinishedVisitDuration
 import com.example.dealerappnative.model.formatVisitElapsed
@@ -140,33 +139,25 @@ internal fun AgentVisitNotes(session: AgentVisitSession, onComment: (String) -> 
 @Composable
 private fun VisitPhoto(uri: String, removable: Boolean, modifier: Modifier, onRemove: () -> Unit) {
     val context = LocalContext.current
-    val resolver = context.contentResolver
-    val bitmap by produceState<ImageBitmap?>(null, uri) {
-        value = withContext(Dispatchers.IO) {
-            runCatching {
-                val source = Uri.parse(uri)
-                if (Build.VERSION.SDK_INT >= 29 && source.scheme == "content")
-                    resolver.loadThumbnail(source, Size(256, 256), null).asImageBitmap()
-                else {
-                    val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-                    openVisitPhoto(context, source)?.use { BitmapFactory.decodeStream(it, null, bounds) }
-                    val options = BitmapFactory.Options().apply {
-                        inSampleSize = 1
-                        while (bounds.outWidth / inSampleSize > 512 || bounds.outHeight / inSampleSize > 512) inSampleSize *= 2
-                    }
-                    openVisitPhoto(context, source)?.use { BitmapFactory.decodeStream(it, null, options)?.asImageBitmap() }
-                }
-            }.getOrNull()
-        }
+    val source = remember(uri) { Uri.parse(uri) }
+    val bitmap by produceState<ImageBitmap?>(null, source, context) {
+        val thumbnail = if (Build.VERSION.SDK_INT >= 29 && source.scheme == "content") {
+            withContext(Dispatchers.IO) {
+                runCatching { context.contentResolver.loadThumbnail(source, Size(256, 256), null) }.getOrNull()
+            }
+        } else null
+        value = (thumbnail ?: loadLocalPhoto(context, source, 512))?.asImageBitmap()
     }
-    Box(modifier.size(96.dp).clip(RoundedCornerShape(12.dp)).background(DealerDesign.background)) {
-        bitmap?.let { Image(it, "Фото визита", Modifier.fillMaxSize(), contentScale = ContentScale.Crop) }
-            ?: Text("Фото недоступно", style = AgentVisitDesign.detail, color = DealerDesign.secondary,
-                modifier = Modifier.align(Alignment.Center).padding(8.dp))
-        if (removable) SoftIconButton(onClick = onRemove, modifier = Modifier.align(Alignment.TopEnd)
-            .size(40.dp).background(DealerDesign.surface.copy(alpha = .9f), RoundedCornerShape(bottomStart = 12.dp))
-            .semantics { contentDescription = "Убрать фото" }) {
-            DealerIcon(R.drawable.ic_agent_clear, DealerDesign.text, 20.dp)
+    PreviewableImage(source.takeIf { bitmap != null }, "Фото визита") { preview ->
+        Box(modifier.size(96.dp).clip(RoundedCornerShape(12.dp)).background(DealerDesign.background)) {
+            bitmap?.let { Image(it, null, Modifier.fillMaxSize().then(preview), contentScale = ContentScale.Crop) }
+                ?: Text("Фото недоступно", style = AgentVisitDesign.detail, color = DealerDesign.secondary,
+                    modifier = Modifier.align(Alignment.Center).padding(8.dp))
+            if (removable) SoftIconButton(onClick = onRemove, modifier = Modifier.align(Alignment.TopEnd)
+                .size(40.dp).background(DealerDesign.surface.copy(alpha = .9f), RoundedCornerShape(bottomStart = 12.dp))
+                .semantics { contentDescription = "Убрать фото" }) {
+                DealerIcon(R.drawable.ic_agent_clear, DealerDesign.text, 20.dp)
+            }
         }
     }
 }
@@ -181,8 +172,3 @@ internal fun AgentVisitAction(label: String, enabled: Boolean = true, onClick: (
         }
     }
 }
-
-/** Packaged fictional samples and user-selected photos use the same bounded decoder. */
-private fun openVisitPhoto(context: Context, uri: Uri): java.io.InputStream? =
-    if (uri.scheme == "asset") context.assets.open(uri.path.orEmpty().removePrefix("/"))
-    else context.contentResolver.openInputStream(uri)

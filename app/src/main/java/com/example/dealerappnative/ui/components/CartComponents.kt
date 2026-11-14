@@ -99,7 +99,7 @@ internal fun CartProductCard(
 ) {
     Row(modifier.fillMaxWidth().background(DealerDesign.surface, cartShape).padding(16.dp),
         verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-        RequestProductThumbnail(product, previewEnabled = true)
+        RequestProductThumbnail(product)
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.Top) {
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {

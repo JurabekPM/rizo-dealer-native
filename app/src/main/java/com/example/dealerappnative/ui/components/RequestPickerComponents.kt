@@ -60,7 +60,7 @@ internal fun RequestPickerProduct(product: PickerProduct, quantity: Int,
         .softCardPress(enabled = product.stock > 0 && quantity == 0) { onStep(1) }
         .padding(horizontal = 16.dp, vertical = 12.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            RequestProductThumbnail(product, selected = quantity > 0, previewEnabled = true)
+            RequestProductThumbnail(product, selected = quantity > 0)
             Spacer(Modifier.width(12.dp))
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(product.name, style = Design.productTitle, color = DealerDesign.text,

@@ -31,11 +31,13 @@ import com.example.dealerappnative.ui.theme.DealerDesign
 
 @Composable
 internal fun ReturnProductThumbnail(product: ReturnCatalogProduct, size: Dp = 48.dp) {
-    Box(Modifier.size(size).clip(RoundedCornerShape(8.dp)).background(DealerDesign.background),
-        contentAlignment = Alignment.Center) {
-        if (product.photo != null) Image(painterResource(product.photo), contentDescription = null,
-            contentScale = ContentScale.Fit, modifier = Modifier.fillMaxSize().padding(2.dp))
-        else DealerIcon(R.drawable.ic_box)
+    PreviewableImage(imageResourceUri(product.photo), product.name) { preview ->
+        Box(Modifier.size(size).then(preview).clip(RoundedCornerShape(8.dp)).background(DealerDesign.background),
+            contentAlignment = Alignment.Center) {
+            if (product.photo != null) Image(painterResource(product.photo), contentDescription = null,
+                contentScale = ContentScale.Fit, modifier = Modifier.fillMaxSize().padding(2.dp))
+            else DealerIcon(R.drawable.ic_box)
+        }
     }
 }
 

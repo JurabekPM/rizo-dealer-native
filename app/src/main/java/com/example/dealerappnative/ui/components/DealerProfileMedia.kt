@@ -1,5 +1,6 @@
 package com.example.dealerappnative.ui.components
 
+import android.net.Uri
 import androidx.compose.ui.graphics.Color
 import com.example.dealerappnative.ui.theme.dealerColor
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -17,6 +18,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.example.dealerappnative.R
 import com.example.dealerappnative.data.dealerProfileThumbnail
@@ -82,12 +85,25 @@ private fun DealerProfileImage(label: String, uri: String, hint: String, modifie
     val bitmap by produceState<android.graphics.Bitmap?>(null, uri) { value = dealerProfileThumbnail(context, uri) }
     Column(modifier, verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Text(label, style = Design.label, color = DealerDesign.secondary)
-        Box(Modifier.fillMaxWidth().height(88.dp).clip(RoundedCornerShape(12.dp)).background(DealerDesign.background)
-            .softCardPress(enabled = enabled, onClick = onClick), contentAlignment = Alignment.Center) {
-            if (bitmap != null) Image(bitmap!!.asImageBitmap(), label, Modifier.fillMaxSize().padding(4.dp), contentScale = ContentScale.Fit)
-            else Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                DealerIcon(R.drawable.ic_request_add, DealerDesign.accent, 24.dp)
-                Text(if (uri.isBlank()) "Загрузить" else "Выбрать заново", style = Design.label, color = DealerDesign.accent)
+        val image = bitmap
+        val source = remember(uri) { Uri.parse(uri) }
+        PreviewableImage(source.takeIf { image != null }, label) { preview ->
+            Box(Modifier.fillMaxWidth().height(88.dp).clip(RoundedCornerShape(12.dp))
+                .background(DealerDesign.background), contentAlignment = Alignment.Center) {
+                if (image != null) {
+                    Image(image.asImageBitmap(), null, Modifier.fillMaxSize().then(preview).padding(4.dp),
+                        contentScale = ContentScale.Fit)
+                    SoftIconButton(onClick, Modifier.align(Alignment.TopEnd).padding(4.dp).size(44.dp)
+                        .background(DealerDesign.surface, RoundedCornerShape(12.dp))
+                        .semantics { contentDescription = "Заменить изображение: $label" }, enabled = enabled) {
+                        DealerIcon(R.drawable.ic_edit, DealerDesign.accent, 20.dp)
+                    }
+                } else Column(Modifier.fillMaxSize().softCardPress(enabled = enabled, onClick = onClick),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically)) {
+                    DealerIcon(R.drawable.ic_request_add, DealerDesign.accent, 24.dp)
+                    Text(if (uri.isBlank()) "Загрузить" else "Выбрать заново", style = Design.label, color = DealerDesign.accent)
+                }
             }
         }
         Text(hint, style = Design.label, color = DealerDesign.secondary)
