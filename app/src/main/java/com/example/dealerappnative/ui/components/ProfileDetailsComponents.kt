@@ -50,7 +50,7 @@ internal fun ProfileAvatar(@DrawableRes icon: Int, size: Dp = 48.dp, imageUri: S
         bitmap
     }
     val uri = remember(imageUri) { imageUri.takeIf { it.isNotBlank() }?.let(Uri::parse) }
-    PreviewableImage(uri.takeIf { image != null }, "Фотография профиля") { preview ->
+    PreviewableImage(uri.takeIf { image != null }, "Фотография профиля", image?.asImageBitmap(), crop = true, radius = size / 2f) { preview ->
         Box(Modifier.size(size).then(preview).clip(CircleShape).background(Design.tint), contentAlignment = Alignment.Center) {
             when {
                 image != null -> Image(image.asImageBitmap(), null, Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
@@ -97,7 +97,7 @@ internal fun ProfileImagePreview(label: String, uri: String, modifier: Modifier 
         Text(label, style = Design.label, color = Design.secondary)
         val image = bitmap
         val source = remember(uri) { Uri.parse(uri) }
-        PreviewableImage(source.takeIf { image != null }, label) { preview ->
+        PreviewableImage(source.takeIf { image != null }, label, image?.asImageBitmap(), inset = 4.dp, radius = 10.dp) { preview ->
             Box(Modifier.fillMaxWidth().height(88.dp).then(preview).clip(RoundedCornerShape(10.dp))
                 .background(Design.field), contentAlignment = Alignment.Center) {
                 if (image != null) Image(image.asImageBitmap(), null, Modifier.fillMaxSize().padding(4.dp), contentScale = ContentScale.Fit)

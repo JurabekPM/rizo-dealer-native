@@ -87,7 +87,7 @@ private fun DealerProfileImage(label: String, uri: String, hint: String, modifie
         Text(label, style = Design.label, color = DealerDesign.secondary)
         val image = bitmap
         val source = remember(uri) { Uri.parse(uri) }
-        PreviewableImage(source.takeIf { image != null }, label) { preview ->
+        PreviewableImage(source.takeIf { image != null }, label, image?.asImageBitmap(), inset = 4.dp) { preview ->
             Box(Modifier.fillMaxWidth().height(88.dp).clip(RoundedCornerShape(12.dp))
                 .background(DealerDesign.background), contentAlignment = Alignment.Center) {
                 if (image != null) {

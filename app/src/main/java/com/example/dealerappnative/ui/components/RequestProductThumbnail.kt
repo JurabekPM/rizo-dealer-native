@@ -36,7 +36,7 @@ internal fun RequestProductThumbnail(
     val pixels = with(LocalDensity.current) { imageSize.roundToPx() }.coerceAtLeast(1)
     val image = rememberProductImage(photo, pixels)
     val shape = RoundedCornerShape(12.dp)
-    PreviewableImage(imageResourceUri(photo).takeIf { image.bitmap != null }, product.name) { preview ->
+    PreviewableImage(imageResourceUri(photo).takeIf { image.bitmap != null }, product.name, image.bitmap, inset = (size - imageSize) / 2f) { preview ->
         Box(Modifier.size(size).then(preview).clip(shape).background(RequestPickerDesign.thumbnail)
             .then(if (selected) Modifier.border(1.dp, DealerDesign.accent.copy(alpha = .6f), shape) else Modifier),
             contentAlignment = Alignment.Center) {
@@ -46,10 +46,10 @@ internal fun RequestProductThumbnail(
     }
 }
 
-private data class ProductImage(val bitmap: ImageBitmap? = null, val loaded: Boolean = false)
+internal data class ProductImage(val bitmap: ImageBitmap? = null, val loaded: Boolean = false)
 
 @Composable
-private fun rememberProductImage(photo: Int?, maxPixels: Int): ProductImage {
+internal fun rememberProductImage(photo: Int?, maxPixels: Int): ProductImage {
     val resources = LocalContext.current.resources
     val image by produceState(ProductImage(), photo, maxPixels, resources) {
         value = ProductImage()

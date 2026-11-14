@@ -15,7 +15,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextRange
@@ -31,10 +31,12 @@ import com.example.dealerappnative.ui.theme.DealerDesign
 
 @Composable
 internal fun ReturnProductThumbnail(product: ReturnCatalogProduct, size: Dp = 48.dp) {
-    PreviewableImage(imageResourceUri(product.photo), product.name) { preview ->
+    val pixels = with(LocalDensity.current) { size.roundToPx() }.coerceAtLeast(1)
+    val image = rememberProductImage(product.photo, pixels)
+    PreviewableImage(imageResourceUri(product.photo).takeIf { image.bitmap != null }, product.name, image.bitmap, inset = 2.dp, radius = 8.dp) { preview ->
         Box(Modifier.size(size).then(preview).clip(RoundedCornerShape(8.dp)).background(DealerDesign.background),
             contentAlignment = Alignment.Center) {
-            if (product.photo != null) Image(painterResource(product.photo), contentDescription = null,
+            if (image.bitmap != null) Image(image.bitmap, contentDescription = null,
                 contentScale = ContentScale.Fit, modifier = Modifier.fillMaxSize().padding(2.dp))
             else DealerIcon(R.drawable.ic_box)
         }

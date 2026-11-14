@@ -1,11 +1,16 @@
 package com.example.dealerappnative
 
+import android.os.SystemClock
+import android.view.InputDevice
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.inspector.WindowInspector
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.platform.ViewRootForTest
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsNode
@@ -48,6 +53,104 @@ class ImagePreviewTest {
             AgentVisitNotes(session, onComment = {}, onAddPhotos = {}, onRemovePhoto = {})
         }
     }
+
+    @Test fun visitGallerySwipesAndPinchesWithoutClosing() {
+        val session = AgentVisitSession(1L, finishedAt = 2L, photoUris = listOf(
+            "asset:///visit_samples/store-interior.png",
+            "asset:///visit_samples/visit-product.jpg"
+        ))
+        ActivityScenario.launch(ComponentActivity::class.java).use { scenario ->
+            scenario.onActivity { activity ->
+                activity.setContent {
+                    DealerPrototypeTheme {
+                        AgentVisitNotes(session, onComment = {}, onAddPhotos = {}, onRemovePhoto = {})
+                    }
+                }
+            }
+            val label = "Фото визита"
+            await(scenario) { all ->
+                all.count { it.config.getOrNull(SemanticsProperties.ContentDescription)?.contains("Открыть фото: $label") == true } == 2
+            }
+            scenario.onActivity { nodes().node("Открыть фото: $label")!!.click() }
+            await(scenario) { all -> all.hasText("1 / 2") && all.isZoomed(false) }
+            gesture(scenario) { view, bounds ->
+                val center = bounds.center
+                val radius = bounds.width * .09f
+                val x = Offset(radius, 0f)
+                val start = SystemClock.uptimeMillis() - 208L
+                val initial = listOf(center - x, center + x)
+                view.sendTouch(start, 0, MotionEvent.ACTION_DOWN, listOf(initial.first()))
+                view.sendTouch(start, 16, MotionEvent.ACTION_POINTER_DOWN or
+                    (1 shl MotionEvent.ACTION_POINTER_INDEX_SHIFT), initial)
+                for (step in 1..10) {
+                    val distance = x * (1f + step * .12f)
+                    view.sendTouch(start, 16 + step * 16L, MotionEvent.ACTION_MOVE, listOf(center - distance, center + distance))
+                }
+                view.sendTouch(start, 192, MotionEvent.ACTION_POINTER_UP or
+                    (1 shl MotionEvent.ACTION_POINTER_INDEX_SHIFT), listOf(center - x * 2.2f, center + x * 2.2f))
+                view.sendTouch(start, 208, MotionEvent.ACTION_UP, listOf(center - x * 2.2f))
+            }
+            await(scenario) { all -> all.hasText("1 / 2") && all.isZoomed(true) }
+            swipe(scenario)
+            await(scenario) { all -> all.hasText("1 / 2") && all.isZoomed(true) }
+            scenario.onActivity { nodes().node("Закрыть фото")!!.click() }
+            await(scenario) { it.node("Закрыть фото") == null }
+            scenario.onActivity { nodes().node("Открыть фото: $label")!!.click() }
+            await(scenario) { all -> all.hasText("1 / 2") && all.isZoomed(false) }
+            swipe(scenario)
+            await(scenario) { all -> all.hasText("2 / 2") && all.isZoomed(false) }
+            swipe(scenario, towardNext = false)
+            await(scenario) { all -> all.hasText("1 / 2") && all.isZoomed(false) }
+        }
+    }
+
+    private fun swipe(scenario: ActivityScenario<ComponentActivity>, towardNext: Boolean = true) {
+        gesture(scenario) { view, bounds ->
+            val direction = if (towardNext) 1f else -1f
+            val half = Offset(bounds.width * .33f * direction, 0f)
+            val start = SystemClock.uptimeMillis() - 192L
+            view.sendTouch(start, 0, MotionEvent.ACTION_DOWN, listOf(bounds.center + half))
+            for (step in 1..11) {
+                view.sendTouch(start, step * 16L, MotionEvent.ACTION_MOVE, listOf(bounds.center + half * (1f - step * 2f / 11)))
+            }
+            view.sendTouch(start, 192, MotionEvent.ACTION_UP, listOf(bounds.center - half))
+        }
+    }
+
+    private fun gesture(scenario: ActivityScenario<ComponentActivity>, send: (View, Rect) -> Unit) {
+        scenario.onActivity {
+            val root = WindowInspector.getGlobalWindowViews().mapNotNull { it.composeRoot() }.last {
+                it.semanticsOwner.getAllSemanticsNodes(mergingEnabled = false).node("Закрыть фото") != null
+            }
+            val viewport = root.semanticsOwner.getAllSemanticsNodes(mergingEnabled = false).single {
+                it.config.getOrNull(SemanticsProperties.StateDescription)?.endsWith("%") == true
+            }
+            send(root.view, viewport.boundsInRoot)
+        }
+    }
+
+    private fun View.sendTouch(start: Long, elapsed: Long, action: Int, positions: List<Offset>) {
+        val pointers = Array(positions.size) { index ->
+            MotionEvent.PointerProperties().apply { id = index; toolType = MotionEvent.TOOL_TYPE_FINGER }
+        }
+        val coordinates = Array(positions.size) { index ->
+            MotionEvent.PointerCoords().apply { x = positions[index].x; y = positions[index].y; pressure = 1f; size = 1f }
+        }
+        val event = MotionEvent.obtain(start, start + elapsed, action, positions.size, pointers, coordinates,
+            0, 0, 1f, 1f, 0, 0, InputDevice.SOURCE_TOUCHSCREEN, 0)
+        try { dispatchTouchEvent(event) } finally { event.recycle() }
+    }
+
+    private fun List<SemanticsNode>.hasText(text: String): Boolean = any {
+        it.config.getOrNull(SemanticsProperties.Text)?.any { value -> value.text == text } == true
+    }
+
+    private fun List<SemanticsNode>.isZoomed(zoomed: Boolean): Boolean = any {
+        val scale = it.config.getOrNull(SemanticsProperties.StateDescription)?.removeSuffix("%")?.toIntOrNull()
+        scale != null && if (zoomed) scale > 100 else scale == 100
+    }
+
+    private fun SemanticsNode.click() = assertTrue(checkNotNull(config.getOrNull(SemanticsActions.OnClick)?.action)())
 
     private fun verifyPreview(label: String, content: @Composable () -> Unit) {
         ActivityScenario.launch(ComponentActivity::class.java).use { scenario ->

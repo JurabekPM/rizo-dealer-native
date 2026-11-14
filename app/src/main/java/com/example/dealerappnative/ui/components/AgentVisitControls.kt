@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -111,6 +112,10 @@ internal fun VisitCommentField(value: String, onChange: (String) -> Unit, readOn
 @Composable
 internal fun AgentVisitNotes(session: AgentVisitSession, onComment: (String) -> Unit,
     onAddPhotos: (List<String>) -> Unit, onRemovePhoto: (String) -> Unit) {
+    val photos = remember(session.photoUris) { session.photoUris.map(Uri::parse) }
+    val anchors = remember { mutableMapOf<Uri, PhotoPreviewAnchor>() }
+    var selected by rememberSaveable(session.startedAt) { mutableStateOf<String?>(null) }
+    val selectedPage = photos.indexOfFirst { it.toString() == selected }
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Column(Modifier.fillMaxWidth().cardShadow().background(DealerDesign.surface).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -118,8 +123,14 @@ internal fun AgentVisitNotes(session: AgentVisitSession, onComment: (String) -> 
                 if (session.isActive && session.photoUris.size < 6) item(key = "add") {
                     VisitPhotoAdder(session, onAddPhotos)
                 }
-                items(session.photoUris, key = { it }) { uri ->
-                    VisitPhoto(uri, session.isActive, modifier = Modifier.animateItem(), onRemove = { onRemovePhoto(uri) })
+                items(photos, key = { it.toString() }) { uri ->
+                    val anchor = remember(uri) { PhotoPreviewAnchor(crop = true) }
+                    DisposableEffect(uri) {
+                        anchors[uri] = anchor
+                        onDispose { anchors.remove(uri) }
+                    }
+                    VisitPhoto(uri, anchor, session.isActive, modifier = Modifier.animateItem(),
+                        onOpen = { selected = uri.toString() }, onRemove = { onRemovePhoto(uri.toString()) })
                 }
                 if (!session.isActive && session.photoUris.isEmpty()) item {
                     Text("Фото не добавлены", style = AgentVisitDesign.detail, color = DealerDesign.secondary)
@@ -134,30 +145,35 @@ internal fun AgentVisitNotes(session: AgentVisitSession, onComment: (String) -> 
                 color = if (session.comment.isBlank()) DealerDesign.secondary else DealerDesign.text)
         }
     }
+    if (selectedPage >= 0) {
+        ImagePreviewGallery(photos, selectedPage, "Фото визита", anchors::get, onDismiss = { selected = null })
+    }
 }
 
 @Composable
-private fun VisitPhoto(uri: String, removable: Boolean, modifier: Modifier, onRemove: () -> Unit) {
+private fun VisitPhoto(uri: Uri, anchor: PhotoPreviewAnchor, removable: Boolean, modifier: Modifier,
+    onOpen: () -> Unit, onRemove: () -> Unit) {
     val context = LocalContext.current
-    val source = remember(uri) { Uri.parse(uri) }
-    val bitmap by produceState<ImageBitmap?>(null, source, context) {
-        val thumbnail = if (Build.VERSION.SDK_INT >= 29 && source.scheme == "content") {
+    val bitmap by produceState<ImageBitmap?>(null, uri, context) {
+        val thumbnail = if (Build.VERSION.SDK_INT >= 29 && uri.scheme == "content") {
             withContext(Dispatchers.IO) {
-                runCatching { context.contentResolver.loadThumbnail(source, Size(256, 256), null) }.getOrNull()
+                runCatching { context.contentResolver.loadThumbnail(uri, Size(256, 256), null) }.getOrNull()
             }
         } else null
-        value = (thumbnail ?: loadLocalPhoto(context, source, 512))?.asImageBitmap()
+        value = (thumbnail ?: loadLocalPhoto(context, uri, 512))?.asImageBitmap()
     }
-    PreviewableImage(source.takeIf { bitmap != null }, "Фото визита") { preview ->
-        Box(modifier.size(96.dp).clip(RoundedCornerShape(12.dp)).background(DealerDesign.background)) {
-            bitmap?.let { Image(it, null, Modifier.fillMaxSize().then(preview), contentScale = ContentScale.Crop) }
-                ?: Text("Фото недоступно", style = AgentVisitDesign.detail, color = DealerDesign.secondary,
-                    modifier = Modifier.align(Alignment.Center).padding(8.dp))
-            if (removable) SoftIconButton(onClick = onRemove, modifier = Modifier.align(Alignment.TopEnd)
-                .size(40.dp).background(DealerDesign.surface.copy(alpha = .9f), RoundedCornerShape(bottomStart = 12.dp))
-                .semantics { contentDescription = "Убрать фото" }) {
-                DealerIcon(R.drawable.ic_agent_clear, DealerDesign.text, 20.dp)
-            }
+    SideEffect { anchor.thumbnail = bitmap }
+    Box(modifier.size(96.dp).clip(RoundedCornerShape(12.dp)).background(DealerDesign.background)) {
+        val image = bitmap
+        if (image != null) {
+            Image(image, null, Modifier.fillMaxSize().then(photoPreviewTrigger(anchor, "Фото визита", onOpen)),
+                contentScale = ContentScale.Crop)
+        } else Text("Фото недоступно", style = AgentVisitDesign.detail, color = DealerDesign.secondary,
+            modifier = Modifier.align(Alignment.Center).padding(8.dp))
+        if (removable) SoftIconButton(onClick = onRemove, modifier = Modifier.align(Alignment.TopEnd)
+            .size(40.dp).background(DealerDesign.surface.copy(alpha = .9f), RoundedCornerShape(bottomStart = 12.dp))
+            .semantics { contentDescription = "Убрать фото" }) {
+            DealerIcon(R.drawable.ic_agent_clear, DealerDesign.text, 20.dp)
         }
     }
 }

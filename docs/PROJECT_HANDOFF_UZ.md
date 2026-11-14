@@ -502,3 +502,5 @@ Admin va Agent kartalarining radiusi 2 dp oshirildi. Asosiy radius 14 dp, soya b
 ## 39. Rasmlarni kattalashtirib ko‘rish
 
 - Zayavka, qaytarish, savat va mahsulot tanlash rasmlari, vizit fotosuratlari va yuklangan profil rasmlari bitta animatsiyali dialog orqali ochiladi. Dialog asl manbadan kattaroq nusxani fon oqimida yuklaydi. Vizitdagi suratni olib tashlash va profil tahriridagi rasmni almashtirish amallari alohida tugmalarda.
+
+- Ko‘rish oynasida ikki barmoq bilan 4× gacha zoom qilish va kattalashtirilgan rasmni surish mumkin. Vizitning bir nechta rasmi bitta galereyada yon tomonga suriladi, pastda tartib raqami chiqadi. Animatsiya rasmni ekrandagi eskizdan ochadi va ko‘rinib turgan eskizga qaytaradi.
