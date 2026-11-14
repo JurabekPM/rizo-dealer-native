@@ -6,7 +6,9 @@ import androidx.annotation.DrawableRes
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.animate
-import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.CubicBezierEasing
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -62,6 +64,7 @@ import com.example.dealerappnative.data.loadLocalPhoto
 import com.example.dealerappnative.ui.theme.DealerDesign
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlin.math.abs
 
 @Composable
 internal fun imageResourceUri(@DrawableRes photo: Int?): Uri? {
@@ -92,6 +95,7 @@ internal fun PreviewableImage(
 }
 
 internal class PhotoPreviewAnchor(val crop: Boolean, val inset: Dp = 0.dp, val radius: Dp = 12.dp) {
+    var hidden by mutableStateOf(false)
     var thumbnail: ImageBitmap? = null
     var coordinates: LayoutCoordinates? = null
 
@@ -107,12 +111,16 @@ internal class PhotoPreviewAnchor(val crop: Boolean, val inset: Dp = 0.dp, val r
 }
 
 internal fun photoPreviewTrigger(anchor: PhotoPreviewAnchor, label: String, onOpen: () -> Unit): Modifier =
-    Modifier.onGloballyPositioned { anchor.coordinates = it }.softCardPress(onClick = onOpen)
+    Modifier.onGloballyPositioned { anchor.coordinates = it }
+        .graphicsLayer { alpha = if (anchor.hidden) 0f else 1f }
+        .softCardPress(onClick = onOpen)
         .semantics { contentDescription = "Открыть фото: $label" }
 
 internal data class ThumbnailBounds(val full: Rect, val visible: Rect) {
     fun translate(offset: Offset) = ThumbnailBounds(full.translate(offset), visible.translate(offset))
 }
+
+private val photoTravelEasing = CubicBezierEasing(.37f, .05f, .42f, 1f)
 
 private data class LoadedPhoto(val bitmap: ImageBitmap?, val blend: Animatable<Float, AnimationVector1D>)
 private data class PhotoTransition(
@@ -121,6 +129,7 @@ private data class PhotoTransition(
     val source: PhotoPreviewAnchor?,
     val zoom: PhotoZoom,
     val pageOffset: Float,
+    val drag: Float,
     val clipPath: Path = Path()
 )
 
@@ -148,6 +157,9 @@ internal fun ImagePreviewGallery(
     var transition by remember { mutableStateOf<PhotoTransition?>(null) }
     val ready = origin.isSpecified && !viewport.isEmpty
     val interactive = opened && !closing
+    val pageSwipeEnabled by remember(photos.size) {
+        derivedStateOf { opened && !closing && photos.size > 1 && drag == 0f }
+    }
     val spacing = 16.dp
     val pageSpacing = with(LocalDensity.current) { spacing.toPx() }
 
@@ -157,7 +169,7 @@ internal fun ImagePreviewGallery(
         val anchor = anchorFor(uri)
         val pageOffset = pager.getOffsetDistanceInPages(page) * (viewport.width + pageSpacing) * if (rtl) -1 else 1
         return PhotoTransition(page, anchor?.screenBounds()?.translate(-origin), anchor,
-            zooms[uri] ?: PhotoZoom(), pageOffset)
+            zooms[uri] ?: PhotoZoom(), pageOffset, drag)
     }
 
     fun dismiss() {
@@ -167,15 +179,23 @@ internal fun ImagePreviewGallery(
         closing = true
     }
 
+    val activeUri = photos[pager.settledPage.coerceIn(photos.indices)]
+    val sharedAnchor = if (interactive) anchorFor(activeUri) else transition?.source
+    DisposableEffect(sharedAnchor) {
+        if (sharedAnchor?.thumbnail != null) sharedAnchor.hidden = true
+        onDispose { sharedAnchor?.hidden = false }
+    }
+
     LaunchedEffect(ready, closing) {
         if (closing) {
-            if (opened) exit.animateTo(1f, tween(280, easing = FastOutSlowInEasing))
-            else opening.animateTo(0f, tween(180, easing = FastOutSlowInEasing))
+            if (opened) exit.animateTo(1f, tween(420, easing = photoTravelEasing))
+            else opening.animateTo(0f, tween(340, easing = photoTravelEasing))
+            transition?.source?.hidden = false
             onDismiss()
         } else if (ready && !opened) {
             transition = capture()
-            opening.animateTo(1f, tween(340, easing = FastOutSlowInEasing))
-            opened = true
+            opening.animateTo(1f, tween(460, easing = photoTravelEasing))
+            withFrameNanos { opened = true }
         }
     }
 
@@ -197,7 +217,7 @@ internal fun ImagePreviewGallery(
                 HorizontalPager(
                     state = pager,
                     key = { photos[it] },
-                    userScrollEnabled = interactive && photos.size > 1,
+                    userScrollEnabled = pageSwipeEnabled,
                     pageSpacing = spacing,
                     modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp, vertical = 62.dp)
                         .onGloballyPositioned { viewport = it.boundsInRoot() }
@@ -232,7 +252,11 @@ internal fun ImagePreviewGallery(
                                 onDragEnd = { close ->
                                     if (close) dismiss()
                                     else rebound = scope.launch {
-                                        animate(drag, 0f, animationSpec = tween(240, easing = FastOutSlowInEasing)) { value, _ ->
+                                        animate(drag, 0f, animationSpec = spring(
+                                            dampingRatio = Spring.DampingRatioNoBouncy,
+                                            stiffness = Spring.StiffnessMediumLow,
+                                            visibilityThreshold = .5f
+                                        )) { value, _ ->
                                             drag = value
                                         }
                                     }
@@ -276,7 +300,7 @@ internal fun ImagePreviewGallery(
                     Canvas(Modifier.matchParentSize()) {
                         val fraction = if (opened) 1f - exit.value else opening.value
                         val pageFrame = viewport.translate(Offset(motion.pageOffset, 0f))
-                        drawPhoto(thumb, photo, viewport, pageFrame, motion.zoom, drag, fraction, motion)
+                        drawPhoto(thumb, photo, viewport, pageFrame, motion.zoom, motion.drag, fraction, motion)
                     }
                 }
             }
@@ -290,6 +314,7 @@ private fun PreviewSystemBars() {
     val window = (view.parent as? DialogWindowProvider)?.window ?: return
     SideEffect {
         window.setDimAmount(0f)
+        window.setWindowAnimations(0)
         WindowCompat.getInsetsController(window, view).apply {
             isAppearanceLightStatusBars = false
             isAppearanceLightNavigationBars = false
@@ -298,7 +323,7 @@ private fun PreviewSystemBars() {
 }
 
 private fun dragFraction(drag: Float, frame: Rect): Float =
-    (drag / (frame.height * .45f).coerceAtLeast(1f)).coerceIn(0f, 1f)
+    (abs(drag) / (frame.height * .45f).coerceAtLeast(1f)).coerceIn(0f, 1f)
 
 private fun DrawScope.drawPhoto(
     thumbnail: ImageBitmap?,
@@ -314,7 +339,8 @@ private fun DrawScope.drawPhoto(
     val dragScale = 1f - .16f * dragFraction(drag, viewport)
     val fitFrame = pageFrame.translate(Offset(0f, drag))
     val scale = zoom.scale * dragScale
-    val blend = (photo?.blend?.value ?: 0f) * if (bounds == null) 1f else (fraction * 1.5f).coerceAtMost(1f)
+    val blend = (photo?.blend?.value ?: 0f) * if (bounds == null) 1f
+        else ((fraction - .35f) / .55f).coerceIn(0f, 1f)
     val visibility = if (bounds == null) fraction else 1f
 
     fun drawLayer(bitmap: ImageBitmap, alpha: Float) {
@@ -336,10 +362,12 @@ private fun DrawScope.drawPhoto(
         }
     }
 
+    val full = photo?.bitmap
+    val matchingAspect = thumbnail != null && full != null &&
+        abs(thumbnail.width.toFloat() / thumbnail.height - full.width.toFloat() / full.height) < .005f
     val layers: DrawScope.() -> Unit = {
-        val full = photo?.bitmap
         if (thumbnail != null) {
-            if (blend < 1f) drawLayer(thumbnail, if (full == null) 1f else 1f - blend)
+            if (blend < 1f) drawLayer(thumbnail, if (full == null || matchingAspect) 1f else 1f - blend)
             if (full != null) drawLayer(full, blend)
         } else if (full != null) drawLayer(full, if (bounds == null) blend else 1f)
     }

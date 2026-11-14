@@ -107,9 +107,16 @@ class ImagePreviewTest {
             doubleTap(scenario)
             await(scenario) { all -> all.hasText("1 / 2") && all.hasZoom("100%") }
 
-            dragDown(scenario, fraction = .06f)
+            dragVertically(scenario, fraction = .06f)
             await(scenario) { all -> all.hasText("1 / 2") && all.hasZoom("100%") }
-            dragDown(scenario, fraction = .32f)
+            dragVertically(scenario, fraction = .32f)
+            await(scenario) { all -> all.node("Закрыть фото") == null && all.node("Открыть фото: $label") != null }
+
+            scenario.onActivity { nodes().node("Открыть фото: $label")!!.click() }
+            await(scenario) { all -> all.hasText("1 / 2") && all.hasZoom("100%") }
+            dragVertically(scenario, fraction = -.06f)
+            await(scenario) { all -> all.hasText("1 / 2") && all.hasZoom("100%") }
+            dragVertically(scenario, fraction = -.32f)
             await(scenario) { all -> all.node("Закрыть фото") == null && all.node("Открыть фото: $label") != null }
         }
     }
@@ -138,7 +145,7 @@ class ImagePreviewTest {
         }
     }
 
-    private fun dragDown(scenario: ActivityScenario<ComponentActivity>, fraction: Float) {
+    private fun dragVertically(scenario: ActivityScenario<ComponentActivity>, fraction: Float) {
         gesture(scenario) { view, bounds ->
             val start = SystemClock.uptimeMillis() - 192L
             val from = bounds.center
