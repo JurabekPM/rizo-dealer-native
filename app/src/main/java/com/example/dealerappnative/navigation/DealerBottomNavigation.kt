@@ -2,7 +2,6 @@ package com.example.dealerappnative.navigation
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.remember
@@ -19,9 +20,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
-import com.example.dealerappnative.ui.components.UnreadNavigationIcon
 import com.example.dealerappnative.ui.theme.DealerDesign
 
 @Composable
@@ -34,7 +35,7 @@ internal fun DealerBottomNavigation(
         HorizontalDivider(color = DealerDesign.divider)
         Row(
             modifier = Modifier.fillMaxWidth().height(DealerDesign.navigationHeight)
-                .padding(horizontal = 8.dp),
+                .padding(horizontal = 8.dp).selectableGroup(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             DealerDestination.entries.forEach { destination ->
@@ -45,13 +46,22 @@ internal fun DealerBottomNavigation(
                         .semantics {
                             if (unreadCount > 0) stateDescription = "Новых: $unreadCount"
                         }
-                        .clickable(interactionSource = remember { MutableInteractionSource() }, indication = null) { onSelect(destination) }.padding(top = 12.dp),
+                        .selectable(
+                            selected = isSelected,
+                            role = Role.Tab,
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                            onClick = { onSelect(destination) }
+                        )
+                        .padding(top = 12.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    UnreadNavigationIcon(
+                    AnimatedNavigationIcon(
                         iconRes = destination.iconRes,
-                        tint = if (isSelected) DealerDesign.accent else DealerDesign.secondary,
-                        unreadCount = unreadCount
+                        selected = isSelected,
+                        inactiveTint = DealerDesign.secondary,
+                        unreadCount = unreadCount,
+                        motion = destination.iconMotion
                     )
                     Spacer(Modifier.height(4.dp))
                     Text(

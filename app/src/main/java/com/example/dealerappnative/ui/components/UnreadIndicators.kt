@@ -62,7 +62,12 @@ internal fun UnreadBadge(count: Int, modifier: Modifier = Modifier, compact: Boo
 }
 
 @Composable
-internal fun UnreadNavigationIcon(@DrawableRes iconRes: Int, tint: Color, unreadCount: Int) {
+internal fun UnreadNavigationIcon(
+    @DrawableRes iconRes: Int,
+    tint: Color,
+    unreadCount: Int,
+    iconModifier: Modifier = Modifier
+) {
     BadgedBox(badge = {
         if (unreadCount > 0) {
             UnreadBadge(
@@ -72,6 +77,6 @@ internal fun UnreadNavigationIcon(@DrawableRes iconRes: Int, tint: Color, unread
             )
         }
     }) {
-        DealerIcon(iconRes, tint)
+        DealerIcon(iconRes, tint, modifier = iconModifier)
     }
 }

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.remember
@@ -22,7 +23,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.example.dealerappnative.ui.components.UnreadNavigationIcon
 import com.example.dealerappnative.ui.theme.AgentDesign
 import com.example.dealerappnative.ui.theme.AgentVisitDesign
 
@@ -35,15 +35,32 @@ internal fun AgentBottomBar(
 ) {
     Column(Modifier.fillMaxWidth().background(DealerDesign.surface)) {
         HorizontalDivider(thickness = 1.dp, color = AgentDesign.divider)
-        Row(Modifier.fillMaxWidth().height(53.dp)) {
+        Row(Modifier.fillMaxWidth().height(53.dp).selectableGroup()) {
             AgentDestination.entries.forEach { destination ->
-                val color = if (destination == selected) AgentDesign.accent else AgentVisitDesign.tertiary
+                val isSelected = destination == selected
+                val color = if (isSelected) AgentDesign.accent else AgentVisitDesign.tertiary
                 val unreadCount = unreadCounts[destination] ?: 0
-                Column(Modifier.weight(1f).fillMaxHeight()
-                    .semantics { if (unreadCount > 0) stateDescription = "Новых: $unreadCount" }
-                    .selectable(selected = selected == destination, enabled = destination.available,
-                        role = Role.Tab, interactionSource = remember { MutableInteractionSource() }, indication = null, onClick = { onSelect(destination) }).padding(top = 8.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                    UnreadNavigationIcon(destination.iconRes, color, unreadCount)
+                Column(
+                    modifier = Modifier.weight(1f).fillMaxHeight()
+                        .semantics { if (unreadCount > 0) stateDescription = "Новых: $unreadCount" }
+                        .selectable(
+                            selected = isSelected,
+                            enabled = destination.available,
+                            role = Role.Tab,
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                            onClick = { onSelect(destination) }
+                        )
+                        .padding(top = 8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    AnimatedNavigationIcon(
+                        iconRes = destination.iconRes,
+                        selected = isSelected,
+                        inactiveTint = AgentVisitDesign.tertiary,
+                        unreadCount = unreadCount,
+                        motion = destination.iconMotion
+                    )
                     Spacer(Modifier.height(4.dp))
                     Text(destination.title, style = AgentVisitDesign.navigation, color = color, maxLines = 1,
                         overflow = TextOverflow.Ellipsis)

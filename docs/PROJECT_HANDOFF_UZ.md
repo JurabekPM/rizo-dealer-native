@@ -505,3 +505,9 @@ Admin va Agent kartalarining radiusi 2 dp oshirildi. Asosiy radius 14 dp, soya b
 
 - Ko‘rish oynasida ikki barmoq bilan 4× gacha zoom qilish va kattalashtirilgan rasmni surish mumkin. Vizitning bir nechta rasmi bitta galereyada yon tomonga suriladi, pastda tartib raqami chiqadi. Animatsiya rasmni ekrandagi eskizdan ochadi va ko‘rinib turgan eskizga qaytaradi.
 - Rasmga ikki marta bosish 2,5× zoom qiladi, takroriy ikki bosish asl o‘lchamiga qaytaradi. Asl o‘lchamdagi rasm tepaga yoki pastga yetarlicha surilganda yopiladi. Qisqa surilganda rasm prujinali animatsiya bilan markazga qaytadi. Ochilish, galereya va yopilish rasmni bir xil geometriyada chizadi. Yuqori aniqlikdagi nusxa yuklanganda asta-sekin ko‘rinadi. Ko‘rilayotgan suratning eskizi o‘tish davomida yashiriladi va rasm qaytib tushganda yana ko‘rinadi. Surib yopilganda barmoqning qo‘yib yuborish tezligi va yo‘nalishi harakatga uzatiladi. Rasm eskizga aniq chegaralari va nol tezlik bilan qo‘nadi. Ochilish 290 ms, tugma yoki Back bilan yopilish 280 ms, surib yopilish barmoq tezligiga qarab 205–310 ms.
+
+
+## 40. Pastki navigatsiya animatsiyasi
+
+- Admin va Agent tablarida tanlangan ikonka orqasidagi och binafsha fon joyida yoyiladi va avvalgi tabda yig‘iladi. Asl ikonka bo‘limiga mos qisqa harakat qiladi. Kirish 240 ms, chiqish 170 ms. Oq va qora temada ilovaning mavjud ranglari ishlatiladi.
+- Yorliq va ko‘rilmagan yozuvlar belgisi joyida turadi. Tab kontenti darhol almashadi. Animatsiya qayta bosilgan faol tabda yoki tafsilotlardan shu tabga qaytganda takrorlanmaydi.
