@@ -495,5 +495,5 @@ Admin va Agent kartalarining radiusi 2 dp oshirildi. Asosiy radius 14 dp, soya b
 
 ## 38. O‘zaro hisob-kitob jami kartalari
 
-- «Заказы», «Оплачено» va «Возвраты» kartalari joy yetganda bitta qatorda chiqadi. Uzun summa, tor ekran yoki katta shrift sabab joy yetmasa kartalar to‘liq kenglikda joylashadi va summalar valyutasi bilan o‘qiladi.
-- Kartada noldan farqli summa bo‘lsa, shu kartadagi nol valyutalar ko‘rsatilmaydi. Ikkala valyutada haqiqiy summa bo‘lsa, ikkalasi ham alohida chiqadi. Jami hisobi sana va valyuta filtrlariga bog‘liq.
+- «Заказы», «Оплачено» va «Возвраты» oldingi kabi yonma-yon turadi va gorizontal scroll qilinadi. Har bir karta matniga mos kengayadi, summa va valyuta bitta qatorda chiqadi.
+- Har bir mavjud valyutaning summasi, jumladan nol qatori, oldingi tartibda ko‘rsatiladi. Jami hisobiga sana va valyuta filtrlari ta’sir qiladi.

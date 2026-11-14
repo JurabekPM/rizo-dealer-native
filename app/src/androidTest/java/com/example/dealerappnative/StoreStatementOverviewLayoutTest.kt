@@ -1,8 +1,8 @@
 package com.example.dealerappnative
 
-import androidx.activity.ComponentActivity
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.width
@@ -10,6 +10,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.ViewRootForTest
+import androidx.compose.ui.semantics.ScrollAxisRange
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsNode
 import androidx.compose.ui.semantics.SemanticsProperties
@@ -33,45 +34,47 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class StoreStatementOverviewLayoutTest {
-    @Test fun usualTotalsShareOneRowWithoutRedundantZeroCurrency() = withOverview(
+    @Test fun normalTotalsKeepAllThreeCardsInOneRow() = withOverview(
         listOf(
             StatementCurrencyTotals("USD", BigDecimal("1152"), BigDecimal("1117"), BigDecimal("567.5")),
             StatementCurrencyTotals("UZS", BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO)
         )
-    ) { nodes ->
-        val headers = listOf("Заказы", "Оплачено", "Возвраты").map {
-            nodes.getValue(it).boundsInRoot
+    ) { nodes, scroll ->
+        assertHorizontalRow(nodes)
+        assertTrue("The last card must be reachable by scrolling", scroll.maxValue() > 0)
+        listOf("1 152 USD", "1 117 USD", "567,5 USD", "0 UZS").forEach {
+            assertSingleLine(nodes.getValue(it), it)
         }
-        assertTrue("Expected one row, got $headers", headers.all { it.top == headers.first().top })
-        assertTrue(headers.zipWithNext().all { (left, right) -> left.right < right.left })
-        assertUnclipped(nodes.getValue("1 152 USD"), "1 152 USD")
-        assertUnclipped(nodes.getValue("1 117 USD"), "1 117 USD")
-        assertUnclipped(nodes.getValue("567,5 USD"), "567,5 USD")
-        assertFalse("0 UZS" in nodes)
     }
 
-    @Test fun longTotalsStackAndKeepBothCurrenciesAtLargeFontScale() = withOverview(
+    @Test fun longTotalsRemainSingleLineInTheScrollableRowAtLargeFontScale() = withOverview(
         listOf(
             StatementCurrencyTotals("USD", BigDecimal("12345678.901234"), BigDecimal.ONE, BigDecimal.ZERO),
-            StatementCurrencyTotals("UZS", BigDecimal("9876543210123456789"), BigDecimal.ZERO, BigDecimal.ZERO)
+            StatementCurrencyTotals("UZS", BigDecimal("9876543210123456789"), BigDecimal("5105000"), BigDecimal("2585000"))
         ),
         fontScale = 1.8f
-    ) { nodes ->
-        val headers = listOf("Заказы", "Оплачено", "Возвраты").map {
-            nodes.getValue(it).boundsInRoot
+    ) { nodes, scroll ->
+        assertHorizontalRow(nodes)
+        assertTrue("Wide cards must remain reachable by scrolling", scroll.maxValue() > 0)
+        listOf("12 345 678,901234 USD", "9 876 543 210 123 456 789 UZS", "5 105 000 UZS", "2 585 000 UZS").forEach {
+            assertSingleLine(nodes.getValue(it), it)
         }
-        assertEquals(headers.first().left, headers.last().left)
-        assertTrue(headers.zipWithNext().all { (above, below) -> above.bottom < below.top })
-        assertUnclipped(nodes.getValue("12 345 678,901234 USD"), "12 345 678,901234 USD")
-        assertUnclipped(nodes.getValue("9 876 543 210 123 456 789 UZS"), "9 876 543 210 123 456 789 UZS")
-        assertUnclipped(nodes.getValue("1 USD"), "1 USD")
+    }
+
+    private fun assertHorizontalRow(nodes: Map<String, SemanticsNode>) {
+        val labels = listOf("Заказы", "Оплачено", "Возвраты")
+        val positions = labels.map { label ->
+            nodes.getValue(label).also { assertSingleLine(it, label) }.positionInRoot
+        }
+        assertTrue("Expected one horizontal row, got $positions", positions.all { it.y == positions.first().y })
+        assertTrue(positions.zipWithNext().all { (left, right) -> left.x < right.x })
     }
 
     // Use the platform activity and semantics because this device's Espresso cannot initialize input.
     private fun withOverview(
         totals: List<StatementCurrencyTotals>,
         fontScale: Float = 1f,
-        verify: (Map<String, SemanticsNode>) -> Unit
+        verify: (Map<String, SemanticsNode>, ScrollAxisRange) -> Unit
     ) {
         ActivityScenario.launch(ComponentActivity::class.java).use { scenario ->
             scenario.onActivity { activity ->
@@ -90,10 +93,12 @@ class StoreStatementOverviewLayoutTest {
             scenario.onActivity { activity ->
                 val root = checkNotNull(activity.window.decorView.composeRoot())
                 val nodes = root.semanticsOwner.getAllSemanticsNodes(mergingEnabled = false)
-                    .mapNotNull { node ->
-                        node.config.getOrNull(SemanticsProperties.Text)?.singleOrNull()?.text?.let { it to node }
-                    }.toMap()
-                verify(nodes)
+
+                val textNodes = nodes.mapNotNull { node ->
+                    node.config.getOrNull(SemanticsProperties.Text)?.singleOrNull()?.text?.let { it to node }
+                }.toMap()
+                val scroll = nodes.mapNotNull { it.config.getOrNull(SemanticsProperties.HorizontalScrollAxisRange) }.single()
+                verify(textNodes, scroll)
             }
         }
     }
@@ -106,15 +111,13 @@ class StoreStatementOverviewLayoutTest {
         return null
     }
 
-    private fun assertUnclipped(node: SemanticsNode, text: String) {
+    private fun assertSingleLine(node: SemanticsNode, text: String) {
         val results = mutableListOf<TextLayoutResult>()
         val action = checkNotNull(node.config[SemanticsActions.GetTextLayoutResult].action)
         assertTrue(action(results))
         val layout = results.single()
         assertFalse("$text exceeds the available height", layout.didOverflowHeight)
-        for (line in 0 until layout.lineCount) {
-            assertTrue("$text exceeds the available width on line $line",
-                layout.getLineRight(line) <= layout.size.width + 1f)
-        }
+        assertEquals("$text must stay on one line", 1, layout.lineCount)
+        assertTrue("$text exceeds the available width", layout.getLineRight(0) <= layout.size.width + 1f)
     }
 }
