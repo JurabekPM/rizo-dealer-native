@@ -13,9 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.dealerappnative.R
 import com.example.dealerappnative.data.*
@@ -54,7 +52,7 @@ internal fun VisitReturnScreen(visit: VisitStore, session: AgentVisitSession? = 
     var infoIndex by rememberSaveable(visit.id) { mutableStateOf<Int?>(null) }
     var quantityIndex by rememberSaveable(visit.id) { mutableStateOf<Int?>(null) }
     val listState = rememberLazyListState()
-    val currentQuantities = normalizeReturnQuantities(quantities)
+    val currentQuantities = remember(quantities) { normalizeReturnQuantities(quantities) }
     val reasons = returns.reasonSettings.reasons
     if (settingsVisible && canManageReasons) {
         ReturnReasonSettingsScreen(onBack = { settingsVisible = false; reasonVisible = true })
@@ -66,21 +64,20 @@ internal fun VisitReturnScreen(visit: VisitStore, session: AgentVisitSession? = 
         }
         return
     }
-    val selected = returnCatalog.indices.filter { currentQuantities[it] > 0 }
-    val items = selected.map { index -> VisitReturnItem(returnCatalog[index].name, returnCatalog[index].price, currentQuantities[index]) }
+    val selected = remember(currentQuantities) { returnCatalog.indices.filter { currentQuantities[it] > 0 } }
+    val items = remember(selected, currentQuantities) {
+        selected.map { index -> VisitReturnItem(returnCatalog[index].name, returnCatalog[index].price, currentQuantities[index]) }
+    }
     val total = items.sumOf { it.total }
     Column(Modifier.fillMaxSize().background(DealerDesign.background).imePadding()) {
         HistoryHeader(visit.name, onBack)
         LazyColumn(Modifier.weight(1f), state = listState, contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            item(key = "store") { HistoryStoreSummary(visit, showId = true) }
-            if (allowCreate) item(key = "total") { HistorySurface {
-                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                    Text("Общая сумма", style = AgentVisitDesign.emphasis, color = DealerDesign.secondary, modifier = Modifier.weight(1f))
-                    Spacer(Modifier.width(12.dp))
-                    Text(historyMoney(total), style = AgentVisitDesign.emphasis, color = DealerDesign.text)
-                }
-            } }
+            item(key = "store") {
+                if (allowCreate && selected.isNotEmpty()) CartStoreCard(visit)
+                else HistoryStoreSummary(visit, showId = true)
+            }
+            if (allowCreate) item(key = "total") { CartTotal(total) }
             if (!allowCreate) item { HistorySurface {
                 Text(if (session?.isActive == false) "Визит завершён. Возвраты не оформлялись" else "Начните визит, чтобы оформить возврат",
                     style = AgentVisitDesign.name, color = DealerDesign.secondary)
@@ -94,21 +91,18 @@ internal fun VisitReturnScreen(visit: VisitStore, session: AgentVisitSession? = 
                         Text("Нет товаров в списке", style = AgentVisitDesign.detail, color = DealerDesign.secondary)
                     }
                 }
-                items(selected, key = { "product-$it" }) { index ->
-                    ReturnProductCard(returnCatalog[index], currentQuantities[index],
-                        onQuantity = { quantity -> quantities = currentQuantities.toMutableList().apply { this[index] = quantity.coerceIn(0, returnCatalog[index].available) } },
+                items(selected, key = { returnCatalog[it].id }, contentType = { "cart-product" }) { index ->
+                    CartProductCard(returnCatalog[index], currentQuantities[index],
+                        onStep = { step -> quantities = stepReturnPickerQuantity(quantities, index, step) },
                         onEditQuantity = { quantityIndex = index },
-                        onRemove = { quantities = currentQuantities.toMutableList().apply { this[index] = 0 } },
+                        onRemove = { quantities = normalizeReturnQuantities(quantities).toMutableList().apply { this[index] = 0 } },
                         onInfo = { infoIndex = index })
                 }
-                item(key = "add") { Box(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)) {
-                    ReturnPrimaryButton("Добавить") { pickerVisible = true }
-                } }
-
+                item(key = "add") { CartAddAction { pickerVisible = true } }
             }
         }
-        if (allowCreate) Column(Modifier.fillMaxWidth().background(DealerDesign.surface).padding(16.dp)) {
-            ReturnPrimaryButton("Возвратить", items.isNotEmpty()) { reasonVisible = true }
+        if (allowCreate) {
+            CartFooter("Возвратить", items.isNotEmpty()) { reasonVisible = true }
         } else if (onStart != null && session == null) AgentVisitAction("Начать визит", onClick = {
             if (!onStart()) Toast.makeText(context, "Для этого магазина визит уже начат или завершён", Toast.LENGTH_SHORT).show()
         })

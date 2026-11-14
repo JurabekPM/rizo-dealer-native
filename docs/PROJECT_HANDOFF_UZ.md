@@ -467,3 +467,8 @@ Admin va Agent kartalarining radiusi 2 dp oshirildi. Asosiy radius 14 dp, soya b
 
 - Admin va Agentdagi ko‘rilmagan yozuv kartalarida bitta «Yengil fon» va nom yonida 6 dp binafsha nuqta ishlatiladi. Admin do‘konlar soni «Меню» hisobiga qo‘shiladi. Agentning do‘kon katalogi va statistika ichidagi qarzdorlik ro‘yxati bitta ko‘rilgan holatni ishlatadi.
 - Vizit natijasi ikonkalari uchun oq va qora temaga mos alohida fon, kontur va ikonka rangi ishlatiladi. Qora tema kartalari ekrandan aniqroq ajraladi. Ixcham matnlar 1 sp kattalashtirildi.
+
+## 34. Mahsulot tanlashdan keyingi savat
+
+- Figma `Returns → Products (20091:267592)` bo‘yicha qaytarish va Agent zayavkasi savatlarida 16 dp inset, 52 dp jami qatori, 48 dp rasm, 112 × 32 dp miqdor boshqaruvi, 15/20 Regular mahsulot matni, 48 dp tugmalar ishlatiladi.
+- Bir xil CartProductCard turli kataloglarning limitlarini o‘zidan oladi. Har bir savat o‘z draftini, yakunlash shartlarini va hujjat saqlash oqimini ishlatadi. Qaytarish sababi pastki tasdiqlash oynasida.

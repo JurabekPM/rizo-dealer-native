@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.dealerappnative.R
 import com.example.dealerappnative.data.ReturnCatalogProduct
-import com.example.dealerappnative.data.historyMoney
 import com.example.dealerappnative.ui.theme.AgentVisitDesign
 import com.example.dealerappnative.ui.theme.DealerDesign
 
@@ -37,53 +36,6 @@ internal fun ReturnProductThumbnail(product: ReturnCatalogProduct, size: Dp = 48
         if (product.photo != null) Image(painterResource(product.photo), contentDescription = null,
             contentScale = ContentScale.Fit, modifier = Modifier.fillMaxSize().padding(2.dp))
         else DealerIcon(R.drawable.ic_box)
-    }
-}
-
-/** Full-width reference card: product, remaining stock, one counter and source-document action. */
-@Composable
-internal fun ReturnProductCard(product: ReturnCatalogProduct, quantity: Int, onQuantity: (Int) -> Unit,
-    onEditQuantity: () -> Unit, onRemove: () -> Unit, onInfo: () -> Unit) {
-    HistorySurface {
-        Row(verticalAlignment = Alignment.Top) {
-            ReturnProductThumbnail(product)
-            Spacer(Modifier.width(12.dp))
-            Column(Modifier.weight(1f)) {
-                Row(verticalAlignment = Alignment.Top) {
-                    Text(product.name, style = AgentVisitDesign.emphasis, color = DealerDesign.text,
-                        maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
-                    SoftIconButton(onClick = onRemove, modifier = Modifier.padding(start = 4.dp).size(28.dp)
-                        .semantics { contentDescription = "Убрать: ${product.name}" }) {
-                        DealerIcon(R.drawable.ic_agent_clear, size = 20.dp)
-                    }
-                }
-                Text(historyMoney(product.price) + "/шт", style = AgentVisitDesign.emphasis,
-                    color = DealerDesign.text, modifier = Modifier.padding(top = 6.dp))
-                Text("${product.available} шт", style = AgentVisitDesign.name, color = DealerDesign.text,
-                    modifier = Modifier.padding(top = 4.dp).semantics { contentDescription = "Текущий остаток: ${product.available} шт" })
-                Row(Modifier.fillMaxWidth().padding(top = 12.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Row(Modifier.height(36.dp).clip(RoundedCornerShape(8.dp)).background(DealerDesign.background),
-                        verticalAlignment = Alignment.CenterVertically) {
-                        SoftTextButton(onClick = { onQuantity(quantity - 1) }, modifier = Modifier.size(40.dp, 36.dp)
-                            .semantics { contentDescription = "Уменьшить количество: ${product.name}" }) {
-                            Text("−", style = AgentVisitDesign.sheetTitle, color = DealerDesign.text)
-                        }
-                        Box(Modifier.size(40.dp, 36.dp).softCardPress(onClick = onEditQuantity)
-                            .semantics { contentDescription = "Количество: ${product.name}, $quantity" }, contentAlignment = Alignment.Center) {
-                            Text("$quantity", style = AgentVisitDesign.emphasis, color = DealerDesign.text)
-                        }
-                        SoftTextButton(onClick = { onQuantity(quantity + 1) }, enabled = quantity < product.available,
-                            modifier = Modifier.size(40.dp, 36.dp).semantics { contentDescription = "Увеличить количество: ${product.name}" }) {
-                            Text("+", style = AgentVisitDesign.sheetTitle, color = if (quantity < product.available) DealerDesign.text else DealerDesign.tertiary)
-                        }
-                    }
-                    Spacer(Modifier.weight(1f))
-                    SoftIconButton(onClick = onInfo, modifier = Modifier.padding(start = 8.dp).size(36.dp)
-                        .clip(RoundedCornerShape(8.dp)).background(DealerDesign.background)
-                        .semantics { contentDescription = "Информация: ${product.name}" }) { DealerIcon(R.drawable.ic_info) }
-                }
-            }
-        }
     }
 }
 

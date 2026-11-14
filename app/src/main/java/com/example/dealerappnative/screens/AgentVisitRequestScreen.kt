@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -17,8 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.example.dealerappnative.R
 import com.example.dealerappnative.data.*
@@ -66,11 +63,13 @@ internal fun AgentVisitRequestScreen(visit: VisitStore, sessions: AgentVisitSess
         }
         return
     }
-    val current = normalizeRequestQuantities(quantities)
-    val selected = requestCatalog.indices.filter { current[it] > 0 }
-    val lines = selected.map { index -> requestCatalog[index].let {
-        VisitRequestItem(it.id, it.name, it.price, current[index])
-    } }
+    val current = remember(quantities) { normalizeRequestQuantities(quantities) }
+    val selected = remember(current) { requestCatalog.indices.filter { current[it] > 0 } }
+    val lines = remember(selected, current) {
+        selected.map { index -> requestCatalog[index].let {
+            VisitRequestItem(it.id, it.name, it.price, current[index])
+        } }
+    }
     Column(Modifier.fillMaxSize().background(DealerDesign.background)) {
         HistoryHeader("Заявка", back)
         if (session?.isActive != true) {
@@ -100,37 +99,17 @@ internal fun AgentVisitRequestScreen(visit: VisitStore, sessions: AgentVisitSess
                         }
                     }
                 } else {
-                    item(key = "total") { HistorySurface {
-                        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                            Text("Общая сумма", style = AgentVisitDesign.detail, color = DealerDesign.secondary,
-                                modifier = Modifier.weight(1f))
-                            Spacer(Modifier.width(12.dp))
-                            Text(historyMoney(lines.sumOf { it.total }), style = AgentVisitDesign.emphasis, color = DealerDesign.text)
-                        }
-                    } }
-                    item(key = "count") { HistorySurface(verticalPadding = 8.dp) {
-                        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                            Text("Товары (${selected.size})", style = AgentVisitDesign.name, color = DealerDesign.text,
-                                modifier = Modifier.weight(1f))
-                            SoftTextButton(onClick = { pickerVisible = true }, modifier = Modifier.size(36.dp)
-                                .background(DealerDesign.accent.copy(alpha = .07f), RoundedCornerShape(8.dp))
-                                .semantics { contentDescription = "Добавить товары" }) {
-                                Text("+", style = AgentVisitDesign.sheetTitle, color = DealerDesign.accent)
-                            }
-                        }
-                    } }
-                    items(selected, key = { requestCatalog[it].id }, contentType = { "request-line" }) { index ->
-                        RequestProductCard(requestCatalog[index], current[index],
-                            onQuantity = { value -> quantities = current.toMutableList().apply {
-                                this[index] = value.coerceIn(0, requestCatalog[index].stock)
-                            } }, onEditQuantity = { quantityIndex = index },
-                            onRemove = { quantities = current.toMutableList().apply { this[index] = 0 } })
+                    item(key = "total") { CartTotal(lines.sumOf { it.total }) }
+                    items(selected, key = { requestCatalog[it].id }, contentType = { "cart-product" }) { index ->
+                        CartProductCard(requestCatalog[index], current[index],
+                            onStep = { step -> quantities = stepRequestPickerQuantity(quantities, index, step) },
+                            onEditQuantity = { quantityIndex = index },
+                            onRemove = { quantities = normalizeRequestQuantities(quantities).toMutableList().apply { this[index] = 0 } })
                     }
+                    item(key = "add") { CartAddAction { pickerVisible = true } }
                 }
             }
-            Box(Modifier.fillMaxWidth().background(DealerDesign.surface).padding(16.dp)) {
-                ReturnPrimaryButton("Завершить", lines.isNotEmpty()) { confirmVisible = true }
-            }
+            CartFooter("Завершить", lines.isNotEmpty()) { confirmVisible = true }
         }
     }
     quantityIndex?.let { index -> RequestQuantitySheet(requestCatalog[index], current[index],
