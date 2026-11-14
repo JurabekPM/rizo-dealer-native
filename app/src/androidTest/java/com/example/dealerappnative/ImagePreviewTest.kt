@@ -101,6 +101,16 @@ class ImagePreviewTest {
             await(scenario) { all -> all.hasText("2 / 2") && all.isZoomed(false) }
             swipe(scenario, towardNext = false)
             await(scenario) { all -> all.hasText("1 / 2") && all.isZoomed(false) }
+
+            doubleTap(scenario)
+            await(scenario) { all -> all.hasText("1 / 2") && all.hasZoom("250%") }
+            doubleTap(scenario)
+            await(scenario) { all -> all.hasText("1 / 2") && all.hasZoom("100%") }
+
+            dragDown(scenario, fraction = .06f)
+            await(scenario) { all -> all.hasText("1 / 2") && all.hasZoom("100%") }
+            dragDown(scenario, fraction = .32f)
+            await(scenario) { all -> all.node("Закрыть фото") == null && all.node("Открыть фото: $label") != null }
         }
     }
 
@@ -115,6 +125,34 @@ class ImagePreviewTest {
             }
             view.sendTouch(start, 192, MotionEvent.ACTION_UP, listOf(bounds.center - half))
         }
+    }
+
+    private fun doubleTap(scenario: ActivityScenario<ComponentActivity>) {
+        gesture(scenario) { view, bounds ->
+            val start = SystemClock.uptimeMillis() - 140L
+            val center = listOf(bounds.center)
+            view.sendTouch(start, 0, MotionEvent.ACTION_DOWN, center)
+            view.sendTouch(start, 30, MotionEvent.ACTION_UP, center)
+            view.sendTouch(start + 110, 0, MotionEvent.ACTION_DOWN, center)
+            view.sendTouch(start + 110, 30, MotionEvent.ACTION_UP, center)
+        }
+    }
+
+    private fun dragDown(scenario: ActivityScenario<ComponentActivity>, fraction: Float) {
+        gesture(scenario) { view, bounds ->
+            val start = SystemClock.uptimeMillis() - 192L
+            val from = bounds.center
+            val distance = Offset(0f, bounds.height * fraction)
+            view.sendTouch(start, 0, MotionEvent.ACTION_DOWN, listOf(from))
+            for (step in 1..11) {
+                view.sendTouch(start, step * 16L, MotionEvent.ACTION_MOVE, listOf(from + distance * (step / 11f)))
+            }
+            view.sendTouch(start, 192, MotionEvent.ACTION_UP, listOf(from + distance))
+        }
+    }
+
+    private fun List<SemanticsNode>.hasZoom(value: String): Boolean = any {
+        it.config.getOrNull(SemanticsProperties.StateDescription) == value
     }
 
     private fun gesture(scenario: ActivityScenario<ComponentActivity>, send: (View, Rect) -> Unit) {
