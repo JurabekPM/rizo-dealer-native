@@ -82,14 +82,7 @@ internal class NavigationIconArtwork(@param:DrawableRes private val iconRes: Int
                 R.drawable.ic_visit_route -> drawRoute(progress, tint, inactiveTint)
                 R.drawable.ic_visit -> drawRequest(progress, tint, surface)
                 R.drawable.ic_box -> drawParcel(progress, tint, surface, center)
-                R.drawable.ic_money -> {
-                    val turn = wave(phase(progress, .04f, .90f))
-                    rotate(17f * turn, center) {
-                        scale(1f - .70f * turn, 1f + .09f * turn, center) {
-                            drawPath(mainShape, tint)
-                        }
-                    }
-                }
+                R.drawable.ic_money -> drawCollection(progress, tint, center)
                 R.drawable.ic_store -> drawStore(progress, tint, surface)
                 R.drawable.ic_agent_statistics -> drawStatistics(progress, tint, surface)
                 R.drawable.ic_agent_history -> {
@@ -142,13 +135,27 @@ internal class NavigationIconArtwork(@param:DrawableRes private val iconRes: Int
     }
 
     private fun DrawScope.drawParcel(progress: Float, tint: Color, cutout: Color, center: Offset) {
-        val turn = wave(phase(progress, 0f, .94f))
-        rotate(-19f * turn, center) {
-            scale(1f - .24f * turn, 1f + .03f * turn, center) {
+        val tilt = wave(phase(progress, 0f, .63f))
+        val settle = wave(phase(progress, .43f, .94f))
+        translate(top = -1.25f * tilt) {
+            rotate(-14f * tilt + 4f * settle, center) {
                 drawPath(mainShape, tint)
                 growFill(2, phase(progress, .13f, .58f), tint)
                 growFill(0, phase(progress, .25f, .84f), lerp(tint, cutout, .12f))
                 growFill(1, phase(progress, .36f, .96f), lerp(tint, cutout, .27f))
+            }
+        }
+    }
+
+    private fun DrawScope.drawCollection(progress: Float, tint: Color, center: Offset) {
+        val turn = wave(phase(progress, 0f, .78f))
+        val settle = wave(phase(progress, .35f, 1f))
+        val lift = wave(phase(progress, .02f, .92f))
+        translate(top = -2f * lift) {
+            rotate(-28f * turn + 9f * settle, center) {
+                scale(1f - .32f * turn, 1f, center) {
+                    drawPath(mainShape, tint)
+                }
             }
         }
     }
