@@ -509,6 +509,6 @@ Admin va Agent kartalarining radiusi 2 dp oshirildi. Asosiy radius 14 dp, soya b
 
 ## 40. Pastki navigatsiya animatsiyasi
 
-- Admin va Agentda yengil binafsha fon 170 ms ichida paydo bo‘ladi yoki yig‘iladi. Asl ikonkalarning shakli 320 ms davomida tanlangan holatga o‘tadi va 245 ms da odatiy shakliga qaytadi. Ranglar och va qora temaga mos.
-- Vizit marshrutida nuqta yuradi va uchlari to‘ladi. Zayavka plansheti to‘ladi, plyus aylanadi. Dostavkada quti qirralari navbat bilan to‘ladi. Do‘konning soyaboni siljiydi, statistika ustunlari va ramkasi o‘zgaradi. Inkassatsiya belgisi aylanadi, tarix mil va strelkasi alohida harakat qiladi, menyu chiziqlari navbat bilan siljiydi.
+- Admin va Agentda tanlangan tab binafsha ikonka va yorliq orqali ajraladi. Asl ikonkalarning shakli 320 ms davomida tanlangan holatga o‘tadi va 245 ms da odatiy shakliga qaytadi. Ranglar och va qora temaga mos.
+- Vizitda marshrut chizig‘i boshidan oxirigacha binafsha rangda chiziladi, uchlari navbat bilan to‘ladi. Zayavka plansheti to‘ladi, plyus aylanadi. Dostavkada quti qirralari navbat bilan to‘ladi. Do‘konning soyaboni siljiydi, statistika ustunlari va ramkasi o‘zgaradi. Inkassatsiya belgisi aylanadi, tarix mil va strelkasi alohida harakat qiladi, menyu chiziqlari yuqoridan pastga navbat bilan qisqarib yoyiladi.
 - Yorliq va ko‘rilmagan yozuvlar belgisi joyida turadi. Tab kontenti darhol almashadi. Animatsiya faol tab qayta bosilganda yoki tafsilotlardan shu tabga qaytilganda takrorlanmaydi.
