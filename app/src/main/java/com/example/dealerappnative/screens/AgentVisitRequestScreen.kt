@@ -73,44 +73,52 @@ internal fun AgentVisitRequestScreen(visit: VisitStore, sessions: AgentVisitSess
     Column(Modifier.fillMaxSize().background(DealerDesign.background)) {
         HistoryHeader("Заявка", back)
         if (session?.isActive != true) {
-            LazyColumn(Modifier.weight(1f), contentPadding = PaddingValues(top = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                item { HistoryStoreSummary(visit) }
-                item { HistorySurface {
-                    Text(if (session == null) "Начните визит, чтобы оформить заявку" else "Визит завершён. Заявки не оформлялись",
-                        style = AgentVisitDesign.name, color = DealerDesign.secondary)
-                } }
-            }
-            if (session == null) AgentVisitAction("Начать визит") {
-                if (!(onStart?.invoke() ?: sessions.start(visit.id, visit.results)))
-                    Toast.makeText(context, "Для этого магазина визит уже начат или завершён", Toast.LENGTH_SHORT).show()
-            }
-        } else {
-            LazyColumn(Modifier.weight(1f), state = listState, contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                if (selected.isEmpty()) item(key = "empty") {
-                    HistorySurface(Modifier.animateItem(), verticalPadding = 24.dp) {
-                        Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                            Image(painterResource(R.drawable.request_empty), null, modifier = Modifier.size(220.dp))
-                            Spacer(Modifier.height(4.dp))
-                            Text("Нет товаров в списке", style = AgentVisitDesign.detail, color = DealerDesign.secondary)
-                            Spacer(Modifier.height(24.dp))
-                            Box(Modifier.width(240.dp)) { ReturnPrimaryButton("Добавить") { pickerVisible = true } }
-                        }
+            BottomActionLayout(Modifier.weight(1f), actions = {
+                if (session == null) {
+                    AgentVisitAction("Начать визит") {
+                        if (!(onStart?.invoke() ?: sessions.start(visit.id, visit.results)))
+                            Toast.makeText(context, "Для этого магазина визит уже начат или завершён", Toast.LENGTH_SHORT).show()
                     }
-                } else {
-                    item(key = "total") { CartTotal(lines.sumOf { it.total }) }
-                    items(selected, key = { requestCatalog[it].id }, contentType = { "cart-product" }) { index ->
-                        CartProductCard(requestCatalog[index], current[index],
-                            onStep = { step -> quantities = stepRequestPickerQuantity(quantities, index, step) },
-                            modifier = Modifier.animateItem(),
-                            onEditQuantity = { quantityIndex = index },
-                            onRemove = { quantities = normalizeRequestQuantities(quantities).toMutableList().apply { this[index] = 0 } })
-                    }
-                    item(key = "add") { CartAddAction(Modifier.animateItem()) { pickerVisible = true } }
+                }
+            }) { actionHeight ->
+                LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(top = 8.dp, bottom = actionHeight),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    item { HistoryStoreSummary(visit) }
+                    item { HistorySurface {
+                        Text(if (session == null) "Начните визит, чтобы оформить заявку" else "Визит завершён. Заявки не оформлялись",
+                            style = AgentVisitDesign.name, color = DealerDesign.secondary)
+                    } }
                 }
             }
-            CartFooter("Завершить", lines.isNotEmpty()) { confirmVisible = true }
+        } else {
+            BottomActionLayout(Modifier.weight(1f), actions = {
+                CartFooter("Завершить", lines.isNotEmpty()) { confirmVisible = true }
+            }) { actionHeight ->
+                LazyColumn(Modifier.fillMaxSize(), state = listState, contentPadding = PaddingValues(top = 8.dp, bottom = actionHeight + 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    if (selected.isEmpty()) item(key = "empty") {
+                        HistorySurface(Modifier.animateItem(), verticalPadding = 24.dp) {
+                            Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+                                Image(painterResource(R.drawable.request_empty), null, modifier = Modifier.size(220.dp))
+                                Spacer(Modifier.height(4.dp))
+                                Text("Нет товаров в списке", style = AgentVisitDesign.detail, color = DealerDesign.secondary)
+                                Spacer(Modifier.height(24.dp))
+                                Box(Modifier.width(240.dp)) { ReturnPrimaryButton("Добавить") { pickerVisible = true } }
+                            }
+                        }
+                    } else {
+                        item(key = "total") { CartTotal(lines.sumOf { it.total }) }
+                        items(selected, key = { requestCatalog[it].id }, contentType = { "cart-product" }) { index ->
+                            CartProductCard(requestCatalog[index], current[index],
+                                onStep = { step -> quantities = stepRequestPickerQuantity(quantities, index, step) },
+                                modifier = Modifier.animateItem(),
+                                onEditQuantity = { quantityIndex = index },
+                                onRemove = { quantities = normalizeRequestQuantities(quantities).toMutableList().apply { this[index] = 0 } })
+                        }
+                        item(key = "add") { CartAddAction(Modifier.animateItem()) { pickerVisible = true } }
+                    }
+                }
+            }
         }
     }
     quantityIndex?.let { index -> RequestQuantitySheet(requestCatalog[index], current[index],

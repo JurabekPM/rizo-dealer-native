@@ -115,32 +115,37 @@ internal fun AdminProfileScreen(onBack: () -> Unit, onAdministratorChanged: (Adm
         }
         if (pager.currentPage == 0) AdminPeopleControls(query, { query = it }, visiblePeople.size, headerState, toolbarSearching,
             onAdd = { closeSearch(); newPersonId = "person-${UUID.randomUUID()}" })
-        HorizontalPager(pager, modifier = Modifier.weight(1f), userScrollEnabled = !saving, beyondViewportPageCount = 1) { page ->
-            if (page == 0) AdminPeopleScreen(visiblePeople, personalList,
-                onPersonClick = { closeSearch(); selectedPersonId = it })
-            else if (!editingDealer) DealerProfileDetailsScreen(savedDealer, dealerViewList)
-            else DealerProfileScreen(dealer, dealerList, onChange = { dealer = it; error = null },
-                onOpenMap = { mapOpen = true }, onImageBusyChange = { imageBusy = it })
-        }
-        if (pager.currentPage == 1 && editingDealer) Column(Modifier.fillMaxWidth().background(DealerDesign.surface).padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            error?.let { Text(it, style = Design.body, color = dealerColor(Color(0xFFE45555), Color(0xFFFF939D))) }
-            DealerProfileButton(if (saving) "Сохраняем…" else "Сохранить", !saving && !imageBusy) {
-                error = dealer.validationError()
-                if (error == null) {
-                    val dealerSnapshot = dealer
-                    saving = true
-                    scope.launch {
-                        val saved = preferences.save(dealerSnapshot)
-                        saving = false
-                        if (saved) {
-                            savedDealer = preferences.read()
-                            dealer = savedDealer
-                            editingDealer = false
-                            Toast.makeText(context, "Данные сохранены", Toast.LENGTH_SHORT).show()
+        BottomActionLayout(Modifier.weight(1f), actions = {
+            if (pager.currentPage == 1 && editingDealer) {
+                BottomActionPanel(spacing = 8.dp) {
+                    error?.let { Text(it, style = Design.body, color = dealerColor(Color(0xFFE45555), Color(0xFFFF939D))) }
+                    DealerProfileButton(if (saving) "Сохраняем…" else "Сохранить", !saving && !imageBusy) {
+                        error = dealer.validationError()
+                        if (error == null) {
+                            val dealerSnapshot = dealer
+                            saving = true
+                            scope.launch {
+                                val saved = preferences.save(dealerSnapshot)
+                                saving = false
+                                if (saved) {
+                                    savedDealer = preferences.read()
+                                    dealer = savedDealer
+                                    editingDealer = false
+                                    Toast.makeText(context, "Данные сохранены", Toast.LENGTH_SHORT).show()
+                                }
+                                else error = "Не удалось сохранить данные. Попробуйте ещё раз"
+                            }
                         }
-                        else error = "Не удалось сохранить данные. Попробуйте ещё раз"
                     }
                 }
+            }
+        }) { actionHeight ->
+            HorizontalPager(pager, modifier = Modifier.fillMaxSize(), userScrollEnabled = !saving, beyondViewportPageCount = 1) { page ->
+                if (page == 0) AdminPeopleScreen(visiblePeople, personalList,
+                    onPersonClick = { closeSearch(); selectedPersonId = it })
+                else if (!editingDealer) DealerProfileDetailsScreen(savedDealer, dealerViewList)
+                else DealerProfileScreen(dealer, dealerList, onChange = { dealer = it; error = null },
+                    onOpenMap = { mapOpen = true }, onImageBusyChange = { imageBusy = it }, bottomInset = actionHeight)
             }
         }
     }

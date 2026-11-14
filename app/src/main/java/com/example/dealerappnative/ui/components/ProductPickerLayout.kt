@@ -31,14 +31,13 @@ internal fun ProductPickerHeader(query: String, onQuery: (String) -> Unit, onBac
 
 @Composable
 internal fun ProductPickerFooter(count: Int, total: Long, label: String, enabled: Boolean, onConfirm: () -> Unit) {
-    Column(Modifier.fillMaxWidth().background(DealerDesign.surface).padding(16.dp)) {
+    BottomActionPanel(spacing = 12.dp) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             SlidingNumber(count.toLong(), RequestPickerDesign.unit, DealerDesign.secondary,
                 suffix = " ${productWord(count)}")
             Spacer(Modifier.weight(1f))
             SlidingNumber(total, RequestPickerDesign.price, DealerDesign.text, groupThousands = true, suffix = " UZS")
         }
-        Spacer(Modifier.height(12.dp))
         RequestPickerButton(label, enabled, onConfirm)
     }
 }

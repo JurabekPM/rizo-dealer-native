@@ -41,22 +41,26 @@ internal fun DealerProfileLocationScreen(profile: DealerProfile, onBack: () -> U
     BackHandler(onBack = onBack)
     Column(Modifier.fillMaxSize().background(DealerDesign.surface).imePadding()) {
         ChildScreenHeader("Адрес на карте", onBack, mapBack = true)
-        Box(Modifier.weight(1f).fillMaxWidth()) {
-            StoreMapView(initialLocation, editing = true,
-                recenterRequest = 0, route = null, cameraTarget = null, cameraRequest = 0,
-                onPositionChange = { a, b ->
-                    if (abs(a - lat) > .000001 || abs(b - lon) > .000001) {
-                        lat = a; lon = b; changed = true; manual = false
-                    }
-                },
-                onTileStatus = {}, onMapMovingChange = {}, modifier = Modifier.fillMaxSize())
-            StoreMapMarker(Modifier.align(Alignment.Center).offset(y = (-28).dp))
-        }
-        Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Text("Передвиньте карту к нужной точке", style = AgentVisitDesign.detail, color = DealerDesign.secondary)
-            DealerProfileField(if (loading) "Определяем адрес…" else "Адрес", address, { address = it; manual = true; loading = false })
-            DealerProfileButton("Выбрать адрес", enabled = address.isNotBlank() && !loading) {
-                onSelect(StoreLocation(lat, lon, address.trim()))
+        BottomActionLayout(Modifier.weight(1f), actions = {
+            BottomActionPanel(spacing = 12.dp) {
+                Text("Передвиньте карту к нужной точке", style = AgentVisitDesign.detail, color = DealerDesign.secondary)
+                DealerProfileField(if (loading) "Определяем адрес…" else "Адрес", address, { address = it; manual = true; loading = false })
+                DealerProfileButton("Выбрать адрес", enabled = address.isNotBlank() && !loading) {
+                    onSelect(StoreLocation(lat, lon, address.trim()))
+                }
+            }
+        }) { actionHeight ->
+            val overlap = minOf(actionHeight, 20.dp)
+            Box(Modifier.fillMaxSize().padding(bottom = actionHeight - overlap)) {
+                StoreMapView(initialLocation, editing = true,
+                    recenterRequest = 0, route = null, cameraTarget = null, cameraRequest = 0,
+                    onPositionChange = { a, b ->
+                        if (abs(a - lat) > .000001 || abs(b - lon) > .000001) {
+                            lat = a; lon = b; changed = true; manual = false
+                        }
+                    },
+                    onTileStatus = {}, onMapMovingChange = {}, modifier = Modifier.fillMaxSize(), bottomContentInset = overlap)
+                StoreMapMarker(Modifier.align(Alignment.Center).offset(y = (-28).dp))
             }
         }
     }

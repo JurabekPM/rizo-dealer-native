@@ -41,24 +41,27 @@ internal fun ReturnProductPickerScreen(initial: List<Int>, orderDate: String, on
     BackHandler(onBack = back)
     Column(Modifier.fillMaxSize().background(DealerDesign.surface).imePadding()) {
         ProductPickerHeader(query, { query = it }, back)
-        LazyColumn(Modifier.weight(1f), state = listState) {
-            items(indexes, key = { returnCatalog[it].barcode }, contentType = { "return-product" }) { index ->
-                val product = returnCatalog[index]
-                RequestPickerProduct(product, quantities[index], onStep = { step ->
-                    draft = stepReturnPickerQuantity(draft, index, step)
-                }, onEditQuantity = { quantityIndex = index }, unavailableText = "Нет товаров для возврата",
-                    supportingContent = {
-                        Text("Можно вернуть: ${product.available} шт", style = RequestPickerDesign.detail,
-                            color = DealerDesign.secondary, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                        Text("Заявка: $orderDate · ${product.originalQuantity} шт", style = RequestPickerDesign.detail,
-                            color = DealerDesign.secondary, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                    })
-                HorizontalDivider(color = DealerDesign.divider, modifier = Modifier.padding(horizontal = 16.dp))
+        BottomActionLayout(Modifier.weight(1f), actions = {
+            // Confirming an empty return draft can clear previously selected items.
+            ProductPickerFooter(selectedCount, total, "Подтвердить", enabled = true) { keyboard?.hide(); onConfirm(quantities) }
+        }) { actionHeight ->
+            LazyColumn(Modifier.fillMaxSize(), state = listState, contentPadding = PaddingValues(bottom = actionHeight)) {
+                items(indexes, key = { returnCatalog[it].barcode }, contentType = { "return-product" }) { index ->
+                    val product = returnCatalog[index]
+                    RequestPickerProduct(product, quantities[index], onStep = { step ->
+                        draft = stepReturnPickerQuantity(draft, index, step)
+                    }, onEditQuantity = { quantityIndex = index }, unavailableText = "Нет товаров для возврата",
+                        supportingContent = {
+                            Text("Можно вернуть: ${product.available} шт", style = RequestPickerDesign.detail,
+                                color = DealerDesign.secondary, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                            Text("Заявка: $orderDate · ${product.originalQuantity} шт", style = RequestPickerDesign.detail,
+                                color = DealerDesign.secondary, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                        })
+                    HorizontalDivider(color = DealerDesign.divider, modifier = Modifier.padding(horizontal = 16.dp))
+                }
+                if (indexes.isEmpty()) item(key = "empty") { HistoryEmpty("Товары не найдены") }
             }
-            if (indexes.isEmpty()) item(key = "empty") { HistoryEmpty("Товары не найдены") }
         }
-        // Unlike a new request, confirming an empty return draft can clear previously selected items.
-        ProductPickerFooter(selectedCount, total, "Подтвердить", enabled = true) { keyboard?.hide(); onConfirm(quantities) }
     }
     quantityIndex?.let { index -> RequestQuantitySheet(returnCatalog[index], quantities[index],
         onDismiss = { quantityIndex = null; focusManager.clearFocus(); keyboard?.hide() }, maxDigits = 2,

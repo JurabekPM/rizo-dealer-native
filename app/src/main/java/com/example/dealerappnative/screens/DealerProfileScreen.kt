@@ -1,5 +1,6 @@
 package com.example.dealerappnative.screens
 
+import androidx.compose.ui.unit.Dp
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -20,9 +21,10 @@ import com.example.dealerappnative.ui.theme.DealerDesign
 /** Legal-entity form inside AdminProfileScreen; state/save/navigation belong to the host. */
 @Composable
 internal fun DealerProfileScreen(profile: DealerProfile, listState: LazyListState, onChange: (DealerProfile) -> Unit,
-    onOpenMap: () -> Unit, onImageBusyChange: (Boolean) -> Unit) {
+    onOpenMap: () -> Unit, onImageBusyChange: (Boolean) -> Unit, bottomInset: Dp) {
     fun update(value: DealerProfile) = onChange(value)
-    LazyColumn(Modifier.fillMaxSize(), state = listState, contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+    LazyColumn(Modifier.fillMaxSize(), state = listState,
+        contentPadding = PaddingValues(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 16.dp + bottomInset), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item(key = "company") { DealerProfileSection("Юридическое лицо") {
             DealerProfileField("ИНН / ПИНФЛ", profile.taxId, { update(profile.copy(taxId = it.filter { c -> c in '0'..'9' }.take(14))) }, numeric = true)
             DealerProfileField("Наименование юридического лица", profile.name, { update(profile.copy(name = it.take(120))) })

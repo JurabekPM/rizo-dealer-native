@@ -1,5 +1,6 @@
 package com.example.dealerappnative.ui.components
 
+import com.example.dealerappnative.ui.components.BottomActionLayout
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -52,35 +53,38 @@ internal fun OrderListScreen(
         }
         Spacer(Modifier.height(8.dp))
         headerContent()
-        HorizontalPager(state = pagerState, modifier = Modifier.weight(1f)) { page ->
-            val orders = if (page == 0) activeOrders else historyOrders
-            val visibleOrders = orders.filter { order ->
-                order.storeName.contains(search, ignoreCase = true) ||
-                    order.customerName.contains(search, ignoreCase = true) ||
-                    order.id.contains(search)
-            }
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(top = 8.dp, bottom = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(visibleOrders, key = { it.id }) { order ->
-                    val onUnreadClick: (() -> Unit)? = if (order.id in unreadIds) ({ onRead(order.id) }) else null
-                    OrderCard(order, onUnreadClick = onUnreadClick)
+        BottomActionLayout(Modifier.weight(1f), actions = {
+            PrototypeCreateButton()
+        }) { actionHeight ->
+            HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
+                val orders = if (page == 0) activeOrders else historyOrders
+                val visibleOrders = orders.filter { order ->
+                    order.storeName.contains(search, ignoreCase = true) ||
+                        order.customerName.contains(search, ignoreCase = true) ||
+                        order.id.contains(search)
                 }
-                if (visibleOrders.isEmpty()) {
-                    item {
-                        Text(
-                            text = emptyMessage,
-                            style = DealerDesign.body,
-                            color = DealerDesign.secondary,
-                            modifier = Modifier.fillMaxWidth().padding(vertical = 32.dp),
-                            textAlign = TextAlign.Center
-                        )
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(top = 8.dp, bottom = actionHeight + 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(visibleOrders, key = { it.id }) { order ->
+                        val onUnreadClick: (() -> Unit)? = if (order.id in unreadIds) ({ onRead(order.id) }) else null
+                        OrderCard(order, onUnreadClick = onUnreadClick)
+                    }
+                    if (visibleOrders.isEmpty()) {
+                        item {
+                            Text(
+                                text = emptyMessage,
+                                style = DealerDesign.body,
+                                color = DealerDesign.secondary,
+                                modifier = Modifier.fillMaxWidth().padding(vertical = 32.dp),
+                                textAlign = TextAlign.Center
+                            )
+                        }
                     }
                 }
             }
         }
-        PrototypeCreateButton()
     }
 }

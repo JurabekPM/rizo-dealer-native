@@ -1,5 +1,6 @@
 package com.example.dealerappnative.screens
 
+import com.example.dealerappnative.ui.components.BottomActionLayout
 import com.example.dealerappnative.ui.theme.displayColor
 import com.example.dealerappnative.ui.theme.dealerColor
 import com.example.dealerappnative.ui.components.softCardPress
@@ -80,36 +81,39 @@ internal fun CollectionsScreen(unreadIds: Set<String>, onRead: (String) -> Unit)
         ShortcutCard(title = "План инкассации", iconRes = R.drawable.ic_money)
         Spacer(Modifier.height(8.dp))
 
-        HorizontalPager(state = pagerState, modifier = Modifier.weight(1f)) { page ->
-            val entries = if (page == 0) activeCollections else collectionHistory
-            val search = query.trim()
-            val visibleEntries = entries.filter {
-                it.storeName.contains(search, ignoreCase = true) || it.storeId.contains(search)
-            }
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(top = 8.dp, bottom = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(visibleEntries, key = { it.collectionId }) { entry ->
-                    val onUnreadClick: (() -> Unit)? =
-                        if (entry.collectionId in unreadIds) ({ onRead(entry.collectionId) }) else null
-                    CollectionCard(entry, onUnreadClick)
+        BottomActionLayout(Modifier.weight(1f), actions = {
+            PrototypeCreateButton()
+        }) { actionHeight ->
+            HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
+                val entries = if (page == 0) activeCollections else collectionHistory
+                val search = query.trim()
+                val visibleEntries = entries.filter {
+                    it.storeName.contains(search, ignoreCase = true) || it.storeId.contains(search)
                 }
-                if (visibleEntries.isEmpty()) {
-                    item {
-                        Text(
-                            text = "Инкассации не найдены",
-                            modifier = Modifier.fillMaxWidth().padding(vertical = 32.dp),
-                            style = DealerDesign.body,
-                            color = DealerDesign.secondary,
-                            textAlign = TextAlign.Center
-                        )
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(top = 8.dp, bottom = actionHeight + 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(visibleEntries, key = { it.collectionId }) { entry ->
+                        val onUnreadClick: (() -> Unit)? =
+                            if (entry.collectionId in unreadIds) ({ onRead(entry.collectionId) }) else null
+                        CollectionCard(entry, onUnreadClick)
+                    }
+                    if (visibleEntries.isEmpty()) {
+                        item {
+                            Text(
+                                text = "Инкассации не найдены",
+                                modifier = Modifier.fillMaxWidth().padding(vertical = 32.dp),
+                                style = DealerDesign.body,
+                                color = DealerDesign.secondary,
+                                textAlign = TextAlign.Center
+                            )
+                        }
                     }
                 }
             }
         }
-        PrototypeCreateButton()
     }
 }
 

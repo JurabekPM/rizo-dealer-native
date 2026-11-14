@@ -1,5 +1,6 @@
 package com.example.dealerappnative.screens
 
+import com.example.dealerappnative.ui.components.BottomActionLayout
 import com.example.dealerappnative.ui.components.cardShadow
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -209,26 +210,29 @@ private fun AgentVisitsList(cards: List<VisitStore>, onStoreClick: (String) -> U
                     height = 40.dp, textStyle = AgentVisitDesign.name)
             }
         }
-        Box(Modifier.fillMaxWidth().weight(1f)) {
-            LazyColumn(Modifier.fillMaxSize(), state = listState, contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                item(key = "plans", contentType = "plans") { AgentVisitPlans() }
-                items(stores, key = { it.id }, contentType = { "visit" }) { store ->
-                    VisitStoreCard(store, unread = store.id in unreadIds,
-                        onClick = { onStoreClick(store.id) })
+        BottomActionLayout(Modifier.weight(1f), actions = {
+            AgentVisitAction("Внеплановые", onClick = onUnplanned)
+        }) { actionHeight ->
+            Box(Modifier.fillMaxSize()) {
+                LazyColumn(Modifier.fillMaxSize(), state = listState, contentPadding = PaddingValues(top = 8.dp, bottom = actionHeight + 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    item(key = "plans", contentType = "plans") { AgentVisitPlans() }
+                    items(stores, key = { it.id }, contentType = { "visit" }) { store ->
+                        VisitStoreCard(store, unread = store.id in unreadIds,
+                            onClick = { onStoreClick(store.id) })
+                    }
+                    if (stores.isEmpty()) item {
+                        Text("Магазины не найдены", style = AgentVisitDesign.name, color = DealerDesign.secondary,
+                            modifier = Modifier.fillMaxWidth().padding(24.dp))
+                    }
                 }
-                if (stores.isEmpty()) item {
-                    Text("Магазины не найдены", style = AgentVisitDesign.name, color = DealerDesign.secondary,
-                        modifier = Modifier.fillMaxWidth().padding(24.dp))
+                IconButton(onClick = {}, modifier = Modifier.align(Alignment.BottomEnd).padding(end = 16.dp, bottom = actionHeight + 16.dp)
+                    .shadow(4.dp, CircleShape).clip(CircleShape).background(DealerDesign.surface).size(48.dp)
+                    .semantics { contentDescription = "Карта визитов" }) {
+                    DealerIcon(R.drawable.ic_route, DealerDesign.text)
                 }
-            }
-            IconButton(onClick = {}, modifier = Modifier.align(Alignment.BottomEnd).padding(end = 16.dp, bottom = 16.dp)
-                .shadow(4.dp, CircleShape).clip(CircleShape).background(DealerDesign.surface).size(48.dp)
-                .semantics { contentDescription = "Карта визитов" }) {
-                DealerIcon(R.drawable.ic_route, DealerDesign.text)
             }
         }
-        AgentVisitAction("Внеплановые", onClick = onUnplanned)
     }
 }
 

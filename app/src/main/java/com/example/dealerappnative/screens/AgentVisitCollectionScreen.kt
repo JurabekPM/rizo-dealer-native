@@ -38,30 +38,33 @@ internal fun AgentVisitCollectionScreen(visit: VisitStore, sessions: AgentVisitS
     }
     Column(Modifier.fillMaxSize().background(DealerDesign.background).imePadding()) {
         HistoryHeader("Инкассация", onBack)
-        LazyColumn(Modifier.weight(1f), contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            item { HistoryStoreSummary(visit) }
-            if (session?.isActive == true) item { HistorySurface {
-                Text("Сумма инкассации", style = AgentVisitDesign.emphasis, color = DealerDesign.text)
-                Spacer(Modifier.height(12.dp))
-                OutlinedTextField(amount, onValueChange = { text ->
-                    if (text.length <= 12 && text.all(Char::isDigit)) amount = text
-                }, modifier = Modifier.fillMaxWidth(), singleLine = true,
-                    textStyle = AgentVisitDesign.emphasis, placeholder = { Text("0", style = AgentVisitDesign.emphasis) },
-                    suffix = { Text("UZS", style = AgentVisitDesign.emphasis) },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    shape = RoundedCornerShape(12.dp), colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = DealerDesign.accent, unfocusedBorderColor = DealerDesign.divider))
-            } } else item { HistorySurface {
-                Text(if (session == null) "Начните визит, чтобы оформить инкассацию" else "Визит завершён. Инкассации не было",
-                    style = AgentVisitDesign.name, color = DealerDesign.secondary)
-            } }
-        }
-        if (session == null) AgentVisitAction("Начать визит") {
-            if (!(onStart?.invoke() ?: sessions.start(visit.id, visit.results)))
-                Toast.makeText(context, "Для этого магазина визит уже начат или завершён", Toast.LENGTH_SHORT).show()
-        } else if (session.isActive) AgentVisitAction("Сохранить", enabled = canSaveVisitCollection(session, value)) {
-            if (sessions.saveCollection(visit.id, value)) onBack()
+        BottomActionLayout(Modifier.weight(1f), actions = {
+            if (session == null) AgentVisitAction("Начать визит") {
+                if (!(onStart?.invoke() ?: sessions.start(visit.id, visit.results)))
+                    Toast.makeText(context, "Для этого магазина визит уже начат или завершён", Toast.LENGTH_SHORT).show()
+            } else if (session.isActive) AgentVisitAction("Сохранить", enabled = canSaveVisitCollection(session, value)) {
+                if (sessions.saveCollection(visit.id, value)) onBack()
+            }
+        }) { actionHeight ->
+            LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(top = 8.dp, bottom = actionHeight + 16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                item { HistoryStoreSummary(visit) }
+                if (session?.isActive == true) item { HistorySurface {
+                    Text("Сумма инкассации", style = AgentVisitDesign.emphasis, color = DealerDesign.text)
+                    Spacer(Modifier.height(12.dp))
+                    OutlinedTextField(amount, onValueChange = { text ->
+                        if (text.length <= 12 && text.all(Char::isDigit)) amount = text
+                    }, modifier = Modifier.fillMaxWidth(), singleLine = true,
+                        textStyle = AgentVisitDesign.emphasis, placeholder = { Text("0", style = AgentVisitDesign.emphasis) },
+                        suffix = { Text("UZS", style = AgentVisitDesign.emphasis) },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        shape = RoundedCornerShape(12.dp), colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = DealerDesign.accent, unfocusedBorderColor = DealerDesign.divider))
+                } } else item { HistorySurface {
+                    Text(if (session == null) "Начните визит, чтобы оформить инкассацию" else "Визит завершён. Инкассации не было",
+                        style = AgentVisitDesign.name, color = DealerDesign.secondary)
+                } }
+            }
         }
     }
 }

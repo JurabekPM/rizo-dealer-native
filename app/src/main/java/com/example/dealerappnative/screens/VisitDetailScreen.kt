@@ -1,5 +1,7 @@
 package com.example.dealerappnative.screens
 
+import com.example.dealerappnative.ui.components.BottomActionLayout
+import com.example.dealerappnative.ui.components.BottomActionPanel
 import com.example.dealerappnative.ui.theme.displayColor
 import com.example.dealerappnative.ui.components.SoftIconButton
 import com.example.dealerappnative.ui.components.softCardPress
@@ -69,35 +71,38 @@ internal fun VisitDetailScreen(store: VisitStore, onBack: () -> Unit) {
                 DealerIcon(R.drawable.ic_arrow_back, DealerDesign.text)
             }
         }
-        LazyColumn(
-            modifier = Modifier.weight(1f), state = detailListState,
-            contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            item { StoreSummary(store) }
-            item { VisitValueRow("Конечное сальдо", store.debtDirection.formatAmount(store.debt), store.debtDirection.displayColor,
-                showChevron = true, valueModifier = Modifier.sharedVisitStorePart(store.id, VisitStorePart.Debt)) }
-            item { StoreStatementEntry(storeForVisit(store)) }
-            item { VisitValueRow("Дата визита", store.details.date, DealerDesign.text) }
-            item { EmployeeCard(store.details.employee, store.details.employeePhone) }
-            item {
-                Column(Modifier.fillMaxWidth().cardShadow()
-                    .background(DealerDesign.surface).padding(horizontal = DealerDesign.pageInset)) {
-                    val operations = visitOperations(store.details)
-                    operations.forEachIndexed { index, operation ->
-                        OperationRow(operation, store.id, operation.result in store.results,
-                            onClick = if (operation.result == VisitResult.Return) ({ returnVisible = true }) else null)
-                        if (index != operations.lastIndex) HorizontalDivider(color = DealerDesign.divider)
-                    }
+        BottomActionLayout(Modifier.weight(1f), actions = {
+            // The action is visual-only until visit completion/cancellation is designed.
+            BottomActionPanel {
+                Box(Modifier.fillMaxWidth().height(DealerDesign.buttonHeight)
+                    .clip(RoundedCornerShape(DealerDesign.radius)).background(visitActionColor),
+                    contentAlignment = Alignment.Center) {
+                    Text("Отменить визит", style = DealerDesign.button, color = Color.White)
                 }
             }
-        }
-        // The action is visual-only until visit completion/cancellation is designed.
-        Box(Modifier.fillMaxWidth().background(DealerDesign.surface).padding(16.dp)) {
-            Box(Modifier.fillMaxWidth().height(DealerDesign.buttonHeight)
-                .clip(RoundedCornerShape(DealerDesign.radius)).background(visitActionColor),
-                contentAlignment = Alignment.Center) {
-                Text("Отменить визит", style = DealerDesign.button, color = Color.White)
+        }) { actionHeight ->
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(), state = detailListState,
+                contentPadding = PaddingValues(top = 8.dp, bottom = actionHeight + 16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                item { StoreSummary(store) }
+                item { VisitValueRow("Конечное сальдо", store.debtDirection.formatAmount(store.debt), store.debtDirection.displayColor,
+                    showChevron = true, valueModifier = Modifier.sharedVisitStorePart(store.id, VisitStorePart.Debt)) }
+                item { StoreStatementEntry(storeForVisit(store)) }
+                item { VisitValueRow("Дата визита", store.details.date, DealerDesign.text) }
+                item { EmployeeCard(store.details.employee, store.details.employeePhone) }
+                item {
+                    Column(Modifier.fillMaxWidth().cardShadow()
+                        .background(DealerDesign.surface).padding(horizontal = DealerDesign.pageInset)) {
+                        val operations = visitOperations(store.details)
+                        operations.forEachIndexed { index, operation ->
+                            OperationRow(operation, store.id, operation.result in store.results,
+                                onClick = if (operation.result == VisitResult.Return) ({ returnVisible = true }) else null)
+                            if (index != operations.lastIndex) HorizontalDivider(color = DealerDesign.divider)
+                        }
+                    }
+                }
             }
         }
     }

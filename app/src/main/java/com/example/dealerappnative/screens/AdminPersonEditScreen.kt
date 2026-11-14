@@ -49,33 +49,38 @@ internal fun AdminPersonEditScreen(initial: DealerPerson, people: List<DealerPer
     Column(Modifier.fillMaxSize().background(DealerDesign.background).imePadding()) {
         ProfilePageHeader(if (editing) (if (isNew) "Новый сотрудник" else "Редактирование") else "Данные сотрудника",
             onBack = ::back, onEdit = if (editing) null else ({ draft = savedPerson; error = null; editing = true }))
-        Box(Modifier.weight(1f)) {
-            if (!editing) AdminPersonDetailsScreen(savedPerson, dealerName, viewList)
-            else AdminPersonalProfileScreen(draft.profile, dealerName, editList,
-                onChange = { draft = draft.copy(profile = it); error = null }, role = draft.role,
-                onRoleChange = if (draft.isCurrentAdministrator) null else ({ role -> draft = draft.copy(role = role); error = null }),
-                onPhotoClick = choosePhoto, photoBusy = photoBusy)
-        }
-        if (editing) Column(Modifier.fillMaxWidth().background(DealerDesign.surface).padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            error?.let { Text(it, style = Design.body, color = dealerColor(Color(0xFFE45555), Color(0xFFFF939D))) }
-            DealerProfileButton(if (saving) "Сохраняем…" else "Сохранить", enabled = !saving && !photoBusy) {
-                focus.clearFocus()
-                val candidate = upsertDealerPerson(people, draft)
-                error = dealerPeopleError(candidate)
-                if (error == null) {
-                    saving = true
-                    scope.launch {
-                        val success = preferences.savePeople(candidate)
-                        saving = false
-                        if (success) {
-                            val saved = preferences.readPeople()
-                            savedPerson = saved.first { it.id == draft.id }
-                            draft = savedPerson
-                            editing = false
-                            onSaved(saved)
-                        } else error = "Не удалось сохранить сотрудника"
+        BottomActionLayout(Modifier.weight(1f), actions = {
+            if (editing) {
+                BottomActionPanel(spacing = 8.dp) {
+                    error?.let { Text(it, style = Design.body, color = dealerColor(Color(0xFFE45555), Color(0xFFFF939D))) }
+                    DealerProfileButton(if (saving) "Сохраняем…" else "Сохранить", enabled = !saving && !photoBusy) {
+                        focus.clearFocus()
+                        val candidate = upsertDealerPerson(people, draft)
+                        error = dealerPeopleError(candidate)
+                        if (error == null) {
+                            saving = true
+                            scope.launch {
+                                val success = preferences.savePeople(candidate)
+                                saving = false
+                                if (success) {
+                                    val saved = preferences.readPeople()
+                                    savedPerson = saved.first { it.id == draft.id }
+                                    draft = savedPerson
+                                    editing = false
+                                    onSaved(saved)
+                                } else error = "Не удалось сохранить сотрудника"
+                            }
+                        }
                     }
                 }
+            }
+        }) { actionHeight ->
+            Box(Modifier.fillMaxSize()) {
+                if (!editing) AdminPersonDetailsScreen(savedPerson, dealerName, viewList)
+                else AdminPersonalProfileScreen(draft.profile, dealerName, editList,
+                    onChange = { draft = draft.copy(profile = it); error = null }, role = draft.role,
+                    onRoleChange = if (draft.isCurrentAdministrator) null else ({ role -> draft = draft.copy(role = role); error = null }),
+                    onPhotoClick = choosePhoto, photoBusy = photoBusy, bottomInset = actionHeight)
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.example.dealerappnative.screens
 
+import com.example.dealerappnative.ui.components.BottomActionLayout
 import com.example.dealerappnative.ui.theme.displayColor
 import com.example.dealerappnative.ui.theme.dealerColor
 import com.example.dealerappnative.ui.components.softCardPress
@@ -45,35 +46,38 @@ import com.example.dealerappnative.ui.theme.DealerDesign
 internal fun StoreDetailScreen(store: StoreUiModel, onBack: () -> Unit, onOpenMap: () -> Unit) {
     Column(Modifier.fillMaxSize().background(DealerDesign.background)) {
         ChildScreenHeader(store.name, onBack, height = 68.dp)
-        LazyColumn(Modifier.weight(1f), contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            item { StoreSummary(store, onOpenMap) }
-            item { StoreSettings(store) }
-            item {
-                Row(Modifier.fillMaxWidth().height(56.dp).cardShadow()
-                    .background(DealerDesign.surface).padding(horizontal = DealerDesign.pageInset),
-                    verticalAlignment = Alignment.CenterVertically) {
-                    Text("Конечное сальдо", style = DealerDesign.body, color = DealerDesign.secondary,
-                        modifier = Modifier.weight(1f))
-                    Spacer(Modifier.width(8.dp))
-                    Text(store.debtDirection.formatAmount(store.debt), style = DealerDesign.body,
-                        color = store.debtDirection.displayColor)
-                    Spacer(Modifier.width(4.dp))
-                    Box(Modifier.rotate(90f)) { DealerIcon(R.drawable.ic_chevron) }
+        BottomActionLayout(Modifier.weight(1f), actions = {
+            PrototypeCreateButton(label = "Обновить")
+        }) { actionHeight ->
+            LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(top = 8.dp, bottom = actionHeight + 16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                item { StoreSummary(store, onOpenMap) }
+                item { StoreSettings(store) }
+                item {
+                    Row(Modifier.fillMaxWidth().height(56.dp).cardShadow()
+                        .background(DealerDesign.surface).padding(horizontal = DealerDesign.pageInset),
+                        verticalAlignment = Alignment.CenterVertically) {
+                        Text("Конечное сальдо", style = DealerDesign.body, color = DealerDesign.secondary,
+                            modifier = Modifier.weight(1f))
+                        Spacer(Modifier.width(8.dp))
+                        Text(store.debtDirection.formatAmount(store.debt), style = DealerDesign.body,
+                            color = store.debtDirection.displayColor)
+                        Spacer(Modifier.width(4.dp))
+                        Box(Modifier.rotate(90f)) { DealerIcon(R.drawable.ic_chevron) }
+                    }
                 }
-            }
-            item { StoreStatementEntry(store) }
-            item {
-                Column(Modifier.fillMaxWidth().cardShadow().background(DealerDesign.surface)) {
-                    Text("Отчёты", style = DealerDesign.type(22, 28),
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp))
-                    storeReports.forEachIndexed { index, (title, icon) ->
-                        MenuRow(title, icon, divider = index != storeReports.lastIndex, rowHeight = 56.dp)
+                item { StoreStatementEntry(store) }
+                item {
+                    Column(Modifier.fillMaxWidth().cardShadow().background(DealerDesign.surface)) {
+                        Text("Отчёты", style = DealerDesign.type(22, 28),
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp))
+                        storeReports.forEachIndexed { index, (title, icon) ->
+                            MenuRow(title, icon, divider = index != storeReports.lastIndex, rowHeight = 56.dp)
+                        }
                     }
                 }
             }
         }
-        PrototypeCreateButton(label = "Обновить")
     }
 }
 

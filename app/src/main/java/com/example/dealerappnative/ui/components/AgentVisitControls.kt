@@ -173,7 +173,7 @@ private fun VisitPhoto(uri: String, removable: Boolean, modifier: Modifier, onRe
 
 @Composable
 internal fun AgentVisitAction(label: String, enabled: Boolean = true, onClick: () -> Unit) {
-    Box(Modifier.fillMaxWidth().background(DealerDesign.surface).padding(16.dp)) {
+    BottomActionPanel {
         Box(Modifier.fillMaxWidth().height(48.dp).softCardPress(enabled = enabled, onClick = onClick)
             .clip(RoundedCornerShape(12.dp))
             .background(if (enabled) DealerDesign.accent else DealerDesign.accent.copy(alpha = .35f)), contentAlignment = Alignment.Center) {

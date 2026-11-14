@@ -1,5 +1,6 @@
 package com.example.dealerappnative.screens
 
+import androidx.compose.ui.unit.Dp
 import com.example.dealerappnative.ui.theme.platformPickerTheme
 import android.app.DatePickerDialog
 import androidx.compose.foundation.background
@@ -33,11 +34,12 @@ import java.time.format.DateTimeFormatter
 internal fun AdminPersonalProfileScreen(profile: AdminPersonalProfile, dealerName: String,
     listState: LazyListState, onChange: (AdminPersonalProfile) -> Unit,
     role: String = "Администратор", onRoleChange: ((String) -> Unit)? = null,
-    onPhotoClick: (() -> Unit)? = null, photoBusy: Boolean = false) {
+    onPhotoClick: (() -> Unit)? = null, photoBusy: Boolean = false, bottomInset: Dp) {
     val context = LocalContext.current
     val pickerTheme = platformPickerTheme
     val today = LocalDate.now(ZoneId.of("Asia/Tashkent"))
-    LazyColumn(Modifier.fillMaxSize(), state = listState, contentPadding = PaddingValues(16.dp),
+    LazyColumn(Modifier.fillMaxSize(), state = listState,
+        contentPadding = PaddingValues(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 16.dp + bottomInset),
         verticalArrangement = Arrangement.spacedBy(12.dp)) {
         if (onPhotoClick != null) item(key = "person-photo") { PersonPhotoField(profile, photoBusy, onPhotoClick) }
         item(key = "personal") { DealerProfileSection("Личные данные") {

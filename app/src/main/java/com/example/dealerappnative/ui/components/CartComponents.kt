@@ -17,10 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -34,7 +30,6 @@ import com.example.dealerappnative.model.PickerProduct
 import com.example.dealerappnative.model.VisitStore
 import com.example.dealerappnative.ui.theme.AgentDesign
 import com.example.dealerappnative.ui.theme.DealerDesign
-import com.example.dealerappnative.ui.theme.dealerColor
 
 private val cartShape = RoundedCornerShape(12.dp)
 private val controlShape = RoundedCornerShape(8.dp)
@@ -163,16 +158,7 @@ internal fun CartAddAction(modifier: Modifier = Modifier, onClick: () -> Unit) {
 
 @Composable
 internal fun CartFooter(label: String, enabled: Boolean, onClick: () -> Unit) {
-    val shadow = dealerColor(Color.Black.copy(alpha = .11f), Color.Black.copy(alpha = .38f))
-    Box(Modifier.fillMaxWidth().drawBehind {
-        val depth = 10.dp.toPx()
-        drawRect(
-            brush = Brush.verticalGradient(listOf(Color.Transparent, shadow), startY = -depth, endY = 0f),
-            topLeft = Offset(0f, -depth),
-            size = Size(size.width, depth)
-        )
-    }.background(DealerDesign.surface, RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
-        .padding(16.dp)) {
+    BottomActionPanel {
         CartButton(label, if (enabled) DealerDesign.accent else DealerDesign.background,
             if (enabled) DealerDesign.onAccent else DealerDesign.secondary, enabled, onClick)
     }

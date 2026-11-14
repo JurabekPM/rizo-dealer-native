@@ -1,5 +1,6 @@
 package com.example.dealerappnative.screens
 
+import com.example.dealerappnative.ui.components.BottomActionLayout
 import com.example.dealerappnative.ui.theme.displayColor
 import com.example.dealerappnative.ui.components.softCardPress
 import com.example.dealerappnative.ui.components.cardShadow
@@ -63,23 +64,26 @@ internal fun StoresScreen(
             .padding(bottom = 16.dp)) {
             SearchField(query, { query = it }, placeholder = "Поиск")
         }
-        LazyColumn(
-            modifier = Modifier.weight(1f),
-            contentPadding = PaddingValues(vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(stores, key = { it.id }) { store ->
-                StoreCard(store, unread = store.id in unreadIds, onClick = { onStoreClick(store.id) })
-            }
-            if (stores.isEmpty()) {
-                item {
-                    Text("Магазины не найдены", style = DealerDesign.body, color = DealerDesign.secondary,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth().padding(vertical = 32.dp))
+        BottomActionLayout(Modifier.weight(1f), actions = {
+            PrototypeCreateButton(label = "+ Добавить")
+        }) { actionHeight ->
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(top = 8.dp, bottom = actionHeight + 8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(stores, key = { it.id }) { store ->
+                    StoreCard(store, unread = store.id in unreadIds, onClick = { onStoreClick(store.id) })
+                }
+                if (stores.isEmpty()) {
+                    item {
+                        Text("Магазины не найдены", style = DealerDesign.body, color = DealerDesign.secondary,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.fillMaxWidth().padding(vertical = 32.dp))
+                    }
                 }
             }
         }
-        PrototypeCreateButton(label = "+ Добавить")
     }
 }
 

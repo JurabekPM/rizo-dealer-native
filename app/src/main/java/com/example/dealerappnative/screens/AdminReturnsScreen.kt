@@ -50,38 +50,41 @@ internal fun AdminReturnsScreen(onBack: () -> Unit) {
         selected != null -> AdminReturnDetailScreen(selected, back)
         else -> Column(Modifier.fillMaxSize().background(DealerDesign.background)) {
             HistoryHeader(month?.label ?: "Возвраты", back)
-            LazyColumn(Modifier.weight(1f), state = if (month == null) monthsState else documentsState,
-                contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                if (month == null) {
-                    item(key = "reasons") {
-                        HistorySurface(onClick = { reasonsVisible = true }) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                DealerIcon(R.drawable.ic_settings); Spacer(Modifier.width(12.dp))
-                                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                                    Text("Причины возврата", style = AgentVisitDesign.emphasis, color = DealerDesign.text)
-                                    Text("Настроить причины для агентов", style = AgentVisitDesign.detail, color = DealerDesign.secondary)
+            BottomActionLayout(Modifier.weight(1f), actions = {
+                BottomActionPanel {
+                    ReturnPrimaryButton("Создать") { createVisible = true }
+                }
+            }) { actionHeight ->
+                LazyColumn(Modifier.fillMaxSize(), state = if (month == null) monthsState else documentsState,
+                    contentPadding = PaddingValues(top = 8.dp, bottom = actionHeight + 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    if (month == null) {
+                        item(key = "reasons") {
+                            HistorySurface(onClick = { reasonsVisible = true }) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    DealerIcon(R.drawable.ic_settings); Spacer(Modifier.width(12.dp))
+                                    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                                        Text("Причины возврата", style = AgentVisitDesign.emphasis, color = DealerDesign.text)
+                                        Text("Настроить причины для агентов", style = AgentVisitDesign.detail, color = DealerDesign.secondary)
+                                    }
+                                    DealerIcon(R.drawable.ic_chevron, size = 16.dp)
                                 }
-                                DealerIcon(R.drawable.ic_chevron, size = 16.dp)
                             }
                         }
-                    }
-                    items(months, key = { it.key }) { item ->
-                        val entries = adminReturnsInMonth(documents, item)
-                        HistoryMonthCard(item, R.drawable.ic_return, "Сумма возвратов",
-                            listOf(historyMoney(entries.sumOf { it.record.total }) to DealerDesign.text)) {
-                            documentsState.requestScrollToItem(0); monthKey = item.key
+                        items(months, key = { it.key }) { item ->
+                            val entries = adminReturnsInMonth(documents, item)
+                            HistoryMonthCard(item, R.drawable.ic_return, "Сумма возвратов",
+                                listOf(historyMoney(entries.sumOf { it.record.total }) to DealerDesign.text)) {
+                                documentsState.requestScrollToItem(0); monthKey = item.key
+                            }
                         }
+                    } else {
+                        val entries = adminReturnsInMonth(documents, month)
+                        items(entries, key = { it.key }) { document ->
+                            AdminReturnCard(document) { documentKey = document.key }
+                        }
+                        if (entries.isEmpty()) item { HistoryEmpty("За этот месяц возвратов нет") }
                     }
-                } else {
-                    val entries = adminReturnsInMonth(documents, month)
-                    items(entries, key = { it.key }) { document ->
-                        AdminReturnCard(document) { documentKey = document.key }
-                    }
-                    if (entries.isEmpty()) item { HistoryEmpty("За этот месяц возвратов нет") }
                 }
-            }
-            Box(Modifier.fillMaxWidth().background(DealerDesign.surface).padding(16.dp)) {
-                ReturnPrimaryButton("Создать") { createVisible = true }
             }
         }
     }

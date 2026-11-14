@@ -1,5 +1,6 @@
 package com.example.dealerappnative.screens
 
+import com.example.dealerappnative.ui.components.BottomActionLayout
 import com.example.dealerappnative.ui.theme.displayColor
 import com.example.dealerappnative.ui.theme.DealerDesign
 import com.example.dealerappnative.ui.components.SoftIconButton
@@ -59,46 +60,49 @@ internal fun AgentStoreDetailScreen(store: StoreUiModel, onBack: () -> Unit, vis
                 DealerIcon(R.drawable.ic_arrow_back, AgentDesign.text)
             }
         }
-        LazyColumn(Modifier.weight(1f), contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            item(key = "store") { AgentStoreSummary(store) }
-            item(key = "balance") {
-                Row(Modifier.fillMaxWidth().height(56.dp).cardShadow()
-                    .background(DealerDesign.surface).padding(horizontal = AgentDesign.inset),
-                    verticalAlignment = Alignment.CenterVertically) {
-                    Text("Конечное сальдо", style = AgentDesign.menuTitle, color = AgentDesign.secondary,
-                        modifier = Modifier.weight(1f))
-                    Spacer(Modifier.width(8.dp))
-                    Text(store.debtDirection.formatAmount(store.debt), style = AgentDesign.menuTitle,
-                        color = store.debtDirection.displayColor, maxLines = 1,
-                        modifier = Modifier.agentStoreSharedPart(store.id, AgentStorePart.Debt)
-                            .sharedVisitStorePart(store.id, VisitStorePart.Debt))
-                    Spacer(Modifier.width(4.dp))
-                    Box(Modifier.rotate(90f)) { DealerIcon(R.drawable.ic_chevron, AgentDesign.secondary) }
+        BottomActionLayout(Modifier.weight(1f), actions = {
+            PrototypeCreateButton(label = "Начать визит")
+        }) { actionHeight ->
+            LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(top = 8.dp, bottom = actionHeight + 16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                item(key = "store") { AgentStoreSummary(store) }
+                item(key = "balance") {
+                    Row(Modifier.fillMaxWidth().height(56.dp).cardShadow()
+                        .background(DealerDesign.surface).padding(horizontal = AgentDesign.inset),
+                        verticalAlignment = Alignment.CenterVertically) {
+                        Text("Конечное сальдо", style = AgentDesign.menuTitle, color = AgentDesign.secondary,
+                            modifier = Modifier.weight(1f))
+                        Spacer(Modifier.width(8.dp))
+                        Text(store.debtDirection.formatAmount(store.debt), style = AgentDesign.menuTitle,
+                            color = store.debtDirection.displayColor, maxLines = 1,
+                            modifier = Modifier.agentStoreSharedPart(store.id, AgentStorePart.Debt)
+                                .sharedVisitStorePart(store.id, VisitStorePart.Debt))
+                        Spacer(Modifier.width(4.dp))
+                        Box(Modifier.rotate(90f)) { DealerIcon(R.drawable.ic_chevron, AgentDesign.secondary) }
+                    }
                 }
-            }
-            item(key = "statement") { StoreStatementEntry(store) }
-            item(key = "reports") {
-                Column(Modifier.fillMaxWidth().cardShadow().background(DealerDesign.surface)) {
-                    Text("Отчёты", style = AgentDesign.reportTitle, color = AgentDesign.text,
-                        modifier = Modifier.padding(16.dp))
-                    if (visitResults != null) {
-                        AgentVisitOperationRow("Доставки", R.drawable.ic_box, VisitResult.Delivery, store.id, visitResults)
-                        AgentVisitOperationRow("Заявки", R.drawable.ic_visit, VisitResult.Request, store.id, visitResults)
-                        AgentMenuRow("Визиты", R.drawable.ic_visit)
-                        AgentVisitOperationRow("Ревизии", R.drawable.ic_edit, VisitResult.Revision, store.id, visitResults)
-                        AgentVisitOperationRow("Инкассация", R.drawable.ic_money, VisitResult.Collection, store.id, visitResults)
-                        AgentVisitOperationRow("Возвраты", R.drawable.ic_return, VisitResult.Return, store.id, visitResults, divider = false)
-                    } else {
-                        AgentMenuRow("Заявки", R.drawable.ic_box)
-                        AgentMenuRow("Визиты", R.drawable.ic_visit)
-                        AgentMenuRow("Ревизии", R.drawable.ic_edit)
-                        AgentMenuRow("Инкассация", R.drawable.ic_money, divider = false)
+                item(key = "statement") { StoreStatementEntry(store) }
+                item(key = "reports") {
+                    Column(Modifier.fillMaxWidth().cardShadow().background(DealerDesign.surface)) {
+                        Text("Отчёты", style = AgentDesign.reportTitle, color = AgentDesign.text,
+                            modifier = Modifier.padding(16.dp))
+                        if (visitResults != null) {
+                            AgentVisitOperationRow("Доставки", R.drawable.ic_box, VisitResult.Delivery, store.id, visitResults)
+                            AgentVisitOperationRow("Заявки", R.drawable.ic_visit, VisitResult.Request, store.id, visitResults)
+                            AgentMenuRow("Визиты", R.drawable.ic_visit)
+                            AgentVisitOperationRow("Ревизии", R.drawable.ic_edit, VisitResult.Revision, store.id, visitResults)
+                            AgentVisitOperationRow("Инкассация", R.drawable.ic_money, VisitResult.Collection, store.id, visitResults)
+                            AgentVisitOperationRow("Возвраты", R.drawable.ic_return, VisitResult.Return, store.id, visitResults, divider = false)
+                        } else {
+                            AgentMenuRow("Заявки", R.drawable.ic_box)
+                            AgentMenuRow("Визиты", R.drawable.ic_visit)
+                            AgentMenuRow("Ревизии", R.drawable.ic_edit)
+                            AgentMenuRow("Инкассация", R.drawable.ic_money, divider = false)
+                        }
                     }
                 }
             }
         }
-        PrototypeCreateButton(label = "Начать визит")
     }
 }
 

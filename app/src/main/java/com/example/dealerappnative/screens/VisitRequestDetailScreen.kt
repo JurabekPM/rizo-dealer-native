@@ -23,30 +23,35 @@ internal fun VisitRequestDetailScreen(visit: VisitStore, record: VisitRequestRec
     BackHandler(onBack = onBack)
     Column(Modifier.fillMaxSize().background(DealerDesign.background)) {
         HistoryHeader("Заявка", onBack)
-        LazyColumn(Modifier.weight(1f), contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            item(key = "created") { HistorySurface {
-                HistoryDateLine("Дата отправления", record.createdAt)
-                HistoryValue("Номер заявки", record.documentId)
-            } }
-            item(key = "total") { HistorySurface { HistoryValue("Общая сумма", historyMoney(record.total)) } }
-            items(record.items, key = { it.productId }, contentType = { "saved-request-line" }) { line ->
-                HistorySurface {
-                    Row(verticalAlignment = Alignment.Top) {
-                        RequestProductThumbnail(requestCatalog.find { it.id == line.productId }
-                            ?: RequestCatalogProduct(line.productId, line.name, line.price, 0))
-                        Spacer(Modifier.width(12.dp))
-                        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                            Text(line.name, style = AgentVisitDesign.name, color = DealerDesign.text)
-                            Text(historyMoney(line.price) + "/шт", style = AgentVisitDesign.detail, color = DealerDesign.text)
-                            Text("${line.quantity} шт", style = AgentVisitDesign.emphasis, color = DealerDesign.text)
+        BottomActionLayout(Modifier.weight(1f), actions = {
+            if (onEdit != null) {
+                BottomActionPanel {
+                    ReturnPrimaryButton("Редактировать", onClick = onEdit)
+                }
+            }
+        }) { actionHeight ->
+            LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(top = 8.dp, bottom = actionHeight + 16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                item(key = "created") { HistorySurface {
+                    HistoryDateLine("Дата отправления", record.createdAt)
+                    HistoryValue("Номер заявки", record.documentId)
+                } }
+                item(key = "total") { HistorySurface { HistoryValue("Общая сумма", historyMoney(record.total)) } }
+                items(record.items, key = { it.productId }, contentType = { "saved-request-line" }) { line ->
+                    HistorySurface {
+                        Row(verticalAlignment = Alignment.Top) {
+                            RequestProductThumbnail(requestCatalog.find { it.id == line.productId }
+                                ?: RequestCatalogProduct(line.productId, line.name, line.price, 0))
+                            Spacer(Modifier.width(12.dp))
+                            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                                Text(line.name, style = AgentVisitDesign.name, color = DealerDesign.text)
+                                Text(historyMoney(line.price) + "/шт", style = AgentVisitDesign.detail, color = DealerDesign.text)
+                                Text("${line.quantity} шт", style = AgentVisitDesign.emphasis, color = DealerDesign.text)
+                            }
                         }
                     }
                 }
             }
-        }
-        if (onEdit != null) Box(Modifier.fillMaxWidth().background(DealerDesign.surface).padding(16.dp)) {
-            ReturnPrimaryButton("Редактировать", onClick = onEdit)
         }
     }
 }

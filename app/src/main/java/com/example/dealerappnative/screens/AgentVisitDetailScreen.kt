@@ -67,51 +67,56 @@ internal fun AgentVisitDetailScreen(store: StoreUiModel, visit: VisitStore,
                 DealerIcon(R.drawable.ic_arrow_back, DealerDesign.text)
             }
         }
-        LazyColumn(Modifier.weight(1f), state = detailListState, contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            item(key = "store") { VisitStoreSummary(store, visit.sourceStore ?: store) }
-            if (session != null) item(key = "time") { AgentVisitTiming(session) }
-            item(key = "balance") {
-                Row(Modifier.fillMaxWidth().cardShadow().background(DealerDesign.surface)
-                    .heightIn(min = 56.dp).padding(horizontal = 16.dp, vertical = 12.dp),
-                    verticalAlignment = Alignment.CenterVertically) {
-                    Text("Конечное сальдо", style = AgentVisitDesign.name, color = DealerDesign.secondary,
-                        modifier = Modifier.weight(1f))
-                    Spacer(Modifier.width(12.dp))
-                    Text(store.debtDirection.formatAmount(store.debt), style = AgentVisitDesign.emphasis,
-                        color = store.debtDirection.displayColor, maxLines = 1,
-                        modifier = Modifier.sharedVisitStorePart(store.id, VisitStorePart.Debt))
-                }
-            }
-            item(key = "statement") { StoreStatementEntry(visit.sourceStore ?: store) }
-            item(key = "operations") {
-                Column(Modifier.fillMaxWidth().cardShadow().background(DealerDesign.surface)
-                    .padding(horizontal = 16.dp)) {
-                    VisitResult.entries.forEachIndexed { index, result ->
-                        VisitOperationRow(visit, result, result in (session?.results ?: visit.results),
-                            onClick = when (result) {
-                                VisitResult.Return -> ({ returnVisible = true })
-                                VisitResult.Request -> ({ requestVisible = true })
-                                VisitResult.Collection -> ({ collectionVisible = true })
-                                else -> null
-                            })
-                        if (index < VisitResult.entries.lastIndex) HorizontalDivider(color = DealerDesign.divider,
-                            modifier = Modifier.padding(start = 36.dp))
+        BottomActionLayout(Modifier.weight(1f), actions = {
+            if (session == null || session.isActive) {
+                AgentVisitAction(
+                    if (session == null) "Начать визит" else "Завершить визит") {
+                    keyboard?.hide()
+                    when {
+                        session == null -> if (!(onStart?.invoke() ?: sessions.start(store.id, visit.results))) warning = true
+                        session.needsReason -> finishSheet = true
+                        else -> sessions.finish(store.id)
                     }
                 }
             }
-            if (session != null) item(key = "notes") {
-                AgentVisitNotes(session, onComment = { sessions.comment(store.id, it) },
-                    onAddPhotos = { sessions.addPhotos(store.id, it) }, onRemovePhoto = { sessions.removePhoto(store.id, it) })
-            }
-        }
-        if (session == null || session.isActive) AgentVisitAction(
-            if (session == null) "Начать визит" else "Завершить визит") {
-            keyboard?.hide()
-            when {
-                session == null -> if (!(onStart?.invoke() ?: sessions.start(store.id, visit.results))) warning = true
-                session.needsReason -> finishSheet = true
-                else -> sessions.finish(store.id)
+        }) { actionHeight ->
+            LazyColumn(Modifier.fillMaxSize(), state = detailListState, contentPadding = PaddingValues(top = 8.dp, bottom = actionHeight + 16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                item(key = "store") { VisitStoreSummary(store, visit.sourceStore ?: store) }
+                if (session != null) item(key = "time") { AgentVisitTiming(session) }
+                item(key = "balance") {
+                    Row(Modifier.fillMaxWidth().cardShadow().background(DealerDesign.surface)
+                        .heightIn(min = 56.dp).padding(horizontal = 16.dp, vertical = 12.dp),
+                        verticalAlignment = Alignment.CenterVertically) {
+                        Text("Конечное сальдо", style = AgentVisitDesign.name, color = DealerDesign.secondary,
+                            modifier = Modifier.weight(1f))
+                        Spacer(Modifier.width(12.dp))
+                        Text(store.debtDirection.formatAmount(store.debt), style = AgentVisitDesign.emphasis,
+                            color = store.debtDirection.displayColor, maxLines = 1,
+                            modifier = Modifier.sharedVisitStorePart(store.id, VisitStorePart.Debt))
+                    }
+                }
+                item(key = "statement") { StoreStatementEntry(visit.sourceStore ?: store) }
+                item(key = "operations") {
+                    Column(Modifier.fillMaxWidth().cardShadow().background(DealerDesign.surface)
+                        .padding(horizontal = 16.dp)) {
+                        VisitResult.entries.forEachIndexed { index, result ->
+                            VisitOperationRow(visit, result, result in (session?.results ?: visit.results),
+                                onClick = when (result) {
+                                    VisitResult.Return -> ({ returnVisible = true })
+                                    VisitResult.Request -> ({ requestVisible = true })
+                                    VisitResult.Collection -> ({ collectionVisible = true })
+                                    else -> null
+                                })
+                            if (index < VisitResult.entries.lastIndex) HorizontalDivider(color = DealerDesign.divider,
+                                modifier = Modifier.padding(start = 36.dp))
+                        }
+                    }
+                }
+                if (session != null) item(key = "notes") {
+                    AgentVisitNotes(session, onComment = { sessions.comment(store.id, it) },
+                        onAddPhotos = { sessions.addPhotos(store.id, it) }, onRemovePhoto = { sessions.removePhoto(store.id, it) })
+                }
             }
         }
     }

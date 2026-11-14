@@ -34,17 +34,20 @@ internal fun RequestProductPickerScreen(initial: List<Int>, onBack: () -> Unit, 
     BackHandler(onBack = back)
     Column(Modifier.fillMaxSize().background(DealerDesign.surface).imePadding()) {
         ProductPickerHeader(query, { query = it }, back)
-        LazyColumn(Modifier.weight(1f), state = listState) {
-            items(indexes, key = { requestCatalog[it].id }, contentType = { "request-product" }) { index ->
-                RequestPickerProduct(requestCatalog[index], quantities[index], onStep = { step ->
-                    draft = stepRequestPickerQuantity(draft, index, step)
-                }, onEditQuantity = { quantityIndex = index })
-                HorizontalDivider(color = DealerDesign.divider, modifier = Modifier.padding(horizontal = 16.dp))
+        BottomActionLayout(Modifier.weight(1f), actions = {
+            ProductPickerFooter(selectedCount, total, "Продолжить", enabled = selectedCount > 0) {
+                keyboard?.hide(); onConfirm(quantities)
             }
-            if (indexes.isEmpty()) item(key = "empty") { HistoryEmpty("Товары не найдены") }
-        }
-        ProductPickerFooter(selectedCount, total, "Продолжить", enabled = selectedCount > 0) {
-            keyboard?.hide(); onConfirm(quantities)
+        }) { actionHeight ->
+            LazyColumn(Modifier.fillMaxSize(), state = listState, contentPadding = PaddingValues(bottom = actionHeight)) {
+                items(indexes, key = { requestCatalog[it].id }, contentType = { "request-product" }) { index ->
+                    RequestPickerProduct(requestCatalog[index], quantities[index], onStep = { step ->
+                        draft = stepRequestPickerQuantity(draft, index, step)
+                    }, onEditQuantity = { quantityIndex = index })
+                    HorizontalDivider(color = DealerDesign.divider, modifier = Modifier.padding(horizontal = 16.dp))
+                }
+                if (indexes.isEmpty()) item(key = "empty") { HistoryEmpty("Товары не найдены") }
+            }
         }
     }
     quantityIndex?.let { index -> RequestQuantitySheet(requestCatalog[index], quantities[index],
