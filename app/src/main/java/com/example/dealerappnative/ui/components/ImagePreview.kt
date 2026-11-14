@@ -198,18 +198,18 @@ internal fun ImagePreviewGallery(
         if (closing) {
             if (opened) {
                 val motion = releaseMotion
-                val spec = if (motion == null) tween<Float>(420, easing = photoTravelEasing)
+                val spec = if (motion == null) tween<Float>(280, easing = photoTravelEasing)
                     else tween(motion.durationMillis, easing = LinearEasing)
                 exit.animateTo(1f, spec)
             } else {
-                opening.animateTo(0f, tween(340, easing = photoTravelEasing))
+                opening.animateTo(0f, tween(190, easing = photoTravelEasing))
             }
             transition?.source?.hidden = false
             if (transition?.bounds != null) withFrameNanos {}
             onDismiss()
         } else if (ready && !opened) {
             transition = capture()
-            opening.animateTo(1f, tween(460, easing = photoTravelEasing))
+            opening.animateTo(1f, tween(290, easing = photoTravelEasing))
             withFrameNanos { opened = true }
         }
     }

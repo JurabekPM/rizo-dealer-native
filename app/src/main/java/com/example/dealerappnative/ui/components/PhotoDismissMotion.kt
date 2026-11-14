@@ -5,7 +5,7 @@ import kotlin.math.roundToInt
 
 internal class PhotoDismissMotion(releaseVelocity: Float, density: Float) {
     private val velocity = releaseVelocity.coerceIn(-3_200f * density, 3_200f * density)
-    val durationMillis = (460f - 180f * (abs(velocity) / (2_200f * density)).coerceAtMost(1f)).roundToInt()
+    val durationMillis = (310f - 105f * (abs(velocity) / (2_200f * density)).coerceAtMost(1f)).roundToInt()
 
     fun progress(time: Float): Float = time * time * (3f - 2f * time)
 
