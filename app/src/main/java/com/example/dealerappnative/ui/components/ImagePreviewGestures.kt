@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.util.VelocityTracker
+import androidx.compose.ui.input.pointer.util.addPointerInputChange
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
@@ -49,7 +50,7 @@ internal fun ZoomablePhoto(
     zoom: () -> PhotoZoom,
     onZoom: (PhotoZoom) -> Unit,
     onDrag: (Float) -> Unit,
-    onDragEnd: (Boolean) -> Unit,
+    onDragEnd: (Boolean, Float) -> Unit,
     drawPhoto: DrawScope.(Rect) -> Unit
 ) {
     val currentBitmap by rememberUpdatedState(bitmap)
@@ -89,7 +90,7 @@ internal fun ZoomablePhoto(
                     var tap = true
                     val frame = size.frame()
                     val slop = viewConfiguration.touchSlop
-                    tracker.addPosition(down.uptimeMillis, down.position)
+                    tracker.addPointerInputChange(down)
                     try {
                         do {
                             val event = awaitPointerEvent()
@@ -101,11 +102,11 @@ internal fun ZoomablePhoto(
                             pinching = pinching || event.changes.count { it.pressed } > 1
                             val finger = event.changes.firstOrNull { it.id == down.id }
                             val delta = finger?.let { it.position - down.position } ?: Offset.Zero
-                            finger?.let { tracker.addPosition(it.uptimeMillis, it.position) }
+                            finger?.let(tracker::addPointerInputChange)
                             tap = tap && !pinching && delta.getDistance() <= viewConfiguration.touchSlop
                             if (pinching && dragging) {
                                 dragging = false
-                                finishDrag(false)
+                                finishDrag(false, 0f)
                             }
                             when {
                                 pinching || (previous.scale > 1f && !tap) -> {
@@ -158,7 +159,7 @@ internal fun ZoomablePhoto(
                             val farEnough = abs(distance) >= minOf(96.dp.toPx(), frame.height * .22f)
                             val flick = abs(distance) >= 28.dp.toPx() && abs(velocity) >= 850.dp.toPx() &&
                                 velocity * distance > 0f
-                            finishDrag(released && (farEnough || flick))
+                            finishDrag(released && (farEnough || flick), velocity)
                         }
                     }
                 }

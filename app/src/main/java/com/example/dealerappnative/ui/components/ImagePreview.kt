@@ -7,6 +7,7 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.CubicBezierEasing
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
@@ -161,7 +162,11 @@ internal fun ImagePreviewGallery(
         derivedStateOf { opened && !closing && photos.size > 1 && drag == 0f }
     }
     val spacing = 16.dp
-    val pageSpacing = with(LocalDensity.current) { spacing.toPx() }
+    val density = LocalDensity.current
+    val pageSpacing = with(density) { spacing.toPx() }
+    var releaseMotion by remember { mutableStateOf<PhotoDismissMotion?>(null) }
+
+    fun exitProgress(): Float = releaseMotion?.progress(exit.value) ?: exit.value
 
     fun capture(): PhotoTransition {
         val page = pager.currentPage.coerceIn(photos.indices)
@@ -172,10 +177,13 @@ internal fun ImagePreviewGallery(
             zooms[uri] ?: PhotoZoom(), pageOffset, drag)
     }
 
-    fun dismiss() {
+    fun dismiss(releaseVelocity: Float? = null) {
         if (closing) return
         rebound?.cancel()
-        if (opened) transition = capture()
+        if (opened) {
+            transition = capture()
+            releaseMotion = releaseVelocity?.let { PhotoDismissMotion(it, density.density) }
+        }
         closing = true
     }
 
@@ -188,9 +196,16 @@ internal fun ImagePreviewGallery(
 
     LaunchedEffect(ready, closing) {
         if (closing) {
-            if (opened) exit.animateTo(1f, tween(420, easing = photoTravelEasing))
-            else opening.animateTo(0f, tween(340, easing = photoTravelEasing))
+            if (opened) {
+                val motion = releaseMotion
+                val spec = if (motion == null) tween<Float>(420, easing = photoTravelEasing)
+                    else tween(motion.durationMillis, easing = LinearEasing)
+                exit.animateTo(1f, spec)
+            } else {
+                opening.animateTo(0f, tween(340, easing = photoTravelEasing))
+            }
             transition?.source?.hidden = false
+            if (transition?.bounds != null) withFrameNanos {}
             onDismiss()
         } else if (ready && !opened) {
             transition = capture()
@@ -200,7 +215,7 @@ internal fun ImagePreviewGallery(
     }
 
     Dialog(
-        onDismissRequest = ::dismiss,
+        onDismissRequest = { dismiss() },
         properties = DialogProperties(
             usePlatformDefaultWidth = false,
             decorFitsSystemWindows = false,
@@ -210,7 +225,7 @@ internal fun ImagePreviewGallery(
         PreviewSystemBars()
         Box(Modifier.fillMaxSize().onGloballyPositioned { origin = it.positionOnScreen() }) {
             Canvas(Modifier.matchParentSize()) {
-                val opacity = opening.value * (1f - exit.value) * (1f - .55f * dragFraction(drag, viewport))
+                val opacity = opening.value * (1f - exitProgress()) * (1f - .55f * dragFraction(drag, viewport))
                 drawRect(Color(0xFF18151D), alpha = .97f * opacity)
             }
             Box(Modifier.fillMaxSize().safeDrawingPadding()) {
@@ -249,8 +264,8 @@ internal fun ImagePreviewGallery(
                                     rebound?.cancel()
                                     drag = it
                                 },
-                                onDragEnd = { close ->
-                                    if (close) dismiss()
+                                onDragEnd = { close, velocity ->
+                                    if (close) dismiss(velocity)
                                     else rebound = scope.launch {
                                         animate(drag, 0f, animationSpec = spring(
                                             dampingRatio = Spring.DampingRatioNoBouncy,
@@ -272,9 +287,9 @@ internal fun ImagePreviewGallery(
                     }
                 }
                 SoftIconButton(
-                    ::dismiss,
+                    { dismiss() },
                     Modifier.align(Alignment.TopEnd).padding(12.dp).size(48.dp)
-                        .graphicsLayer { alpha = opening.value * (1f - exit.value) * (1f - dragFraction(drag, viewport)) }
+                        .graphicsLayer { alpha = opening.value * (1f - exitProgress()) * (1f - dragFraction(drag, viewport)) }
                         .background(Color.White.copy(alpha = .12f), CircleShape)
                         .semantics { contentDescription = "Закрыть фото" }
                 ) { DealerIcon(R.drawable.ic_agent_clear, Color.White, 22.dp) }
@@ -284,7 +299,7 @@ internal fun ImagePreviewGallery(
                         style = DealerDesign.detail,
                         color = Color.White,
                         modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 14.dp)
-                            .graphicsLayer { alpha = opening.value * (1f - exit.value) * (1f - dragFraction(drag, viewport)) }
+                            .graphicsLayer { alpha = opening.value * (1f - exitProgress()) * (1f - dragFraction(drag, viewport)) }
                             .background(Color.White.copy(alpha = .12f), CircleShape)
                             .padding(horizontal = 14.dp, vertical = 7.dp)
                     )
@@ -298,9 +313,10 @@ internal fun ImagePreviewGallery(
                 val photo = loaded[uri]
                 if (thumb != null || photo?.bitmap != null) {
                     Canvas(Modifier.matchParentSize()) {
-                        val fraction = if (opened) 1f - exit.value else opening.value
+                        val fraction = if (opened) 1f - exitProgress() else opening.value
                         val pageFrame = viewport.translate(Offset(motion.pageOffset, 0f))
-                        drawPhoto(thumb, photo, viewport, pageFrame, motion.zoom, motion.drag, fraction, motion)
+                        val momentum = releaseMotion?.verticalOffset(exit.value) ?: 0f
+                        drawPhoto(thumb, photo, viewport, pageFrame, motion.zoom, motion.drag, fraction, motion, momentum)
                     }
                 }
             }
@@ -333,7 +349,8 @@ private fun DrawScope.drawPhoto(
     zoom: PhotoZoom,
     drag: Float,
     fraction: Float = 1f,
-    motion: PhotoTransition? = null
+    motion: PhotoTransition? = null,
+    momentum: Float = 0f
 ) {
     val bounds = motion?.bounds
     val dragScale = 1f - .16f * dragFraction(drag, viewport)
@@ -352,7 +369,7 @@ private fun DrawScope.drawPhoto(
             val inset = motion.source.inset.toPx().coerceAtMost(minOf(bounds.full.width, bounds.full.height) * .45f)
             photoRect(bitmap, bounds.full.deflate(inset), motion.source.crop)
         } else target
-        val rect = lerp(source, target, fraction)
+        val rect = lerp(source, target, fraction).translate(Offset(0f, momentum))
         withTransform({
             translate(rect.left, rect.top)
             scale(rect.width / bitmap.width, rect.height / bitmap.height, Offset.Zero)
