@@ -58,8 +58,7 @@ internal fun AgentBottomBar(
                         iconRes = destination.iconRes,
                         selected = isSelected,
                         inactiveTint = AgentVisitDesign.tertiary,
-                        unreadCount = unreadCount,
-                        motion = destination.iconMotion
+                        unreadCount = unreadCount
                     )
                     Spacer(Modifier.height(4.dp))
                     Text(destination.title, style = AgentVisitDesign.navigation, color = color, maxLines = 1,

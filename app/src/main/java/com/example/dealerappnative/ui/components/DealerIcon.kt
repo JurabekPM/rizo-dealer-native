@@ -15,13 +15,12 @@ import com.example.dealerappnative.ui.theme.DealerDesign
 internal fun DealerIcon(
     @DrawableRes iconRes: Int,
     tint: Color = DealerDesign.secondary,
-    size: Dp = DealerDesign.iconSize,
-    modifier: Modifier = Modifier
+    size: Dp = DealerDesign.iconSize
 ) {
     Icon(
         painter = painterResource(iconRes),
         contentDescription = null,
         tint = tint,
-        modifier = modifier.size(size)
+        modifier = Modifier.size(size)
     )
 }

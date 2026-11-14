@@ -60,8 +60,7 @@ internal fun DealerBottomNavigation(
                         iconRes = destination.iconRes,
                         selected = isSelected,
                         inactiveTint = DealerDesign.secondary,
-                        unreadCount = unreadCount,
-                        motion = destination.iconMotion
+                        unreadCount = unreadCount
                     )
                     Spacer(Modifier.height(4.dp))
                     Text(

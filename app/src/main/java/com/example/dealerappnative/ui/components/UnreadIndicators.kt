@@ -1,6 +1,5 @@
 package com.example.dealerappnative.ui.components
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -63,10 +62,8 @@ internal fun UnreadBadge(count: Int, modifier: Modifier = Modifier, compact: Boo
 
 @Composable
 internal fun UnreadNavigationIcon(
-    @DrawableRes iconRes: Int,
-    tint: Color,
     unreadCount: Int,
-    iconModifier: Modifier = Modifier
+    icon: @Composable () -> Unit
 ) {
     BadgedBox(badge = {
         if (unreadCount > 0) {
@@ -77,6 +74,6 @@ internal fun UnreadNavigationIcon(
             )
         }
     }) {
-        DealerIcon(iconRes, tint, modifier = iconModifier)
+        icon()
     }
 }
