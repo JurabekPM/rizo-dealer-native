@@ -17,10 +17,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -32,20 +34,23 @@ import com.example.dealerappnative.model.PickerProduct
 import com.example.dealerappnative.model.VisitStore
 import com.example.dealerappnative.ui.theme.AgentDesign
 import com.example.dealerappnative.ui.theme.DealerDesign
+import com.example.dealerappnative.ui.theme.dealerColor
 
 private val cartShape = RoundedCornerShape(12.dp)
 private val controlShape = RoundedCornerShape(8.dp)
-private val cartText = DealerDesign.type(15, 20, FontWeight.Normal, -.24f)
-private val cartDetail = DealerDesign.type(13, 18, FontWeight.Normal, -.08f)
-private val cartButton = DealerDesign.type(15, 20, FontWeight.SemiBold)
+private val cartText = DealerDesign.type(16, 22, FontWeight.Normal, -.2f)
+private val cartProductName = DealerDesign.type(17, 23, FontWeight.Medium, -.2f)
+private val cartDetail = DealerDesign.type(14, 19, FontWeight.Normal, -.08f)
+private val cartButton = DealerDesign.type(16, 22, FontWeight.Medium)
 
 @Composable
 internal fun CartTotal(total: Long) {
     Column(Modifier.fillMaxWidth().background(DealerDesign.surface, cartShape)
         .padding(horizontal = 16.dp, vertical = 16.dp)) {
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             Text("Общая сумма", style = cartText, color = DealerDesign.secondary, modifier = Modifier.weight(1f))
-            Text(historyMoney(total), style = cartText, color = DealerDesign.text)
+            SlidingNumber(total, cartText, DealerDesign.text, groupThousands = true, suffix = " UZS")
         }
     }
 }
@@ -91,15 +96,16 @@ internal fun CartProductCard(
     onStep: (Int) -> Unit,
     onEditQuantity: () -> Unit,
     onRemove: () -> Unit,
+    modifier: Modifier = Modifier,
     onInfo: (() -> Unit)? = null
 ) {
-    Row(Modifier.fillMaxWidth().background(DealerDesign.surface, cartShape).padding(16.dp),
+    Row(modifier.fillMaxWidth().background(DealerDesign.surface, cartShape).padding(16.dp),
         verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-        RequestProductThumbnail(product)
+        RequestProductThumbnail(product, previewEnabled = true)
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.Top) {
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Text(product.name, style = cartText, color = DealerDesign.text)
+                    Text(product.name, style = cartProductName, color = DealerDesign.text)
                     Text(historyMoney(product.price) + "/шт", style = cartText, color = DealerDesign.text)
                 }
                 CartIconControl(R.drawable.ic_agent_clear, "Убрать: ${product.name}", Modifier.size(24.dp),
@@ -111,10 +117,10 @@ internal fun CartProductCard(
                     verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                     CartIconControl(R.drawable.ic_request_remove, "Уменьшить количество: ${product.name}",
                         Modifier.size(20.dp, 32.dp), onClick = { onStep(-1) })
-                    Box(Modifier.weight(1f).heightIn(min = 32.dp).softCardPress(onClick = onEditQuantity)
-                        .semantics { contentDescription = "Количество: ${product.name}, $quantity" },
+                    Box(Modifier.weight(1f).heightIn(min = 32.dp).softCardPress(onClick = onEditQuantity),
                         contentAlignment = Alignment.Center) {
-                        Text(quantity.toString(), style = cartText, color = DealerDesign.text, maxLines = 1)
+                        SlidingNumber(quantity.toLong(), cartText, DealerDesign.text,
+                            accessibleLabel = "Количество: ${product.name}, $quantity")
                     }
                     CartIconControl(R.drawable.ic_request_add, "Увеличить количество: ${product.name}",
                         Modifier.size(20.dp, 32.dp), enabled = quantity < product.stock, onClick = { onStep(1) })
@@ -140,21 +146,29 @@ private fun CartIconControl(
     onClick: () -> Unit
 ) {
     Box(modifier.softCardPress(enabled = enabled, onClick = onClick)
-        .semantics { role = Role.Button; contentDescription = label }, contentAlignment = Alignment.Center) {
+        .semantics { contentDescription = label }, contentAlignment = Alignment.Center) {
         DealerIcon(icon, if (enabled) tint else DealerDesign.tertiary, 20.dp)
     }
 }
 
 @Composable
-internal fun CartAddAction(onClick: () -> Unit) {
-    Box(Modifier.fillMaxWidth().background(DealerDesign.surface, cartShape).padding(16.dp)) {
+internal fun CartAddAction(modifier: Modifier = Modifier, onClick: () -> Unit) {
+    Box(modifier.fillMaxWidth().background(DealerDesign.surface, cartShape).padding(16.dp)) {
         CartButton("Добавить", AgentDesign.tint, DealerDesign.accent, true, onClick)
     }
 }
 
 @Composable
 internal fun CartFooter(label: String, enabled: Boolean, onClick: () -> Unit) {
-    Box(Modifier.fillMaxWidth().background(DealerDesign.surface, RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
+    val shadow = dealerColor(Color.Black.copy(alpha = .11f), Color.Black.copy(alpha = .38f))
+    Box(Modifier.fillMaxWidth().drawBehind {
+        val depth = 10.dp.toPx()
+        drawRect(
+            brush = Brush.verticalGradient(listOf(Color.Transparent, shadow), startY = -depth, endY = 0f),
+            topLeft = Offset(0f, -depth),
+            size = Size(size.width, depth)
+        )
+    }.background(DealerDesign.surface, RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
         .padding(16.dp)) {
         CartButton(label, if (enabled) DealerDesign.accent else DealerDesign.background,
             if (enabled) DealerDesign.onAccent else DealerDesign.secondary, enabled, onClick)
@@ -164,7 +178,7 @@ internal fun CartFooter(label: String, enabled: Boolean, onClick: () -> Unit) {
 @Composable
 private fun CartButton(label: String, background: Color, textColor: Color, enabled: Boolean, onClick: () -> Unit) {
     Box(Modifier.fillMaxWidth().heightIn(min = 48.dp).softCardPress(enabled = enabled, onClick = onClick)
-        .semantics { role = Role.Button }.background(background, cartShape).padding(horizontal = 12.dp), contentAlignment = Alignment.Center) {
+        .background(background, cartShape).padding(horizontal = 12.dp), contentAlignment = Alignment.Center) {
         Text(label, style = cartButton, color = textColor)
     }
 }

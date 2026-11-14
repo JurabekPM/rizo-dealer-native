@@ -11,7 +11,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.style.TextOverflow
@@ -31,7 +30,6 @@ internal fun ReturnProductPickerScreen(initial: List<Int>, orderDate: String, on
     val selectedCount = quantities.count { it > 0 }
     val total = remember(quantities) { returnPickerTotal(quantities) }
     val listState = rememberLazyListState()
-    val focus = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
     val keyboard = LocalSoftwareKeyboardController.current
     val indexes = remember(query) {
@@ -42,7 +40,7 @@ internal fun ReturnProductPickerScreen(initial: List<Int>, orderDate: String, on
     val back: () -> Unit = { keyboard?.hide(); onBack() }
     BackHandler(onBack = back)
     Column(Modifier.fillMaxSize().background(DealerDesign.surface).imePadding()) {
-        ProductPickerHeader(query, { query = it }, focus, back)
+        ProductPickerHeader(query, { query = it }, back)
         LazyColumn(Modifier.weight(1f), state = listState) {
             items(indexes, key = { returnCatalog[it].barcode }, contentType = { "return-product" }) { index ->
                 val product = returnCatalog[index]
@@ -62,7 +60,6 @@ internal fun ReturnProductPickerScreen(initial: List<Int>, orderDate: String, on
         // Unlike a new request, confirming an empty return draft can clear previously selected items.
         ProductPickerFooter(selectedCount, total, "Подтвердить", enabled = true) { keyboard?.hide(); onConfirm(quantities) }
     }
-    LaunchedEffect(Unit) { focus.requestFocus(); keyboard?.show() }
     quantityIndex?.let { index -> RequestQuantitySheet(returnCatalog[index], quantities[index],
         onDismiss = { quantityIndex = null; focusManager.clearFocus(); keyboard?.hide() }, maxDigits = 2,
         stockLabel = "Можно вернуть", onConfirm = {

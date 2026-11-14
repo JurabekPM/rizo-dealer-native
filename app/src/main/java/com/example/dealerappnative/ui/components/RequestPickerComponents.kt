@@ -13,8 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.buildAnnotatedString
@@ -29,11 +27,11 @@ import com.example.dealerappnative.ui.theme.RequestPickerDesign as Design
 
 /** Clear stays inside the input, so typing never changes its width. */
 @Composable
-internal fun RequestPickerSearch(query: String, onQuery: (String) -> Unit, focus: FocusRequester) {
+internal fun RequestPickerSearch(query: String, onQuery: (String) -> Unit) {
     BasicTextField(query, onQuery, singleLine = true, textStyle = Design.body.copy(color = DealerDesign.text),
         cursorBrush = SolidColor(DealerDesign.accent),
         keyboardOptions = KeyboardOptions(autoCorrectEnabled = false),
-        modifier = Modifier.fillMaxWidth().height(40.dp).focusRequester(focus)
+        modifier = Modifier.fillMaxWidth().height(40.dp)
             .semantics { contentDescription = "Поиск товаров" },
         decorationBox = { input ->
             Row(Modifier.fillMaxSize().clip(RoundedCornerShape(12.dp)).background(DealerDesign.background)
@@ -62,7 +60,7 @@ internal fun RequestPickerProduct(product: PickerProduct, quantity: Int,
         .softCardPress(enabled = product.stock > 0 && quantity == 0) { onStep(1) }
         .padding(horizontal = 16.dp, vertical = 12.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            RequestProductThumbnail(product, selected = quantity > 0)
+            RequestProductThumbnail(product, selected = quantity > 0, previewEnabled = true)
             Spacer(Modifier.width(12.dp))
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(product.name, style = Design.productTitle, color = DealerDesign.text,

@@ -23,15 +23,20 @@ internal fun ChildScreenHeader(
     title: String,
     onBack: () -> Unit,
     height: Dp = 56.dp,
-    showFilter: Boolean = false
+    showFilter: Boolean = false,
+    mapBack: Boolean = false
 ) {
     Box(Modifier.fillMaxWidth().height(height).background(DealerDesign.surface), contentAlignment = Alignment.Center) {
         Text(title, style = DealerDesign.title, maxLines = 1, overflow = TextOverflow.Ellipsis,
             modifier = Modifier.padding(horizontal = 56.dp))
-        SoftIconButton(onClick = onBack,
-            modifier = Modifier.align(Alignment.CenterStart).padding(start = 4.dp).size(48.dp)
-                .semantics { contentDescription = "Назад" }) {
-            DealerIcon(R.drawable.ic_arrow_back, DealerDesign.text)
+        if (mapBack) {
+            MapBackButton(onBack, Modifier.align(Alignment.CenterStart).padding(start = 12.dp))
+        } else {
+            SoftIconButton(onClick = onBack,
+                modifier = Modifier.align(Alignment.CenterStart).padding(start = 4.dp).size(48.dp)
+                    .semantics { contentDescription = "Назад" }) {
+                DealerIcon(R.drawable.ic_arrow_back, DealerDesign.text)
+            }
         }
         if (showFilter) {
             // Filter is visual-only until its options are designed.

@@ -1,17 +1,10 @@
 package com.example.dealerappnative.ui.components
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -61,20 +54,10 @@ internal fun RequestPickerCounter(product: PickerProduct, quantity: Int,
                     contentAlignment = Alignment.Center) {
                     DealerIcon(R.drawable.ic_request_remove, DealerDesign.accent, size = 22.dp)
                 }
-                Box(Modifier.size(40.dp).clipToBounds().softCardPress(enabled = expanded, onClick = onEditQuantity)
-                    .semantics { contentDescription = "Ввести количество: ${product.name}, $quantity" },
+                Box(Modifier.size(40.dp).clipToBounds().softCardPress(enabled = expanded, onClick = onEditQuantity),
                     contentAlignment = Alignment.Center) {
-                    // No size transform: a wrapped stack stays truly centered in its fixed slot.
-                    AnimatedContent(targetState = quantity, modifier = Modifier.clearAndSetSemantics { },
-                        contentAlignment = Alignment.Center, label = "picker-quantity",
-                        transitionSpec = {
-                            val direction = if (targetState > initialState) 1 else -1
-                            ((slideInVertically(tween(320, easing = FastOutSlowInEasing)) { it * direction } + fadeIn(tween(220)))
-                                togetherWith (slideOutVertically(tween(320, easing = FastOutSlowInEasing)) { -it * direction } + fadeOut(tween(220))))
-                                .using(null)
-                        }) { count ->
-                        Text("$count", style = Design.quantity, color = DealerDesign.accent, maxLines = 1)
-                    }
+                    SlidingNumber(quantity.toLong(), Design.quantity, DealerDesign.accent,
+                        accessibleLabel = "Ввести количество: ${product.name}, $quantity")
                 }
             }
         }

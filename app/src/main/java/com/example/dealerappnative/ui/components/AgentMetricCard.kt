@@ -42,7 +42,7 @@ internal fun AgentMetricCard(metric: AgentHomeMetric, modifier: Modifier = Modif
             Spacer(Modifier.height(6.dp))
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 AgentProgress(progress, Modifier.weight(1f), height = 4.dp)
-                Text("${(progress * 100).toInt()}%", style = AgentDesign.detail, color = AgentDesign.text)
+                SlidingNumber((progress * 100).toLong(), AgentDesign.detail, AgentDesign.text, suffix = "%")
             }
         }
         metric.detail?.let { detail ->
@@ -65,7 +65,7 @@ private fun MonthlyPlanSummary(progress: StatisticsPlanProgress) {
         Text("План · ${StatisticsDates.monthName(progress.monthStart)}",
             style = AgentDesign.detail, color = AgentDesign.secondary,
             modifier = Modifier.weight(1f), maxLines = 2, overflow = TextOverflow.Ellipsis)
-        Text("${progress.percent}%", style = AgentDesign.planPercent, color = AgentDesign.accent)
+        SlidingNumber(progress.percent.toLong(), AgentDesign.planPercent, AgentDesign.accent, suffix = "%")
     }
     Spacer(Modifier.height(4.dp))
     AgentProgress(progress.fraction, height = 4.dp)

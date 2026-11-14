@@ -84,7 +84,7 @@ internal fun VisitReturnScreen(visit: VisitStore, session: AgentVisitSession? = 
             } }
             if (allowCreate) {
                 if (selected.isEmpty()) item(key = "empty") {
-                    Column(Modifier.fillMaxWidth().padding(vertical = 28.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                    Column(Modifier.animateItem().fillMaxWidth().padding(vertical = 28.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                         Box(Modifier.size(96.dp).background(DealerDesign.accent.copy(alpha = .06f), RoundedCornerShape(24.dp)),
                             contentAlignment = Alignment.Center) { DealerIcon(R.drawable.ic_box, DealerDesign.accent, 48.dp) }
                         Spacer(Modifier.height(16.dp))
@@ -94,11 +94,12 @@ internal fun VisitReturnScreen(visit: VisitStore, session: AgentVisitSession? = 
                 items(selected, key = { returnCatalog[it].id }, contentType = { "cart-product" }) { index ->
                     CartProductCard(returnCatalog[index], currentQuantities[index],
                         onStep = { step -> quantities = stepReturnPickerQuantity(quantities, index, step) },
+                        modifier = Modifier.animateItem(),
                         onEditQuantity = { quantityIndex = index },
                         onRemove = { quantities = normalizeReturnQuantities(quantities).toMutableList().apply { this[index] = 0 } },
                         onInfo = { infoIndex = index })
                 }
-                item(key = "add") { CartAddAction { pickerVisible = true } }
+                item(key = "add") { CartAddAction(Modifier.animateItem()) { pickerVisible = true } }
             }
         }
         if (allowCreate) {

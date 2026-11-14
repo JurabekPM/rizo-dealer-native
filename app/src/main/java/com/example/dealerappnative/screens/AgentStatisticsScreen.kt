@@ -53,6 +53,7 @@ import androidx.compose.runtime.mutableStateOf
 import com.example.dealerappnative.ui.components.AgentMetricCard
 import com.example.dealerappnative.ui.components.AgentProgress
 import com.example.dealerappnative.ui.components.DealerIcon
+import com.example.dealerappnative.ui.components.SlidingNumber
 import com.example.dealerappnative.ui.theme.AgentDesign
 import com.example.dealerappnative.ui.theme.DealerPrototypeTheme
 import java.text.SimpleDateFormat
@@ -148,7 +149,7 @@ private fun AgentVisitsSummary(data: AgentStatisticsSnapshot) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.Bottom) {
             Text("${data.completedVisits} / ${data.plannedVisits}", style = AgentDesign.heroValue,
                 color = AgentDesign.text, modifier = Modifier.weight(1f))
-            Text("${(progress * 100).toInt()}%", style = AgentDesign.percent, color = AgentDesign.text)
+            SlidingNumber((progress * 100).toLong(), AgentDesign.percent, AgentDesign.text, suffix = "%")
         }
         Spacer(Modifier.height(10.4.dp))
         AgentProgress(progress)

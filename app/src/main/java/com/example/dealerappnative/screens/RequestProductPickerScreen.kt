@@ -10,7 +10,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
@@ -28,14 +27,13 @@ internal fun RequestProductPickerScreen(initial: List<Int>, onBack: () -> Unit, 
     val selectedCount = quantities.count { it > 0 }
     val total = remember(quantities) { requestPickerTotal(quantities) }
     val listState = rememberLazyListState()
-    val focus = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
     val keyboard = LocalSoftwareKeyboardController.current
     val indexes = remember(query, quantities) { requestPickerIndexes(quantities, query) }
     val back: () -> Unit = { keyboard?.hide(); onBack() }
     BackHandler(onBack = back)
     Column(Modifier.fillMaxSize().background(DealerDesign.surface).imePadding()) {
-        ProductPickerHeader(query, { query = it }, focus, back)
+        ProductPickerHeader(query, { query = it }, back)
         LazyColumn(Modifier.weight(1f), state = listState) {
             items(indexes, key = { requestCatalog[it].id }, contentType = { "request-product" }) { index ->
                 RequestPickerProduct(requestCatalog[index], quantities[index], onStep = { step ->
@@ -49,7 +47,6 @@ internal fun RequestProductPickerScreen(initial: List<Int>, onBack: () -> Unit, 
             keyboard?.hide(); onConfirm(quantities)
         }
     }
-    LaunchedEffect(Unit) { focus.requestFocus(); keyboard?.show() }
     quantityIndex?.let { index -> RequestQuantitySheet(requestCatalog[index], quantities[index],
         onDismiss = { quantityIndex = null; focusManager.clearFocus(); keyboard?.hide() }, onConfirm = {
             draft = normalizeRequestQuantities(draft).toMutableList().apply { this[index] = it }

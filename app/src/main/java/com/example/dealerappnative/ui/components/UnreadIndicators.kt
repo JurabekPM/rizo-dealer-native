@@ -55,13 +55,9 @@ internal fun UnreadBadge(count: Int, modifier: Modifier = Modifier, compact: Boo
         containerColor = DealerDesign.accent,
         contentColor = DealerDesign.onAccent
     ) {
-        Text(
-            text = if (count > 99) "99+" else count.toString(),
-            style = if (compact) DealerDesign.type(9, 11, tracking = 0f)
-                else DealerDesign.type(10, 12, tracking = 0f),
-            maxLines = 1,
-            softWrap = false
-        )
+        SlidingNumber(count.coerceAtMost(99).toLong(),
+            style = if (compact) DealerDesign.type(9, 11, tracking = 0f) else DealerDesign.type(10, 12, tracking = 0f),
+            color = DealerDesign.onAccent, suffix = if (count > 99) "+" else "")
     }
 }
 

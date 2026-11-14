@@ -472,3 +472,9 @@ Admin va Agent kartalarining radiusi 2 dp oshirildi. Asosiy radius 14 dp, soya b
 
 - Figma `Returns → Products (20091:267592)` bo‘yicha qaytarish va Agent zayavkasi savatlarida 16 dp inset, 52 dp jami qatori, 48 dp rasm, 112 × 32 dp miqdor boshqaruvi, 15/20 Regular mahsulot matni, 48 dp tugmalar ishlatiladi.
 - Bir xil CartProductCard turli kataloglarning limitlarini o‘zidan oladi. Har bir savat o‘z draftini, yakunlash shartlarini va hujjat saqlash oqimini ishlatadi. Qaytarish sababi pastki tasdiqlash oynasida.
+
+## 35. Savat va tanlash animatsiyalari
+
+- Savat tugmasi ustida yengil gradient soya, savatda 17/23 Medium nom va 16/22 matnlar. Mahsulot va vizit fotosi ro‘yxatdan chiqayotganda fade ishlaydi, qolgan elementlar bo‘shagan joyga siljiydi. Draft miqdori darhol yangilanadi.
+- Savat va ikkala picker miqdori hamda jami sonlari har o‘nlik xonasiga alohida animatsiya beradi. Mahsulot rasmi mavjud bo‘lsa kattalashtirilgan dialogda ochiladi. Picker qidiruvi kirishda fokus so‘ramaydi.
+- Do‘kon va profil xaritasidagi orqaga tugmasi chap tepada, yumaloq fon bilan. Xarita tahriri ichida u avval tahrirni bekor qiladi.

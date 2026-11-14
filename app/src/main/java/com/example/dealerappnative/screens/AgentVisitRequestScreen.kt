@@ -89,7 +89,7 @@ internal fun AgentVisitRequestScreen(visit: VisitStore, sessions: AgentVisitSess
             LazyColumn(Modifier.weight(1f), state = listState, contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 if (selected.isEmpty()) item(key = "empty") {
-                    HistorySurface(verticalPadding = 24.dp) {
+                    HistorySurface(Modifier.animateItem(), verticalPadding = 24.dp) {
                         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
                             Image(painterResource(R.drawable.request_empty), null, modifier = Modifier.size(220.dp))
                             Spacer(Modifier.height(4.dp))
@@ -103,10 +103,11 @@ internal fun AgentVisitRequestScreen(visit: VisitStore, sessions: AgentVisitSess
                     items(selected, key = { requestCatalog[it].id }, contentType = { "cart-product" }) { index ->
                         CartProductCard(requestCatalog[index], current[index],
                             onStep = { step -> quantities = stepRequestPickerQuantity(quantities, index, step) },
+                            modifier = Modifier.animateItem(),
                             onEditQuantity = { quantityIndex = index },
                             onRemove = { quantities = normalizeRequestQuantities(quantities).toMutableList().apply { this[index] = 0 } })
                     }
-                    item(key = "add") { CartAddAction { pickerVisible = true } }
+                    item(key = "add") { CartAddAction(Modifier.animateItem()) { pickerVisible = true } }
                 }
             }
             CartFooter("Завершить", lines.isNotEmpty()) { confirmVisible = true }

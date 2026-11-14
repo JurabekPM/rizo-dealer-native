@@ -120,7 +120,7 @@ internal fun AgentVisitNotes(session: AgentVisitSession, onComment: (String) -> 
                     VisitPhotoAdder(session, onAddPhotos)
                 }
                 items(session.photoUris, key = { it }) { uri ->
-                    VisitPhoto(uri, session.isActive, onRemove = { onRemovePhoto(uri) })
+                    VisitPhoto(uri, session.isActive, modifier = Modifier.animateItem(), onRemove = { onRemovePhoto(uri) })
                 }
                 if (!session.isActive && session.photoUris.isEmpty()) item {
                     Text("Фото не добавлены", style = AgentVisitDesign.detail, color = DealerDesign.secondary)
@@ -138,7 +138,7 @@ internal fun AgentVisitNotes(session: AgentVisitSession, onComment: (String) -> 
 }
 
 @Composable
-private fun VisitPhoto(uri: String, removable: Boolean, onRemove: () -> Unit) {
+private fun VisitPhoto(uri: String, removable: Boolean, modifier: Modifier, onRemove: () -> Unit) {
     val context = LocalContext.current
     val resolver = context.contentResolver
     val bitmap by produceState<ImageBitmap?>(null, uri) {
@@ -159,7 +159,7 @@ private fun VisitPhoto(uri: String, removable: Boolean, onRemove: () -> Unit) {
             }.getOrNull()
         }
     }
-    Box(Modifier.size(96.dp).clip(RoundedCornerShape(12.dp)).background(DealerDesign.background)) {
+    Box(modifier.size(96.dp).clip(RoundedCornerShape(12.dp)).background(DealerDesign.background)) {
         bitmap?.let { Image(it, "Фото визита", Modifier.fillMaxSize(), contentScale = ContentScale.Crop) }
             ?: Text("Фото недоступно", style = AgentVisitDesign.detail, color = DealerDesign.secondary,
                 modifier = Modifier.align(Alignment.Center).padding(8.dp))

@@ -40,7 +40,7 @@ internal fun DealerProfileLocationScreen(profile: DealerProfile, onBack: () -> U
     }
     BackHandler(onBack = onBack)
     Column(Modifier.fillMaxSize().background(DealerDesign.surface).imePadding()) {
-        ChildScreenHeader("Адрес на карте", onBack)
+        ChildScreenHeader("Адрес на карте", onBack, mapBack = true)
         Box(Modifier.weight(1f).fillMaxWidth()) {
             StoreMapView(initialLocation, editing = true,
                 recenterRequest = 0, route = null, cameraTarget = null, cameraRequest = 0,

@@ -29,10 +29,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material3.Surface
 import com.example.dealerappnative.ui.components.StoreMapInfoSheet
 import com.example.dealerappnative.ui.components.DraggableMapSheet
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -60,6 +58,7 @@ import com.example.dealerappnative.model.StoreLocation
 import com.example.dealerappnative.model.StoreUiModel
 import com.example.dealerappnative.ui.components.DealerIcon
 import com.example.dealerappnative.ui.components.StoreMapView
+import com.example.dealerappnative.ui.components.MapBackButton
 import com.example.dealerappnative.ui.components.StoreMapMarker
 import com.example.dealerappnative.ui.theme.DealerDesign
 
@@ -242,12 +241,14 @@ internal fun StoreMapScreen(
             if (tilesAvailable == false) {
                 Text("Карта недоступна. Проверьте интернет", style = DealerDesign.detail,
                     modifier = Modifier.align(Alignment.TopCenter).padding(top = 16.dp,
-                        start = 16.dp, end = 56.dp).clip(RoundedCornerShape(12.dp))
+                        start = 64.dp, end = 16.dp).clip(RoundedCornerShape(12.dp))
                         .background(DealerDesign.surface).padding(12.dp))
             }
-            MapIconButton("Назад", R.drawable.ic_arrow_back,
-                onClick = { if (editing) cancelEdit() else onBack() },
-                modifier = Modifier.align(Alignment.BottomStart).then(controlsOffset).padding(start = 12.dp, bottom = 24.dp))
+            MapBackButton(
+                onBack = { if (editing) cancelEdit() else onBack() },
+                modifier = Modifier.align(Alignment.TopStart).padding(12.dp),
+                onMap = true
+            )
             androidx.compose.animation.AnimatedVisibility(visible = editing,
                 enter = fadeIn(tween(220)) + scaleIn(tween(220), initialScale = .7f),
                 exit = fadeOut(tween(160)) + scaleOut(tween(160), targetScale = .7f),
@@ -264,7 +265,7 @@ internal fun StoreMapScreen(
             if (editing && (locating || gpsMessage != null)) {
                 Text(if (locating) "Определяем местоположение…" else gpsMessage.orEmpty(),
                     style = DealerDesign.detail,
-                    modifier = Modifier.align(Alignment.TopCenter).padding(16.dp)
+                    modifier = Modifier.align(Alignment.TopCenter).padding(start = 64.dp, top = 16.dp, end = 16.dp)
                         .clip(RoundedCornerShape(12.dp)).background(DealerDesign.surface).padding(12.dp))
             }
         }
