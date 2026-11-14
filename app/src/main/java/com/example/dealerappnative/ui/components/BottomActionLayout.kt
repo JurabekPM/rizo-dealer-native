@@ -27,12 +27,11 @@ internal fun BottomActionPanel(
     spacing: Dp = 0.dp,
     content: @Composable ColumnScope.() -> Unit
 ) {
-    val background = DealerDesign.surface.copy(alpha = .92f)
     val shadow = dealerColor(Color.Black.copy(alpha = .10f), Color.Black.copy(alpha = .28f))
     Column(
         Modifier.fillMaxWidth()
             .dropShadow(actionPanelShape, Shadow(radius = 12.dp, color = shadow, offset = DpOffset(0.dp, (-2).dp)))
-            .background(background, actionPanelShape)
+            .background(DealerDesign.surface, actionPanelShape)
             .padding(DealerDesign.pageInset),
         verticalArrangement = Arrangement.spacedBy(spacing),
         content = content

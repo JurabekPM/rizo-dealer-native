@@ -489,5 +489,5 @@ Admin va Agent kartalarining radiusi 2 dp oshirildi. Asosiy radius 14 dp, soya b
 
 ## 37. Pastki tugma panellari
 
-- Admin va Agentning ekran pastidagi tugma panellari bir xil 20 dp yuqori burchaklar, yarim shaffof tema foni va tarqoq soyadan foydalanadi. Ro‘yxat panel orqasidan ko‘rinadi va oxirgi element tugma tepasigacha scroll bo‘ladi.
+- Admin va Agentning ekran pastidagi tugma panellari bir xil 20 dp yuqori burchaklar, to‘liq yopiq tema foni va tarqoq soyadan foydalanadi. Ro‘yxat yumaloq burchaklarning tashqarisida ko‘rinadi va oxirgi element tugma tepasigacha scroll bo‘ladi.
 - BottomActionLayout panelni o‘lchab, ro‘yxatga uning haqiqiy balandligini uzatadi. Panel balandligi tugmalar, jami yoki xato yozuvi o‘lchamiga moslashadi.
