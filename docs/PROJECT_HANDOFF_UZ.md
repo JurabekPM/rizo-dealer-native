@@ -491,3 +491,9 @@ Admin va Agent kartalarining radiusi 2 dp oshirildi. Asosiy radius 14 dp, soya b
 
 - Admin va Agentning ekran pastidagi tugma panellari bir xil 20 dp yuqori burchaklar, to‘liq yopiq tema foni va tarqoq soyadan foydalanadi. Ro‘yxat yumaloq burchaklarning tashqarisida ko‘rinadi va oxirgi element tugma tepasigacha scroll bo‘ladi.
 - BottomActionLayout panelni o‘lchab, ro‘yxatga uning haqiqiy balandligini uzatadi. Panel balandligi tugmalar, jami yoki xato yozuvi o‘lchamiga moslashadi.
+
+
+## 38. O‘zaro hisob-kitob jami kartalari
+
+- «Заказы», «Оплачено» va «Возвраты» kartalari joy yetganda bitta qatorda chiqadi. Uzun summa, tor ekran yoki katta shrift sabab joy yetmasa kartalar to‘liq kenglikda joylashadi va summalar valyutasi bilan o‘qiladi.
+- Kartada noldan farqli summa bo‘lsa, shu kartadagi nol valyutalar ko‘rsatilmaydi. Ikkala valyutada haqiqiy summa bo‘lsa, ikkalasi ham alohida chiqadi. Jami hisobi sana va valyuta filtrlariga bog‘liq.
