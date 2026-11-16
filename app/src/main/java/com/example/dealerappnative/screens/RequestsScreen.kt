@@ -21,7 +21,8 @@ internal fun RequestsScreen(unreadIds: Set<String>, onRead: (String) -> Unit) {
         unreadIds = unreadIds,
         onRead = onRead,
         historyOrders = requestHistory,
-        emptyMessage = "Заявки не найдены"
+        emptyMessage = "Заявки не найдены",
+        documentTitle = "Заявка"
     ) {
         Column(Modifier.fillMaxWidth().cardShadow().background(DealerDesign.surface)) {
             MenuRow("Ревизия", R.drawable.ic_edit, rowHeight = 48.dp)

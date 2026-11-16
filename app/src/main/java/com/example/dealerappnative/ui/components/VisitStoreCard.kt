@@ -26,11 +26,12 @@ import com.example.dealerappnative.ui.theme.displayColor
 internal fun VisitStoreCard(
     store: VisitStore,
     unread: Boolean = false,
+    selected: Boolean = false,
     onClick: () -> Unit
 ) {
     val debtLabel = store.debtDirection.formatAmount(store.debt)
     Column(Modifier.fillMaxWidth().height(DealerDesign.cardHeight).softCardPress(onClick = onClick).cardShadow()
-        .unreadCardBackground(unread).padding(horizontal = 16.dp)) {
+        .unreadCardBackground(unread).dealerSelectedCard(selected).padding(horizontal = 16.dp)) {
         Row(Modifier.fillMaxWidth().height(72.dp), verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.sharedVisitStorePart(store.id, VisitStorePart.Logo)) {
                 DealerIcon(R.drawable.ic_store, DealerDesign.secondary, 24.dp)

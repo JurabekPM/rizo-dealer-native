@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import com.example.dealerappnative.R
 import com.example.dealerappnative.data.AgentStatisticsSampleData
 import com.example.dealerappnative.data.AgentStatisticsSnapshot
+import com.example.dealerappnative.navigation.LocalDealerWindowLayout
 import com.example.dealerappnative.model.StatisticsPeriod
 import com.example.dealerappnative.model.StatisticsDates
 import com.example.dealerappnative.model.StatisticsDateRange
@@ -72,6 +73,7 @@ internal fun AgentStatisticsScreen(onStoreDebtsClick: () -> Unit) {
     val range = remember(period, anchor, customStart, customEnd) {
         StatisticsDates.range(period, anchor, StatisticsDateRange(customStart, customEnd))
     }
+    val columns = if (LocalDealerWindowLayout.current.hasPanes) 3 else 2
     val data = remember(range, today) { AgentStatisticsSampleData.forRange(range, today) }
     Column(Modifier.fillMaxSize().background(DealerDesign.surface)) {
         AgentStatisticsHeader(updatedAt, onRefresh = { updatedAt = System.currentTimeMillis() })
@@ -86,7 +88,7 @@ internal fun AgentStatisticsScreen(onStoreDebtsClick: () -> Unit) {
                     modifier = Modifier.padding(vertical = 8.dp))
             }
             item(key = "visits") { AgentVisitsSummary(data) }
-            data.metrics.chunked(2).forEachIndexed { index, pair ->
+            data.metrics.chunked(columns).forEachIndexed { index, pair ->
                 item(key = "metrics-$index") {
                     Row(Modifier.fillMaxWidth().height(IntrinsicSize.Min),
                         horizontalArrangement = Arrangement.spacedBy(AgentDesign.gap)) {

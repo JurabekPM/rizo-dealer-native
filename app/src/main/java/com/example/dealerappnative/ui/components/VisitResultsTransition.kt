@@ -29,6 +29,8 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.layout.ContentScale
+import com.example.dealerappnative.R
+import com.example.dealerappnative.navigation.LocalDealerWindowLayout
 import com.example.dealerappnative.model.VisitResult
 
 internal enum class VisitStorePart { Logo, Name, Debt }
@@ -40,13 +42,16 @@ internal fun VisitResultsTransition(
     selectedId: String?, onSelect: (String) -> Unit,
     content: @Composable (String?, (String) -> Unit) -> Unit
 ) {
+    val split = LocalDealerWindowLayout.current.hasPanes
     var preparedId by remember { mutableStateOf(selectedId) }
     var opening by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     val latestContent by rememberUpdatedState(content)
     val latestSelection by rememberUpdatedState(onSelect)
     val openVisit: (String) -> Unit = { id ->
-        if (!opening && selectedId == null) {
+        if (split) {
+            if (selectedId != id) latestSelection(id)
+        } else if (!opening && selectedId == null) {
             opening = true
             preparedId = id
             scope.launch {
@@ -63,6 +68,17 @@ internal fun VisitResultsTransition(
     // Removing/reparenting the host leaves subsequent scroll remeasures in approach-only
     // mode: scroll offsets/bounds stop updating. Keep one measurement hierarchy alive.
     SharedTransitionLayout(Modifier.fillMaxSize()) {
+        if (split) {
+            // The list stays in the same lookahead host when the window is resized.
+            DealerListDetail(
+                hasSelection = selectedId != null,
+                emptyIcon = R.drawable.ic_visit_route,
+                emptyText = "Выберите визит",
+                list = { latestContent(null, latestOpen) },
+                detail = { latestContent(selectedId, latestOpen) }
+            )
+            return@SharedTransitionLayout
+        }
         val sharedScope = this
         val screenTransition = updateTransition(selectedId, label = "Visit navigation")
         LaunchedEffect(selectedId, opening) {

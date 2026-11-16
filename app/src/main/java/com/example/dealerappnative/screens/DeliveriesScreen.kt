@@ -19,7 +19,8 @@ internal fun DeliveriesScreen(unreadIds: Set<String>, onRead: (String) -> Unit) 
         unreadIds = unreadIds,
         onRead = onRead,
         historyOrders = deliveryHistory,
-        emptyMessage = "Доставки не найдены"
+        emptyMessage = "Доставки не найдены",
+        documentTitle = "Доставка"
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             ShortcutCard("Запросы на сотрудничество", R.drawable.ic_visit, "1 магазин", dealerColor(Color(0xFF529FDB), Color(0xFF91B8FF)))

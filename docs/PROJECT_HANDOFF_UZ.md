@@ -512,3 +512,10 @@ Admin va Agent kartalarining radiusi 2 dp oshirildi. Asosiy radius 14 dp, soya b
 - Admin va Agentda tanlangan tab binafsha ikonka va yorliq orqali ajraladi. Asl ikonkalarning shakli 320 ms davomida tanlangan holatga o‘tadi va 245 ms da odatiy shakliga qaytadi. Ranglar och va qora temaga mos.
 - Vizitda marshrut chizig‘i boshidan oxirigacha binafsha rangda chiziladi, uchlari navbat bilan to‘ladi. Zayavka plansheti to‘ladi, plyus aylanadi. Dostavka qutisi yengil ko‘tarilib buriladi, yuzlari navbat bilan to‘ladi va faol holatda to‘la qoladi. Do‘konning soyaboni siljiydi, statistika ustunlari va ramkasi o‘zgaradi. Inkassatsiya ikonkasining o‘zi tab tanlanganda 440 ms ichida gorizontal yo‘nalishda 360° aylanadi. Tarix mil va strelkasi alohida harakat qiladi, menyu chiziqlari yuqoridan pastga navbat bilan qisqarib yoyiladi.
 - Yorliq va ko‘rilmagan yozuvlar belgisi joyida turadi. Tab kontenti darhol almashadi. Animatsiya faol tab qayta bosilganda yoki tafsilotlardan shu tabga qaytilganda takrorlanmaydi.
+
+
+## 41. Telefon, planshet va bo‘lingan ekran — 2026-11-16
+
+- `DealerAdaptiveShell` mavjud oynaning kengligi va balandligiga qaraydi. 600 dp dan tor yoki 480 dp dan past oynada pastki menyu ishlaydi. Kattaroq oynada Admin va Agent chap menyuni ko‘rsatadi. Yotiq oynaning eni kamida 840 dp bo‘lsa, mos bo‘limlarda ro‘yxat va tafsilot yonma-yon chiqadi.
+- Vizitlar, do‘konlar, Admin ariza/dostavka/inkassatsiya va Agent tarixida `DealerListDetail` ishlatiladi. Vizitlar ikkala o‘lchamda bitta doimiy shared-transition host ichida qoladi. Tanlangan yozuv ID bo‘yicha saqlanadi. Panel bo‘sh bo‘lsa, yozuv tanlash so‘raladi.
+- Admin hujjat tafsilotlari mavjud prototip ma’lumotlarini o‘qish uchun. Agent statistikasi keng yotiq oynada uch ustunli. Tik planshet va alohida sahifalarda kontent eni chegaralanadi.

@@ -11,6 +11,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import com.example.dealerappnative.R
+import com.example.dealerappnative.ui.components.DealerListDetail
 import com.example.dealerappnative.data.StoreLocationPreferences
 import com.example.dealerappnative.data.findStore
 import com.example.dealerappnative.data.sampleStores
@@ -35,16 +37,25 @@ internal fun AgentStoresScreen(
     DisposableEffect(Unit) { onDispose { onDetailVisible(false) } }
     val closeDetail: () -> Unit = { selectedStoreId = null }
     BackHandler(enabled = store != null, onBack = closeDetail)
-    if (store != null) {
-        screenState.SaveableStateProvider("detail-${store.id}") {
-            AgentStoreDetailScreen(store, onBack = closeDetail)
+    DealerListDetail(
+        hasSelection = store != null,
+        emptyIcon = R.drawable.ic_store,
+        emptyText = "Выберите магазин",
+        list = {
+            screenState.SaveableStateProvider("stores") {
+                StoresScreen(locations, onBack = onBack, unreadIds = unreadIds, selectedId = selectedStoreId,
+                    onStoreClick = { id ->
+                        onRead(id)
+                        selectedStoreId = id
+                    })
+            }
+        },
+        detail = {
+            store?.let {
+                screenState.SaveableStateProvider("detail-${it.id}") {
+                    AgentStoreDetailScreen(it, onBack = closeDetail)
+                }
+            }
         }
-    } else {
-        screenState.SaveableStateProvider("stores") {
-            StoresScreen(locations, onBack = onBack, unreadIds = unreadIds, onStoreClick = { id ->
-                onRead(id)
-                selectedStoreId = id
-            })
-        }
-    }
+    )
 }

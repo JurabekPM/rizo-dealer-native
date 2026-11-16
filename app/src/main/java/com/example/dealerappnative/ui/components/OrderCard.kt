@@ -20,16 +20,16 @@ import com.example.dealerappnative.model.OrderUiModel
 import com.example.dealerappnative.ui.theme.DealerDesign
 
 @Composable
-internal fun OrderCard(order: OrderUiModel, onUnreadClick: (() -> Unit)?) {
+internal fun OrderCard(order: OrderUiModel, unread: Boolean, selected: Boolean, onClick: (() -> Unit)?) {
     val secondaryDetail = DealerDesign.detail.copy(fontWeight = FontWeight.Normal)
-    Column(Modifier.fillMaxWidth().height(DealerDesign.cardHeight).softCardPress(onClick = onUnreadClick)
-        .cardShadow().unreadCardBackground(onUnreadClick != null)
+    Column(Modifier.fillMaxWidth().height(DealerDesign.cardHeight).softCardPress(onClick = onClick)
+        .cardShadow().unreadCardBackground(unread).dealerSelectedCard(selected)
         .padding(horizontal = DealerDesign.pageInset)) {
         Row(Modifier.fillMaxWidth().height(72.dp), verticalAlignment = Alignment.CenterVertically) {
             DealerIcon(R.drawable.ic_store, DealerDesign.secondary, 24.dp)
             Spacer(Modifier.width(12.dp))
             Column(Modifier.weight(1f)) {
-                UnreadCardTitle(order.storeName, unread = onUnreadClick != null)
+                UnreadCardTitle(order.storeName, unread = unread)
                 Spacer(Modifier.height(4.dp))
                 Text(order.customerName, style = secondaryDetail, color = DealerDesign.secondary,
                     maxLines = 1, overflow = TextOverflow.Ellipsis)

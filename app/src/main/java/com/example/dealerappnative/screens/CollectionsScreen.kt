@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.HorizontalDivider
@@ -35,6 +36,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.dealerappnative.R
 import com.example.dealerappnative.model.DebtDirection
+import com.example.dealerappnative.navigation.LocalDealerWindowLayout
+import com.example.dealerappnative.ui.components.DealerDocumentDetails
+import com.example.dealerappnative.ui.components.DealerListDetail
+import com.example.dealerappnative.ui.components.dealerSelectedCard
 import com.example.dealerappnative.ui.components.ActiveHistoryTabs
 import com.example.dealerappnative.ui.components.DealerIcon
 import com.example.dealerappnative.ui.components.PrototypeCreateButton
@@ -48,87 +53,122 @@ import com.example.dealerappnative.ui.theme.DealerDesign
 @Composable
 internal fun CollectionsScreen(unreadIds: Set<String>, onRead: (String) -> Unit) {
     val pagerState = rememberPagerState(pageCount = { 2 })
+    val activeListState = rememberLazyListState()
+    val historyListState = rememberLazyListState()
     var query by rememberSaveable { mutableStateOf("") }
     val historySelected = pagerState.currentPage == 1
 
-    Column(Modifier.fillMaxSize().background(DealerDesign.background)) {
-        ScreenHeader(
-            title = "Инкассации",
-            showSortIcon = true,
-            actionIconRes = if (historySelected) R.drawable.ic_collection_filter else R.drawable.ic_sort
-        )
-        Column(
-            Modifier.background(DealerDesign.surface).padding(horizontal = DealerDesign.pageInset)
-                .padding(bottom = 16.dp)
-        ) {
-            ActiveHistoryTabs(
-                pagerState = pagerState,
-                activeCount = activeCollections.size
-            )
-            Spacer(Modifier.height(16.dp))
-            SearchField(value = query, onValueChange = { query = it })
-        }
-
-        // These two common cards stay in place when the pager changes pages.
-        Spacer(Modifier.height(8.dp))
-        ShortcutCard(
-            title = "Запросы на сотрудничество",
-            iconRes = R.drawable.ic_pending_actions,
-            detail = "1 магазин",
-            detailColor = dealerColor(Color(0xFF4094F7), Color(0xFF91B8FF))
-        )
-        Spacer(Modifier.height(8.dp))
-        ShortcutCard(title = "План инкассации", iconRes = R.drawable.ic_money)
-        Spacer(Modifier.height(8.dp))
-
-        BottomActionLayout(Modifier.weight(1f), actions = {
-            PrototypeCreateButton()
-        }) { actionHeight ->
-            HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
-                val entries = if (page == 0) activeCollections else collectionHistory
-                val search = query.trim()
-                val visibleEntries = entries.filter {
-                    it.storeName.contains(search, ignoreCase = true) || it.storeId.contains(search)
-                }
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(top = 8.dp, bottom = actionHeight + 8.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+    val layout = LocalDealerWindowLayout.current
+    var selectedId by rememberSaveable { mutableStateOf<String?>(null) }
+    val opened = activeCollections.find { it.collectionId == selectedId }
+        ?: collectionHistory.find { it.collectionId == selectedId }
+    DealerListDetail(
+        hasSelection = opened != null,
+        emptyIcon = R.drawable.ic_money,
+        emptyText = "Выберите инкассацию",
+        list = {
+            Column(Modifier.fillMaxSize().background(DealerDesign.background)) {
+                ScreenHeader(
+                    title = "Инкассации",
+                    showSortIcon = true,
+                    actionIconRes = if (historySelected) R.drawable.ic_collection_filter else R.drawable.ic_sort
+                )
+                Column(
+                    Modifier.background(DealerDesign.surface).padding(horizontal = DealerDesign.pageInset)
+                        .padding(bottom = 16.dp)
                 ) {
-                    items(visibleEntries, key = { it.collectionId }) { entry ->
-                        val onUnreadClick: (() -> Unit)? =
-                            if (entry.collectionId in unreadIds) ({ onRead(entry.collectionId) }) else null
-                        CollectionCard(entry, onUnreadClick)
-                    }
-                    if (visibleEntries.isEmpty()) {
-                        item {
-                            Text(
-                                text = "Инкассации не найдены",
-                                modifier = Modifier.fillMaxWidth().padding(vertical = 32.dp),
-                                style = DealerDesign.body,
-                                color = DealerDesign.secondary,
-                                textAlign = TextAlign.Center
-                            )
+                    ActiveHistoryTabs(
+                        pagerState = pagerState,
+                        activeCount = activeCollections.size
+                    )
+                    Spacer(Modifier.height(16.dp))
+                    SearchField(value = query, onValueChange = { query = it })
+                }
+
+                // These two common cards stay in place when the pager changes pages.
+                Spacer(Modifier.height(8.dp))
+                ShortcutCard(
+                    title = "Запросы на сотрудничество",
+                    iconRes = R.drawable.ic_pending_actions,
+                    detail = "1 магазин",
+                    detailColor = dealerColor(Color(0xFF4094F7), Color(0xFF91B8FF))
+                )
+                Spacer(Modifier.height(8.dp))
+                ShortcutCard(title = "План инкассации", iconRes = R.drawable.ic_money)
+                Spacer(Modifier.height(8.dp))
+
+                BottomActionLayout(Modifier.weight(1f), actions = {
+                    PrototypeCreateButton()
+                }) { actionHeight ->
+                    HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
+                        val entries = if (page == 0) activeCollections else collectionHistory
+                        val search = query.trim()
+                        val visibleEntries = entries.filter {
+                            it.storeName.contains(search, ignoreCase = true) || it.storeId.contains(search)
+                        }
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize(),
+                            state = if (page == 0) activeListState else historyListState,
+                            contentPadding = PaddingValues(top = 8.dp, bottom = actionHeight + 8.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            items(visibleEntries, key = { it.collectionId }) { entry ->
+                                val unread = entry.collectionId in unreadIds
+                                val openEntry: (() -> Unit)? = if (unread || layout.hasRail) ({
+                                    if (unread) onRead(entry.collectionId)
+                                    if (layout.hasRail) selectedId = entry.collectionId
+                                }) else null
+                                CollectionCard(entry, unread, layout.hasPanes && selectedId == entry.collectionId, openEntry)
+                            }
+                            if (visibleEntries.isEmpty()) {
+                                item {
+                                    Text(
+                                        text = "Инкассации не найдены",
+                                        modifier = Modifier.fillMaxWidth().padding(vertical = 32.dp),
+                                        style = DealerDesign.body,
+                                        color = DealerDesign.secondary,
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
+                            }
                         }
                     }
                 }
             }
+        },
+        detail = {
+            opened?.let { entry ->
+                DealerDocumentDetails(
+                    documentId = entry.collectionId,
+                    title = "Инкассация",
+                    fields = listOf(
+                        "Магазин" to entry.storeName,
+                        "ID магазина" to entry.storeId,
+                        "Адрес" to entry.address,
+                        "Статус" to entry.status.label,
+                        "Тип" to entry.kind,
+                        "Сальдо" to entry.debtDirection.formatAmount(entry.debtUsd),
+                        "Сумма инкассации" to entry.amount
+                    ),
+                    onBack = { selectedId = null }
+                )
+            }
         }
-    }
+    )
 }
 
 @Composable
-private fun CollectionCard(entry: CollectionEntry, onUnreadClick: (() -> Unit)?) {
+private fun CollectionCard(entry: CollectionEntry, unread: Boolean, selected: Boolean, onClick: (() -> Unit)?) {
     Column(
-        Modifier.fillMaxWidth().height(DealerDesign.cardHeight).softCardPress(onClick = onUnreadClick)
-            .cardShadow().unreadCardBackground(onUnreadClick != null)
+        Modifier.fillMaxWidth().height(DealerDesign.cardHeight).softCardPress(onClick = onClick)
+            .cardShadow().unreadCardBackground(unread).dealerSelectedCard(selected)
             .padding(horizontal = DealerDesign.pageInset)
     ) {
         Row(Modifier.fillMaxWidth().height(72.dp), verticalAlignment = Alignment.CenterVertically) {
             DealerIcon(R.drawable.ic_store)
             Spacer(Modifier.width(12.dp))
             Column(Modifier.weight(1f)) {
-                UnreadCardTitle(entry.storeName, onUnreadClick != null)
+                UnreadCardTitle(entry.storeName, unread)
                 Spacer(Modifier.height(4.dp))
                 Text(
                     text = entry.debtDirection.formatAmount(entry.debtUsd),

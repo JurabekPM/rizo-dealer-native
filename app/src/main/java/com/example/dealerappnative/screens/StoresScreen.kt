@@ -33,6 +33,8 @@ import com.example.dealerappnative.R
 import com.example.dealerappnative.data.sampleStores
 import com.example.dealerappnative.model.StoreUiModel
 import com.example.dealerappnative.model.StoreLocation
+import com.example.dealerappnative.navigation.LocalDealerWindowLayout
+import com.example.dealerappnative.ui.components.dealerSelectedCard
 import com.example.dealerappnative.ui.components.ChildScreenHeader
 import com.example.dealerappnative.ui.components.DealerIcon
 import com.example.dealerappnative.ui.components.PrototypeCreateButton
@@ -46,9 +48,11 @@ internal fun StoresScreen(
     locations: Map<String, StoreLocation>,
     onBack: () -> Unit,
     onStoreClick: (String) -> Unit,
-    unreadIds: Set<String> = emptySet()
+    unreadIds: Set<String> = emptySet(),
+    selectedId: String? = null
 ) {
     var query by rememberSaveable { mutableStateOf("") }
+    val split = LocalDealerWindowLayout.current.hasPanes
     val search = query.trim()
     val stores = sampleStores.map { store ->
         val point = locations[store.id]
@@ -73,7 +77,8 @@ internal fun StoresScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(stores, key = { it.id }) { store ->
-                    StoreCard(store, unread = store.id in unreadIds, onClick = { onStoreClick(store.id) })
+                    StoreCard(store, unread = store.id in unreadIds, selected = split && store.id == selectedId,
+                        onClick = { onStoreClick(store.id) })
                 }
                 if (stores.isEmpty()) {
                     item {
@@ -88,9 +93,9 @@ internal fun StoresScreen(
 }
 
 @Composable
-private fun StoreCard(store: StoreUiModel, unread: Boolean, onClick: () -> Unit) {
+private fun StoreCard(store: StoreUiModel, unread: Boolean, selected: Boolean, onClick: () -> Unit) {
     Column(Modifier.fillMaxWidth().height(DealerDesign.cardHeight)
-        .softCardPress(onClick = onClick).cardShadow().unreadCardBackground(unread)
+        .softCardPress(onClick = onClick).cardShadow().unreadCardBackground(unread).dealerSelectedCard(selected)
         .padding(horizontal = DealerDesign.pageInset)) {
         Row(Modifier.fillMaxWidth().height(72.dp), verticalAlignment = Alignment.CenterVertically) {
             DealerIcon(R.drawable.ic_store)

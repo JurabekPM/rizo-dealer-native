@@ -54,6 +54,8 @@ import com.example.dealerappnative.data.unplannedVisitCard
 import com.example.dealerappnative.model.UnplannedVisit
 import com.example.dealerappnative.model.UnplannedVisitKind
 import com.example.dealerappnative.model.VisitResult
+import com.example.dealerappnative.navigation.DealerTabletContent
+import com.example.dealerappnative.navigation.LocalDealerWindowLayout
 import com.example.dealerappnative.model.agentVisitStatus
 import com.example.dealerappnative.model.VisitStore
 import com.example.dealerappnative.ui.components.AgentUnplannedSheet
@@ -77,6 +79,7 @@ internal fun AgentVisitsScreen(
     onRead: (String) -> Unit,
     onDetailVisible: (Boolean) -> Unit
 ) {
+    val split = LocalDealerWindowLayout.current.hasPanes
     // Keep fixture ordering stable when a visit starts/finishes or a shared transition runs.
     val orderedIds = rememberSaveable {
         val active = agentVisitCards.firstOrNull { it.id in visitSessions.activeVisitIds }
@@ -124,6 +127,8 @@ internal fun AgentVisitsScreen(
     var query by rememberSaveable { mutableStateOf("") }
     var savedIndex by rememberSaveable { mutableIntStateOf(0) }
     var savedOffset by rememberSaveable { mutableIntStateOf(0) }
+    var restoreCompactScroll by rememberSaveable { mutableStateOf(false) }
+    LaunchedEffect(split) { if (split) restoreCompactScroll = false }
     val closeVisit: () -> Unit = {
         val id = selectedId
         id?.let { state.removeState("visit-detail-$it") }
@@ -132,7 +137,7 @@ internal fun AgentVisitsScreen(
             selectedId = null
         } else {
             if (id == pendingId && unplannedKind != null) listState.requestScrollToItem(0)
-            else listState.requestScrollToItem(savedIndex, savedOffset)
+            else if (!split && restoreCompactScroll) listState.requestScrollToItem(savedIndex, savedOffset)
             unplannedKind = null
             selectedId = null
             onDetailVisible(false)
@@ -145,18 +150,21 @@ internal fun AgentVisitsScreen(
     if (unplannedKind != null && selectedId == null) {
         val activeSourceIds = visitSessions.activeStoreIds
         state.SaveableStateProvider("unplanned-stores") {
-            AgentUnplannedVisitsScreen(activeSourceIds, onBack = {
-                unplannedKind = null; onDetailVisible(false); state.removeState("unplanned-stores")
-            }) { store ->
-                pendingId = "unplanned-${UUID.randomUUID()}"
-                pendingStoreId = store.id
-                pendingAt = System.currentTimeMillis()
-                selectedId = pendingId
+            DealerTabletContent {
+                AgentUnplannedVisitsScreen(activeSourceIds, onBack = {
+                    unplannedKind = null; onDetailVisible(false); state.removeState("unplanned-stores")
+                }) { store ->
+                    pendingId = "unplanned-${UUID.randomUUID()}"
+                    pendingStoreId = store.id
+                    pendingAt = System.currentTimeMillis()
+                    selectedId = pendingId
+                }
             }
         }
         return
     }
     VisitResultsTransition(selectedId, onSelect = {
+        restoreCompactScroll = !split
         savedIndex = listState.firstVisibleItemIndex
         savedOffset = listState.firstVisibleItemScrollOffset
         onRead(it)
@@ -175,14 +183,16 @@ internal fun AgentVisitsScreen(
                 } else null,
                 onStart = unplanned?.let { metadata -> ({ visitSessions.startUnplanned(metadata) }) })
         } else state.SaveableStateProvider("visits") {
-            VisitListViewport(active = selectedId == null) {
+            VisitListViewport(active = split || selectedId == null) {
                 AgentVisitsList(cards, onStoreClick = openVisit, query = query, onQueryChange = { query = it },
-                    listState = listState, unreadIds = unreadIds, onUnplanned = { choiceVisible = true })
+                    listState = listState, unreadIds = unreadIds, selectedId = selectedId.takeIf { split },
+                    onUnplanned = { choiceVisible = true })
             }
         }
     }
     if (choiceVisible) AgentUnplannedSheet(onDismiss = { choiceVisible = false }) {
         choiceVisible = false
+        selectedId = null
         unplannedKind = it
         state.removeState("unplanned-stores")
         onDetailVisible(true)
@@ -191,7 +201,8 @@ internal fun AgentVisitsScreen(
 
 @Composable
 private fun AgentVisitsList(cards: List<VisitStore>, onStoreClick: (String) -> Unit, query: String,
-    onQueryChange: (String) -> Unit, listState: LazyListState, unreadIds: Set<String>, onUnplanned: () -> Unit) {
+    onQueryChange: (String) -> Unit, listState: LazyListState, unreadIds: Set<String>,
+    selectedId: String?, onUnplanned: () -> Unit) {
     val search = query.trim()
     val stores = remember(search, cards) {
         cards.filter { it.name.contains(search, true) || it.id.contains(search) || it.address.contains(search, true) }
@@ -218,7 +229,7 @@ private fun AgentVisitsList(cards: List<VisitStore>, onStoreClick: (String) -> U
                     verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     item(key = "plans", contentType = "plans") { AgentVisitPlans() }
                     items(stores, key = { it.id }, contentType = { "visit" }) { store ->
-                        VisitStoreCard(store, unread = store.id in unreadIds,
+                        VisitStoreCard(store, unread = store.id in unreadIds, selected = store.id == selectedId,
                             onClick = { onStoreClick(store.id) })
                     }
                     if (stores.isEmpty()) item {

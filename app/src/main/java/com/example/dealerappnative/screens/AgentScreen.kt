@@ -10,6 +10,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import com.example.dealerappnative.navigation.DealerAdaptiveShell
+import com.example.dealerappnative.navigation.DealerNavigationRail
+import com.example.dealerappnative.navigation.DealerTabletContent
+import com.example.dealerappnative.navigation.LocalDealerWindowLayout
+import com.example.dealerappnative.ui.theme.AgentVisitDesign
 import androidx.compose.runtime.remember
 import com.example.dealerappnative.data.UnreadContent
 import com.example.dealerappnative.data.agentNotifications
@@ -62,56 +68,87 @@ internal fun AgentScreen(onBack: () -> Unit, onSettingsClick: () -> Unit = {}) {
             else -> onBack()
         }
     }
-    Column(Modifier.fillMaxSize().background(DealerDesign.surface).safeDrawingPadding()) {
-        if (notificationsVisible) {
-            NotificationsScreen(
-                notifications = agentNotifications,
-                unreadIds = unreadContent[AgentDestination.More],
-                onRead = { unreadContent.markRead(AgentDestination.More, it) },
-                onBack = { notificationsVisible = false }
-            )
-        } else if (storeDebtsVisible) {
-            AgentStoreDebtsScreen(onBack = { storeDebtsVisible = false }, unreadIds = unreadStores, onRead = onStoreRead)
-        } else if (storesVisible) {
-            AgentStoresScreen(
-                onBack = { storesVisible = false },
-                unreadIds = unreadStores,
-                onRead = onStoreRead
-            )
-        } else {
-            Box(Modifier.weight(1f)) {
-                screenState.SaveableStateProvider(destination.name) {
-                    when (destination) {
-                        AgentDestination.Visits -> AgentVisitsScreen(
-                            visitSessions, visitsListState,
-                            unreadIds = unreadContent[AgentDestination.Visits],
-                            onRead = { unreadContent.markRead(AgentDestination.Visits, it) },
-                            onDetailVisible = { tabDetailVisible = it }
+    val unreadCounts = AgentDestination.entries.associateWith { unreadContent[it].size }
+    val selectTab: (AgentDestination) -> Unit = {
+        if (destination != it) {
+            notificationsVisible = false
+            storesVisible = false
+            storeDebtsVisible = false
+            tabDetailVisible = false
+            destination = it
+        }
+    }
+    DealerAdaptiveShell(rail = {
+        DealerNavigationRail(
+            AgentDestination.entries, destination, unreadCounts,
+            title = { it.title }, icon = { it.iconRes }, onSelect = selectTab,
+            iconColor = AgentVisitDesign.tertiary, textStyle = AgentVisitDesign.navigation, enabled = { it.available }
+        )
+    }) {
+        val layout = LocalDealerWindowLayout.current
+        Column(Modifier.fillMaxSize().background(DealerDesign.surface).safeDrawingPadding()) {
+            val bodyWidth = when {
+                notificationsVisible || storeDebtsVisible -> 600.dp
+                !layout.hasPanes -> 600.dp
+                storesVisible -> 1200.dp
+                destination == AgentDestination.Statistics -> 880.dp
+                destination == AgentDestination.More -> 600.dp
+                else -> 1200.dp
+            }
+            if (notificationsVisible || storeDebtsVisible || storesVisible) {
+                DealerTabletContent(maxWidth = bodyWidth) {
+                    when {
+                        notificationsVisible -> NotificationsScreen(
+                            notifications = agentNotifications,
+                            unreadIds = unreadContent[AgentDestination.More],
+                            onRead = { unreadContent.markRead(AgentDestination.More, it) },
+                            onBack = { notificationsVisible = false }
                         )
-                        AgentDestination.Stores -> AgentStoresScreen(
-                            onBack = { destination = AgentDestination.Visits },
-                            unreadIds = unreadStores,
-                            onRead = onStoreRead,
-                            onDetailVisible = { tabDetailVisible = it }
+                        storeDebtsVisible -> AgentStoreDebtsScreen(
+                            onBack = { storeDebtsVisible = false }, unreadIds = unreadStores, onRead = onStoreRead
                         )
-                        AgentDestination.Statistics -> AgentStatisticsScreen(onStoreDebtsClick = { storeDebtsVisible = true })
-                        AgentDestination.History -> AgentHistoryScreen(visitSessions, onDetailVisible = { tabDetailVisible = it })
-                        AgentDestination.More -> AgentMenuScreen(
-                            onExit = onBack,
-                            onStoresClick = { storesVisible = true },
-                            unreadNotifications = unreadContent[AgentDestination.More].size,
-                            onNotificationsClick = { notificationsVisible = true },
-                            onSettingsClick = onSettingsClick
+                        else -> AgentStoresScreen(
+                            onBack = { storesVisible = false }, unreadIds = unreadStores, onRead = onStoreRead
                         )
                     }
                 }
-            }
-            if (!tabDetailVisible) {
-                AgentBottomBar(
-                    selected = destination,
-                    unreadCounts = AgentDestination.entries.associateWith { unreadContent[it].size },
-                    onSelect = { destination = it }
-                )
+            } else {
+                Box(Modifier.weight(1f)) {
+                    DealerTabletContent(maxWidth = bodyWidth) {
+                        screenState.SaveableStateProvider(destination.name) {
+                            when (destination) {
+                                AgentDestination.Visits -> AgentVisitsScreen(
+                                    visitSessions, visitsListState,
+                                    unreadIds = unreadContent[AgentDestination.Visits],
+                                    onRead = { unreadContent.markRead(AgentDestination.Visits, it) },
+                                    onDetailVisible = { tabDetailVisible = it }
+                                )
+                                AgentDestination.Stores -> AgentStoresScreen(
+                                    onBack = { destination = AgentDestination.Visits },
+                                    unreadIds = unreadStores,
+                                    onRead = onStoreRead,
+                                    onDetailVisible = { tabDetailVisible = it }
+                                )
+                                AgentDestination.Statistics -> AgentStatisticsScreen(onStoreDebtsClick = { storeDebtsVisible = true })
+                                AgentDestination.History -> AgentHistoryScreen(visitSessions, onDetailVisible = { tabDetailVisible = it })
+                                AgentDestination.More -> AgentMenuScreen(
+                                    onExit = onBack,
+                                    onStoresClick = { storesVisible = true },
+                                    unreadNotifications = unreadContent[AgentDestination.More].size,
+                                    onNotificationsClick = { notificationsVisible = true },
+                                    onSettingsClick = onSettingsClick
+                                )
+                            }
+                        }
+                    }
+                }
+                if (!layout.hasRail && !tabDetailVisible) {
+                    AgentBottomBar(
+                        selected = destination,
+                        unreadCounts = unreadCounts,
+                        onSelect = selectTab
+                    )
+                }
             }
         }
     }

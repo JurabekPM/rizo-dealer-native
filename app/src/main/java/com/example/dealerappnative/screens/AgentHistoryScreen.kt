@@ -57,45 +57,69 @@ internal fun AgentHistoryScreen(sessions: AgentVisitSessions, onDetailVisible: (
     val close: () -> Unit = { selectedId = null; onDetailVisible(false) }
     LaunchedEffect(selectedId, section) { onDetailVisible(selectedId != null || section != null) }
     DisposableEffect(Unit) { onDispose { onDetailVisible(false) } }
-    BackHandler(enabled = selectedId != null, onBack = close)
-    if (section != null) {
-        AgentHistorySectionScreen(section!!, entries, onBack = { section = null; onDetailVisible(false) })
-    } else if (selected != null) {
-        AgentHistoryVisitDetailScreen(selected, onBack = close)
-    } else Column(Modifier.fillMaxSize().background(DealerDesign.background)) {
-        Box(Modifier.fillMaxWidth().height(56.dp).background(DealerDesign.surface), contentAlignment = Alignment.Center) {
-            Text("История", style = AgentVisitDesign.screenTitle, color = DealerDesign.text)
-            SoftIconButton(onClick = { showFilter = true }, modifier = Modifier.align(Alignment.CenterEnd)
-                .padding(end = 4.dp).size(48.dp).semantics { contentDescription = "Фильтр истории" }) {
-                Box {
-                    DealerIcon(R.drawable.ic_collection_filter, DealerDesign.text)
-                    if (filter.active) Box(Modifier.align(Alignment.TopEnd).size(6.dp)
-                        .background(DealerDesign.accent, CircleShape))
+    BackHandler(enabled = selectedId != null || section != null) {
+        section = null
+        close()
+    }
+    DealerListDetail(
+        hasSelection = selected != null || section != null,
+        emptyIcon = R.drawable.ic_agent_history,
+        emptyText = "Выберите запись",
+        list = {
+            Column(Modifier.fillMaxSize().background(DealerDesign.background)) {
+                Box(Modifier.fillMaxWidth().height(56.dp).background(DealerDesign.surface), contentAlignment = Alignment.Center) {
+                    Text("История", style = AgentVisitDesign.screenTitle, color = DealerDesign.text)
+                    SoftIconButton(onClick = { showFilter = true }, modifier = Modifier.align(Alignment.CenterEnd)
+                        .padding(end = 4.dp).size(48.dp).semantics { contentDescription = "Фильтр истории" }) {
+                        Box {
+                            DealerIcon(R.drawable.ic_collection_filter, DealerDesign.text)
+                            if (filter.active) Box(Modifier.align(Alignment.TopEnd).size(6.dp)
+                                .background(DealerDesign.accent, CircleShape))
+                        }
+                    }
                 }
-            }
-        }
-        LazyColumn(Modifier.fillMaxSize(), state = listState,
-            contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            item(key = "plans", contentType = "plans") { HistoryPlans { section = it; onDetailVisible(true) } }
-            items(visible, key = { it.visit.id }, contentType = { "history" }) { entry ->
-                AgentHistoryCard(entry) { onDetailVisible(true); selectedId = entry.visit.id }
-            }
-            if (visible.isEmpty()) item(key = "empty") {
-                Column(Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 40.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    DealerIcon(R.drawable.ic_agent_history, size = 32.dp)
-                    Text(if (filter.active) "Визиты не найдены" else "Пока нет завершённых визитов",
-                        style = AgentVisitDesign.emphasis, color = DealerDesign.text)
-                    Text(if (filter.active) "Измените параметры фильтра" else "Завершённые визиты появятся здесь",
-                        style = AgentVisitDesign.detail, color = DealerDesign.secondary)
-                    if (filter.active) SoftTextButton(onClick = { filter = AgentHistoryFilter() }) {
-                        Text("Сбросить фильтр", style = AgentVisitDesign.button, color = DealerDesign.accent)
+                LazyColumn(Modifier.fillMaxSize(), state = listState,
+                    contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    item(key = "plans", contentType = "plans") { HistoryPlans {
+                            selectedId = null
+                            section = it
+                            onDetailVisible(true)
+                        } }
+                    items(visible, key = { it.visit.id }, contentType = { "history" }) { entry ->
+                        AgentHistoryCard(entry) {
+                            section = null
+                            onDetailVisible(true)
+                            selectedId = entry.visit.id
+                        }
+                    }
+                    if (visible.isEmpty()) item(key = "empty") {
+                        Column(Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 40.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            DealerIcon(R.drawable.ic_agent_history, size = 32.dp)
+                            Text(if (filter.active) "Визиты не найдены" else "Пока нет завершённых визитов",
+                                style = AgentVisitDesign.emphasis, color = DealerDesign.text)
+                            Text(if (filter.active) "Измените параметры фильтра" else "Завершённые визиты появятся здесь",
+                                style = AgentVisitDesign.detail, color = DealerDesign.secondary)
+                            if (filter.active) SoftTextButton(onClick = { filter = AgentHistoryFilter() }) {
+                                Text("Сбросить фильтр", style = AgentVisitDesign.button, color = DealerDesign.accent)
+                            }
+                        }
                     }
                 }
             }
+        },
+        detail = {
+            val openedSection = section
+            if (openedSection != null) {
+                key(openedSection) {
+                    AgentHistorySectionScreen(openedSection, entries, onBack = { section = null; onDetailVisible(false) })
+                }
+            } else if (selected != null) {
+                key(selected.visit.id) { AgentHistoryVisitDetailScreen(selected, onBack = close) }
+            }
         }
-    }
+    )
     if (showFilter) AgentHistoryFilterSheet(filter, filterStores, onDismiss = { showFilter = false }, onApply = {
         filter = it; showFilter = false; listState.requestScrollToItem(0)
     })
