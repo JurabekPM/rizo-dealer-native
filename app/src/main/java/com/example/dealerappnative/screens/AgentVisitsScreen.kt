@@ -1,6 +1,7 @@
 package com.example.dealerappnative.screens
 
 import com.example.dealerappnative.ui.components.BottomActionLayout
+import com.example.dealerappnative.ui.components.BottomActionPanel
 import com.example.dealerappnative.ui.components.cardShadow
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -60,6 +61,7 @@ import com.example.dealerappnative.model.agentVisitStatus
 import com.example.dealerappnative.model.VisitStore
 import com.example.dealerappnative.ui.components.AgentUnplannedSheet
 import com.example.dealerappnative.ui.components.AgentVisitAction
+import com.example.dealerappnative.ui.components.AgentVisitButton
 import com.example.dealerappnative.ui.components.DealerIcon
 import com.example.dealerappnative.ui.components.SearchField
 import com.example.dealerappnative.ui.components.VisitListViewport
@@ -203,6 +205,7 @@ internal fun AgentVisitsScreen(
 private fun AgentVisitsList(cards: List<VisitStore>, onStoreClick: (String) -> Unit, query: String,
     onQueryChange: (String) -> Unit, listState: LazyListState, unreadIds: Set<String>,
     selectedId: String?, onUnplanned: () -> Unit) {
+    val tablet = LocalDealerWindowLayout.current.hasRail
     val search = query.trim()
     val stores = remember(search, cards) {
         cards.filter { it.name.contains(search, true) || it.id.contains(search) || it.address.contains(search, true) }
@@ -210,7 +213,8 @@ private fun AgentVisitsList(cards: List<VisitStore>, onStoreClick: (String) -> U
     Column(Modifier.fillMaxSize().background(DealerDesign.background)) {
         Column(Modifier.fillMaxWidth().background(DealerDesign.surface)) {
             Box(Modifier.fillMaxWidth().height(56.dp), contentAlignment = Alignment.Center) {
-                Text("Визиты", style = AgentVisitDesign.title, color = DealerDesign.text)
+                Text("Визиты", style = AgentVisitDesign.title, color = DealerDesign.text,
+                    modifier = if (tablet) Modifier.align(Alignment.CenterStart).padding(start = 16.dp) else Modifier)
                 Row(Modifier.align(Alignment.CenterEnd).padding(end = 16.dp), verticalAlignment = Alignment.CenterVertically) {
                     Text("Сегодня", style = AgentVisitDesign.detail, color = DealerDesign.text)
                     Box(Modifier.rotate(90f)) { DealerIcon(R.drawable.ic_chevron, DealerDesign.secondary, 16.dp) }
@@ -222,11 +226,19 @@ private fun AgentVisitsList(cards: List<VisitStore>, onStoreClick: (String) -> U
             }
         }
         BottomActionLayout(Modifier.weight(1f), actions = {
-            AgentVisitAction("Внеплановые", onClick = onUnplanned)
+            if (tablet) {
+                BottomActionPanel {
+                    AgentVisitButton("Внеплановые", secondary = true, onClick = onUnplanned)
+                }
+            } else AgentVisitAction("Внеплановые", onClick = onUnplanned)
         }) { actionHeight ->
             Box(Modifier.fillMaxSize()) {
-                LazyColumn(Modifier.fillMaxSize(), state = listState, contentPadding = PaddingValues(top = 8.dp, bottom = actionHeight + 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                val inset = if (tablet) 12.dp else 0.dp
+                LazyColumn(
+                    Modifier.fillMaxSize(), state = listState,
+                    contentPadding = PaddingValues(start = inset, top = 8.dp, end = inset, bottom = actionHeight + 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
                     item(key = "plans", contentType = "plans") { AgentVisitPlans() }
                     items(stores, key = { it.id }, contentType = { "visit" }) { store ->
                         VisitStoreCard(store, unread = store.id in unreadIds, selected = store.id == selectedId,

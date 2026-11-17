@@ -1,6 +1,7 @@
 package com.example.dealerappnative.screens
 
 import com.example.dealerappnative.ui.components.BottomActionLayout
+import com.example.dealerappnative.ui.components.BottomActionPanel
 import com.example.dealerappnative.ui.theme.displayColor
 import com.example.dealerappnative.ui.components.softCardPress
 import com.example.dealerappnative.ui.components.cardShadow
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -37,6 +39,7 @@ import com.example.dealerappnative.navigation.LocalDealerWindowLayout
 import com.example.dealerappnative.ui.components.dealerSelectedCard
 import com.example.dealerappnative.ui.components.ChildScreenHeader
 import com.example.dealerappnative.ui.components.DealerIcon
+import com.example.dealerappnative.ui.components.PrototypeActionLabel
 import com.example.dealerappnative.ui.components.PrototypeCreateButton
 import com.example.dealerappnative.ui.components.UnreadCardTitle
 import com.example.dealerappnative.ui.components.unreadCardBackground
@@ -52,7 +55,8 @@ internal fun StoresScreen(
     selectedId: String? = null
 ) {
     var query by rememberSaveable { mutableStateOf("") }
-    val split = LocalDealerWindowLayout.current.hasPanes
+    val layout = LocalDealerWindowLayout.current
+    val inset = if (layout.hasRail) 12.dp else 0.dp
     val search = query.trim()
     val stores = sampleStores.map { store ->
         val point = locations[store.id]
@@ -69,15 +73,17 @@ internal fun StoresScreen(
             SearchField(query, { query = it }, placeholder = "Поиск")
         }
         BottomActionLayout(Modifier.weight(1f), actions = {
-            PrototypeCreateButton(label = "+ Добавить")
+            if (layout.hasRail) {
+                BottomActionPanel { PrototypeActionLabel("+ Добавить") }
+            } else PrototypeCreateButton(label = "+ Добавить")
         }) { actionHeight ->
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(top = 8.dp, bottom = actionHeight + 8.dp),
+                contentPadding = PaddingValues(start = inset, top = 8.dp, end = inset, bottom = actionHeight + 8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(stores, key = { it.id }) { store ->
-                    StoreCard(store, unread = store.id in unreadIds, selected = split && store.id == selectedId,
+                    StoreCard(store, unread = store.id in unreadIds, selected = layout.hasPanes && store.id == selectedId,
                         onClick = { onStoreClick(store.id) })
                 }
                 if (stores.isEmpty()) {
@@ -94,10 +100,13 @@ internal fun StoresScreen(
 
 @Composable
 private fun StoreCard(store: StoreUiModel, unread: Boolean, selected: Boolean, onClick: () -> Unit) {
-    Column(Modifier.fillMaxWidth().height(DealerDesign.cardHeight)
+    val tablet = LocalDealerWindowLayout.current.hasRail
+    val cardHeight = if (tablet) Modifier.heightIn(min = 84.dp) else Modifier.height(DealerDesign.cardHeight)
+    val titleHeight = if (tablet) Modifier.heightIn(min = 52.dp).padding(vertical = 4.dp) else Modifier.height(72.dp)
+    Column(Modifier.fillMaxWidth().then(cardHeight)
         .softCardPress(onClick = onClick).cardShadow().unreadCardBackground(unread).dealerSelectedCard(selected)
         .padding(horizontal = DealerDesign.pageInset)) {
-        Row(Modifier.fillMaxWidth().height(72.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(Modifier.fillMaxWidth().then(titleHeight), verticalAlignment = Alignment.CenterVertically) {
             DealerIcon(R.drawable.ic_store)
             Spacer(Modifier.width(12.dp))
             Column(Modifier.weight(1f)) {
@@ -108,7 +117,9 @@ private fun StoreCard(store: StoreUiModel, unread: Boolean, selected: Boolean, o
             }
         }
         HorizontalDivider(color = DealerDesign.divider)
-        Row(Modifier.fillMaxWidth().weight(1f), verticalAlignment = Alignment.CenterVertically) {
+        val addressHeight = if (tablet) Modifier.heightIn(min = 31.dp).padding(vertical = 4.dp)
+            else Modifier.weight(1f)
+        Row(Modifier.fillMaxWidth().then(addressHeight), verticalAlignment = Alignment.CenterVertically) {
             Text(store.address, style = DealerDesign.detail, color = DealerDesign.secondary,
                 modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
             Spacer(Modifier.width(12.dp))

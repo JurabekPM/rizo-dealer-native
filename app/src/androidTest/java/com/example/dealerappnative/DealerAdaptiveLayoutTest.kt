@@ -3,17 +3,23 @@ package com.example.dealerappnative
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.SystemClock
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.ViewRootForTest
@@ -113,18 +119,63 @@ class DealerAdaptiveLayoutTest {
         }
     }
 
+    @Test
+    fun agentSplitDragPersistsAndTabletActionsStayCompact() = withRole({ AgentScreen(onBack = {}) }) { window ->
+        window.resize(1024, 790)
+        val pending = agentVisitCards[1].name
+        var initialHandle = Offset.Zero
+        window.onNodes {
+            val listPane = divider().boundsInWindow
+            initialHandle = listPane.center
+            val listAction = action("Внеплановые").boundsInWindow
+            val bottomGap = listPane.bottom - listAction.bottom
+            assertTrue("List action $listAction should sit at the bottom of $listPane", bottomGap in 0f..window.dpToPx(24))
+            assertTrue(listAction.width < window.dpToPx(200))
+            action(pending).click()
+        }
+        window.onNodes {
+            val start = action("Начать визит").boundsInWindow
+            val operations = text("Возврат", rightOf = initialHandle.x).boundsInWindow
+            assertTrue(start.top >= operations.bottom)
+            assertTrue(start.left > initialHandle.x)
+            assertTrue(start.center.x > operations.center.x)
+            assertTrue(start.width < window.dpToPx(200))
+        }
+        window.drag(initialHandle, window.dpToPx(158))
+        var adjustedX = 0f
+        window.onNodes {
+            adjustedX = divider().boundsInWindow.center.x
+            assertTrue("Divider must move right from ${initialHandle.x}, got $adjustedX", adjustedX > initialHandle.x + window.dpToPx(94))
+            assertTrue(action(pending).boundsInWindow.right < divider().boundsInWindow.left)
+            assertTrue(action("Начать визит").boundsInWindow.left > adjustedX)
+        }
+        window.resize(840, 700)
+        window.onNodes { assertTrue(divider().boundsInWindow.center.x < adjustedX) }
+        window.resize(1024, 790)
+        window.onNodes { assertEquals(adjustedX, divider().boundsInWindow.center.x, 2f) }
+        window.reopenRole()
+        window.onNodes { assertEquals(adjustedX, divider().boundsInWindow.center.x, 2f) }
+    }
+
     private fun withRole(content: @Composable () -> Unit, verify: (TestWindow) -> Unit) {
         ActivityScenario.launch(ComponentActivity::class.java).use { scenario ->
             lateinit var context: TestPreferences
             val window = TestWindow(scenario)
             scenario.onActivity { activity ->
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+                    activity.setShowWhenLocked(true)
+                    activity.setTurnScreenOn(true)
+                }
+                activity.window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                 context = TestPreferences(activity)
                 window.density = (activity.resources.displayMetrics.widthPixels / 1100f).coerceAtMost(1f)
                 activity.setContent {
                     CompositionLocalProvider(LocalContext provides context, LocalDensity provides Density(window.density, 1f)) {
                         Box(Modifier.size(window.size.value)) {
                             DealerPrototypeTheme {
-                                VisitReturnsProvider { StoreActionsHost { content() } }
+                                key(window.roleGeneration.intValue) {
+                                    VisitReturnsProvider { StoreActionsHost { content() } }
+                                }
                             }
                         }
                     }
@@ -140,6 +191,7 @@ class DealerAdaptiveLayoutTest {
 
     private class TestWindow(private val scenario: ActivityScenario<ComponentActivity>) {
         val size = mutableStateOf(DpSize(1024.dp, 700.dp))
+        val roleGeneration = mutableIntStateOf(0)
         var density = 1f
         fun dpToPx(dp: Int) = dp * density
 
@@ -162,6 +214,30 @@ class DealerAdaptiveLayoutTest {
             scenario.onActivity { size.value = DpSize(width.dp, height.dp) }
         }
 
+        fun reopenRole() {
+            scenario.onActivity { roleGeneration.intValue++ }
+        }
+
+        fun drag(start: Offset, distance: Float) {
+            val downTime = SystemClock.uptimeMillis()
+            fun send(action: Int, x: Float) {
+                scenario.onActivity { activity ->
+                    val event = MotionEvent.obtain(downTime, SystemClock.uptimeMillis(), action, x, start.y, 0)
+                    try {
+                        activity.dispatchTouchEvent(event)
+                    } finally {
+                        event.recycle()
+                    }
+                }
+            }
+            send(MotionEvent.ACTION_DOWN, start.x)
+            for (step in 1..8) {
+                SystemClock.sleep(20)
+                send(MotionEvent.ACTION_MOVE, start.x + distance * step / 8)
+            }
+            send(MotionEvent.ACTION_UP, start.x + distance)
+        }
+
         fun back() {
             scenario.onActivity { it.onBackPressedDispatcher.onBackPressed() }
             SystemClock.sleep(650)
@@ -172,11 +248,19 @@ class DealerAdaptiveLayoutTest {
         fun tabs() = nodes.filter { it.config.getOrNull(SemanticsProperties.Role) == Role.Tab }
             .filter { it.config.getOrNull(SemanticsProperties.Text)?.any { text -> text.text in navigationNames } == true }
         fun tab(text: String) = tabs().first { it.hasText(text) }
-        fun text(text: String) = checkNotNull(nodes.firstOrNull { it.hasText(text) }) {
+        fun text(text: String, rightOf: Float = Float.NEGATIVE_INFINITY) = checkNotNull(
+            nodes.firstOrNull { it.hasText(text) && it.boundsInWindow.left > rightOf }
+        ) {
             "Missing $text in ${nodes.mapNotNull { it.config.getOrNull(SemanticsProperties.Text) }.flatten()}"
         }
         fun hasText(text: String) = nodes.any { it.hasText(text) }
-        fun action(text: String) = nodes.first { it.hasText(text) && it.config.getOrNull(SemanticsActions.OnClick) != null }
+        fun action(text: String) = checkNotNull(nodes.firstOrNull {
+            it.hasText(text) && it.config.getOrNull(SemanticsActions.OnClick) != null
+        }) { "Missing action $text in ${nodes.mapNotNull { it.config.getOrNull(SemanticsProperties.Text) }.flatten()}" }
+
+        fun divider() = nodes.first {
+            it.config.getOrNull(SemanticsProperties.ContentDescription)?.contains("Ширина списка") == true
+        }
 
         private fun SemanticsNode.hasText(value: String) =
             config.getOrNull(SemanticsProperties.Text)?.any { it.text == value } == true

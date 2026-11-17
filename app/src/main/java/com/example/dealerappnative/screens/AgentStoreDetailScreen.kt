@@ -40,31 +40,41 @@ import com.example.dealerappnative.ui.components.VisitResultBadge
 import com.example.dealerappnative.ui.components.VisitStorePart
 import com.example.dealerappnative.ui.components.sharedVisitStorePart
 import com.example.dealerappnative.model.StoreUiModel
+import com.example.dealerappnative.navigation.LocalDealerWindowLayout
 import com.example.dealerappnative.ui.components.AgentStorePart
 import com.example.dealerappnative.ui.components.LocalAgentStoreTransition
 import com.example.dealerappnative.ui.components.agentStoreSharedPart
 import com.example.dealerappnative.ui.components.AgentMenuRow
 import com.example.dealerappnative.ui.components.DealerIcon
+import com.example.dealerappnative.ui.components.PrototypeActionLabel
 import com.example.dealerappnative.ui.components.PrototypeCreateButton
 import com.example.dealerappnative.ui.theme.AgentDesign
 
 /** Agent store details use the supplied reference; starting a visit is visual at this stage. */
 @Composable
 internal fun AgentStoreDetailScreen(store: StoreUiModel, onBack: () -> Unit, visitResults: List<VisitResult>? = null) {
+    val tablet = LocalDealerWindowLayout.current.hasRail
     Column(Modifier.fillMaxSize().background(AgentDesign.background)) {
-        Box(Modifier.fillMaxWidth().height(68.dp).background(DealerDesign.surface), contentAlignment = Alignment.Center) {
+        Box(Modifier.fillMaxWidth().height(if (tablet) 56.dp else 68.dp).background(DealerDesign.surface),
+            contentAlignment = Alignment.Center) {
             Text(store.name, style = AgentDesign.screenTitle, color = AgentDesign.text,
-                maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.padding(horizontal = 56.dp))
+                maxLines = 1, overflow = TextOverflow.Ellipsis,
+                modifier = if (tablet) Modifier.align(Alignment.CenterStart).padding(start = 56.dp, end = 12.dp)
+                    else Modifier.padding(horizontal = 56.dp))
             SoftIconButton(onClick = onBack, modifier = Modifier.align(Alignment.CenterStart).padding(start = 4.dp)
                 .size(48.dp).semantics { contentDescription = "Назад" }) {
                 DealerIcon(R.drawable.ic_arrow_back, AgentDesign.text)
             }
         }
         BottomActionLayout(Modifier.weight(1f), actions = {
-            PrototypeCreateButton(label = "Начать визит")
+            if (!tablet) PrototypeCreateButton(label = "Начать визит")
         }) { actionHeight ->
-            LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(top = 8.dp, bottom = actionHeight + 16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            val inset = if (tablet) 12.dp else 0.dp
+            LazyColumn(
+                Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(start = inset, top = 8.dp, end = inset, bottom = actionHeight + 16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
                 item(key = "store") { AgentStoreSummary(store) }
                 item(key = "balance") {
                     Row(Modifier.fillMaxWidth().height(56.dp).cardShadow()
@@ -101,6 +111,11 @@ internal fun AgentStoreDetailScreen(store: StoreUiModel, onBack: () -> Unit, vis
                         }
                     }
                 }
+                if (tablet) item(key = "visit-action") {
+                    Box(Modifier.fillMaxWidth().padding(top = 4.dp), contentAlignment = Alignment.CenterEnd) {
+                        PrototypeActionLabel("Начать визит")
+                    }
+                }
             }
         }
     }
@@ -109,6 +124,7 @@ internal fun AgentStoreDetailScreen(store: StoreUiModel, onBack: () -> Unit, vis
 @Composable
 private fun AgentStoreSummary(store: StoreUiModel) {
     val actions = LocalStoreActions.current
+    val tablet = LocalDealerWindowLayout.current.hasRail
     Column(Modifier.fillMaxWidth().cardShadow().background(DealerDesign.surface)
         .padding(horizontal = 16.dp, vertical = 12.dp)) {
         Row(Modifier.fillMaxWidth().height(44.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -131,8 +147,8 @@ private fun AgentStoreSummary(store: StoreUiModel) {
         }
         Spacer(Modifier.height(8.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            AgentStoreAction("Открыть карту", R.drawable.ic_route, Modifier.weight(1f)) { actions.openMap(store) }
-            AgentStoreAction("Позвонить", R.drawable.ic_phone_call, Modifier.weight(1f)) { actions.dial(store.phoneNumber) }
+            AgentStoreAction("Открыть карту", R.drawable.ic_route, Modifier.weight(1f, fill = !tablet)) { actions.openMap(store) }
+            AgentStoreAction("Позвонить", R.drawable.ic_phone_call, Modifier.weight(1f, fill = !tablet)) { actions.dial(store.phoneNumber) }
         }
     }
 }

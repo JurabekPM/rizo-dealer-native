@@ -28,6 +28,7 @@ import com.example.dealerappnative.data.AgentVisitSessions
 import com.example.dealerappnative.model.StoreUiModel
 import com.example.dealerappnative.model.VisitResult
 import com.example.dealerappnative.model.VisitStore
+import com.example.dealerappnative.navigation.LocalDealerWindowLayout
 import com.example.dealerappnative.ui.components.*
 import com.example.dealerappnative.ui.theme.AgentVisitDesign
 import com.example.dealerappnative.ui.theme.DealerDesign
@@ -58,30 +59,40 @@ internal fun AgentVisitDetailScreen(store: StoreUiModel, visit: VisitStore,
     var finishSheet by rememberSaveable(store.id) { mutableStateOf(false) }
     var warning by rememberSaveable(store.id) { mutableStateOf(false) }
     val keyboard = LocalSoftwareKeyboardController.current
+    val tablet = LocalDealerWindowLayout.current.hasRail
+    val actionLabel = when {
+        session == null -> "Начать визит"
+        session.isActive -> "Завершить визит"
+        else -> null
+    }
+    val visitAction: () -> Unit = {
+        keyboard?.hide()
+        when {
+            session == null -> if (!(onStart?.invoke() ?: sessions.start(store.id, visit.results))) warning = true
+            session.needsReason -> finishSheet = true
+            else -> sessions.finish(store.id)
+        }
+    }
     Column(Modifier.fillMaxSize().background(DealerDesign.background).imePadding()) {
         Box(Modifier.fillMaxWidth().height(56.dp).background(DealerDesign.surface), contentAlignment = Alignment.Center) {
             Text(store.name, style = AgentVisitDesign.screenTitle, color = DealerDesign.text,
-                maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.padding(horizontal = 56.dp))
+                maxLines = 1, overflow = TextOverflow.Ellipsis,
+                modifier = if (tablet) Modifier.align(Alignment.CenterStart).padding(start = 56.dp, end = 12.dp)
+                    else Modifier.padding(horizontal = 56.dp))
             SoftIconButton(onClick = onBack, modifier = Modifier.align(Alignment.CenterStart).padding(start = 4.dp)
                 .size(48.dp).semantics { contentDescription = "Назад" }) {
                 DealerIcon(R.drawable.ic_arrow_back, DealerDesign.text)
             }
         }
         BottomActionLayout(Modifier.weight(1f), actions = {
-            if (session == null || session.isActive) {
-                AgentVisitAction(
-                    if (session == null) "Начать визит" else "Завершить визит") {
-                    keyboard?.hide()
-                    when {
-                        session == null -> if (!(onStart?.invoke() ?: sessions.start(store.id, visit.results))) warning = true
-                        session.needsReason -> finishSheet = true
-                        else -> sessions.finish(store.id)
-                    }
-                }
-            }
+            if (!tablet && actionLabel != null) AgentVisitAction(actionLabel, onClick = visitAction)
         }) { actionHeight ->
-            LazyColumn(Modifier.fillMaxSize(), state = detailListState, contentPadding = PaddingValues(top = 8.dp, bottom = actionHeight + 16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            val inset = if (tablet) 12.dp else 0.dp
+            LazyColumn(
+                Modifier.fillMaxSize(), state = detailListState,
+                contentPadding = PaddingValues(start = inset, top = 8.dp, end = inset, bottom = actionHeight + 16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
                 item(key = "store") { VisitStoreSummary(store, visit.sourceStore ?: store) }
                 if (session != null) item(key = "time") { AgentVisitTiming(session) }
                 item(key = "balance") {
@@ -117,6 +128,11 @@ internal fun AgentVisitDetailScreen(store: StoreUiModel, visit: VisitStore,
                     AgentVisitNotes(session, onComment = { sessions.comment(store.id, it) },
                         onAddPhotos = { sessions.addPhotos(store.id, it) }, onRemovePhoto = { sessions.removePhoto(store.id, it) })
                 }
+                if (tablet && actionLabel != null) item(key = "visit-action") {
+                    Box(Modifier.fillMaxWidth().padding(top = 4.dp), contentAlignment = Alignment.CenterEnd) {
+                        AgentVisitButton(actionLabel, onClick = visitAction)
+                    }
+                }
             }
         }
     }
@@ -135,6 +151,7 @@ internal fun AgentVisitDetailScreen(store: StoreUiModel, visit: VisitStore,
 @Composable
 private fun VisitStoreSummary(store: StoreUiModel, actionStore: StoreUiModel) {
     val actions = LocalStoreActions.current
+    val tablet = LocalDealerWindowLayout.current.hasRail
     Column(Modifier.fillMaxWidth().cardShadow().background(DealerDesign.surface).padding(16.dp)) {
         Row(Modifier.fillMaxWidth().heightIn(min = 44.dp), verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.sharedVisitStorePart(store.id, VisitStorePart.Logo)) { DealerIcon(R.drawable.ic_store) }
@@ -149,8 +166,12 @@ private fun VisitStoreSummary(store: StoreUiModel, actionStore: StoreUiModel) {
         }
         Spacer(Modifier.height(8.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            VisitSummaryAction("Открыть карту", R.drawable.ic_route, Modifier.weight(1f)) { actions.openMap(actionStore) }
-            VisitSummaryAction("Позвонить", R.drawable.ic_phone_call, Modifier.weight(1f)) { actions.dial(actionStore.phoneNumber) }
+            VisitSummaryAction("Открыть карту", R.drawable.ic_route, Modifier.weight(1f, fill = !tablet)) {
+                actions.openMap(actionStore)
+            }
+            VisitSummaryAction("Позвонить", R.drawable.ic_phone_call, Modifier.weight(1f, fill = !tablet)) {
+                actions.dial(actionStore.phoneNumber)
+            }
         }
     }
 }
@@ -176,7 +197,9 @@ private fun VisitOperationRow(visit: VisitStore, result: VisitResult, completed:
         VisitResult.Collection -> Triple("Инкассация", R.drawable.img_visit_collection_result, if (completed) visit.details.collection else "Нет инкассации")
         VisitResult.Return -> Triple("Возврат", R.drawable.ic_return, if (completed) visit.details.returns else "Нет возвращённых товаров")
     }
-    Row(Modifier.fillMaxWidth().heightIn(min = 64.dp).softCardPress(onClick = onClick).padding(vertical = 12.dp),
+    val tablet = LocalDealerWindowLayout.current.hasRail
+    Row(Modifier.fillMaxWidth().heightIn(min = if (tablet) 54.dp else 64.dp)
+        .softCardPress(onClick = onClick).padding(vertical = if (tablet) 8.dp else 12.dp),
         verticalAlignment = Alignment.CenterVertically) {
         VisitResultBadge(result, if (completed) visit.id else null, inDetails = true, completed = completed)
         Spacer(Modifier.width(12.dp))

@@ -1,5 +1,7 @@
 package com.example.dealerappnative.navigation
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -23,11 +25,18 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.semantics
@@ -47,6 +56,26 @@ internal enum class DealerWindowLayout {
 
 internal val LocalDealerWindowLayout = compositionLocalOf { DealerWindowLayout.Compact }
 
+internal val LocalDealerSplitWidth = staticCompositionLocalOf<DealerSplitWidth> {
+    error("DealerListDetail requires DealerAdaptiveShell in a split window")
+}
+
+@Stable
+internal class DealerSplitWidth(private val preferences: SharedPreferences) {
+    var fraction by mutableFloatStateOf(
+        preferences.getFloat("split_list_fraction", .34f).let { if (it in 0f..1f) it else .34f }
+    )
+        private set
+
+    fun resize(value: Float) {
+        fraction = value
+    }
+
+    fun save() {
+        preferences.edit().putFloat("split_list_fraction", fraction).apply()
+    }
+}
+
 internal fun dealerWindowLayout(width: Dp, height: Dp): DealerWindowLayout = when {
     width < 600.dp || height < 480.dp -> DealerWindowLayout.Compact
     width >= 840.dp && width > height -> DealerWindowLayout.Split
@@ -58,11 +87,18 @@ internal fun DealerAdaptiveShell(
     rail: @Composable () -> Unit,
     content: @Composable () -> Unit
 ) {
+    val context = LocalContext.current
+    val splitWidth = remember(context) {
+        DealerSplitWidth(context.getSharedPreferences("dealer_layout", Context.MODE_PRIVATE))
+    }
     BoxWithConstraints(Modifier.fillMaxSize().background(DealerDesign.surface)) {
         val keyboardVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0
         val windowHeight = if (keyboardVisible) LocalConfiguration.current.screenHeightDp.dp else maxHeight
         val mode = dealerWindowLayout(maxWidth, windowHeight)
-        CompositionLocalProvider(LocalDealerWindowLayout provides mode) {
+        CompositionLocalProvider(
+            LocalDealerWindowLayout provides mode,
+            LocalDealerSplitWidth provides splitWidth
+        ) {
             Row(Modifier.fillMaxSize()) {
                 if (mode.hasRail) {
                     Box(Modifier.width(94.dp).fillMaxHeight().safeDrawingPadding()) { rail() }

@@ -181,10 +181,27 @@ private fun VisitPhoto(uri: Uri, anchor: PhotoPreviewAnchor, removable: Boolean,
 @Composable
 internal fun AgentVisitAction(label: String, enabled: Boolean = true, onClick: () -> Unit) {
     BottomActionPanel {
-        Box(Modifier.fillMaxWidth().height(48.dp).softCardPress(enabled = enabled, onClick = onClick)
+        AgentVisitButton(label, Modifier.fillMaxWidth().height(48.dp), enabled = enabled, onClick = onClick)
+    }
+}
+
+@Composable
+internal fun AgentVisitButton(
+    label: String,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    secondary: Boolean = false,
+    onClick: () -> Unit
+) {
+    val background = if (secondary) DealerDesign.background else DealerDesign.accent
+    Box(
+        modifier.heightIn(min = 48.dp)
+            .softCardPress(enabled = enabled, onClick = onClick)
             .clip(RoundedCornerShape(12.dp))
-            .background(if (enabled) DealerDesign.accent else DealerDesign.accent.copy(alpha = .35f)), contentAlignment = Alignment.Center) {
-            Text(label, style = AgentVisitDesign.button, color = DealerDesign.onAccent)
-        }
+            .background(if (enabled) background else background.copy(alpha = .35f))
+            .padding(horizontal = 18.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(label, style = AgentVisitDesign.button, color = if (secondary) DealerDesign.text else DealerDesign.onAccent)
     }
 }
