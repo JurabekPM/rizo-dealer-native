@@ -1,7 +1,10 @@
 package com.example.dealerappnative.screens
 
+import androidx.compose.foundation.shape.RoundedCornerShape
+import com.example.dealerappnative.ui.components.TabletColors
+import com.example.dealerappnative.ui.components.tabletPanel
+import com.example.dealerappnative.ui.components.tabletCard
 import com.example.dealerappnative.ui.components.BottomActionLayout
-import com.example.dealerappnative.ui.components.BottomActionPanel
 import com.example.dealerappnative.ui.components.cardShadow
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -67,7 +70,6 @@ import com.example.dealerappnative.ui.components.SearchField
 import com.example.dealerappnative.ui.components.VisitListViewport
 import com.example.dealerappnative.ui.components.VisitResultsTransition
 import com.example.dealerappnative.ui.components.VisitStoreCard
-import com.example.dealerappnative.ui.components.softCardPress
 import com.example.dealerappnative.ui.theme.AgentVisitDesign
 import com.example.dealerappnative.ui.theme.DealerDesign
 import java.util.UUID
@@ -172,7 +174,7 @@ internal fun AgentVisitsScreen(
         onRead(it)
         onDetailVisible(true)
         selectedId = it
-    }) { targetId, openVisit ->
+    }, roundedPanes = true) { targetId, openVisit ->
         val unplanned = unplannedSnapshot[targetId] ?: pending?.takeIf { it.id == targetId }
         val targetStore = unplanned?.store?.copy(id = unplanned.id) ?: agentVisitStores.firstOrNull { it.id == targetId }
         val targetCard = cards.firstOrNull { it.id == targetId } ?: unplanned?.let(::unplannedVisitCard)
@@ -210,25 +212,40 @@ private fun AgentVisitsList(cards: List<VisitStore>, onStoreClick: (String) -> U
     val stores = remember(search, cards) {
         cards.filter { it.name.contains(search, true) || it.id.contains(search) || it.address.contains(search, true) }
     }
-    Column(Modifier.fillMaxSize().background(DealerDesign.background)) {
-        Column(Modifier.fillMaxWidth().background(DealerDesign.surface)) {
+    Column(Modifier.fillMaxSize().then(if (tablet) Modifier.tabletPanel() else Modifier.background(DealerDesign.background))) {
+        Column(Modifier.fillMaxWidth().then(if (tablet) Modifier else Modifier.background(DealerDesign.surface))) {
             Box(Modifier.fillMaxWidth().height(56.dp), contentAlignment = Alignment.Center) {
                 Text("Визиты", style = AgentVisitDesign.title, color = DealerDesign.text,
                     modifier = if (tablet) Modifier.align(Alignment.CenterStart).padding(start = 16.dp) else Modifier)
                 Row(Modifier.align(Alignment.CenterEnd).padding(end = 16.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Text("Сегодня", style = AgentVisitDesign.detail, color = DealerDesign.text)
-                    Box(Modifier.rotate(90f)) { DealerIcon(R.drawable.ic_chevron, DealerDesign.secondary, 16.dp) }
+                    Row(
+                        if (tablet) Modifier.background(TabletColors.raised, RoundedCornerShape(10.dp)).padding(8.dp) else Modifier,
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(if (tablet) 5.dp else 0.dp)
+                    ) {
+                        if (tablet) DealerIcon(R.drawable.ic_agent_schedule, DealerDesign.secondary, 16.dp)
+                        Text("Сегодня", style = AgentVisitDesign.detail, color = DealerDesign.text)
+                        Box(Modifier.rotate(90f)) { DealerIcon(R.drawable.ic_chevron, DealerDesign.secondary, 16.dp) }
+                    }
                 }
             }
-            Box(Modifier.fillMaxWidth().padding(horizontal = 16.dp).padding(bottom = 16.dp)) {
+            Box(Modifier.fillMaxWidth().padding(horizontal = if (tablet) 12.dp else 16.dp)
+                .padding(bottom = if (tablet) 4.dp else 16.dp)) {
                 SearchField(query, onQueryChange, placeholder = "Поиск по имени и ид",
-                    height = 40.dp, textStyle = AgentVisitDesign.name)
+                    height = 40.dp, textStyle = AgentVisitDesign.name,
+                    containerColor = if (tablet) TabletColors.inset else DealerDesign.background)
             }
         }
         BottomActionLayout(Modifier.weight(1f), actions = {
             if (tablet) {
-                BottomActionPanel {
-                    AgentVisitButton("Внеплановые", secondary = true, onClick = onUnplanned)
+                Column(
+                    Modifier.fillMaxWidth().background(TabletColors.panel).padding(horizontal = 12.dp).padding(bottom = 12.dp, top = 5.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalAlignment = Alignment.End
+                ) {
+                    VisitsMapButton(Modifier.size(44.dp), tablet = true)
+                    AgentVisitButton("Внеплановые", Modifier.fillMaxWidth(), tonal = true,
+                        leadingIcon = R.drawable.ic_agent_schedule, onClick = onUnplanned)
                 }
             } else AgentVisitAction("Внеплановые", onClick = onUnplanned)
         }) { actionHeight ->
@@ -239,24 +256,57 @@ private fun AgentVisitsList(cards: List<VisitStore>, onStoreClick: (String) -> U
                     contentPadding = PaddingValues(start = inset, top = 8.dp, end = inset, bottom = actionHeight + 16.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    item(key = "plans", contentType = "plans") { AgentVisitPlans() }
+                    item(key = "plans", contentType = "plans") {
+                        if (tablet) TabletVisitPlans() else AgentVisitPlans()
+                    }
                     items(stores, key = { it.id }, contentType = { "visit" }) { store ->
                         VisitStoreCard(store, unread = store.id in unreadIds, selected = store.id == selectedId,
-                            onClick = { onStoreClick(store.id) })
+                            roundedTablet = tablet, onClick = { onStoreClick(store.id) })
                     }
                     if (stores.isEmpty()) item {
                         Text("Магазины не найдены", style = AgentVisitDesign.name, color = DealerDesign.secondary,
                             modifier = Modifier.fillMaxWidth().padding(24.dp))
                     }
                 }
-                IconButton(onClick = {}, modifier = Modifier.align(Alignment.BottomEnd).padding(end = 16.dp, bottom = actionHeight + 16.dp)
-                    .shadow(4.dp, CircleShape).clip(CircleShape).background(DealerDesign.surface).size(48.dp)
-                    .semantics { contentDescription = "Карта визитов" }) {
-                    DealerIcon(R.drawable.ic_route, DealerDesign.text)
-                }
+                if (!tablet) VisitsMapButton(
+                    Modifier.align(Alignment.BottomEnd).padding(end = 16.dp, bottom = actionHeight + 16.dp).size(48.dp),
+                    tablet = false
+                )
             }
         }
     }
+}
+
+@Composable
+private fun VisitsMapButton(modifier: Modifier, tablet: Boolean) {
+    IconButton(onClick = {}, modifier = modifier.shadow(4.dp, CircleShape).clip(CircleShape)
+        .background(if (tablet) TabletColors.raised else DealerDesign.surface)
+        .semantics { contentDescription = "Карта визитов" }) {
+        DealerIcon(R.drawable.ic_route, DealerDesign.text, if (tablet) 20.dp else 24.dp)
+    }
+}
+
+@Composable
+private fun TabletVisitPlans() {
+    Row(Modifier.fillMaxWidth().tabletCard(TabletColors.inset).padding(5.dp),
+        horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+        Column(Modifier.weight(1.2f).tabletCard(TabletColors.raised).padding(7.dp),
+            verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            VisitPlanText("План инкассации", "50 000 000 UZS")
+        }
+        Column(Modifier.weight(1f).padding(7.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            VisitPlanText("План · Август", "80 000 000 UZS")
+        }
+        Column(Modifier.weight(.9f).padding(7.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            VisitPlanText("Возврат", "Нет возврата")
+        }
+    }
+}
+
+@Composable
+private fun VisitPlanText(title: String, value: String) {
+    Text(title, style = AgentVisitDesign.detail, color = DealerDesign.secondary)
+    Text(value, style = DealerDesign.detail, color = DealerDesign.text)
 }
 
 @Composable

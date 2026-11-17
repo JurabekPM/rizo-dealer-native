@@ -120,7 +120,7 @@ class DealerAdaptiveLayoutTest {
     }
 
     @Test
-    fun agentSplitDragPersistsAndTabletActionsStayCompact() = withRole({ AgentScreen(onBack = {}) }) { window ->
+    fun agentSplitDragPersistsWithFullWidthUnplannedAction() = withRole({ AgentScreen(onBack = {}) }) { window ->
         window.resize(1024, 790)
         val pending = agentVisitCards[1].name
         var initialHandle = Offset.Zero
@@ -130,7 +130,12 @@ class DealerAdaptiveLayoutTest {
             val listAction = action("Внеплановые").boundsInWindow
             val bottomGap = listPane.bottom - listAction.bottom
             assertTrue("List action $listAction should sit at the bottom of $listPane", bottomGap in 0f..window.dpToPx(24))
-            assertTrue(listAction.width < window.dpToPx(200))
+            val row = action(pending).boundsInWindow
+            val map = description("Карта визитов").boundsInWindow
+            assertEquals(row.width, listAction.width, 2f)
+            assertEquals(listAction.right, map.right, 2f)
+            assertEquals(map.width, map.height, 2f)
+            assertTrue(map.bottom < listAction.top)
             action(pending).click()
         }
         window.onNodes {
@@ -157,6 +162,49 @@ class DealerAdaptiveLayoutTest {
         window.onNodes { assertEquals(adjustedX, divider().boundsInWindow.center.x, 2f) }
     }
 
+    @Test
+    fun tabletActiveVisitPlacesCameraAboveFinishAndStatisticsFiltersShareARow() =
+        withRole({ AgentScreen(onBack = {}) }) { window ->
+            window.resize(1024, 820)
+            window.darkTheme()
+            window.onNodes { action("Ravnaq Market").click() }
+            window.onNodes {
+                val operations = text("Операции визита").boundsInWindow
+                val camera = action("Сделать фото").boundsInWindow
+                val finish = action("Завершить визит").boundsInWindow
+                assertTrue(camera.top > operations.bottom)
+                assertTrue("Camera bounds: $camera, finish bounds: $finish",
+                    camera.bottom <= finish.top && camera.right < finish.right)
+                assertTrue(camera.width > camera.height)
+                tab("Статистика").click()
+            }
+            window.onNodes {
+                val period = text("День").boundsInWindow
+                val date = description("Выбрать даты:", prefix = true).boundsInWindow
+                assertTrue(date.left > period.right && date.top < period.bottom && period.top < date.bottom)
+                assertTrue(hasText("АКБ / ОКБ"))
+            }
+        }
+
+    @Test
+    fun tabletPortraitDeliveriesPlaceShortcutsSideBySideAndCreateAtTheRightEdge() =
+        withRole({ DealerApp() }) { window ->
+            window.resize(800, 1040)
+            window.darkTheme()
+            window.onNodes { tab("Доставки").click() }
+            window.onNodes {
+                val cooperation = text("Запросы на сотрудничество").boundsInWindow
+                val returns = text("Возвраты").boundsInWindow
+                val order = action("Asil Market").boundsInWindow
+                val create = text("Создать").boundsInWindow
+                assertTrue(cooperation.top < returns.bottom && returns.top < cooperation.bottom)
+                assertTrue(cooperation.right < returns.left)
+                assertTrue(order.center.x < create.left && create.top > order.bottom)
+                action("Asil Market").click()
+            }
+            window.onNodes { assertTrue(hasText("Доставка № 33446105")) }
+        }
+
     private fun withRole(content: @Composable () -> Unit, verify: (TestWindow) -> Unit) {
         ActivityScenario.launch(ComponentActivity::class.java).use { scenario ->
             lateinit var context: TestPreferences
@@ -172,7 +220,7 @@ class DealerAdaptiveLayoutTest {
                 activity.setContent {
                     CompositionLocalProvider(LocalContext provides context, LocalDensity provides Density(window.density, 1f)) {
                         Box(Modifier.size(window.size.value)) {
-                            DealerPrototypeTheme {
+                            DealerPrototypeTheme(dark = window.dark.value) {
                                 key(window.roleGeneration.intValue) {
                                     VisitReturnsProvider { StoreActionsHost { content() } }
                                 }
@@ -191,6 +239,7 @@ class DealerAdaptiveLayoutTest {
 
     private class TestWindow(private val scenario: ActivityScenario<ComponentActivity>) {
         val size = mutableStateOf(DpSize(1024.dp, 700.dp))
+        val dark = mutableStateOf(false)
         val roleGeneration = mutableIntStateOf(0)
         var density = 1f
         fun dpToPx(dp: Int) = dp * density
@@ -212,6 +261,10 @@ class DealerAdaptiveLayoutTest {
 
         fun resize(width: Int, height: Int) {
             scenario.onActivity { size.value = DpSize(width.dp, height.dp) }
+        }
+
+        fun darkTheme() {
+            scenario.onActivity { dark.value = true }
         }
 
         fun reopenRole() {
@@ -258,8 +311,12 @@ class DealerAdaptiveLayoutTest {
             it.hasText(text) && it.config.getOrNull(SemanticsActions.OnClick) != null
         }) { "Missing action $text in ${nodes.mapNotNull { it.config.getOrNull(SemanticsProperties.Text) }.flatten()}" }
 
-        fun divider() = nodes.first {
-            it.config.getOrNull(SemanticsProperties.ContentDescription)?.contains("Ширина списка") == true
+        fun divider() = description("Ширина списка")
+
+        fun description(value: String, prefix: Boolean = false) = nodes.first {
+            it.config.getOrNull(SemanticsProperties.ContentDescription)?.any { description ->
+                if (prefix) description.startsWith(value) else description == value
+            } == true
         }
 
         private fun SemanticsNode.hasText(value: String) =

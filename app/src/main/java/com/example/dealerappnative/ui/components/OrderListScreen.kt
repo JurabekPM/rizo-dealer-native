@@ -1,5 +1,7 @@
 package com.example.dealerappnative.ui.components
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.ui.Alignment
 import com.example.dealerappnative.ui.components.BottomActionLayout
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -39,6 +41,7 @@ internal fun OrderListScreen(
     onRead: (String) -> Unit,
     emptyMessage: String,
     documentTitle: String,
+    roundedTablet: Boolean = false,
     headerContent: @Composable () -> Unit
 ) {
     val pagerState = rememberPagerState(pageCount = { 2 })
@@ -48,27 +51,36 @@ internal fun OrderListScreen(
     val search = query.trim()
 
     val layout = LocalDealerWindowLayout.current
+    val tablet = roundedTablet && layout.hasRail
     var selectedId by rememberSaveable(title) { mutableStateOf<String?>(null) }
     val opened = activeOrders.find { it.id == selectedId } ?: historyOrders.find { it.id == selectedId }
     DealerListDetail(
         hasSelection = opened != null,
         emptyIcon = if (documentTitle == "Заявка") R.drawable.ic_visit else R.drawable.ic_box,
         emptyText = "Выберите документ",
+        roundedPanes = tablet,
         list = {
-            Column(Modifier.fillMaxSize().background(DealerDesign.background)) {
-                ScreenHeader(title, showSortIcon = true)
+            Column(Modifier.fillMaxSize().then(
+                if (tablet) Modifier.tabletPanel().padding(horizontal = 12.dp) else Modifier.background(DealerDesign.background)
+            )) {
+                ScreenHeader(title, showSortIcon = true, tabletStyle = tablet)
                 Column(
-                    Modifier.background(DealerDesign.surface).padding(horizontal = DealerDesign.pageInset)
-                        .padding(bottom = 16.dp)
+                    if (tablet) Modifier.fillMaxWidth().tabletCard().padding(10.dp)
+                    else Modifier.background(DealerDesign.surface).padding(horizontal = DealerDesign.pageInset).padding(bottom = 16.dp)
                 ) {
-                    ActiveHistoryTabs(pagerState = pagerState, activeCount = activeOrders.size)
-                    Spacer(Modifier.height(16.dp))
-                    SearchField(value = query, onValueChange = { query = it })
+                    ActiveHistoryTabs(pagerState = pagerState, activeCount = activeOrders.size, tabletStyle = tablet)
+                    Spacer(Modifier.height(if (tablet) 8.dp else 16.dp))
+                    SearchField(value = query, onValueChange = { query = it },
+                        height = if (tablet) 40.dp else 36.dp,
+                        containerColor = if (tablet) TabletColors.inset else DealerDesign.background)
                 }
-                Spacer(Modifier.height(8.dp))
+                Spacer(Modifier.height(if (tablet) 12.dp else 8.dp))
                 headerContent()
                 BottomActionLayout(Modifier.weight(1f), actions = {
-                    PrototypeCreateButton()
+                    if (tablet) Box(Modifier.fillMaxWidth().background(TabletColors.panel).padding(vertical = 12.dp),
+                        contentAlignment = Alignment.CenterEnd) {
+                        PrototypeActionLabel("Создать", leadingIcon = R.drawable.ic_request_add)
+                    } else PrototypeCreateButton()
                 }) { actionHeight ->
                     HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
                         val orders = if (page == 0) activeOrders else historyOrders
@@ -89,7 +101,7 @@ internal fun OrderListScreen(
                                     if (unread) onRead(order.id)
                                     if (layout.hasRail) selectedId = order.id
                                 }) else null
-                                OrderCard(order, unread, layout.hasPanes && selectedId == order.id, openOrder)
+                                OrderCard(order, unread, layout.hasPanes && selectedId == order.id, openOrder, tabletStyle = tablet)
                             }
                             if (visibleOrders.isEmpty()) {
                                 item {
@@ -120,7 +132,8 @@ internal fun OrderListScreen(
                         "Количество товаров" to order.productCount.toString(),
                         "Общая сумма" to order.amount
                     ),
-                    onBack = { selectedId = null }
+                    onBack = { selectedId = null },
+                    tabletStyle = tablet
                 )
             }
         }

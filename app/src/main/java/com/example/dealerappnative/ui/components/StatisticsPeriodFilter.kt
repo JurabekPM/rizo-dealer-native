@@ -1,5 +1,6 @@
 package com.example.dealerappnative.ui.components
 
+import com.example.dealerappnative.navigation.LocalDealerWindowLayout
 import com.example.dealerappnative.ui.theme.DealerDesign
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.animation.core.animateFloatAsState
@@ -37,37 +38,60 @@ internal fun StatisticsPeriodFilter(period: StatisticsPeriod, dateLabel: String,
     // Keep animation state outside the constraints subcomposition, like the other tabs.
     val position by animateFloatAsState(period.ordinal.toFloat(),
         tween(280, easing = FastOutSlowInEasing), label = "Statistics tab indicator")
-    Column(Modifier.fillMaxWidth().background(DealerDesign.surface)) {
-        Column(Modifier.padding(horizontal = 16.dp).padding(top = 8.dp, bottom = 4.dp)) {
-            BoxWithConstraints(Modifier.fillMaxWidth().height(44.dp).clip(RoundedCornerShape(12.dp))
-                .background(AgentDesign.background).padding(4.dp)) {
-                val width = maxWidth / StatisticsPeriod.entries.size
-                Box(Modifier.offset {
-                    IntOffset((width.toPx() * position).roundToInt(), 0)
-                }.width(width).fillMaxHeight().clip(RoundedCornerShape(9.dp))
-                    .background(DealerDesign.surface))
-                Row(Modifier.fillMaxSize().selectableGroup()) {
-                    StatisticsPeriod.entries.forEach { item ->
-                        Box(Modifier.weight(1f).fillMaxHeight().clip(RoundedCornerShape(9.dp))
-                            .selectable(item == period, role = Role.Tab, interactionSource = remember { MutableInteractionSource() }, indication = null) { onPeriodChange(item) }, contentAlignment = Alignment.Center) {
-                            Text(item.label, style = if (item == period) AgentDesign.menuDetail else AgentDesign.label,
-                                color = if (item == period) AgentDesign.accent else AgentDesign.secondary)
-                        }
+    val tablet = LocalDealerWindowLayout.current.hasRail
+    val tabs: @Composable (Modifier) -> Unit = { modifier ->
+        BoxWithConstraints(modifier.height(44.dp).clip(RoundedCornerShape(12.dp))
+            .background(if (tablet) TabletColors.inset else AgentDesign.background).padding(4.dp)) {
+            val width = maxWidth / StatisticsPeriod.entries.size
+            Box(Modifier.offset { IntOffset((width.toPx() * position).roundToInt(), 0) }
+                .width(width).fillMaxHeight().clip(RoundedCornerShape(9.dp))
+                .background(if (tablet) TabletColors.raised else DealerDesign.surface))
+            Row(Modifier.fillMaxSize().selectableGroup()) {
+                StatisticsPeriod.entries.forEach { item ->
+                    Box(Modifier.weight(1f).fillMaxHeight().clip(RoundedCornerShape(9.dp))
+                        .selectable(item == period, role = Role.Tab,
+                            interactionSource = remember { MutableInteractionSource() }, indication = null) { onPeriodChange(item) },
+                        contentAlignment = Alignment.Center) {
+                        Text(item.label, style = if (item == period) AgentDesign.menuDetail else AgentDesign.label,
+                            color = when {
+                                item != period -> AgentDesign.secondary
+                                tablet -> AgentDesign.text
+                                else -> AgentDesign.accent
+                            })
                     }
                 }
             }
-            Row(Modifier.fillMaxWidth().heightIn(min = 48.dp).clip(RoundedCornerShape(12.dp))
-                .softCardPress(onClick = onChooseDates)
-                .semantics { contentDescription = "Выбрать даты: $dateLabel" }.padding(horizontal = 8.dp, vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically) {
-                DealerIcon(R.drawable.ic_agent_schedule, AgentDesign.accent, 20.dp)
-                Spacer(Modifier.width(10.dp))
-                Text(dateLabel, style = AgentDesign.menuTitle, color = AgentDesign.text,
-                    maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
-                Spacer(Modifier.width(8.dp))
-                Box(Modifier.rotate(90f)) { DealerIcon(R.drawable.ic_agent_chevron, AgentDesign.secondary, 18.dp) }
+        }
+    }
+    val dates: @Composable (Modifier) -> Unit = { modifier ->
+        Row(modifier.heightIn(min = if (tablet) 44.dp else 48.dp).clip(RoundedCornerShape(12.dp))
+            .then(if (tablet) Modifier.background(TabletColors.card) else Modifier)
+            .softCardPress(onClick = onChooseDates)
+            .semantics { contentDescription = "Выбрать даты: $dateLabel" }
+            .padding(horizontal = if (tablet) 12.dp else 8.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically) {
+            DealerIcon(R.drawable.ic_agent_schedule, AgentDesign.accent, 20.dp)
+            Spacer(Modifier.width(10.dp))
+            Text(dateLabel, style = AgentDesign.menuTitle, color = AgentDesign.text,
+                maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
+            Spacer(Modifier.width(8.dp))
+            Box(Modifier.rotate(90f)) { DealerIcon(R.drawable.ic_agent_chevron, AgentDesign.secondary, 18.dp) }
+        }
+    }
+    Column(Modifier.fillMaxWidth().then(if (tablet) Modifier else Modifier.background(DealerDesign.surface))) {
+        BoxWithConstraints(Modifier.fillMaxWidth().padding(horizontal = 16.dp).padding(top = 8.dp, bottom = 4.dp)) {
+            if (tablet && maxWidth >= 560.dp) {
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    tabs(Modifier.weight(1f))
+                    dates(Modifier.widthIn(min = 192.dp, max = 220.dp))
+                }
+            } else {
+                Column(verticalArrangement = Arrangement.spacedBy(if (tablet) 8.dp else 0.dp)) {
+                    tabs(Modifier.fillMaxWidth())
+                    dates(Modifier.fillMaxWidth())
+                }
             }
         }
-        HorizontalDivider(color = AgentDesign.divider)
+        if (!tablet) HorizontalDivider(color = AgentDesign.divider)
     }
 }

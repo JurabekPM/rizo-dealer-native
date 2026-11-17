@@ -214,7 +214,12 @@ internal fun DealerApp(initialTab: Int = 0, onSettingsClick: () -> Unit = {}) {
                         DealerDestination.Menu -> storesVisible && !mapVisible
                         else -> true
                     }
-                    DealerTabletContent(maxWidth = if (layout.hasPanes && usePanes) 1200.dp else 600.dp) {
+                    val bodyWidth = when {
+                        layout.hasPanes && usePanes -> 1200.dp
+                        destination == DealerDestination.Deliveries -> 860.dp
+                        else -> 600.dp
+                    }
+                    DealerTabletContent(maxWidth = bodyWidth) {
                         if (menuTab && dealerProfileVisible) {
                             AdminProfileScreen(onBack = closeChildScreen, onAdministratorChanged = { administrator = it })
                         } else if (menuTab && notificationsVisible) {

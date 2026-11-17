@@ -39,13 +39,14 @@ import kotlin.math.roundToInt
 internal fun ActiveHistoryTabs(
     pagerState: PagerState,
     activeCount: Int,
-    inactiveTextColor: Color = dealerColor(Color(0xFF4D4D4D), Color(0xFFC4BECD))
+    inactiveTextColor: Color = dealerColor(Color(0xFF4D4D4D), Color(0xFFC4BECD)),
+    tabletStyle: Boolean = false
 ) {
     val coroutineScope = rememberCoroutineScope()
 
     BoxWithConstraints(
         Modifier.fillMaxWidth().height(44.dp).clip(RoundedCornerShape(DealerDesign.radius))
-            .background(DealerDesign.background).padding(4.dp)
+            .background(if (tabletStyle) TabletColors.inset else DealerDesign.background).padding(4.dp)
     ) {
         val tabWidth = maxWidth / 2
 
@@ -56,7 +57,7 @@ internal fun ActiveHistoryTabs(
                     .coerceIn(0f, 1f)
                 IntOffset((tabWidth.toPx() * pagePosition).roundToInt(), 0)
             }.width(tabWidth).fillMaxHeight()
-                .clip(RoundedCornerShape(DealerDesign.radius)).background(DealerDesign.surface)
+                .clip(RoundedCornerShape(DealerDesign.radius)).background(if (tabletStyle) TabletColors.raised else DealerDesign.surface)
         )
         Row(Modifier.fillMaxSize()) {
             listOf("Активные", "История").forEachIndexed { index, label ->

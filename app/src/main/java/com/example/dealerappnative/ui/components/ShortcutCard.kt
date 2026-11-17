@@ -1,5 +1,9 @@
 package com.example.dealerappnative.ui.components
 
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -24,25 +28,34 @@ internal fun ShortcutCard(
     title: String,
     @DrawableRes iconRes: Int,
     detail: String? = null,
-    detailColor: Color = DealerDesign.secondary
+    detailColor: Color = DealerDesign.secondary,
+    modifier: Modifier = Modifier,
+    tabletStyle: Boolean = false
 ) {
     Row(
-        Modifier.fillMaxWidth().height(if (detail == null) 48.dp else 68.dp)
-            .cardShadow().background(DealerDesign.surface)
-            .padding(horizontal = DealerDesign.pageInset),
+        modifier.fillMaxWidth()
+            .then(if (tabletStyle) Modifier.heightIn(min = 64.dp).tabletCard()
+                else Modifier.height(if (detail == null) 48.dp else 68.dp).cardShadow().background(DealerDesign.surface))
+            .padding(horizontal = if (tabletStyle) 10.dp else DealerDesign.pageInset, vertical = if (tabletStyle) 7.dp else 0.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        DealerIcon(iconRes)
-        Spacer(Modifier.width(12.dp))
+        if (tabletStyle) {
+            Box(Modifier.size(32.dp).background(TabletColors.raised, RoundedCornerShape(10.dp)),
+                contentAlignment = Alignment.Center) {
+                DealerIcon(iconRes, DealerDesign.secondary, 18.dp)
+            }
+        } else DealerIcon(iconRes)
+        Spacer(Modifier.width(if (tabletStyle) 8.dp else 12.dp))
         Column(Modifier.weight(1f)) {
             Text(title, style = DealerDesign.body, color = DealerDesign.text,
-                maxLines = 1, overflow = TextOverflow.Ellipsis)
+                maxLines = if (tabletStyle) 2 else 1, overflow = TextOverflow.Ellipsis)
             if (detail != null) {
                 Spacer(Modifier.height(4.dp))
                 Text(detail, style = DealerDesign.detail, color = detailColor)
             }
         }
         Spacer(Modifier.width(8.dp))
-        DealerIcon(R.drawable.ic_chevron, DealerDesign.tertiary)
+        if (tabletStyle) DealerIcon(R.drawable.ic_chevron, DealerDesign.tertiary, 16.dp)
+        else DealerIcon(R.drawable.ic_chevron, DealerDesign.tertiary)
     }
 }

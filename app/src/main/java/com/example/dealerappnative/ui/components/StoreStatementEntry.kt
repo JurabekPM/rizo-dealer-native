@@ -17,9 +17,9 @@ import com.example.dealerappnative.ui.theme.DealerDesign
 
 /** Placed immediately after saldo, so both roles find the history beside the balance. */
 @Composable
-internal fun StoreStatementEntry(store: StoreUiModel) {
+internal fun StoreStatementEntry(store: StoreUiModel, tabletStyle: Boolean = false) {
     val actions = LocalStoreActions.current
-    Row(Modifier.fillMaxWidth().cardShadow().background(DealerDesign.surface)
+    Row(Modifier.fillMaxWidth().then(if (tabletStyle) Modifier.tabletCard() else Modifier.cardShadow().background(DealerDesign.surface))
         .softCardPress { actions.openStatement(store) }.heightIn(min = 52.dp).padding(horizontal = 16.dp, vertical = 12.dp)
         .semantics { contentDescription = "История взаиморасчётов: ${store.name}" }, verticalAlignment = Alignment.CenterVertically) {
         DealerIcon(R.drawable.ic_agent_history, DealerDesign.secondary, 22.dp)

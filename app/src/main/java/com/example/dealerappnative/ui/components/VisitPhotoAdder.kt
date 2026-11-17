@@ -30,7 +30,7 @@ import kotlinx.coroutines.withContext
 
 /** Active visits accept new photos only through the camera. Existing photos stay readable. */
 @Composable
-internal fun VisitPhotoAdder(session: AgentVisitSession, onAddPhotos: (List<String>) -> Unit) {
+internal fun VisitPhotoAdder(session: AgentVisitSession, onAddPhotos: (List<String>) -> Unit, compact: Boolean = false) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val keyboard = LocalSoftwareKeyboardController.current
@@ -74,6 +74,19 @@ internal fun VisitPhotoAdder(session: AgentVisitSession, onAddPhotos: (List<Stri
                 } finally { preparing = false }
             }
         }
+    }
+    if (compact) {
+        Row(
+            Modifier.heightIn(min = 44.dp)
+                .softCardPress(enabled = !preparing && pendingCamera == null, onClick = takePhoto)
+                .background(TabletColors.raised, RoundedCornerShape(13.dp)).padding(horizontal = 14.dp, vertical = 8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            DealerIcon(R.drawable.ic_visit_camera, DealerDesign.text, 18.dp)
+            Text("Сделать фото", style = AgentVisitDesign.detail, color = DealerDesign.text)
+        }
+        return
     }
     Column(
         Modifier.width(96.dp).heightIn(min = 96.dp)

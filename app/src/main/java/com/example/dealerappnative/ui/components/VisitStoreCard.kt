@@ -1,5 +1,9 @@
 package com.example.dealerappnative.ui.components
 
+import androidx.compose.foundation.border
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.selected
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,19 +33,27 @@ internal fun VisitStoreCard(
     store: VisitStore,
     unread: Boolean = false,
     selected: Boolean = false,
+    roundedTablet: Boolean = false,
     onClick: () -> Unit
 ) {
     val debtLabel = store.debtDirection.formatAmount(store.debt)
     val tablet = LocalDealerWindowLayout.current.hasRail
     val cardHeight = if (tablet) Modifier.heightIn(min = 84.dp) else Modifier.height(DealerDesign.cardHeight)
     val titleHeight = if (tablet) Modifier.heightIn(min = 52.dp).padding(vertical = 4.dp) else Modifier.height(72.dp)
-    Column(Modifier.fillMaxWidth().then(cardHeight).softCardPress(onClick = onClick).cardShadow()
-        .unreadCardBackground(unread).dealerSelectedCard(selected).padding(horizontal = 16.dp)) {
+    val appearance = if (roundedTablet) {
+        Modifier.tabletCard(if (selected || unread) TabletColors.selected else TabletColors.card)
+            .then(if (selected) Modifier.border(1.dp, DealerDesign.accent.copy(alpha = .36f), RoundedCornerShape(16.dp))
+                .semantics { this.selected = true } else Modifier)
+    } else Modifier.cardShadow().unreadCardBackground(unread).dealerSelectedCard(selected)
+    Column(Modifier.fillMaxWidth().then(cardHeight).softCardPress(onClick = onClick)
+        .then(appearance).padding(horizontal = if (roundedTablet) 12.dp else 16.dp)) {
         Row(Modifier.fillMaxWidth().then(titleHeight), verticalAlignment = Alignment.CenterVertically) {
-            Box(Modifier.sharedVisitStorePart(store.id, VisitStorePart.Logo)) {
-                DealerIcon(R.drawable.ic_store, DealerDesign.secondary, 24.dp)
+            if (!roundedTablet) {
+                Box(Modifier.sharedVisitStorePart(store.id, VisitStorePart.Logo)) {
+                    DealerIcon(R.drawable.ic_store, DealerDesign.secondary, 24.dp)
+                }
+                Spacer(Modifier.width(8.dp))
             }
-            Spacer(Modifier.width(8.dp))
             Column(Modifier.weight(1f)) {
                 UnreadCardTitle(store.name, unread,
                     textModifier = Modifier.sharedVisitStorePart(store.id, VisitStorePart.Name))
@@ -60,7 +72,7 @@ internal fun VisitStoreCard(
                 }
             }
         }
-        HorizontalDivider(color = DealerDesign.divider)
+        if (!roundedTablet) HorizontalDivider(color = DealerDesign.divider)
         val addressHeight = if (tablet) Modifier.heightIn(min = 31.dp).padding(vertical = 4.dp)
             else Modifier.weight(1f)
         Row(Modifier.fillMaxWidth().then(addressHeight), verticalAlignment = Alignment.CenterVertically) {

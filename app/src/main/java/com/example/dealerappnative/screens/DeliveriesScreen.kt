@@ -1,5 +1,10 @@
 package com.example.dealerappnative.screens
 
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.ui.Modifier
+import com.example.dealerappnative.navigation.LocalDealerWindowLayout
 import com.example.dealerappnative.ui.theme.dealerColor
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,11 +25,30 @@ internal fun DeliveriesScreen(unreadIds: Set<String>, onRead: (String) -> Unit) 
         onRead = onRead,
         historyOrders = deliveryHistory,
         emptyMessage = "Доставки не найдены",
-        documentTitle = "Доставка"
+        documentTitle = "Доставка",
+        roundedTablet = true
     ) {
-        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            ShortcutCard("Запросы на сотрудничество", R.drawable.ic_visit, "1 магазин", dealerColor(Color(0xFF529FDB), Color(0xFF91B8FF)))
-            ShortcutCard("Возвраты", R.drawable.ic_store, "1 доставщик", dealerColor(Color(0xFFD66F6F), Color(0xFFFF939D)))
+        val tablet = LocalDealerWindowLayout.current.hasRail
+        val cooperation: @Composable (Modifier) -> Unit = { modifier ->
+            ShortcutCard("Запросы на сотрудничество", R.drawable.ic_visit, "1 магазин",
+                dealerColor(Color(0xFF529FDB), Color(0xFF91B8FF)), modifier, tablet)
+        }
+        val returns: @Composable (Modifier) -> Unit = { modifier ->
+            ShortcutCard("Возвраты", if (tablet) R.drawable.ic_return else R.drawable.ic_store, "1 доставщик",
+                dealerColor(Color(0xFFD66F6F), Color(0xFFFF939D)), modifier, tablet)
+        }
+        BoxWithConstraints(Modifier.fillMaxWidth()) {
+            if (tablet && maxWidth >= 500.dp) {
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    cooperation(Modifier.weight(1f))
+                    returns(Modifier.weight(1f))
+                }
+            } else {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    cooperation(Modifier)
+                    returns(Modifier)
+                }
+            }
         }
     }
 }

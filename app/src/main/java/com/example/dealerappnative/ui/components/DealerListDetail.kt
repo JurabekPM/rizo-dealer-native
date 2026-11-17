@@ -63,6 +63,7 @@ internal fun DealerListDetail(
     hasSelection: Boolean,
     @DrawableRes emptyIcon: Int,
     emptyText: String,
+    roundedPanes: Boolean = false,
     list: @Composable () -> Unit,
     detail: @Composable () -> Unit
 ) {
@@ -84,6 +85,7 @@ internal fun DealerListDetail(
                 val minFraction = minListWidth / paneWidth
                 val maxFraction = maxListWidth / paneWidth
                 DealerSplitHandle(
+                    roundedPanes = roundedPanes,
                     fraction = listWidth / paneWidth,
                     range = minFraction..maxFraction,
                     paneWidth = paneWidth,
@@ -100,12 +102,16 @@ internal fun DealerListDetail(
             }
             if (split || hasSelection) {
                 Box(
-                    Modifier.weight(1f).fillMaxHeight().background(DealerDesign.background)
-                        .then(if (split) Modifier.clipToBounds() else Modifier),
+                    Modifier.weight(1f).fillMaxHeight().then(when {
+                        split && roundedPanes -> Modifier.tabletPanel()
+                        split -> Modifier.background(DealerDesign.background).clipToBounds()
+                        else -> Modifier.background(DealerDesign.background)
+                    }),
                     contentAlignment = Alignment.TopCenter
                 ) {
                     if (hasSelection) {
-                        Box(Modifier.widthIn(max = 720.dp).fillMaxSize()) { detail() }
+                        Box(Modifier.then(if (roundedPanes) Modifier else Modifier.widthIn(max = 720.dp))
+                            .fillMaxSize()) { detail() }
                     } else {
                         Column(
                             Modifier.align(Alignment.Center).padding(24.dp),
@@ -126,6 +132,7 @@ private val SplitHandleWidth = 28.dp
 
 @Composable
 private fun DealerSplitHandle(
+    roundedPanes: Boolean,
     fraction: Float,
     range: ClosedFloatingPointRange<Float>,
     paneWidth: Dp,
@@ -142,7 +149,8 @@ private fun DealerSplitHandle(
     val active = dragging || focused
     val adjustable = range.start < range.endInclusive
     Box(
-        Modifier.width(SplitHandleWidth).fillMaxHeight().background(DealerDesign.background)
+        Modifier.width(SplitHandleWidth).fillMaxHeight()
+            .background(if (roundedPanes) TabletColors.canvas else DealerDesign.background)
             .semantics {
                 contentDescription = "Ширина списка"
                 progressBarRangeInfo = ProgressBarRangeInfo(fraction, range)
@@ -176,11 +184,12 @@ private fun DealerSplitHandle(
             ),
         contentAlignment = Alignment.Center
     ) {
-        VerticalDivider(
+        if (!roundedPanes) VerticalDivider(
             color = if (active) DealerDesign.accent.copy(alpha = .45f) else DealerDesign.divider
         )
         Column(
-            Modifier.width(16.dp).height(40.dp).background(DealerDesign.surface, CircleShape),
+            Modifier.width(16.dp).height(40.dp)
+                .background(if (roundedPanes) TabletColors.raised else DealerDesign.surface, CircleShape),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(3.dp, Alignment.CenterVertically)
         ) {
@@ -208,11 +217,12 @@ internal fun DealerDocumentDetails(
     documentId: String,
     title: String,
     fields: List<Pair<String, String>>,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    tabletStyle: Boolean = false
 ) {
     BackHandler(onBack = onBack)
     val scroll = key(documentId) { rememberScrollState() }
-    Column(Modifier.fillMaxSize().background(DealerDesign.background)) {
+    Column(Modifier.fillMaxSize().then(if (tabletStyle) Modifier.tabletPanel() else Modifier.background(DealerDesign.background))) {
         ChildScreenHeader(title, onBack)
         Column(
             Modifier.fillMaxWidth().verticalScroll(scroll).padding(DealerDesign.pageInset),

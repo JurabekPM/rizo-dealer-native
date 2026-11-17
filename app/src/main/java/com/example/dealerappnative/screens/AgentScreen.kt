@@ -91,7 +91,7 @@ internal fun AgentScreen(onBack: () -> Unit, onSettingsClick: () -> Unit = {}) {
                 notificationsVisible || storeDebtsVisible -> 600.dp
                 !layout.hasPanes -> 600.dp
                 storesVisible -> 1200.dp
-                destination == AgentDestination.Statistics -> 880.dp
+                destination == AgentDestination.Statistics -> 1200.dp
                 destination == AgentDestination.More -> 600.dp
                 else -> 1200.dp
             }

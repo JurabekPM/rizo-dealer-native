@@ -40,6 +40,7 @@ internal enum class VisitStorePart { Logo, Name, Debt }
 @Composable
 internal fun VisitResultsTransition(
     selectedId: String?, onSelect: (String) -> Unit,
+    roundedPanes: Boolean = false,
     content: @Composable (String?, (String) -> Unit) -> Unit
 ) {
     val split = LocalDealerWindowLayout.current.hasPanes
@@ -74,6 +75,7 @@ internal fun VisitResultsTransition(
                 hasSelection = selectedId != null,
                 emptyIcon = R.drawable.ic_visit_route,
                 emptyText = "Выберите визит",
+                roundedPanes = roundedPanes,
                 list = { latestContent(null, latestOpen) },
                 detail = { latestContent(selectedId, latestOpen) }
             )

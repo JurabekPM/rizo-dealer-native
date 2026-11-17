@@ -44,14 +44,32 @@ import java.util.Locale
 
 /** The timer recomposes only this small block, not the shared-transition/list tree. */
 @Composable
-internal fun AgentVisitTiming(session: AgentVisitSession) {
+internal fun AgentVisitTiming(session: AgentVisitSession, modifier: Modifier = Modifier, compact: Boolean = false) {
     val now by produceState(System.currentTimeMillis(), session.startedAt, session.finishedAt) {
         while (session.isActive) { value = System.currentTimeMillis(); delay(1000) }
     }
     val elapsedMillis = session.elapsedMillis(now)
     val date = remember { SimpleDateFormat("dd.MM.yyyy | HH:mm", Locale.getDefault()) }
     val finished = !session.isActive
-    Column(Modifier.fillMaxWidth().cardShadow().background(DealerDesign.surface).padding(16.dp)) {
+    if (compact) {
+        Column(modifier, verticalArrangement = Arrangement.spacedBy(3.dp)) {
+            Text("Дата визита", style = AgentVisitDesign.detail, color = DealerDesign.secondary)
+            Text(date.format(Date(session.startedAt)), style = AgentVisitDesign.name, color = DealerDesign.text)
+            if (finished) {
+                session.finishedAt?.let {
+                    Text("Дата завершения", style = AgentVisitDesign.detail, color = DealerDesign.secondary)
+                    Text(date.format(Date(it)), style = AgentVisitDesign.name, color = DealerDesign.text)
+                }
+                Text(formatFinishedVisitDuration(elapsedMillis), style = AgentVisitDesign.detail, color = DealerDesign.secondary)
+                session.reason?.let { Text(it.label, style = AgentVisitDesign.detail, color = DealerDesign.secondary) }
+            } else {
+                Text(formatVisitElapsed(elapsedMillis), style = AgentVisitDesign.detail.copy(fontFeatureSettings = "tnum"),
+                    color = dealerColor(Color(0xFF2563EB), Color(0xFF91B8FF)))
+            }
+        }
+        return
+    }
+    Column(modifier.fillMaxWidth().cardShadow().background(DealerDesign.surface).padding(16.dp)) {
         Row(Modifier.fillMaxWidth()) {
             Box(Modifier.width(8.dp).height(if (finished) 92.dp else 40.dp)) {
                 Box(Modifier.align(Alignment.TopCenter).padding(top = 4.dp).size(8.dp)
@@ -111,16 +129,19 @@ internal fun VisitCommentField(value: String, onChange: (String) -> Unit, readOn
 
 @Composable
 internal fun AgentVisitNotes(session: AgentVisitSession, onComment: (String) -> Unit,
-    onAddPhotos: (List<String>) -> Unit, onRemovePhoto: (String) -> Unit) {
+    onAddPhotos: (List<String>) -> Unit, onRemovePhoto: (String) -> Unit, compact: Boolean = false) {
     val photos = remember(session.photoUris) { session.photoUris.map(Uri::parse) }
     val anchors = remember { mutableMapOf<Uri, PhotoPreviewAnchor>() }
     var selected by rememberSaveable(session.startedAt) { mutableStateOf<String?>(null) }
     val selectedPage = photos.indexOfFirst { it.toString() == selected }
+    val canAddPhoto = session.isActive && session.photoUris.size < 6
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Column(Modifier.fillMaxWidth().cardShadow().background(DealerDesign.surface).padding(16.dp),
+        if (compact && canAddPhoto) VisitPhotoAdder(session, onAddPhotos, compact = true)
+        if (!compact || photos.isNotEmpty() || !session.isActive) Column(Modifier.fillMaxWidth()
+            .then(if (compact) Modifier.tabletCard() else Modifier.cardShadow().background(DealerDesign.surface)).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)) {
             LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                if (session.isActive && session.photoUris.size < 6) item(key = "add") {
+                if (!compact && canAddPhoto) item(key = "add") {
                     VisitPhotoAdder(session, onAddPhotos)
                 }
                 items(photos, key = { it.toString() }) { uri ->
@@ -137,8 +158,8 @@ internal fun AgentVisitNotes(session: AgentVisitSession, onComment: (String) -> 
                 }
             }
         }
-        Column(Modifier.fillMaxWidth().cardShadow().background(DealerDesign.surface).padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        Column(Modifier.fillMaxWidth().then(if (compact) Modifier.tabletCard() else Modifier.cardShadow().background(DealerDesign.surface))
+            .padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Text("Комментарии", style = AgentVisitDesign.detail, color = DealerDesign.text)
             if (session.isActive) VisitCommentField(session.comment, onComment)
             else Text(session.comment.ifBlank { "Без комментария" }, style = AgentVisitDesign.name,
@@ -190,10 +211,12 @@ internal fun AgentVisitButton(
     label: String,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    secondary: Boolean = false,
+    tonal: Boolean = false,
+    leadingIcon: Int? = null,
     onClick: () -> Unit
 ) {
-    val background = if (secondary) DealerDesign.background else DealerDesign.accent
+    val background = if (tonal) DealerDesign.softAccent else DealerDesign.accent
+    val foreground = if (tonal) DealerDesign.accent else DealerDesign.onAccent
     Box(
         modifier.heightIn(min = 48.dp)
             .softCardPress(enabled = enabled, onClick = onClick)
@@ -202,6 +225,9 @@ internal fun AgentVisitButton(
             .padding(horizontal = 18.dp),
         contentAlignment = Alignment.Center
     ) {
-        Text(label, style = AgentVisitDesign.button, color = if (secondary) DealerDesign.text else DealerDesign.onAccent)
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+            leadingIcon?.let { DealerIcon(it, foreground, 18.dp) }
+            Text(label, style = AgentVisitDesign.button, color = foreground)
+        }
     }
 }

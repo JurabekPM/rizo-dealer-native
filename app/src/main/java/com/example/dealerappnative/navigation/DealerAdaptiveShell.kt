@@ -1,5 +1,8 @@
 package com.example.dealerappnative.navigation
 
+import androidx.compose.foundation.shape.RoundedCornerShape
+import com.example.dealerappnative.ui.components.TabletColors
+import com.example.dealerappnative.ui.components.tabletPanel
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.compose.foundation.background
@@ -22,7 +25,6 @@ import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Stable
@@ -63,7 +65,7 @@ internal val LocalDealerSplitWidth = staticCompositionLocalOf<DealerSplitWidth> 
 @Stable
 internal class DealerSplitWidth(private val preferences: SharedPreferences) {
     var fraction by mutableFloatStateOf(
-        preferences.getFloat("split_list_fraction", .34f).let { if (it in 0f..1f) it else .34f }
+        preferences.getFloat("split_list_fraction", .40f).let { if (it in 0f..1f) it else .40f }
     )
         private set
 
@@ -101,8 +103,9 @@ internal fun DealerAdaptiveShell(
         ) {
             Row(Modifier.fillMaxSize()) {
                 if (mode.hasRail) {
-                    Box(Modifier.width(94.dp).fillMaxHeight().safeDrawingPadding()) { rail() }
-                    VerticalDivider(color = DealerDesign.divider)
+                    Box(Modifier.width(94.dp).fillMaxHeight().background(TabletColors.canvas).safeDrawingPadding()
+                        .padding(start = 10.dp, end = 8.dp, top = 6.dp, bottom = 6.dp)
+                        .tabletPanel(TabletColors.rail)) { rail() }
                 }
                 Box(Modifier.weight(1f).fillMaxHeight()) { content() }
             }
@@ -117,7 +120,7 @@ internal fun DealerTabletContent(
 ) {
     val tablet = LocalDealerWindowLayout.current.hasRail
     Box(
-        Modifier.fillMaxSize().then(if (tablet) Modifier.background(DealerDesign.background) else Modifier),
+        Modifier.fillMaxSize().then(if (tablet) Modifier.background(TabletColors.canvas).padding(horizontal = 6.dp, vertical = 6.dp) else Modifier),
         contentAlignment = Alignment.TopCenter
     ) {
         Box(Modifier.then(if (tablet) Modifier.widthIn(max = maxWidth) else Modifier).fillMaxSize()) {
@@ -138,12 +141,14 @@ internal fun <T : Enum<T>> DealerNavigationRail(
     textStyle: TextStyle = DealerDesign.navigation,
     enabled: (T) -> Boolean = { true }
 ) {
-    Column(Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).selectableGroup().padding(top = 12.dp)) {
+    Column(Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).selectableGroup()
+        .padding(horizontal = 4.dp, vertical = 8.dp)) {
         destinations.forEach { destination ->
             val active = destination == selected
             val unreadCount = unreadCounts[destination] ?: 0
             Column(
-                Modifier.fillMaxWidth().heightIn(min = 64.dp)
+                Modifier.fillMaxWidth().heightIn(min = 62.dp)
+                    .background(if (active) DealerDesign.softAccent else Color.Transparent, RoundedCornerShape(13.dp))
                     .semantics { if (unreadCount > 0) stateDescription = "Новых: $unreadCount" }
                     .selectable(
                         selected = active,

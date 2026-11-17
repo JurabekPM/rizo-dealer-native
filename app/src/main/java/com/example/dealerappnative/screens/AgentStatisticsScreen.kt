@@ -1,5 +1,8 @@
 package com.example.dealerappnative.screens
 
+import com.example.dealerappnative.ui.components.TabletColors
+import com.example.dealerappnative.ui.components.tabletPanel
+import com.example.dealerappnative.ui.components.tabletCard
 import com.example.dealerappnative.ui.theme.DealerDesign
 import com.example.dealerappnative.ui.components.SoftIconButton
 import com.example.dealerappnative.ui.components.softCardPress
@@ -73,21 +76,23 @@ internal fun AgentStatisticsScreen(onStoreDebtsClick: () -> Unit) {
     val range = remember(period, anchor, customStart, customEnd) {
         StatisticsDates.range(period, anchor, StatisticsDateRange(customStart, customEnd))
     }
-    val columns = if (LocalDealerWindowLayout.current.hasPanes) 3 else 2
+    val layout = LocalDealerWindowLayout.current
+    val tablet = layout.hasRail
+    val columns = if (layout.hasPanes) 3 else 2
     val data = remember(range, today) { AgentStatisticsSampleData.forRange(range, today) }
-    Column(Modifier.fillMaxSize().background(DealerDesign.surface)) {
+    Column(Modifier.fillMaxSize().then(if (tablet) Modifier.tabletPanel() else Modifier.background(DealerDesign.surface))) {
         AgentStatisticsHeader(updatedAt, onRefresh = { updatedAt = System.currentTimeMillis() })
         StatisticsPeriodFilter(picking ?: period, StatisticsDates.label(range, period), onPeriodChange = {
             if (it == StatisticsPeriod.Range) picking = it else period = it
         }, onChooseDates = { picking = period })
-        LazyColumn(Modifier.fillMaxWidth().weight(1f).background(AgentDesign.background),
+        LazyColumn(Modifier.fillMaxWidth().weight(1f).then(if (tablet) Modifier else Modifier.background(AgentDesign.background)),
             contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = AgentDesign.inset, vertical = 12.dp),
             verticalArrangement = Arrangement.spacedBy(AgentDesign.gap)) {
             if (!data.hasData) item(key = "empty-period") {
                 Text("Нет данных за выбранный период", style = AgentDesign.menuDetail, color = AgentDesign.secondary,
                     modifier = Modifier.padding(vertical = 8.dp))
             }
-            item(key = "visits") { AgentVisitsSummary(data) }
+            item(key = "visits") { AgentVisitsSummary(data, tablet) }
             data.metrics.chunked(columns).forEachIndexed { index, pair ->
                 item(key = "metrics-$index") {
                     Row(Modifier.fillMaxWidth().height(IntrinsicSize.Min),
@@ -98,7 +103,7 @@ internal fun AgentStatisticsScreen(onStoreDebtsClick: () -> Unit) {
                     }
                 }
             }
-            item(key = "store-debt") { AgentStoreDebt(onClick = onStoreDebtsClick) }
+            item(key = "store-debt") { AgentStoreDebt(tablet, onClick = onStoreDebtsClick) }
         }
     }
     picking?.let { chosen ->
@@ -118,14 +123,17 @@ private fun AgentStatisticsHeader(updatedAt: Long, onRefresh: () -> Unit) {
     var refreshCount by rememberSaveable { mutableIntStateOf(0) }
     val rotation by animateFloatAsState(refreshCount * 360f, tween(500), label = "Refresh agent summary")
     val time = remember(updatedAt) { SimpleDateFormat("HH:mm", locale).format(Date(updatedAt)) }
-    Box(Modifier.fillMaxWidth().height(56.dp).background(DealerDesign.surface), contentAlignment = Alignment.Center) {
+    val tablet = LocalDealerWindowLayout.current.hasRail
+    Box(Modifier.fillMaxWidth().height(if (tablet) 70.dp else 56.dp)
+        .then(if (tablet) Modifier else Modifier.background(DealerDesign.surface)), contentAlignment = Alignment.Center) {
         Column(Modifier.align(Alignment.CenterStart).padding(start = 16.dp, end = 56.dp)) {
             Text("Статистика", style = AgentDesign.screenTitle, color = AgentDesign.text,
                 maxLines = 1, overflow = TextOverflow.Ellipsis)
             Text("Обновлено $time", style = AgentDesign.updated, color = AgentDesign.secondary)
         }
         SoftIconButton(onClick = { onRefresh(); refreshCount++ },
-            modifier = Modifier.align(Alignment.CenterEnd).padding(end = 4.dp).size(40.dp)
+            modifier = Modifier.align(Alignment.CenterEnd).padding(end = if (tablet) AgentDesign.inset else 4.dp).size(40.dp)
+                .then(if (tablet) Modifier.background(TabletColors.card, RoundedCornerShape(12.dp)) else Modifier)
                 .semantics { contentDescription = "Обновить сводку" }) {
             Box(Modifier.rotate(rotation)) {
                 DealerIcon(R.drawable.ic_agent_refresh, AgentDesign.secondary, AgentDesign.iconSize)
@@ -135,37 +143,42 @@ private fun AgentStatisticsHeader(updatedAt: Long, onRefresh: () -> Unit) {
 }
 
 @Composable
-private fun AgentVisitsSummary(data: AgentStatisticsSnapshot) {
+private fun AgentVisitsSummary(data: AgentStatisticsSnapshot, tablet: Boolean) {
     val progress = if (data.plannedVisits > 0) data.completedVisits.toFloat() / data.plannedVisits else 0f
-    Column(Modifier.fillMaxWidth().cardShadow()
-        .background(DealerDesign.surface).padding(16.dp)) {
-        Row(Modifier.fillMaxWidth().height(40.dp), verticalAlignment = Alignment.CenterVertically) {
+    Column(Modifier.fillMaxWidth().then(if (tablet) Modifier.tabletCard() else Modifier.cardShadow().background(DealerDesign.surface))
+        .padding(16.dp)) {
+        Row(Modifier.fillMaxWidth().height(if (tablet) 34.dp else 40.dp), verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.size(40.dp).clip(CircleShape).background(AgentDesign.tint), contentAlignment = Alignment.Center) {
                 DealerIcon(R.drawable.ic_agent_visit, AgentDesign.accent, AgentDesign.iconSize)
             }
             Spacer(Modifier.width(12.dp))
             Text("Визиты", style = AgentDesign.heroLabel, color = AgentDesign.secondary, modifier = Modifier.weight(1f))
-            DealerIcon(R.drawable.ic_agent_chevron, AgentDesign.secondary, 20.dp)
+            if (!tablet) DealerIcon(R.drawable.ic_agent_chevron, AgentDesign.secondary, 20.dp)
         }
         Spacer(Modifier.height(8.dp))
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.Bottom) {
             Text("${data.completedVisits} / ${data.plannedVisits}", style = AgentDesign.heroValue,
                 color = AgentDesign.text, modifier = Modifier.weight(1f))
-            SlidingNumber((progress * 100).toLong(), AgentDesign.percent, AgentDesign.text, suffix = "%")
+            SlidingNumber((progress * 100).toLong(), AgentDesign.percent,
+                if (tablet) AgentDesign.accent else AgentDesign.text, suffix = "%")
         }
         Spacer(Modifier.height(10.4.dp))
         AgentProgress(progress)
-        Spacer(Modifier.height(10.dp))
-        Box(Modifier.align(Alignment.End).clip(RoundedCornerShape(8.dp)).background(AgentDesign.tint)
-            .padding(horizontal = 8.dp, vertical = 4.dp)) {
-            Text("+${data.unplannedVisits} вне плана", style = AgentDesign.badge, color = AgentDesign.accent)
+        if (!tablet || data.unplannedVisits > 0) {
+            Spacer(Modifier.height(10.dp))
+            Box(Modifier.align(Alignment.End).clip(RoundedCornerShape(8.dp)).background(AgentDesign.tint)
+                .padding(horizontal = 8.dp, vertical = 4.dp)) {
+                Text("+${data.unplannedVisits} вне плана", style = AgentDesign.badge, color = AgentDesign.accent)
+            }
         }
     }
 }
 
 @Composable
-private fun AgentStoreDebt(onClick: () -> Unit) {
-    Row(Modifier.fillMaxWidth().softCardPress(onClick = onClick).cardShadow().background(DealerDesign.surface).padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+private fun AgentStoreDebt(tablet: Boolean, onClick: () -> Unit) {
+    Row(Modifier.fillMaxWidth().softCardPress(onClick = onClick)
+        .then(if (tablet) Modifier.tabletCard() else Modifier.cardShadow().background(DealerDesign.surface))
+        .padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
         DealerIcon(R.drawable.ic_agent_debt, AgentDesign.secondary, AgentDesign.iconSize)
         Spacer(Modifier.width(12.dp))
         Column(Modifier.weight(1f)) {

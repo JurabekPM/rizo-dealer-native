@@ -1,5 +1,6 @@
 package com.example.dealerappnative.ui.components
 
+import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -29,7 +30,8 @@ internal fun SearchField(
     onValueChange: (String) -> Unit,
     placeholder: String = "Поиск по имени и ид",
     height: Dp = 36.dp,
-    textStyle: TextStyle = DealerDesign.search
+    textStyle: TextStyle = DealerDesign.search,
+    containerColor: Color = DealerDesign.background
 ) {
     BasicTextField(
         value = value,
@@ -41,7 +43,7 @@ internal fun SearchField(
         decorationBox = { textField ->
             Row(
                 Modifier.fillMaxSize().clip(RoundedCornerShape(DealerDesign.radius))
-                    .background(DealerDesign.background).padding(horizontal = 12.dp),
+                    .background(containerColor).padding(horizontal = 12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 DealerIcon(R.drawable.ic_search)

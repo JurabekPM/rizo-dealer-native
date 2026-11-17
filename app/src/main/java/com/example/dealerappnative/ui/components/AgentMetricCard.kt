@@ -1,5 +1,8 @@
 package com.example.dealerappnative.ui.components
 
+import com.example.dealerappnative.navigation.LocalDealerWindowLayout
+import androidx.compose.ui.graphics.Color
+import com.example.dealerappnative.ui.theme.dealerColor
 import com.example.dealerappnative.ui.theme.DealerDesign
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,17 +26,24 @@ import com.example.dealerappnative.ui.theme.AgentDesign
 
 @Composable
 internal fun AgentMetricCard(metric: AgentHomeMetric, modifier: Modifier = Modifier) {
-    Column(modifier.cardShadow().background(DealerDesign.surface).padding(12.dp)) {
-        Row(Modifier.fillMaxWidth().height(22.dp), horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.Top) {
-            DealerIcon(metric.icon, AgentDesign.secondary, AgentDesign.iconSize)
-            if (metric.monthlyPlan == null) {
-                DealerIcon(R.drawable.ic_agent_chevron, AgentDesign.secondary, 18.dp)
+    val tablet = LocalDealerWindowLayout.current.hasRail
+    Column(modifier.then(if (tablet) Modifier.tabletCard() else Modifier.cardShadow().background(DealerDesign.surface)).padding(12.dp)) {
+        if (tablet) {
+            Row(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
+                DealerIcon(metric.icon, AgentDesign.secondary, 17.dp)
+                Text(metric.title, style = AgentDesign.menuTitle, color = AgentDesign.text,
+                    maxLines = 2, overflow = TextOverflow.Ellipsis)
             }
+        } else {
+            Row(Modifier.fillMaxWidth().height(22.dp), horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Top) {
+                DealerIcon(metric.icon, AgentDesign.secondary, AgentDesign.iconSize)
+                if (metric.monthlyPlan == null) DealerIcon(R.drawable.ic_agent_chevron, AgentDesign.secondary, 18.dp)
+            }
+            Spacer(Modifier.height(4.dp))
+            Text(metric.title, style = AgentDesign.label, color = AgentDesign.secondary,
+                maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
-        Spacer(Modifier.height(4.dp))
-        Text(metric.title, style = AgentDesign.label, color = AgentDesign.secondary,
-            maxLines = 1, overflow = TextOverflow.Ellipsis)
         Spacer(Modifier.height(2.dp))
         Text(metric.value, style = AgentDesign.value,
             color = if (metric.negative) AgentDesign.negative else AgentDesign.text,
@@ -50,12 +60,12 @@ internal fun AgentMetricCard(metric: AgentHomeMetric, modifier: Modifier = Modif
             Text(detail, style = AgentDesign.detail, color = AgentDesign.secondary,
                 maxLines = 2, overflow = TextOverflow.Ellipsis)
         }
-        metric.monthlyPlan?.let { MonthlyPlanSummary(it) }
+        metric.monthlyPlan?.let { MonthlyPlanSummary(it, tablet) }
     }
 }
 
 @Composable
-private fun MonthlyPlanSummary(progress: StatisticsPlanProgress) {
+private fun MonthlyPlanSummary(progress: StatisticsPlanProgress, tablet: Boolean) {
     Spacer(Modifier.height(8.dp))
     Row(
         Modifier.fillMaxWidth(),
@@ -65,7 +75,8 @@ private fun MonthlyPlanSummary(progress: StatisticsPlanProgress) {
         Text("План · ${StatisticsDates.monthName(progress.monthStart)}",
             style = AgentDesign.detail, color = AgentDesign.secondary,
             modifier = Modifier.weight(1f), maxLines = 2, overflow = TextOverflow.Ellipsis)
-        SlidingNumber(progress.percent.toLong(), AgentDesign.planPercent, AgentDesign.accent, suffix = "%")
+        val color = if (tablet && progress.percent >= 100) dealerColor(Color(0xFF18754C), Color(0xFF91DBB2)) else AgentDesign.accent
+        SlidingNumber(progress.percent.toLong(), AgentDesign.planPercent, color, suffix = "%")
     }
     Spacer(Modifier.height(4.dp))
     AgentProgress(progress.fraction, height = 4.dp)

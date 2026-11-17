@@ -1,5 +1,8 @@
 package com.example.dealerappnative.ui.components
 
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,13 +27,16 @@ internal fun PrototypeCreateButton(label: String = "Создать") {
 }
 
 @Composable
-internal fun PrototypeActionLabel(label: String, modifier: Modifier = Modifier) {
+internal fun PrototypeActionLabel(label: String, modifier: Modifier = Modifier, @DrawableRes leadingIcon: Int? = null) {
     Box(
         modifier.heightIn(min = DealerDesign.buttonHeight)
             .clip(RoundedCornerShape(DealerDesign.radius)).background(DealerDesign.accent)
             .padding(horizontal = 18.dp),
         contentAlignment = Alignment.Center
     ) {
-        Text(label, style = DealerDesign.button, color = DealerDesign.onAccent)
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(7.dp)) {
+            leadingIcon?.let { DealerIcon(it, DealerDesign.onAccent, 17.dp) }
+            Text(label, style = DealerDesign.button, color = DealerDesign.onAccent)
+        }
     }
 }
